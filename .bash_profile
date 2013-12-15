@@ -1,12 +1,18 @@
-
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+#####################################################################################################
+#
 # http://hackerslab.eu/blog/2013/04/a-little-better-ls-for-mac-osx/
+#
+# Must install GNU coreutils in order to work. More info at:
+# http://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities
+#
 # Enable color support of ls and also add handy aliases..
+
 alias ls='gls -F --color=auto'
 alias la='ls -a'
 alias lf='ls -FA'
@@ -17,12 +23,28 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-alias arrange-brightpearl-dev="~/bin/bash/arrange-brightpearl-dev.sh"
-alias close-all-windows="~/bin/bash/close-all-windows.sh"
-alias empty-trash="~/bin/bash/empty-trash.sh"
-alias open-bank-accounts='~/bin/bash/open-bank-accounts.sh'
-alias run-ruby-tests='~/bin/bash/run-ruby-tests.sh'
-alias vm='~/bin/bash/vm.sh'
+#####################################################################################################
+
+### BROWSE ###################
+alias browse-banks='~/Repos/Scripts/bash/browse/browse-banks.sh'
+
+### CRON #####################
+alias cron-backup-bash-profile='~/Repos/Scripts/bash/cron/cron-backup-bash-profile.sh'
+
+### QUICK COMMANDS ###########
+alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
+
+### SYS ######################
+alias sys-chmod-shell-scripts='~/Repos/Scripts/bash/sys/sys-chmod-shell-scripts.sh'
+alias sys-close-all-windows='~/Repos/Scripts/bash/sys/sys-close-all-windows.sh'
+alias sys-edit-bash='~/Repos/Scripts/bash/sys/sys-edit-bash.sh'
+alias sys-edit-crontab='~/Repos/Scripts/bash/sys/sys-edit-crontab.sh'
+alias sys-empty-trash='~/Repos/Scripts/bash/sys/sys-empty-trash.sh'
+
+### TESTS ####################
+alias test-ruby-scripts='~/Repos/Scripts/bash/tests/test-ruby-scripts.sh'
+
+#####################################################################################################
 
 parse_git_branch() {
   if ! git rev-parse --git-dir > /dev/null 2>&1; then
