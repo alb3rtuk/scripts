@@ -16,7 +16,43 @@ function detectDisplays()
     else
         displays="single"
     fi
-    echo "`tput setab 4` DETECT DISPLAYS `tput setab 0` Detected $displays display(s)."
+    echo "`tput setab 4` DETECT DISPLAYS `tput setab 0` Detected $displays display(s)"
+}
+
+# Displays a message with the first set of words colored
+function message()
+{
+    color=$1
+    title=$2
+    message=$3
+    if [ "$color" == "black" ]; then
+        colorDigit="0"
+    elif [ "$color" == "red" ]; then
+        colorDigit="1"
+    elif [ "$color" == "green" ]; then
+        colorDigit="2"
+    elif [ "$color" == "yellow" ]; then
+        colorDigit="3"
+    elif [ "$color" == "blue" ]; then
+        colorDigit="4"
+    elif [ "$color" == "magenta" ]; then
+        colorDigit="5"
+    elif [ "$color" == "cyan" ]; then
+        colorDigit="6"
+    elif [ "$color" == "white" ]; then
+        colorDigit="7"
+    else
+        error "The color '$color' isn't defined."
+    fi
+    echo "`tput setab "$colorDigit"` $title `tput setab 0` $message"
+}
+
+# Displays error message and dies.
+function error()
+{
+    message=$1
+    echo "`tput setab 1` ERROR `tput setab 0` $message"
+    exit
 }
 
 # Checks if a file exists. Exits script if it doesn't.
