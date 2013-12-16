@@ -23,14 +23,16 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+# More (Misc) aliases..
+
+alias sb='source ~/.bash_profile'
+
 #####################################################################################################
 
 ### BROWSE ###################
 alias browse-banks='~/Repos/Scripts/bash/browse/browse-banks.sh'
 
 ### CRON #####################
-alias cron-backup-bash-profile='~/Repos/Scripts/bash/cron/cron-backup-bash-profile.sh'
-alias cron-update='~/Repos/Scripts/bash/cron/cron-update.sh'
 
 ### QUICK COMMANDS ###########
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
@@ -44,6 +46,10 @@ alias sys-empty-trash='~/Repos/Scripts/bash/sys/sys-empty-trash.sh'
 
 ### TESTS ####################
 alias test-ruby-scripts='~/Repos/Scripts/bash/test/test-ruby-scripts.sh'
+
+### UPDATE ###################
+alias update-bash-profile='~/Repos/Scripts/bash/update/update-bash-profile.sh'
+alias update-crontab='~/Repos/Scripts/bash/update/update-crontab.sh'
 
 #####################################################################################################
 
