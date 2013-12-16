@@ -42,7 +42,7 @@ alias sys-edit-crontab='~/Repos/Scripts/bash/sys/sys-edit-crontab.sh'
 alias sys-empty-trash='~/Repos/Scripts/bash/sys/sys-empty-trash.sh'
 
 ### TESTS ####################
-alias test-ruby-scripts='~/Repos/Scripts/bash/tests/test-ruby-scripts.sh'
+alias test-ruby-scripts='~/Repos/Scripts/bash/test/test-ruby-scripts.sh'
 
 #####################################################################################################
 
