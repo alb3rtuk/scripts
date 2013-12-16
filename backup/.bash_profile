@@ -30,6 +30,7 @@ alias browse-banks='~/Repos/Scripts/bash/browse/browse-banks.sh'
 
 ### CRON #####################
 alias cron-backup-bash-profile='~/Repos/Scripts/bash/cron/cron-backup-bash-profile.sh'
+alias cron-update='~/Repos/Scripts/bash/cron/cron-update.sh'
 
 ### QUICK COMMANDS ###########
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
