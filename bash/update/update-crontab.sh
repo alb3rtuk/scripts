@@ -16,10 +16,10 @@ file_size=$(du ~/Repos/Scripts/backup/crontab.txt | awk '{print $1}');
 
 # If no crons, exit with message.
 if [ "$file_size" == "0" ]; then
-    echo "`tput setab 4` SUCCESS `tput setab 0` `tput setaf 3`$file`tput setaf 7` is empty so you currently have no crons."
+    message blue "CRONTAB UPDATED" "`tput setaf 3`$file`tput setaf 7` is empty so you currently have no crons."
     exit
 fi
 
 # If crons, exit and display crons.
 OUTPUT=$(crontab -l ARG1 2>&1)
-echo "`tput setab 4` SUCCESS `tput setab 0` Crons have been updated. Crontab is now configured to run the followning crons:`tput setaf 3`\n`crontab -l``tput setaf 7`"
+message blue "CRONTAB UPDATED" "Crontab is now configured to run the followning crons:`tput setaf 3`\n`crontab -l``tput setaf 7`"
