@@ -16,7 +16,6 @@ function detectDisplays()
     else
         displays="single"
     fi
-    echo "`tput setab 4` DETECT DISPLAYS `tput setab 0` Detected $displays display(s)"
 }
 
 # Displays a message with the first set of words colored
