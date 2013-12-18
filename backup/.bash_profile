@@ -24,8 +24,8 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # More (Misc) aliases..
-
 alias sb='source ~/.bash_profile'
+alias tig='/Users/Albert/bin/exec/tig'
 
 #####################################################################################################
 
@@ -35,6 +35,7 @@ alias browse-banks='~/Repos/Scripts/bash/browse/browse-banks.sh'
 ### CRON #####################
 
 ### QUICK COMMANDS ###########
+alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
 ### SYS ######################
