@@ -44,14 +44,14 @@ alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
 ### SYS ######################
-alias sys-chmod-shell-scripts='~/Repos/Scripts/bash/sys/sys-chmod-shell-scripts.sh'
-alias sys-close-all-windows='~/Repos/Scripts/bash/sys/sys-close-all-windows.sh'
-alias sys-edit-bash='~/Repos/Scripts/bash/sys/sys-edit-bash.sh'
-alias sys-edit-crontab='~/Repos/Scripts/bash/sys/sys-edit-crontab.sh'
-alias sys-empty-trash='~/Repos/Scripts/bash/sys/sys-empty-trash.sh'
+alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
+alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
+alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
+alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
+alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 
-### TESTS ####################
-alias test-ruby-scripts='~/Repos/Scripts/bash/test/test-ruby-scripts.sh'
+### RUN ####################
+alias run-ruby-tests='~/Repos/Scripts/bash/run/run-ruby-tests.sh'
 
 ### UPDATE ###################
 alias update-bash-profile='~/Repos/Scripts/bash/update/update-bash-profile.sh'
