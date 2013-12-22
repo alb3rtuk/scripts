@@ -29,10 +29,15 @@ alias tig='/Users/Albert/bin/exec/tig'
 
 #####################################################################################################
 
-### BROWSE ###################
-alias browse-banks='~/Repos/Scripts/bash/browse/browse-banks.sh'
-
 ### CRON #####################
+
+### OPEN #####################
+alias open-all-banks='~/Repos/Scripts/bash/open/open-all-banks.sh'
+alias open-halifax='~/Repos/Scripts/bash/open/open-halifax.sh'
+alias open-natwest='~/Repos/Scripts/bash/open/open-natwest.sh'
+alias open-lloyds='~/Repos/Scripts/bash/open/open-lloyds.sh'
+alias open-capitalone='~/Repos/Scripts/bash/open/open-capitalone.sh'
+alias open-barclaycard='~/Repos/Scripts/bash/open/open-barclaycard.sh'
 
 ### QUICK COMMANDS ###########
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'

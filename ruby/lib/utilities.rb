@@ -2,12 +2,6 @@ require 'rubygems'
 require 'watir-webdriver'
 require 'openssl'
 
-require '/Users/Albert/Repos/Scripts/ruby/lib/browser.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/mysql.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/twitter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities-banks.rb'
-
 # Exits a script and raises a runtime error.
 # @return void
 def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
@@ -61,3 +55,20 @@ def getCharAt(charAt, string)
         return string[charAt]
     end
 end
+
+# Get a Watir Browser object.
+# @return [Watir::Browser]
+def getBrowser(type = 'chrome', width = 1440, height = 1000, x = 1420, y = -2000)
+    verifyInput(Array['ff','chrome','phantomjs'], type)
+    browser = Watir::Browser.new(type)
+    browser.window.resize_to(width, height)
+    browser.window.move_to(x, y)
+    browser.window.use
+    return browser
+end
+
+require '/Users/Albert/Repos/Scripts/ruby/lib/browser.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/mysql.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/twitter.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/banks.rb'
