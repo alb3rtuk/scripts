@@ -40,6 +40,7 @@ alias open-capitalone='~/Repos/Scripts/bash/banking/open-capitalone.sh'
 alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
 
 ### QUICK COMMANDS ###########
+alias encrypt='~/Repos/Scripts/bash/quick-commands/encrypt.sh'
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
