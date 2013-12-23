@@ -17,7 +17,7 @@ def openLloyds(displays, headless = false)
     browser.getSecurityForLabel(":for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2'").setSelectField(":name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2'").to("#{crypter.decrypt(LloydsSecurity)}").toPrefix("&nbsp;")
     browser.getSecurityForLabel(":for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3'").setSelectField(":name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3'").to("#{crypter.decrypt(LloydsSecurity)}").toPrefix("&nbsp;")
     browser.clickInput(":id => 'frmentermemorableinformation1:btnContinue'")
-    browser.ifExists().clickInput(":id => 'frm2:btnContinue', :type => 'image'")
+    browser.ifExists().clickInput(":id => 'frm2:btnContinue2', :type => 'image'")
     return browser
 end
 
