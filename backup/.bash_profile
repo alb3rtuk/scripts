@@ -29,15 +29,15 @@ alias tig='/Users/Albert/bin/exec/tig'
 
 #####################################################################################################
 
-### CRON #####################
+### CRONS ####################
 
-### OPEN #####################
-alias open-all-banks='~/Repos/Scripts/bash/open/open-all-banks.sh'
-alias open-halifax='~/Repos/Scripts/bash/open/open-halifax.sh'
-alias open-natwest='~/Repos/Scripts/bash/open/open-natwest.sh'
-alias open-lloyds='~/Repos/Scripts/bash/open/open-lloyds.sh'
-alias open-capitalone='~/Repos/Scripts/bash/open/open-capitalone.sh'
-alias open-barclaycard='~/Repos/Scripts/bash/open/open-barclaycard.sh'
+### BANKING ##################
+alias open-all-banks='~/Repos/Scripts/bash/banking/open-all-banks.sh'
+alias open-halifax='~/Repos/Scripts/bash/banking/open-halifax.sh'
+alias open-natwest='~/Repos/Scripts/bash/banking/open-natwest.sh'
+alias open-lloyds='~/Repos/Scripts/bash/banking/open-lloyds.sh'
+alias open-capitalone='~/Repos/Scripts/bash/banking/open-capitalone.sh'
+alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
 
 ### QUICK COMMANDS ###########
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
@@ -49,13 +49,11 @@ alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
 alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
+alias update-bash-profile='~/Repos/Scripts/bash/sys/update-bash-profile.sh'
+alias update-crontab='~/Repos/Scripts/bash/sys/update-crontab.sh'
 
-### RUN ####################
+### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/run/run-ruby-tests.sh'
-
-### UPDATE ###################
-alias update-bash-profile='~/Repos/Scripts/bash/update/update-bash-profile.sh'
-alias update-crontab='~/Repos/Scripts/bash/update/update-crontab.sh'
 
 #####################################################################################################
 

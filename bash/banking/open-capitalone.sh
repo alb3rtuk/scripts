@@ -4,4 +4,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/open/open-barclaycard.rb $displays
+ruby ~/Repos/Scripts/ruby/banking/open-capitalone.rb $displays

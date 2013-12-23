@@ -1,5 +1,5 @@
 #!/bin/sh
 
-# Opens the cron definition file.
+# Opens the crons definition file.
 
 crontab -e

@@ -4,4 +4,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/open/open-natwest.rb $displays
+ruby ~/Repos/Scripts/ruby/banking/open-all-banks.rb $displays
