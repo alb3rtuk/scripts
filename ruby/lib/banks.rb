@@ -1,10 +1,3 @@
-# Require private config file
-if(File.exists?('/Users/Albert/bin/config/private.rb'))
-    require '/Users/Albert/bin/config/private.rb'
-else
-    exitScript("/Users/Albert/bin/config/private.rb doesn't exist. Can't log in without this file.")
-end
-
 def openLloyds(displays, headless = false)
     crypter = Encrypter.new
     browser = Browser.new((headless) ? 'phantomjs' : 'chrome', displays)

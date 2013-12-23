@@ -2,6 +2,13 @@ require 'rubygems'
 require 'watir-webdriver'
 require 'openssl'
 
+# Require private config file
+if(File.exists?('/Users/Albert/bin/config/private.rb'))
+    require '/Users/Albert/bin/config/private.rb'
+else
+    exitScript("/Users/Albert/bin/config/private.rb doesn't exist. Can't log in without this file.")
+end
+
 # Exits a script and raises a runtime error.
 # @return void
 def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
