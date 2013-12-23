@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Updates the crons using the crons definition file in this Repo
-# Scripts/bash/crons/crontab.txt
+# Updates the crons using the cron definition file in this Repo.
+# Fount at: ~/Repos/Scripts/bash/cron/crontab.txt
 
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 

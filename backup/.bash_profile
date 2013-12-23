@@ -29,8 +29,6 @@ alias tig='/Users/Albert/bin/exec/tig'
 
 #####################################################################################################
 
-### CRONS ####################
-
 ### BANKING ##################
 alias open-all-banks='~/Repos/Scripts/bash/banking/open-all-banks.sh'
 alias open-halifax='~/Repos/Scripts/bash/banking/open-halifax.sh'
@@ -53,11 +51,12 @@ alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
 alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
+alias tail-cron-mail='~/Repos/Scripts/bash/sys/tail-cron-mail.sh'
 alias update-bash-profile='~/Repos/Scripts/bash/sys/update-bash-profile.sh'
 alias update-crontab='~/Repos/Scripts/bash/sys/update-crontab.sh'
 
 ### TESTS ####################
-alias run-ruby-tests='~/Repos/Scripts/bash/run/run-ruby-tests.sh'
+alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
 
 #####################################################################################################
 

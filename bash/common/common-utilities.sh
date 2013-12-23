@@ -63,3 +63,11 @@ function verifyFileExists()
         exit
     fi
 }
+
+# Logs an entry in the file: ~Repos/Scripts/backup/cronlog.txt
+# Used for logging when a cron was kicked off.
+function logCron()
+{
+    logfile=/Users/Albert/Repos/Scripts/backup/cronlog.txt
+    echo "$(date) - $1" | cat - $logfile > /tmp/out && mv /tmp/out $logfile
+}

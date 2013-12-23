@@ -3,6 +3,10 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 
 class TestUtilities < Test::Unit::TestCase
 
+    def testConfigFileExists
+        assert_equal(File.exists?('/Users/Albert/bin/config/private.rb'), true)
+    end
+
     def testVerifyInput
         testArray = Array['foo', 'bar']
         assert_equal(verifyInput(testArray, 'foo'), true)

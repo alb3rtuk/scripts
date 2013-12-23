@@ -1,6 +1,8 @@
 class Browser
 
+    ClickCustom = "ClickCustom"
     ClickInput = "ClickInput"
+    ClickLink = "ClickLink"
     Frame = "Frame"
     GetSecurityForLabel = "GetSecurityForLabel"
     GetSecurityForCustom = "GetSecurityForCustom"
@@ -99,11 +101,29 @@ class Browser
         @actions.push(action)
     end
 
+    # Click a custom element
+    # @return void
+    def clickCustom(params)
+        action = self.getActionArray()
+        action.push(ClickCustom)
+        action.push(params)
+        @actions.push(action)
+    end
+
     # Click an input button
     # @return void
     def clickInput(params)
         action = self.getActionArray()
         action.push(ClickInput)
+        action.push(params)
+        @actions.push(action)
+    end
+
+    # Click an <a> tag
+    # @return void
+    def clickLink(params)
+        action = self.getActionArray()
+        action.push(ClickLink)
         action.push(params)
         @actions.push(action)
     end
@@ -218,12 +238,26 @@ class Browser
 
             exists = true
             case action.at(0)
+                when ClickCustom
+                    if (@ifExists == true)
+                        eval("exists = @browser#{@frame}.#{action.at(1)}.exists?")
+                    end
+                    if (exists == true)
+                        eval("@browser#{@frame}.#{action.at(1)}.click")
+                    end
                 when ClickInput
                     if (@ifExists == true)
                         eval("exists = @browser#{@frame}.input(#{action.at(1)}).exists?")
                     end
                     if (exists == true)
                         eval("@browser#{@frame}.input(#{action.at(1)}).click")
+                    end
+                when ClickLink
+                    if (@ifExists == true)
+                        eval("exists = @browser#{@frame}.link(#{action.at(1)}).exists?")
+                    end
+                    if (exists == true)
+                        eval("@browser#{@frame}.link(#{action.at(1)}).click")
                     end
                 when GetSecurityForLabel
                     charAt = false
@@ -245,7 +279,7 @@ class Browser
                     @browser.goto(action.at(1))
                 when TickCheckbox
                     if (@ifExists == true)
-                        eval("exists = @browser#{@frame}.input(#{action.at(1)}).exists?")
+                        eval("exists = @browser#{@frame}.checkbox(#{action.at(1)}).exists?")
                     end
                     if (exists == true)
                         if (action.at(2) == true)

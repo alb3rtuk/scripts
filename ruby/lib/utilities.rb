@@ -67,11 +67,23 @@ end
 
 # Get a Watir Browser object.
 # @return [Watir::Browser]
-def getBrowser(type = 'chrome', width = 1440, height = 1000, x = 1420, y = -2000)
-    verifyInput(Array['ff','chrome','phantomjs'], type)
+def getBrowser(type = 'chrome', displays = 'single')
+    verifyInput(Array['chrome', 'phantomjs'], type)
+    verifyInput(Array['single', 'multiple'], displays)
     browser = Watir::Browser.new(type)
-    browser.window.resize_to(width, height)
+    if displays == 'single'
+        width = 1440
+        height = 2000
+        x = 0
+        y = -0
+    elsif displays == 'multiple'
+        width = 1920
+        height = 2000
+        x = 1440
+        y = -2000
+    end
     browser.window.move_to(x, y)
+    browser.window.resize_to(width, height)
     browser.window.use
     return browser
 end
