@@ -26,4 +26,28 @@ class TestUtilities < Test::Unit::TestCase
         puts "\n\x1B[90mPass: testInArray\x1B[0"
     end
 
+    def testIsWholeNumber
+        assert_equal(isWholeNumber(12), true)
+        assert_equal(isWholeNumber(12.3), false)
+        assert_equal(isWholeNumber('12'), true)
+        assert_equal(isWholeNumber('12.3'), false)
+        assert_equal(isWholeNumber('abc'), false)
+        assert_equal(isWholeNumber(Array.new), false)
+        assert_equal(isWholeNumber("#{(3 + 3)}"), true)
+        puts "\n\x1B[90mPass: testIsWholeNumber\x1B[0"
+    end
+
+    def testGetCharAt
+        testString = "abcdefgh"
+        assert_equal(getCharAt(3, testString), 'c')
+        assert_equal(getCharAt('5', testString), 'e')
+        assert_equal(getCharAt("#{(3 + 3)}", testString), 'f')
+        assert_raise RuntimeError do
+            getCharAt(3.3, testString)
+        end
+        assert_raise RuntimeError do
+            getCharAt("3.3", testString)
+        end
+    end
+
 end

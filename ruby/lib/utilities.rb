@@ -42,7 +42,7 @@ def isWholeNumber(value)
     elsif value.is_a? Integer
         return true
     else
-        exitScript("Value passed must be a string or integer that represents a WHOLE NUMBER. You passed (#{value.class}) #{value}.")
+        return false
     end
 end
 
@@ -53,6 +53,8 @@ def getCharAt(charAt, string)
         charAt = charAt.to_i
         charAt = (charAt - 1)
         return string[charAt]
+    else
+        exitScript("The value for CharAt must be a whole number. The script received (#{charAt.class}) #{charAt}.")
     end
 end
 
