@@ -43,6 +43,9 @@ alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
+### SELENIUM #################
+alias order-asthma-inhalers='~/Repos/Scripts/bash/selenium/order-asthma-inhalers.sh'
+
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
 alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
