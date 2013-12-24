@@ -27,7 +27,7 @@ for input in $(find . -type f -name "albert.*.plist"); do
     launchctl load $launchdDirectory${input:2}
     inputLength=${#input}
     inputLength=`expr $inputLength - 8`
-    message green "Registered Launchd Job" "`tput setaf 3`${input:2:$inputLength}"
+    message green "REGISTERED LAUNCHD" "`tput setaf 3`${input:2:$inputLength}"
 done
 exit 0
 
