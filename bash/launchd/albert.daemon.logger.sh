@@ -2,5 +2,5 @@
 
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 
-clear
-ruby ~/Repos/Scripts/ruby/quick-commands/encrypt.rb $1
+logCron "Daemon-Cron ran succesfully."
+exit 0

@@ -43,7 +43,7 @@ function message()
     else
         error "The color '$color' isn't defined."
     fi
-    echo "`tput setab "$colorDigit"` $title `tput setab 0` $message"
+    echo "`tput setab "$colorDigit"` $title `tput setab 0` $message\033[0m"
 }
 
 # Displays error message and dies.
@@ -69,5 +69,6 @@ function verifyFileExists()
 function logCron()
 {
     logfile=/Users/Albert/Repos/Scripts/backup/cronlog.txt
-    echo "$(date) - $1" | cat - $logfile > /tmp/out && mv /tmp/out $logfile
+    # echo "$(date) - $1" | cat - $logfile > /tmp/out && mv /tmp/out $logfile
+    echo "$(date) - $1" >> $logfile
 }
