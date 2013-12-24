@@ -6,14 +6,7 @@
         <string>albert.daemon.logger</string>
         <key>Program</key>
         <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.daemon.logger.sh</string>
-        <key>ProgramArguments</key>
-        <array>
-            <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.daemon.logger.sh</string>
-        </array>
-        <key>StartCalendarInterval</key>
-        <dict>
-            <key>Minute</key>
-            <integer>15</integer>
-        </dict>
+        <key>StartInterval</key>
+        <integer>300</integer>
     </dict>
 </plist>

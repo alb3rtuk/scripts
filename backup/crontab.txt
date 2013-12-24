@@ -1,1 +1,1 @@
-* * * * * /Users/Albert/Repos/Scripts/bash/cron/cron-logger.sh
+*/5 * * * * /Users/Albert/Repos/Scripts/bash/cron/cron-logger.sh
