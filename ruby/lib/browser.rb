@@ -20,7 +20,7 @@ class Browser
         verifyInput(Array['ff', 'chrome', 'phantomjs'], browserType)
         verifyInput(Array['single', 'multiple'], displays)
         if (displays == 'single')
-            width = 1440
+            width = 1680
             height = 2000
             x = 0
             y = -0

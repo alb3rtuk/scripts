@@ -2,13 +2,6 @@ require 'rubygems'
 require 'watir-webdriver'
 require 'openssl'
 
-# Require private config file
-if(File.exists?('/Users/Albert/bin/config/private.rb'))
-    require '/Users/Albert/bin/config/private.rb'
-else
-    exitScript("/Users/Albert/bin/config/private.rb doesn't exist. Can't log in without this file.")
-end
-
 # Exits a script and raises a runtime error.
 # @return void
 def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
@@ -72,7 +65,7 @@ def getBrowser(type = 'chrome', displays = 'single')
     verifyInput(Array['single', 'multiple'], displays)
     browser = Watir::Browser.new(type)
     if displays == 'single'
-        width = 1440
+        width = 1680
         height = 2000
         x = 0
         y = -0
@@ -87,9 +80,3 @@ def getBrowser(type = 'chrome', displays = 'single')
     browser.window.use
     return browser
 end
-
-require '/Users/Albert/Repos/Scripts/ruby/lib/browser.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/mysql.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/twitter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/banks.rb'
