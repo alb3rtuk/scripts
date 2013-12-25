@@ -2,5 +2,5 @@
 
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 
-logCron "LaunchDaemon ran succesfully."
+logCron "LaunchDaemon ran successfully."
 exit 0
