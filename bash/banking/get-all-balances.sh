@@ -3,3 +3,4 @@
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 
 detectDisplays
+
