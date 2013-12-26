@@ -47,7 +47,7 @@ alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
 ### SELENIUM #################
-alias order-asthma-inhalers='~/Repos/Scripts/bash/selenium/order-asthma-inhalers.sh'
+alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'

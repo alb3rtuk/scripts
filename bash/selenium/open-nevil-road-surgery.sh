@@ -4,4 +4,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/order-asthma-inhalers.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-nevil-road-surgery.rb $displays
