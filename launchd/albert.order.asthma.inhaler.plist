@@ -3,11 +3,11 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>order.asthma.inhaler</string>
+        <string>albert.order.asthma.inhaler</string>
         <key>RunAtLoad</key>
         <false/>
         <key>Program</key>
-        <string>/Users/Albert/Repos/Scripts/bash/launchd/order.asthma.inhaler.sh</string>
+        <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.order.asthma.inhaler.sh</string>
         <key>StartCalendarInterval</key>
         <dict>
             <key>Minute</key>
