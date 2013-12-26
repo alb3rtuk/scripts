@@ -2,12 +2,6 @@ require 'rubygems'
 require 'watir-webdriver'
 require 'openssl'
 
-# Exits a script and raises a runtime error.
-# @return void
-def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
-    raise(RuntimeError, msg)
-end
-
 # Will exit script if element is not contained in arrayOfValidElements.
 # @return boolean
 def verifyInput(arrayOfValidElements, element, downcase = true)
@@ -15,7 +9,7 @@ def verifyInput(arrayOfValidElements, element, downcase = true)
         element = element.downcase
     end
     if !arrayOfValidElements.include?(element)
-        exitScript("ERROR: Invalid input. The value '#{element}' is not accepted.")
+        raise(RuntimeError, "ERROR: Invalid input. The value '#{element}' is not accepted.")
     end
     return true
 end
@@ -54,16 +48,15 @@ def getCharAt(charAt, string)
         charAt = (charAt - 1)
         return string[charAt]
     else
-        exitScript("The value for CharAt must be a whole number. The script received (#{charAt.class}) #{charAt}.")
+        raise(RuntimeError, "The value for CharAt must be a whole number. The script received (#{charAt.class}) #{charAt}.")
     end
 end
 
 # Get a Watir Browser object.
 # @return [Watir::Browser]
-def getBrowser(type = 'chrome', displays = 'single')
-    verifyInput(Array['chrome', 'phantomjs'], type)
+def getBrowser(displays = 'single', headless = false)
     verifyInput(Array['single', 'multiple'], displays)
-    browser = Watir::Browser.new(type)
+    browser = Watir::Browser.new(headless == false ? 'chrome' : 'phantomjs')
     if displays == 'single'
         width = 1680
         height = 2000
@@ -79,4 +72,17 @@ def getBrowser(type = 'chrome', displays = 'single')
     browser.window.resize_to(width, height)
     browser.window.use
     return browser
+end
+
+# Logs a message in backup/cronlog.txt
+# @return void
+def cronLog(message = '')
+    timestamp = Time.now.strftime('%a %b %d %H:%I:%S %Z %Y')
+    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.txt', 'a') { | file | file.write("#{timestamp} - #{message}\n") }
+end
+
+# Exits a script and raises a runtime error.
+# @return void
+def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
+    raise(RuntimeError, msg)
 end
