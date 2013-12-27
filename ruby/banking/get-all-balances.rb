@@ -25,6 +25,15 @@ capitalOne = BankCapitalOne.new(
     true
 )
 
+halifax = BankHalifax.new(
+    crypter.decrypt(HalifaxUsername),
+    crypter.decrypt(HalifaxPassword),
+    crypter.decrypt(HalifaxSecurity),
+    'single',
+    true,
+    true
+)
+
 lloyds = BankLloyds.new(
     crypter.decrypt(LloydsUsername),
     crypter.decrypt(LloydsPassword),
@@ -49,6 +58,9 @@ barclayCardBalances = barclayCardBalances[1]
 puts "\n"
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
+puts "\n"
+halifaxBalances = halifax.getBalances(true)
+halifaxBalances = halifaxBalances[1]
 puts "\n"
 lloydsBalances = lloyds.getBalances(true)
 lloydsBalances = lloydsBalances[1]
