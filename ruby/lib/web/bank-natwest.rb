@@ -8,18 +8,18 @@ end
 class BankNatWest
     include CommandLineReporter
 
-    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, runAsTest = false)
+    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false)
         @username = username
         @security_top = security_top
         @security_bottom = security_bottom
         @displays = displays
         @headless = headless
-        @displayProgress = runAsTest
+        @displayProgress = displayProgress
         @login_uri = 'https://www.nwolb.com/default.aspx'
     end
 
     # Gets you as far as NatWest account overview screen & then returns the browser for (possible) further manipulation.
-    def login(headless = @headless)
+    def login
         browser = getBrowser(@displays, @headless)
         f = 'ctl00_secframe'
         if @displayProgress
