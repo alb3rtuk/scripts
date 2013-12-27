@@ -6,6 +6,7 @@ else
 end
 
 class BankNatWest
+    include CommandLineReporter
 
     def initialize(username, security_top, security_bottom, displays = 'single', headless = false, runAsTest = false)
         @username = username
@@ -45,13 +46,31 @@ class BankNatWest
         return browser
     end
 
-    def getBalances
+    def getBalances(showInTerminal = false)
         browser = self.login
         f = 'ctl00_secframe'
         data = {}
         data['main_account'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+
+        if showInTerminal
+            puts "\n [ #{Rainbow("NatWest").foreground('#ff008a')} ]"
+            table(:border => true) do
+                row do
+                    column('90042689 Account', :width => 20, :align => 'right')
+                    column('STEP Account', :width => 20, :align => 'right')
+                    column('Savings Account', :width => 20, :align => 'right')
+                end
+                row do
+                    column("£#{toCurrency(data['main_account'])}", :color => 'green')
+                    column("£#{toCurrency(data['step_account'])}", :color => 'green')
+                    column("£#{toCurrency(data['savings_account'])}", :color => 'green')
+                end
+            end
+            puts "\n"
+        end
+
         return Array[browser, data]
     end
 
