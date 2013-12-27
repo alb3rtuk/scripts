@@ -86,6 +86,7 @@ end
 # Converts a number to 2 decimal points and adds thousands delimiter.
 # @return number
 def toCurrency(number, delimiter = ',')
+    number = number.to_f
     number = '%.2f' % number
     number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
 end
