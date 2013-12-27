@@ -19,10 +19,10 @@ class TestBankBarclayCard < Test::Unit::TestCase
         )
 
         puts "\n\n"
-        balances = barclayCard.getBalances
+        data = barclayCard.getBalances
         puts "\n"
 
-        balances[1].each { | key, value |
+        data[1].each { | key, value |
             assert_equal(key.is_a?(String), true)
             if(key == 'due_date')
                 assert_equal(value.is_a?(DateTime), true)
