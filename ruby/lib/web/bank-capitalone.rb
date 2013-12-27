@@ -39,7 +39,7 @@ class BankCapitalOne
                 puts "\x1B[90mSuccessfully bypassed (occasional) email confirmation page\x1B[0m\n"
             end
         end
-        if @displayprogress
+        if @displayProgress
             puts "\x1B[90mSuccessfully logged in to CapitalOne\x1B[0m\n"
         end
         return browser
