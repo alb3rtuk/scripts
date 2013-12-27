@@ -1,10 +1,16 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/browser.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/banks.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
 
 displays = ARGV[0]
 
-# CapitalOne
-browser = openCapitalOne(displays)
-browser.execute
+crypter = Encrypter.new
+
+capitalOne = BankCapitalOne.new(
+    crypter.decrypt(CapitalOneUsername),
+    crypter.decrypt(CapitalOneSecurity),
+    displays
+)
+
+capitalOne.login()
+exit
