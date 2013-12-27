@@ -31,6 +31,11 @@ alias tig='/Users/Albert/bin/exec/tig'
 
 ### BANKING ##################
 alias get-all-balances='~/Repos/Scripts/bash/banking/get-all-balances.sh'
+alias get-barclaycard-balances='~/Repos/Scripts/bash/banking/get-barclaycard-balances.sh'
+alias get-capitalone-balances='~/Repos/Scripts/bash/banking/get-capitalone-balances.sh'
+alias get-halifax-balances='~/Repos/Scripts/bash/banking/get-halifax-balances.sh'
+alias get-lloyds-balances='~/Repos/Scripts/bash/banking/get-lloyds-balances.sh'
+alias get-natwest-balances='~/Repos/Scripts/bash/banking/get-natwest-balances.sh'
 alias open-all-banks='~/Repos/Scripts/bash/banking/open-all-banks.sh'
 alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
 alias open-capitalone='~/Repos/Scripts/bash/banking/open-capitalone.sh'

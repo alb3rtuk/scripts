@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'rainbow'
+require 'command_line_reporter'
 require 'watir-webdriver'
 require 'openssl'
 
