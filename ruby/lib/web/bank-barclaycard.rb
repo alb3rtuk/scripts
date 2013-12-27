@@ -52,7 +52,7 @@ class BankBarclayCard
         data['due_date'] = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
 
         if showInTerminal
-            puts "\n [ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('Outstanding Balance', :width => 20, :align => 'right')
@@ -71,7 +71,6 @@ class BankBarclayCard
                     column("#{data['due_date'].strftime('%d %b %Y')}", :color => 'white')
                 end
             end
-            puts "\n"
         end
 
         return Array[browser, data]

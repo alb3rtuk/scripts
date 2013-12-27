@@ -14,6 +14,6 @@ barclayCard = BankBarclayCard.new(
 )
 
 puts "\n"
-
-data = barclayCard.getBalances(true)
+barclayCard.getBalances(true)
+puts "\n"
 exit

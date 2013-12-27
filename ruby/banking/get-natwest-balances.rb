@@ -14,6 +14,6 @@ natWest = BankNatWest.new(
 )
 
 puts "\n"
-
 natWest.getBalances(true)
+puts "\n"
 exit

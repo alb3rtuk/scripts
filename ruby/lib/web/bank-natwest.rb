@@ -55,7 +55,7 @@ class BankNatWest
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
 
         if showInTerminal
-            puts "\n [ #{Rainbow("NatWest").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow("NatWest").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('90042689 Account', :width => 20, :align => 'right')
@@ -68,7 +68,6 @@ class BankNatWest
                     column("£#{toCurrency(data['savings_account'])}", :color => 'green')
                 end
             end
-            puts "\n"
         end
 
         return Array[browser, data]
