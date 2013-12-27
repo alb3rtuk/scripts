@@ -45,7 +45,7 @@ end
 # Get the character at a specific index in a string.
 # @return string
 def getCharAt(charAt, string)
-    if(isWholeNumber(charAt))
+    if (isWholeNumber(charAt))
         charAt = charAt.to_i
         charAt = (charAt - 1)
         return string[charAt]
@@ -80,7 +80,12 @@ end
 # @return void
 def cronLog(message = '')
     timestamp = Time.now.strftime('%a %b %d %H:%I:%S %Z %Y')
-    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.txt', 'a') { | file | file.write("#{timestamp} - #{message}\n") }
+    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.txt', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
+end
+
+def toCurrency(number, delimiter = ',')
+    number = '%.2f' % number
+    number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
 end
 
 # Exits a script and raises a runtime error.

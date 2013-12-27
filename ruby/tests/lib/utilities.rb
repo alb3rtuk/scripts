@@ -54,4 +54,15 @@ class TestUtilities < Test::Unit::TestCase
         end
     end
 
+    def testToCurrency
+        assert_equal(toCurrency(4123), '4,123.00')
+        assert_equal(toCurrency('4123'), '4,123.00')
+        assert_equal(toCurrency(4123.123), '4,123.12')
+        assert_equal(toCurrency('4123.123'), '4,123.12')
+        assert_equal(toCurrency('4123.0', '-'), '4-123.00')
+        assert_raise ArgumentError do
+            toCurrency('abc')
+        end
+    end
+
 end
