@@ -83,6 +83,8 @@ def cronLog(message = '')
     File.open('/Users/Albert/Repos/Scripts/backup/cronlog.txt', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
 end
 
+# Converts a number to 2 decimal points and adds thousands delimiter.
+# @return number
 def toCurrency(number, delimiter = ',')
     number = '%.2f' % number
     number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
