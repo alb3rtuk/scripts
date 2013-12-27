@@ -1,10 +1,17 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/browser.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/banks.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-halifax.rb'
 
 displays = ARGV[0]
 
-# Halifax
-browser = openHalifax(displays)
-browser.execute
+crypter = Encrypter.new
+
+halifax = BankHalifax.new(
+    crypter.decrypt(HalifaxUsername),
+    crypter.decrypt(HalifaxPassword),
+    crypter.decrypt(HalifaxSecurity),
+    displays
+)
+
+halifax.login
+exit
