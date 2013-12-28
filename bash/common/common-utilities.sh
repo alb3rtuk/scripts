@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Clears Terminal output using AppleScript.
+function clearTerminal()
+{
+    osascript ~/Repos/Scripts/osa/clear-terminal.scpt
+}
+
 # Detects displays and returns either 'single' or 'multiple' in a global variable named: displays
 function detectDisplays()
 {

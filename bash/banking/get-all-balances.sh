@@ -1,5 +1,7 @@
 #!/bin/sh
 
-clear
+. ~/Repos/Scripts/bash/common/common-utilities.sh
+
+clearTerminal
+
 ruby ~/Repos/Scripts/ruby/banking/get-all-balances.rb
-exit

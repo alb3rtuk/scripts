@@ -56,6 +56,7 @@ alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-sur
 
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
+alias clear-terminal='~/Repos/Scripts/bash/sys/clear-terminal.sh'
 alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
 alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'

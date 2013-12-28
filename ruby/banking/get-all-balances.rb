@@ -131,3 +131,5 @@ table(:border => true) do
         column("#{toCurrency(0 - summary['total_credit_used'])}", :color => (summary['total_credit_used'] > 0) ? 'red' : 'white')
     end
 end
+
+exit
