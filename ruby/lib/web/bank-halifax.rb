@@ -19,8 +19,7 @@ class BankHalifax
     end
 
     # Gets you as far as Halifax account overview screen & then returns the browser for (possible) further manipulation.
-    def login
-        browser = getBrowser(@displays, @headless)
+    def login(browser = getBrowser(@displays, @headless))
         if @displayProgress
             puts "\x1B[90mAttempting to establish connection with: #{@login_uri}\x1B[0m"
         end
