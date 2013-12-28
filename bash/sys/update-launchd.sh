@@ -29,5 +29,4 @@ for input in $(find . -type f -name "albert.*.plist"); do
     inputLength=`expr $inputLength - 8`
     message green "REGISTERED LAUNCHD" "`tput setaf 3`${input:2:$inputLength}"
 done
-exit 0
-
+exit
