@@ -55,14 +55,17 @@ class TestUtilities < Test::Unit::TestCase
     end
 
     def testToCurrency
-        assert_equal(toCurrency(4123), '4,123.00')
-        assert_equal(toCurrency('4123'), '4,123.00')
-        assert_equal(toCurrency(4123.123), '4,123.12')
-        assert_equal(toCurrency('4123.123'), '4,123.12')
-        assert_equal(toCurrency('4123.0', '-'), '4-123.00')
-        assert_equal(toCurrency(0), '0.00')
-        assert_equal(toCurrency('0'), '0.00')
-        assert_equal(toCurrency('abc'), '0.00')
+        assert_equal(toCurrency(4123), '£4,123.00')
+        assert_equal(toCurrency('4123'), '£4,123.00')
+        assert_equal(toCurrency(4123.123), '£4,123.12')
+        assert_equal(toCurrency('4123.123'), '£4,123.12')
+        assert_equal(toCurrency('4123.0', '$', '-'), '$4-123.00')
+        assert_equal(toCurrency(0), '£0.00')
+        assert_equal(toCurrency('0'), '£0.00')
+        assert_equal(toCurrency('abcz'), '£0.00')
+        assert_equal(toCurrency(-55.01), '-£55.01')
+        assert_equal(toCurrency(0 - 55.01), '-£55.01')
+        assert_equal(toCurrency('-55.01'), '-£55.01')
     end
 
 end
