@@ -63,9 +63,9 @@ class BankNatWest
                     column('Savings Account', :width => 20, :align => 'right')
                 end
                 row do
-                    column("#{toCurrency(data['advantage_gold'])}", :color => (data['advantage_gold'] > 0) ? 'green' : 'white')
-                    column("#{toCurrency(data['step_account'])}", :color => (data['step_account'] > 0) ? 'green' : 'white')
-                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['advantage_gold'])}", :color => (data['advantage_gold'] >= 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['step_account'])}", :color => (data['step_account'] >= 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'green' : 'red')
                 end
             end
         end
