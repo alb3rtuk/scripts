@@ -79,6 +79,8 @@ puts "\n"
 #barclayCardBalances = {"balance" => 19.69, "available_funds" => 1580.31, "credit_limit" => 1600.0, "minimum_payment" => 5.0, "pending_transactions" => 0.0}
 #capitalOneBalances= {"balance" => 783.25, "available_funds" => 216.75, "credit_limit" => 1000.0, "minimum_payment" => 7.83}
 
+puts "\x1B[90mGenerating Summary\x1B[0m\n\n"
+
 summary = {}
 summary['total_available'] =
     natWestBalances['advantage_gold'] +
