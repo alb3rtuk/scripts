@@ -82,24 +82,24 @@ class BankLloyds
             puts "\n[ #{Rainbow("Lloyds").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('77-73-03, 29422468', :width => 20, :align => 'right')
+                    column('Platinum MasterCard', :width => 20, :align => 'right')
+                    column('Available Funds', :width => 20, :align => 'right')
+                    column('Credit Limit', :width => 20, :align => 'right')
+                    column('Minimum Payment', :width => 20, :align => 'right')
+                    column('Payment Date', :width => 20, :align => 'right')
+                    column('Current Account', :width => 20, :align => 'right')
                     column('Available Funds', :width => 20, :align => 'right')
                     column('O/D Limit', :width => 20, :align => 'right')
-                    column('MasterCard Balance', :width => 20, :align => 'right')
-                    column('MasterCard Available', :width => 20, :align => 'right')
-                    column('MasterCard Limit', :width => 20, :align => 'right')
-                    column('Minimum Payment', :width => 20, :align => 'right')
-                    column('Due Date', :width => 20, :align => 'right')
                 end
                 row do
-                    column("£#{toCurrency(data['account_1_balance'])}", :color => 'green')
-                    column("£#{toCurrency(data['account_1_available'])}", :color => 'green')
-                    column("£#{toCurrency(data['account_1_overdraft'])}", :color => 'white')
-                    column("-£#{toCurrency(data['cc_balance'])}", :color => 'red')
-                    column("£#{toCurrency(data['cc_available'])}", :color => 'green')
-                    column("£#{toCurrency(data['cc_limit'])}", :color => 'green')
-                    column("£#{toCurrency(data['cc_minimum_payment'])}", :color => 'white')
-                    column("#{data['cc_due_date'].strftime('%d %b %Y')}", :color => 'white')
+                    column("#{toCurrency(0 - data['cc_balance'])}", :color => (data['cc_balance'] > 0) ? 'red' : 'white')
+                    column("#{toCurrency(data['cc_available'])}", :color => (data['cc_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['cc_limit'])}", :color => 'white')
+                    column("#{toCurrency(data['cc_minimum_payment'])}", :color => 'white')
+                    column("#{data['cc_due_date'].strftime('%B %d %Y')}", :color => 'white')
+                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] < 0) ? 'red' : 'white')
+                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['account_1_overdraft'])}", :color => 'white')
                 end
             end
         end

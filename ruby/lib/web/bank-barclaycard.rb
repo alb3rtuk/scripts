@@ -45,8 +45,8 @@ class BankBarclayCard
         browser = self.login
         data = {}
 
-        data['current_balance'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
-        data['available_credit'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
+        data['balance'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
+        data['available_funds'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
         data['credit_limit'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 3).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
@@ -56,20 +56,20 @@ class BankBarclayCard
             puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Outstanding Balance', :width => 20, :align => 'right')
-                    column('Available Credit', :width => 20, :align => 'right')
+                    column('BarclayCard Visa', :width => 20, :align => 'right')
+                    column('Available Funds', :width => 20, :align => 'right')
                     column('Credit Limit', :width => 20, :align => 'right')
                     column('Minimum Payment', :width => 20, :align => 'right')
-                    column('Payment Due', :width => 20, :align => 'right')
+                    column('Payment Date', :width => 20, :align => 'right')
                     column('Pending Transactions', :width => 20, :align => 'right')
                 end
                 row do
-                    column("-£#{toCurrency(data['current_balance'])}", :color => 'red')
-                    column("£#{toCurrency(data['available_credit'])}", :color => 'green')
-                    column("£#{toCurrency(data['credit_limit'])}", :color => 'green')
-                    column("£#{toCurrency(data['minimum_payment'])}", :color => 'green')
-                    column("#{data['due_date'].strftime('%d %b %Y')}", :color => 'white')
-                    column("£#{toCurrency(data['pending_transactions'])}", :color => 'white')
+                    column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')
+                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['credit_limit'])}", :color => 'white')
+                    column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
+                    column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')
+                    column("#{toCurrency(0 - data['pending_transactions'])}", :color => (data['pending_transactions'] > 0) ? 'red' : 'white')
                 end
             end
         end

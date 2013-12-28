@@ -48,8 +48,8 @@ class BankCapitalOne
     def getBalances(showInTerminal = false)
         browser = self.login
         data = {}
-        data['current_balance'] = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
-        data['available_credit'] = browser.td(:text, /Available to spend/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
+        data['balance'] = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
+        data['available_funds'] = browser.td(:text, /Available to spend/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['credit_limit'] = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.td(:text, /Minimum payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y')
@@ -58,18 +58,18 @@ class BankCapitalOne
             puts "\n[ #{Rainbow("CapitalOne").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Outstanding Balance', :width => 20, :align => 'right')
-                    column('Available Credit', :width => 20, :align => 'right')
+                    column('CapitalOne Visa', :width => 20, :align => 'right')
+                    column('Available Funds', :width => 20, :align => 'right')
                     column('Credit Limit', :width => 20, :align => 'right')
                     column('Minimum Payment', :width => 20, :align => 'right')
-                    column('Payment Due', :width => 20, :align => 'right')
+                    column('Payment Date', :width => 20, :align => 'right')
                 end
                 row do
-                    column("-£#{toCurrency(data['current_balance'])}", :color => 'red')
-                    column("£#{toCurrency(data['available_credit'])}", :color => 'green')
-                    column("£#{toCurrency(data['credit_limit'])}", :color => 'green')
-                    column("£#{toCurrency(data['minimum_payment'])}", :color => 'green')
-                    column("#{data['due_date'].strftime('%d %b %Y')}", :color => 'white')
+                    column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')
+                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['credit_limit'])}", :color => 'white')
+                    column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
+                    column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')
                 end
             end
         end
