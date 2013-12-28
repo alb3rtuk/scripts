@@ -49,11 +49,9 @@ class NevilRoadSurgery
         browser.link(:id => '__tab_ctl00_ContentPlaceHolder1_TabContainer1_Panel3').click
         browser.select_list(:id => 'ctl00_ContentPlaceHolder1_TabContainer1_Panel3_emailReminder').option(:value => '1').select
         browser.checkbox(:id => 'ctl00_ContentPlaceHolder1_TabContainer1_Panel3_confirmation').set
-
-        if(headless != false)
-            browser.input(:name => 'ctl00$ContentPlaceHolder1$TabContainer1$Panel3$buttonSend').click
-            cronLog('Asthma inhalers have been orderd. Ready for collection at Soods Chemist in a day or so.')
-        end
+        browser.input(:name => 'ctl00$ContentPlaceHolder1$TabContainer1$Panel3$buttonSend').click
+        cronLog('Asthma inhalers have been successfully ordered. Ready for collection at Soods Chemist in 2-3 days.')
+        return browser
     end
 
 end
