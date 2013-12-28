@@ -50,7 +50,6 @@ class BankBarclayCard
         data['minimum_payment'] = browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
         data['pending_transactions'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 1).text.delete('£').delete(',').to_f
-
         if showInTerminal
             puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -68,7 +67,16 @@ class BankBarclayCard
                     column("#{toCurrency(data['credit_limit'])}", :color => 'white')
                     column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
                     column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')
-                    column("#{toCurrency(0 - data['pending_transactions'])}", :color => (data['pending_transactions'] > 0) ? 'red' : 'white')
+                    ptSign = ''
+                    if(data['pending_transactions'] < 0)
+                        ptSign = '+'
+                        ptColor = 'green'
+                    elsif (data['pending_transactions'] > 0)
+                        ptColor = 'red'
+                    else
+                        ptColor = 'white'
+                    end
+                    column("#{ptSign}#{toCurrency(0 - data['pending_transactions'])}", :color => ptColor)
                 end
             end
         end
@@ -76,4 +84,10 @@ class BankBarclayCard
         return Array[browser, data]
     end
 
+    # Pays the amount passed in
+    def payBarclayCard(amount)
+
+
+
+    end
 end
