@@ -8,6 +8,8 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
 
 include CommandLineReporter
 
+clean = (ARGV.empty?) ? true : false
+
 crypter = Encrypter.new
 
 barclayCard = BankBarclayCard.new(
@@ -16,7 +18,7 @@ barclayCard = BankBarclayCard.new(
     crypter.decrypt(BarclayCardSecurity),
     'single',
     true,
-    true
+    clean
 )
 
 capitalOne = BankCapitalOne.new(
@@ -24,7 +26,7 @@ capitalOne = BankCapitalOne.new(
     crypter.decrypt(CapitalOneSecurity),
     'single',
     true,
-    true
+    clean
 )
 
 halifax = BankHalifax.new(
@@ -33,7 +35,7 @@ halifax = BankHalifax.new(
     crypter.decrypt(HalifaxSecurity),
     'single',
     true,
-    true
+    clean
 )
 
 lloyds = BankLloyds.new(
@@ -42,7 +44,7 @@ lloyds = BankLloyds.new(
     crypter.decrypt(LloydsSecurity),
     'single',
     true,
-    true
+    clean
 )
 
 natWest = BankNatWest.new(
@@ -51,35 +53,25 @@ natWest = BankNatWest.new(
     crypter.decrypt(NatWestSecurityBottom),
     'single',
     true,
-    true
+    clean
 )
 
-puts "\n"
+if clean then puts "\n" end
 natWestBalances = natWest.getBalances(true)
 natWestBalances = natWestBalances[1]
-puts "\n"
+if clean then puts "\n" end
 halifaxBalances = halifax.getBalances(true)
 halifaxBalances = halifaxBalances[1]
-puts "\n"
+if clean then puts "\n" end
 lloydsBalances = lloyds.getBalances(true)
 lloydsBalances = lloydsBalances[1]
-puts "\n"
+if clean then puts "\n" end
 barclayCardBalances = barclayCard.getBalances(true)
 barclayCardBalances = barclayCardBalances[1]
-puts "\n"
+if clean then puts "\n" end
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
-puts "\n"
-
-# DEBUG STUFF, DELETE BY 8TH JAN IF NOT USING
-
-#natWestBalances = {"advantage_gold" => 1932.61, "step_account" => 5.59, "savings_account" => 20.72}
-#halifaxBalances = {"isa" => 75.0, "isa_remaining" => 5710.04, "account_1_balance" => 105.0, "account_1_available" => 5105.0, "account_1_overdraft" => 5000.0, "account_2_balance" => 600.0, "account_2_available" => 600.0, "account_2_overdraft" => 0.0}
-#lloydsBalances = {"account_1_balance" => 169.42, "account_1_available" => 3169.42, "account_1_overdraft" => 3000.0, "cc_balance" => 1673.41, "cc_available" => 2324.98, "cc_limit" => 4000.0, "cc_minimum_payment" => 10.0}
-#barclayCardBalances = {"balance" => 19.69, "available_funds" => 1580.31, "credit_limit" => 1600.0, "minimum_payment" => 5.0, "pending_transactions" => 0.0}
-#capitalOneBalances= {"balance" => 783.25, "available_funds" => 216.75, "credit_limit" => 1000.0, "minimum_payment" => 7.83}
-
-puts "\x1B[90mGenerating Summary\x1B[0m\n\n"
+if clean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
 
 summary = {}
 summary['total_available'] =
@@ -118,7 +110,7 @@ summary['total_cash'] =
     summary['total_available'] -
     summary['total_credit']
 
-puts "[ #{Rainbow("Summary").foreground('#ff008a')} ]"
+puts "\n[ #{Rainbow("Summary").foreground('#ff008a')} ]"
 table(:border => true) do
     row do
         column('Total Available', :width => 20, :align => 'right')
@@ -133,5 +125,6 @@ table(:border => true) do
         column("#{toCurrency(0 - summary['total_credit_used'])}", :color => (summary['total_credit_used'] > 0) ? 'red' : 'white')
     end
 end
+puts "\n"
 
 exit
