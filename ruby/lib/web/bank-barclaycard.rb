@@ -1,10 +1,3 @@
-configFile = '/Users/Albert/bin/config/private.rb'
-if (File.exists?(configFile))
-    require configFile
-else
-    abort "#{configFile} exist. Can't log in without this file."
-end
-
 class BankBarclayCard
     include CommandLineReporter
 

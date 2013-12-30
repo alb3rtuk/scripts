@@ -47,6 +47,7 @@ alias pay-capitalone='~/Repos/Scripts/bash/banking/pay-capitalone.sh'
 alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
 ### QUICK COMMANDS ###########
+alias decrypt='~/Repos/Scripts/bash/quick-commands/decrypt.sh'
 alias encrypt='~/Repos/Scripts/bash/quick-commands/encrypt.sh'
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'

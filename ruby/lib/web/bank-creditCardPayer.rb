@@ -1,5 +1,4 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-barclaycard.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-halifax.rb'
@@ -24,6 +23,8 @@ class BankCreditCardPayer
 
         @payment_accounts = Array.new
 
+        puts "\n"
+
         # Get Credit Cards
         if creditCard == 'barclaycard'
             @barclayCard = BankBarclayCard.new(crypter.decrypt(BarclayCardUsername), crypter.decrypt(BarclayCardPin), crypter.decrypt(BarclayCardSecurity), 'single', true, true)
@@ -44,6 +45,8 @@ class BankCreditCardPayer
             @minimum_payment = @lloyds[1]['cc_minimum_payment']
             @due_date = @lloyds[1]['cc_due_date']
         end
+
+        self.displayOutstandingBalance
 
         # Get Bank Account(s)
         bankAccounts.each do | bankAccount |
@@ -78,9 +81,21 @@ class BankCreditCardPayer
 
     end
 
-    # Script to pay credit cards.
-    def payCreditCard()
+    # Display the outstanding balance
+    def displayOutstandingBalance
+        puts "\n"
+        if @outstanding_balance > 0
+            puts "Outstanding Balance        : \x1B[31m#{toCurrency(@outstanding_balance).to_s.rjust(11)}\x1B[0m"
+        else
+            puts "Outstanding Balance        : #{toCurrency(@outstanding_balance).to_s.rjust(11)}"
+        end
 
+        if @minimum_payment
+            puts "Minimum Payment            : \x1B[31m#{toCurrency(@minimum_payment).to_s.rjust(11)}\x1B[0m"
+        else
+            puts "Minimum Payment            : #{toCurrency(@minimum_payment).to_s.rjust(11)}"
+        end
+        puts "Due Date                   : \x1B[90m#{@due_date.strftime('%d-%m-%y').to_s.rjust(11)} (in #{diffBetweenDatesInDays(@due_date.strftime('%y-%m-%d'))} days)\x1B[0m"
     end
 
 end

@@ -4,6 +4,8 @@ require 'command_line_reporter'
 require 'watir-webdriver'
 require 'openssl'
 require 'time'
+require '/Users/Albert/bin/config/private.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 
 # Will exit script if element is not contained in arrayOfValidElements.
 # @return boolean

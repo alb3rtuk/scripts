@@ -3,9 +3,12 @@ require 'base64'
 
 class Encrypter
 
+    # I keep all my keys, hex's & passwords stored (and encrypted) locally.
+    # These will never be transmitted across the web, git, or anything.. ever!
+    # If you made it far enough to read this comment then you, sir, are a sneaky dog.. and I salute you :)
     def initialize
-        @key = 'a7Jhd9Ope8iJQbpodYN34Yha'
-        @hex = 'qHSo70fNuF74dNatIL3u9AAz'
+        @key = $cryptoKey
+        @hex = $cryptoHex
     end
 
     # Encrypts a string. Please note, this is not bomb-proof.

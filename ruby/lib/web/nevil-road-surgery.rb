@@ -1,11 +1,3 @@
-# Require private config file
-configFile = '/Users/Albert/bin/config/private.rb'
-if(File.exists?(configFile))
-    require configFile
-else
-    abort "#{configFile} doesn't exist. Can't log in without this file."
-end
-
 class NevilRoadSurgery
 
     def initialize(username, password)
