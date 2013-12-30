@@ -96,7 +96,7 @@ def toCurrency(number, symbol = '£', delimiter = ',')
 end
 
 # Calculates how many days between 2 dates (must be in 2013-10-29 format).
-def diffBetweenDatesInDays(earlierDate = nil, laterDate = nil)
+def diffBetweenDatesInDays(laterDate = nil, earlierDate = nil)
     dates = Array[earlierDate, laterDate]
     dates.map! { | date |
         if date == nil

@@ -55,8 +55,10 @@ class TestUtilities < Test::Unit::TestCase
     end
 
     def testDiffBetweenDatesInDays
-        assert_equal(diffBetweenDatesInDays('2013-10-29', '2013-12-10'), 42)
-        assert_equal(diffBetweenDatesInDays('2013-12-10', '2013-10-29'), -42)
+        assert_equal(diffBetweenDatesInDays('2013-10-29', '2013-12-10'), -42)
+        assert_equal(diffBetweenDatesInDays('2013-12-10', '2013-10-29'), 42)
+        assert_equal(diffBetweenDatesInDays('2013-12-10') < 0, true)
+        assert_equal(diffBetweenDatesInDays(), 0)
         assert_raise ArgumentError do
             assert_equal(diffBetweenDatesInDays('2013/10/29', '2013/12/10'), 42)
         end
