@@ -54,6 +54,17 @@ class TestUtilities < Test::Unit::TestCase
         end
     end
 
+    def testDiffBetweenDatesInDays
+        assert_equal(diffBetweenDatesInDays('2013-10-29', '2013-12-10'), 42)
+        assert_equal(diffBetweenDatesInDays('2013-12-10', '2013-10-29'), -42)
+        assert_raise ArgumentError do
+            assert_equal(diffBetweenDatesInDays('2013/10/29', '2013/12/10'), 42)
+        end
+        assert_raise ArgumentError do
+            assert_equal(diffBetweenDatesInDays('abc', 'def'), 42)
+        end
+    end
+
     def testToCurrency
         assert_equal(toCurrency(4123), '£4,123.00')
         assert_equal(toCurrency('4123'), '£4,123.00')

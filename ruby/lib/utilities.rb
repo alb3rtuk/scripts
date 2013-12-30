@@ -3,6 +3,7 @@ require 'rainbow'
 require 'command_line_reporter'
 require 'watir-webdriver'
 require 'openssl'
+require 'time'
 
 # Will exit script if element is not contained in arrayOfValidElements.
 # @return boolean
@@ -10,10 +11,10 @@ def verifyInput(arrayOfValidElements, element, downcase = true)
     if downcase
         element = element.downcase
     end
-    if !arrayOfValidElements.include?(element)
+    unless arrayOfValidElements.include?(element)
         raise(RuntimeError, "ERROR: Invalid input. The value '#{element}' is not accepted.")
     end
-    return true
+    true
 end
 
 # Same as verifyInput(), except this function doesn't stop the script if the element isn't found.
@@ -24,9 +25,9 @@ def inArray(arrayOfValidElements, element, downcase = false)
         element = element.downcase
     end
     if arrayOfValidElements.include?(element)
-        return true
+        true
     else
-        return false
+        false
     end
 end
 
@@ -34,21 +35,21 @@ end
 # @return boolean
 def isWholeNumber(value)
     if value =~ /^\s*\d+\s*$/
-        return true
+        true
     elsif value.is_a? Integer
-        return true
+        true
     else
-        return false
+        false
     end
 end
 
 # Get the character at a specific index in a string.
 # @return string
 def getCharAt(charAt, string)
-    if (isWholeNumber(charAt))
+    if isWholeNumber(charAt)
         charAt = charAt.to_i
         charAt = (charAt - 1)
-        return string[charAt]
+        string[charAt]
     else
         raise(RuntimeError, "The value for CharAt must be a whole number. The script received (#{charAt.class}) #{charAt}.")
     end
@@ -58,7 +59,8 @@ end
 # @return [Watir::Browser]
 def getBrowser(displays = 'single', headless = false, browser = 'chrome')
     verifyInput(Array['single', 'multiple'], displays)
-    browser = Watir::Browser.new(headless == false ? browser : 'phantomjs')
+    browser = Watir::Browser.new(!headless ? browser : 'phantomjs')
+    x = y= width = height = 0
     if displays == 'single'
         width = 1680
         height = 2000
@@ -73,7 +75,7 @@ def getBrowser(displays = 'single', headless = false, browser = 'chrome')
     browser.window.move_to(x, y)
     browser.window.resize_to(width, height)
     browser.window.use
-    return browser
+    browser
 end
 
 # Logs a message in backup/cronlog.txt
@@ -87,10 +89,28 @@ end
 # @return number
 def toCurrency(number, symbol = '£', delimiter = ',')
     number = number.to_f
-    minus =  (number < 0) ? '-' : ''
+    minus = (number < 0) ? '-' : ''
     number = '%.2f' % number.abs
     number = number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
-    return "#{minus}#{symbol}#{number}"
+    "#{minus}#{symbol}#{number}"
+end
+
+# Calculates how many days between 2 dates (must be in 2013-10-29 format).
+def diffBetweenDatesInDays(earlierDate = nil, laterDate = nil)
+    dates = Array[earlierDate, laterDate]
+    dates.map! { | date |
+        if date == nil
+            today = DateTime.now
+            today.strftime('%y-%m-%d')
+        else
+            explodedDate = date.split('-')
+            date = DateTime.new(explodedDate[0].to_i, explodedDate[1].to_i, explodedDate[2].to_i)
+            date.strftime('%y-%m-%d')
+        end
+    }
+    earlierDate = Date.parse(dates[0])
+    laterDate = Date.parse(dates[1])
+    laterDate.mjd - earlierDate.mjd
 end
 
 # Exits a script and raises a runtime error.
