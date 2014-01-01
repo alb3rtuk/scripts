@@ -182,8 +182,14 @@ class BankCreditCardPayer
         until inArray(getKeysInHash(@payment_map), @chosenAccount)
             STDOUT.flush
             print "\x1B[90mWhat account would you like to make the payment from? [ie: 1] \x1B[0m => "
-            @chosenAccount = STDIN.gets.chomp
-            @chosenAccount = @chosenAccount.to_i
+            if @payment_map.count == 1
+                @chosenAccount = 1
+                print 1
+                puts
+            else
+                @chosenAccount = STDIN.gets.chomp
+                @chosenAccount = @chosenAccount.to_i
+            end
         end
         puts "\n\x1B[44m ACC \x1B[0m \x1B[33m#{@payment_map[@chosenAccount]['account_name']}\x1B[0m\n\n"
         @chosenAccount = @payment_map[@chosenAccount]['account_id']
