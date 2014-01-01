@@ -33,6 +33,15 @@ def inArray(arrayOfValidElements, element, downcase = false)
     end
 end
 
+# Gets all the indexes of a hash in an array
+# Currently doesn't validate if it's a Hash or not.
+# @return Array|boolean
+def getKeysInHash(hash)
+    response = Array.new
+    hash.each_key { |key| response << key }
+    response
+end
+
 # Checks if a String or Integer is a whole Number
 # @return boolean
 def isWholeNumber(value)
@@ -100,7 +109,7 @@ end
 # Calculates how many days between 2 dates (must be in 2013-10-29 format).
 def diffBetweenDatesInDays(laterDate = nil, earlierDate = nil)
     dates = Array[earlierDate, laterDate]
-    dates.map! { | date |
+    dates.map! { |date|
         if date == nil
             today = DateTime.now
             today.strftime('%y-%m-%d')

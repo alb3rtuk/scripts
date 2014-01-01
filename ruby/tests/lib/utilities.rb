@@ -30,6 +30,15 @@ class TestUtilities < Test::Unit::TestCase
         puts "\n\x1B[90mPass: testInArray\x1B[0"
     end
 
+    def testGetKeysInHash
+        testHash = {}
+        testHash[1] = 'testValue'
+        testHash[2] = 'testValue'
+        testHash['abc'] = 'testValue'
+        testHash['def'] = 'testValue'
+        assert_equal(Array[1, 2, 'abc', 'def'], getKeysInHash(testHash))
+    end
+
     def testIsWholeNumber
         assert_equal(isWholeNumber(12), true)
         assert_equal(isWholeNumber(12.3), false)
