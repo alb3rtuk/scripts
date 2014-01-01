@@ -8,7 +8,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
 
 include CommandLineReporter
 
-clean = (ARGV.empty?) ? true : false
+notClean = (ARGV.empty?) ? false : true
 
 crypter = Encrypter.new
 
@@ -18,7 +18,7 @@ barclayCard = BankBarclayCard.new(
     crypter.decrypt(BarclayCardSecurity),
     'single',
     true,
-    clean
+    notClean
 )
 
 capitalOne = BankCapitalOne.new(
@@ -26,7 +26,7 @@ capitalOne = BankCapitalOne.new(
     crypter.decrypt(CapitalOneSecurity),
     'single',
     true,
-    clean
+    notClean
 )
 
 halifax = BankHalifax.new(
@@ -35,7 +35,7 @@ halifax = BankHalifax.new(
     crypter.decrypt(HalifaxSecurity),
     'single',
     true,
-    clean
+    notClean
 )
 
 lloyds = BankLloyds.new(
@@ -44,7 +44,7 @@ lloyds = BankLloyds.new(
     crypter.decrypt(LloydsSecurity),
     'single',
     true,
-    clean
+    notClean
 )
 
 natWest = BankNatWest.new(
@@ -53,25 +53,25 @@ natWest = BankNatWest.new(
     crypter.decrypt(NatWestSecurityBottom),
     'single',
     true,
-    clean
+    notClean
 )
 
-if clean then puts "\n" end
+if notClean then puts "\n" end
 natWestBalances = natWest.getBalances(true)
 natWestBalances = natWestBalances[1]
-if clean then puts "\n" end
+if notClean then puts "\n" end
 halifaxBalances = halifax.getBalances(true)
 halifaxBalances = halifaxBalances[1]
-if clean then puts "\n" end
+if notClean then puts "\n" end
 lloydsBalances = lloyds.getBalances(true)
 lloydsBalances = lloydsBalances[1]
-if clean then puts "\n" end
+if notClean then puts "\n" end
 barclayCardBalances = barclayCard.getBalances(true)
 barclayCardBalances = barclayCardBalances[1]
-if clean then puts "\n" end
+if notClean then puts "\n" end
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
-if clean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
+if notClean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
 
 summary = {}
 summary['total_available'] =
