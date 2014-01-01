@@ -38,13 +38,13 @@ class BankBarclayCard
     def getBalances(showInTerminal = false)
         browser = self.login
         data = {}
-
         data['balance'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
         data['available_funds'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
         data['credit_limit'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 3).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
         data['pending_transactions'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 1).text.delete('£').delete(',').to_f
+
         if showInTerminal
             puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -154,7 +154,7 @@ class BankBarclayCard
                     puts "\x1B[90mPayment was successful!\x1B[0m"
                 end
             end
-            return browser
+            browser
         end
     end
 
