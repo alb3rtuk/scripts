@@ -7,12 +7,10 @@ class TestBankLloyds < Test::Unit::TestCase
 
     def testLogin
 
-        crypter = Encrypter.new
-
-        lloyds = BankLloyds.new(
-            crypter.decrypt(LloydsUsername),
-            crypter.decrypt(LloydsPassword),
-            crypter.decrypt(LloydsSecurity),
+                lloyds = BankLloyds.new(
+            Encrypter.new.decrypt(LloydsUsername),
+            Encrypter.new.decrypt(LloydsPassword),
+            Encrypter.new.decrypt(LloydsSecurity),
             'single',
             true,
             true

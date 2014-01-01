@@ -7,12 +7,10 @@ class TestBankBarclayCard < Test::Unit::TestCase
 
     def testLogin
 
-        crypter = Encrypter.new
-
-        barclayCard = BankBarclayCard.new(
-            crypter.decrypt(BarclayCardUsername),
-            crypter.decrypt(BarclayCardPin),
-            crypter.decrypt(BarclayCardSecurity),
+                barclayCard = BankBarclayCard.new(
+            Encrypter.new.decrypt(BarclayCardUsername),
+            Encrypter.new.decrypt(BarclayCardPin),
+            Encrypter.new.decrypt(BarclayCardSecurity),
             'single',
             true,
             true
@@ -21,6 +19,9 @@ class TestBankBarclayCard < Test::Unit::TestCase
         puts "\n\n"
         data = barclayCard.getBalances
         puts "\n"
+
+        browser = data[0]
+        assert_equal()
 
         data[1].each { | key, value |
             assert_equal(key.is_a?(String), true)

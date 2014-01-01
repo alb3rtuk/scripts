@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class BankBarclayCard
     include CommandLineReporter
 
@@ -77,9 +79,14 @@ class BankBarclayCard
         return Array[browser, data]
     end
 
-    # Pays the amount passed in
-    def payBarclayCard(amount)
+    # Pays the amount passed in. Must also pass in browser in a state where it's already at login screen.
+    def payBarclayCard(amount, account, browser = nil)
+        if browser == nil
+            browser = self.login
+        end
+        verifyInput(Array['halifax','natwest'], account)
 
+        browser.text_field(:id => 'otherAmount', :name => 'otherAmount')
 
 
     end

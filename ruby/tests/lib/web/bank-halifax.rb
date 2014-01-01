@@ -7,12 +7,10 @@ class TestBankHalifax < Test::Unit::TestCase
 
     def testLogin
 
-        crypter = Encrypter.new
-
-        halifax = BankHalifax.new(
-            crypter.decrypt(HalifaxUsername),
-            crypter.decrypt(HalifaxPassword),
-            crypter.decrypt(HalifaxSecurity),
+                halifax = BankHalifax.new(
+            Encrypter.new.decrypt(HalifaxUsername),
+            Encrypter.new.decrypt(HalifaxPassword),
+            Encrypter.new.decrypt(HalifaxSecurity),
             'single',
             true,
             true

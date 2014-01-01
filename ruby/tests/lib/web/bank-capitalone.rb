@@ -7,11 +7,9 @@ class TestBankCapitalOne < Test::Unit::TestCase
 
     def testLogin
 
-        crypter = Encrypter.new
-
-        capitalOne = BankCapitalOne.new(
-            crypter.decrypt(CapitalOneUsername),
-            crypter.decrypt(CapitalOneSecurity),
+                capitalOne = BankCapitalOne.new(
+            Encrypter.new.decrypt(CapitalOneUsername),
+            Encrypter.new.decrypt(CapitalOneSecurity),
             'single',
             true,
             true

@@ -4,12 +4,10 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-lloyds.rb'
 
 displays = ARGV[0]
 
-crypter = Encrypter.new
-
 lloyds = BankLloyds.new(
-    crypter.decrypt(LloydsUsername),
-    crypter.decrypt(LloydsPassword),
-    crypter.decrypt(LloydsSecurity),
+    Encrypter.new.decrypt(LloydsUsername),
+    Encrypter.new.decrypt(LloydsPassword),
+    Encrypter.new.decrypt(LloydsSecurity),
     displays
 )
 

@@ -1,13 +1,7 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-creditCardPayer.rb'
 
-require 'time'
-
-
-#barclayCard = barclayCard.getBalances(false)
-#barclayCardBalances = barclayCard[1]
-
-barclayCardBalances = {"balance" => 19.69, "available_funds" => 1585.31, "credit_limit" => 1600.0, "minimum_payment" => 5.0, "due_date" => DateTime.new(2014, 1, 7)}
-
+BankCreditCardPayer.new('barclaycard', Array['natwest','halifax'])
 
 
 
@@ -36,7 +30,7 @@ if ARGV[0] == 'ydHyu8kdjZl12wAq=='
         puts "Outstanding Balance        : #{toCurrency(barclayCardBalances['balance']).to_s.rjust(11)}"
     end
 
-    if barclayCardBalances['minimum_payment']
+    if barclayCardBalances['minimum_payment'] > 0
         puts "Minimum Payment            : \x1B[31m#{toCurrency(barclayCardBalances['minimum_payment']).to_s.rjust(11)}\x1B[0m"
     else
         puts "Minimum Payment            : #{toCurrency(barclayCardBalances['minimum_payment']).to_s.rjust(11)}"

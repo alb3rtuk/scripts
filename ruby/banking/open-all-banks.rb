@@ -8,47 +8,45 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
 
 displays = ARGV[0]
 
-crypter = Encrypter.new
-
 barclayCard = BankBarclayCard.new(
-    crypter.decrypt(BarclayCardUsername),
-    crypter.decrypt(BarclayCardPin),
-    crypter.decrypt(BarclayCardSecurity),
+    Encrypter.new.decrypt(BarclayCardUsername),
+    Encrypter.new.decrypt(BarclayCardPin),
+    Encrypter.new.decrypt(BarclayCardSecurity),
     'single',
     true,
     true
 )
 
 capitalOne = BankCapitalOne.new(
-    crypter.decrypt(CapitalOneUsername),
-    crypter.decrypt(CapitalOneSecurity),
+    Encrypter.new.decrypt(CapitalOneUsername),
+    Encrypter.new.decrypt(CapitalOneSecurity),
     'single',
     true,
     true
 )
 
 halifax = BankHalifax.new(
-    crypter.decrypt(HalifaxUsername),
-    crypter.decrypt(HalifaxPassword),
-    crypter.decrypt(HalifaxSecurity),
+    Encrypter.new.decrypt(HalifaxUsername),
+    Encrypter.new.decrypt(HalifaxPassword),
+    Encrypter.new.decrypt(HalifaxSecurity),
     'single',
     true,
     true
 )
 
 lloyds = BankLloyds.new(
-    crypter.decrypt(LloydsUsername),
-    crypter.decrypt(LloydsPassword),
-    crypter.decrypt(LloydsSecurity),
+    Encrypter.new.decrypt(LloydsUsername),
+    Encrypter.new.decrypt(LloydsPassword),
+    Encrypter.new.decrypt(LloydsSecurity),
     'single',
     true,
     true
 )
 
 natWest = BankNatWest.new(
-    crypter.decrypt(NatWestUsername),
-    crypter.decrypt(NatWestSecurityTop),
-    crypter.decrypt(NatWestSecurityBottom),
+    Encrypter.new.decrypt(NatWestUsername),
+    Encrypter.new.decrypt(NatWestSecurityTop),
+    Encrypter.new.decrypt(NatWestSecurityBottom),
     'single',
     true,
     true

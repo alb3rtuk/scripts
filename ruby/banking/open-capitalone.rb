@@ -4,11 +4,9 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
 
 displays = ARGV[0]
 
-crypter = Encrypter.new
-
 capitalOne = BankCapitalOne.new(
-    crypter.decrypt(CapitalOneUsername),
-    crypter.decrypt(CapitalOneSecurity),
+    Encrypter.new.decrypt(CapitalOneUsername),
+    Encrypter.new.decrypt(CapitalOneSecurity),
     displays
 )
 

@@ -4,12 +4,10 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-barclaycard.rb'
 
 displays = ARGV[0]
 
-crypter = Encrypter.new
-
 barclayCard = BankBarclayCard.new(
-    crypter.decrypt(BarclayCardUsername),
-    crypter.decrypt(BarclayCardPin),
-    crypter.decrypt(BarclayCardSecurity),
+    Encrypter.new.decrypt(BarclayCardUsername),
+    Encrypter.new.decrypt(BarclayCardPin),
+    Encrypter.new.decrypt(BarclayCardSecurity),
     displays
 )
 

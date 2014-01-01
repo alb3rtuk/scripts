@@ -7,12 +7,10 @@ class TestBankNatWest < Test::Unit::TestCase
 
     def testLogin
 
-        crypter = Encrypter.new
-
-        natWest = BankNatWest.new(
-            crypter.decrypt(NatWestUsername),
-            crypter.decrypt(NatWestSecurityTop),
-            crypter.decrypt(NatWestSecurityBottom),
+                natWest = BankNatWest.new(
+            Encrypter.new.decrypt(NatWestUsername),
+            Encrypter.new.decrypt(NatWestSecurityTop),
+            Encrypter.new.decrypt(NatWestSecurityBottom),
             'single',
             true,
             true

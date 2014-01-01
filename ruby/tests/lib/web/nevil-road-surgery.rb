@@ -7,10 +7,9 @@ class TestNevilRoadSurgery < Test::Unit::TestCase
 
     def testLogin
         displays = 'single'
-        crypter = Encrypter.new
-        nrs = NevilRoadSurgery.new(
-            crypter.decrypt(NevilRoadUsername),
-            crypter.decrypt(NevilRoadPassword)
+            nrs = NevilRoadSurgery.new(
+            Encrypter.new.decrypt(NevilRoadUsername),
+            Encrypter.new.decrypt(NevilRoadPassword)
         )
         browser = nrs.login(displays, true)
         assert_equal(browser.link(:id => '__tab_ctl00_ContentPlaceHolder1_TabContainer1_Panel2').exists?, true)

@@ -4,12 +4,10 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-halifax.rb'
 
 displays = ARGV[0]
 
-crypter = Encrypter.new
-
 halifax = BankHalifax.new(
-    crypter.decrypt(HalifaxUsername),
-    crypter.decrypt(HalifaxPassword),
-    crypter.decrypt(HalifaxSecurity),
+    Encrypter.new.decrypt(HalifaxUsername),
+    Encrypter.new.decrypt(HalifaxPassword),
+    Encrypter.new.decrypt(HalifaxSecurity),
     displays
 )
 

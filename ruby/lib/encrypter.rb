@@ -9,6 +9,7 @@ class Encrypter
     def initialize
         @key = $cryptoKey
         @hex = $cryptoHex
+        return self
     end
 
     # Encrypts a string. Please note, this is not bomb-proof.
