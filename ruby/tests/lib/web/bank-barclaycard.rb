@@ -7,7 +7,7 @@ class TestBankBarclayCard < Test::Unit::TestCase
 
     def testLogin
 
-                barclayCard = BankBarclayCard.new(
+        barclayCard = BankBarclayCard.new(
             Encrypter.new.decrypt(BarclayCardUsername),
             Encrypter.new.decrypt(BarclayCardPin),
             Encrypter.new.decrypt(BarclayCardSecurity),
@@ -21,11 +21,16 @@ class TestBankBarclayCard < Test::Unit::TestCase
         puts "\n"
 
         browser = data[0]
-        assert_equal()
 
-        data[1].each { | key, value |
+        # Test for payment elements
+        assert_equal(true, browser.text_field(:id => 'otherAmount', :name => 'otherAmount', :type => 'text', :class => 'text').exists?)
+        assert_equal(true, browser.select_list(:id => 'ASCSPn2', :name => 'accountSelect').option(:value => '4462919386484319').exists?)
+        assert_equal(true, browser.select_list(:id => 'ASCSPn2', :name => 'accountSelect').option(:value => '4751270014064838').exists?)
+        assert_equal(true, browser.input(:type => 'submit', :name => 'makePayment', :id => 'ASCSFn3').exists?)
+
+        data[1].each { |key, value|
             assert_equal(key.is_a?(String), true)
-            if(key == 'due_date')
+            if (key == 'due_date')
                 assert_equal(value.is_a?(DateTime), true)
             else
                 assert_equal(value.is_a?(Float), true)
