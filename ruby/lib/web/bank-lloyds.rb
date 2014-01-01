@@ -28,12 +28,24 @@ class BankLloyds
         browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').text.gsub(/[^0-9]/, ''), @security)}").select
         browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').text.gsub(/[^0-9]/, ''), @security)}").select
         browser.input(:id => 'frmentermemorableinformation1:btnContinue').click
-        if browser.input(:id => 'frm2:btnContinue2', :type => 'image').exists?
-            browser.input(:id => 'frm2:btnContinue2', :type => 'image').click
-            if @displayProgress
-                puts "\x1B[90mSuccessfully bypassed (occasional) email confirmation page\x1B[0m\n"
+
+        until browser.link(:title => 'View the latest transactions on your Lloyds Account').exists? do
+            # Email Confirmation Page
+            if browser.input(:id => 'frm2:btnContinue2', :type => 'image').exists?
+                browser.input(:id => 'frm2:btnContinue2', :type => 'image').click
+                if @displayProgress
+                    puts "\x1B[90mSuccessfully bypassed (occasional) email confirmation page\x1B[0m\n"
+                end
+            end
+            # Offers Page
+            if browser.link(:title => 'Not right now').exists?
+                browser.link(:title => 'Not right now').click
+                if @displayProgress
+                    puts "\x1B[90mSuccessfully bypassed (occasional) offers page\x1B[0m\n"
+                end
             end
         end
+
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Lloyds\x1B[0m\n"
         end
