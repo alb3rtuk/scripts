@@ -1,3 +1,9 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-creditCardPayer.rb'
 
-displays = ARGV[0]
+BankCreditCardPayer.new(
+    'capitalone',
+    Array['natwest']
+)
+
+exit

@@ -7,7 +7,7 @@ class TestBankCapitalOne < Test::Unit::TestCase
 
     def testLogin
 
-                capitalOne = BankCapitalOne.new(
+        capitalOne = BankCapitalOne.new(
             Encrypter.new.decrypt(CapitalOneUsername),
             Encrypter.new.decrypt(CapitalOneSecurity),
             'single',
@@ -18,6 +18,9 @@ class TestBankCapitalOne < Test::Unit::TestCase
         puts "\n\n"
         balances = capitalOne.getBalances
         puts "\n"
+
+        # Test for payment elements
+        assert_equal(true, browser.input(:type => 'submit', :value => 'MAKE PAYMENT', :class => 'btn').exists?)
 
         balances[1].each { | key, value |
             assert_equal(key.is_a?(String), true)

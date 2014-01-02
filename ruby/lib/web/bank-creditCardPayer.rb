@@ -54,7 +54,7 @@ class BankCreditCardPayer
                 true,
                 true
             )
-            @capitalOneResponse = @capitalOneResponse.getBalances(false)
+            @capitalOneResponse = @capitalOne.getBalances(false)
             @outstanding_balance = @capitalOneResponse[1]['balance']
             @minimum_payment = @capitalOneResponse[1]['minimum_payment']
             @due_date = @capitalOneResponse[1]['due_date']
@@ -135,9 +135,13 @@ class BankCreditCardPayer
             @barclayCard.payBarclayCard(@chosenAmount, @chosenAccount, @barclayCardResponse[0])
             puts "\n"
         elsif creditCard == 'capitalone'
-            puts "TODO"
+            puts "\n"
+            @capitalOne.payCapitalOne(@chosenAmount, @chosenAccount, @capitalOneResponse[0])
+            puts "\n"
         elsif creditCard == 'lloyds'
-            puts "TODO"
+            puts "\n"
+            #@lloyds.payLoyds(@chosenAmount, @chosenAccount, @lloydsResponse[0])
+            puts "\n"
         end
 
     end
@@ -181,7 +185,7 @@ class BankCreditCardPayer
     def getUserInput
         until inArray(getKeysInHash(@payment_map), @chosenAccount)
             STDOUT.flush
-            print "\x1B[90mWhat account would you like to make the payment from? [ie: 1] \x1B[0m => "
+            print "\x1B[90mWhat account would you like to make the payment from? [ie: 1]\x1B[0m => "
             if @payment_map.count == 1
                 @chosenAccount = 1
                 print 1
@@ -195,7 +199,7 @@ class BankCreditCardPayer
         @chosenAccount = @payment_map[@chosenAccount]['account_id']
         until @chosenAmount > 0
             STDOUT.flush
-            print "\x1B[90mHow much would you like to pay? [ie: 15.00] \x1B[0m => "
+            print "\x1B[90mHow much would you like to pay? [ie: 15.00]\x1B[0m => "
             @chosenAmount = STDIN.gets.chomp
             @chosenAmount = @chosenAmount.to_f
         end

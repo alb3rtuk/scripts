@@ -2,6 +2,8 @@
 
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 
-detectDisplays
+clear
 
-ruby ~/Repos/Scripts/ruby/banking/pay-capitalone.rb $displays
+message red "Pay CapitalOne"
+
+ruby ~/Repos/Scripts/ruby/banking/pay-capitalone.rb
