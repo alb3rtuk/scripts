@@ -150,6 +150,7 @@ class BankCapitalOne
         else
             abort "Something went wrong. The confirmation screen was reached but the checks didn't pass. This doesn't necessarily mean the payment wasn't made, possibly some of the elements on the page were updated."
         end
+        browser
     end
 
 end
