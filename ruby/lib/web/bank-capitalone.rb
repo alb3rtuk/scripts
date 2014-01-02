@@ -81,7 +81,7 @@ class BankCapitalOne
         browser.input(:type => 'submit', :value => 'MAKE PAYMENT', :class => 'btn').click
         browser.input(:type => 'submit', :value => 'PAY BY DEBIT CARD', :class => 'btn').click
         browser.input(:type => 'radio', :value => 'OtherAmount', :name => 'paymentAmountFlag', :id => 'radio-check').click
-7.83
+
         # 1st sanity check
         if browser.radio(:name => 'selectedPaymentAccountID', :value => '2675167').checked?
             if @displayProgress
