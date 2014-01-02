@@ -140,7 +140,7 @@ class BankCreditCardPayer
             puts "\n"
         elsif creditCard == 'lloyds'
             puts "\n"
-            #@lloyds.payLoyds(@chosenAmount, @chosenAccount, @lloydsResponse[0])
+            @lloyds.payLloyds(@chosenAmount, @chosenAccount, @lloydsResponse[0])
             puts "\n"
         end
 

@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class BankLloyds
     include CommandLineReporter
 
@@ -28,7 +30,6 @@ class BankLloyds
         browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').text.gsub(/[^0-9]/, ''), @security)}").select
         browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').text.gsub(/[^0-9]/, ''), @security)}").select
         browser.input(:id => 'frmentermemorableinformation1:btnContinue').click
-
         until browser.link(:title => 'View the latest transactions on your Lloyds Account').exists? do
             # Email Confirmation Page
             if browser.input(:id => 'frm2:btnContinue2', :type => 'image').exists?
@@ -45,19 +46,15 @@ class BankLloyds
                 end
             end
         end
-
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Lloyds\x1B[0m\n"
         end
-        return browser
+        browser
     end
 
-    def getBalances(showInTerminal = false)
-        browser = self.login
+    def getBalances(showInTerminal = false, browser = self.login)
         data = {}
-
         browser.link(:title => 'View the latest transactions on your Lloyds Account').when_present(5).click
-
         data['account_1_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
         data['account_1_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['account_1_available'] = data['account_1_available'].split
@@ -65,10 +62,8 @@ class BankLloyds
         data['account_1_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_1_overdraft'] = data['account_1_overdraft'].split
         data['account_1_overdraft'] = data['account_1_overdraft'][data['account_1_overdraft'].count - 1].delete('£').delete(',').to_f
-
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-
         data['cc_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
         data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['cc_available'] = data['cc_available'].split(':')
@@ -81,7 +76,6 @@ class BankLloyds
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
         data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y')
-
         if showInTerminal
             puts "\n[ #{Rainbow("Lloyds").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -107,8 +101,55 @@ class BankLloyds
                 end
             end
         end
+        browser.link(:id => 'lkAccOverView_retail').when_present(5).click
+        Array[browser, data]
+    end
 
-        return Array[browser, data]
+    # Pays the amount passed in. Must also pass in browser in a state where it's already at login screen.
+    def payLloyds(amount, account, browser = nil)
+        verifyInput(Array['lloyds'], account)
+        if browser == nil
+            browser = self.login
+        end
+        if @displayProgress
+            puts "\x1B[90mAttempting to pay #{toCurrency(amount)} towards outstanding balance\x1B[0m"
+        end
+        browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs', :title => 'Pay credit card').click
+
+        # Sanity Check #1
+        if browser.label(:for => 'frmMakeTransfer1:datePickerRadios:0').text.downcase == 'as soon as possible'
+            if @displayProgress
+                puts "\x1B[90mPassed sanity check #1. Arranging for payment to be made as soon as possible\x1B[0m"
+            end
+            browser.radio(:id => 'frmMakeTransfer1:amountRadio:2', :name => 'frmMakeTransfer1:amountRadio', :value => '2').click
+            browser.text_field(:id => 'frmMakeTransfer1:txtPayAmt', :name => 'frmMakeTransfer1:txtPayAmt', :class => 'amountFieldAmount').set amount
+            browser.radio(:id => 'frmMakeTransfer1:datePickerRadios:0', :name => 'frmMakeTransfer1:datePickerRadios', :value => '0').click
+            browser.input(:id => 'frmMakeTransfer1:btncontinue', :title => 'Continue', :class => 'submitAction').click
+        else
+            abort "Lloyds sanity check #1 failed. Script aborted and no payment was made!\n"
+        end
+
+        # Sanity Check #2
+        if browser.dl(:class => 'summary').dd(:index => 2).exists? &&
+            browser.dl(:class => 'summary').dd(:index => 3).text.delete('£').strip == amount
+            if @displayProgress
+                puts "\x1B[90mPassed sanity check #2\x1B[0m"
+            end
+            ref = browser.dl(:class => 'summary').dd(:index => 2).text
+            browser.text_field(:id => 'frmMakePaymentConfirmation:txtAuthPwd', :name => 'frmMakePaymentConfirmation:txtAuthPwd', :class => 'field').set Encrypter.new.decrypt(LloydsPassword)
+            browser.input(:id => 'frmMakePaymentConfirmation:Btnconfirm', :name => 'frmMakePaymentConfirmation:Btnconfirm', :title => 'Confirm').click
+        else
+            abort "Lloyds sanity check #2 failed. Script aborted and no payment was made!\n"
+        end
+
+        if browser.div(:class => 'panelWrap').when_present(20).h1.text.downcase == 'payment confirmed'
+            if @displayProgress
+                puts "\x1B[90mPayment was successful! Your reference number for this payment is: \x1B[0m#{ref}"
+            end
+        else
+            abort "Something went wrong. The confirmation screen was reached but the checks didn't pass. This doesn't necessarily mean the payment wasn't made, possibly some of the elements on the page were updated."
+        end
+        browser
     end
 
 end
