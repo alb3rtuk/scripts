@@ -4,6 +4,6 @@
 
 clear
 
-message red "Pay BarclayCard"
+message red "Pay BarclayCard VISA"
 
 ruby ~/Repos/Scripts/ruby/banking/pay-barclaycard.rb

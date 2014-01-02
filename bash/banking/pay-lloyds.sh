@@ -2,6 +2,8 @@
 
 . ~/Repos/Scripts/bash/common/common-utilities.sh
 
-detectDisplays
+clear
 
-ruby ~/Repos/Scripts/ruby/banking/pay-lloyds.rb $displays
+message red "Pay Lloyds Platinum MASTERCARD"
+
+ruby ~/Repos/Scripts/ruby/banking/pay-lloyds.rb

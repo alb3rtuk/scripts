@@ -4,6 +4,6 @@
 
 clear
 
-message red "Pay CapitalOne"
+message red "Pay CapitalOne Platinum VISA"
 
 ruby ~/Repos/Scripts/ruby/banking/pay-capitalone.rb
