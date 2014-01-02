@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class BankCapitalOne
     include CommandLineReporter
 
@@ -37,15 +39,13 @@ class BankCapitalOne
         return browser
     end
 
-    def getBalances(showInTerminal = false)
-        browser = self.login
+    def getBalances(showInTerminal = false, browser = self.login)
         data = {}
         data['balance'] = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['available_funds'] = browser.td(:text, /Available to spend/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['credit_limit'] = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.td(:text, /Minimum payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y')
-
         if showInTerminal
             puts "\n[ #{Rainbow("CapitalOne").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -65,16 +65,12 @@ class BankCapitalOne
                 end
             end
         end
-
-        return Array[browser, data]
+        Array[browser, data]
     end
 
     # Pays the amount passed in. Must also pass in browser in a state where it's already at login screen.
-    def payCapitalOne(amount, account, browser = nil)
+    def payCapitalOne(amount, account, browser = self.login)
         verifyInput(Array['natwest'], account)
-        if browser == nil
-            browser = self.login
-        end
         if @displayProgress
             puts "\x1B[90mAttempting to pay #{toCurrency(amount)} towards outstanding balance\x1B[0m"
         end
@@ -154,6 +150,6 @@ class BankCapitalOne
         else
             abort "Something went wrong. The confirmation screen was reached but the checks didn't pass. This doesn't necessarily mean the payment wasn't made, possibly some of the elements on the page were updated."
         end
-
     end
+
 end

@@ -32,11 +32,10 @@ class BankBarclayCard
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to BarclayCard\x1B[0m\n"
         end
-        return browser
+        browser
     end
 
-    def getBalances(showInTerminal = false)
-        browser = self.login
+    def getBalances(showInTerminal = false, browser = self.login)
         data = {}
         data['balance'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
         data['available_funds'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
@@ -76,15 +75,12 @@ class BankBarclayCard
             end
         end
 
-        return Array[browser, data]
+        Array[browser, data]
     end
 
     # Pays the amount passed in. Must also pass in browser in a state where it's already at login screen.
-    def payBarclayCard(amount, account, browser = nil)
+    def payBarclayCard(amount, account, browser = self.login)
         verifyInput(Array['halifax', 'natwest'], account)
-        if browser == nil
-            browser = self.login
-        end
         if @displayProgress
             puts "\x1B[90mAttempting to pay #{toCurrency(amount)} towards outstanding balance\x1B[0m"
         end

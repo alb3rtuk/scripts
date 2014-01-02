@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class BankHalifax
     include CommandLineReporter
 
@@ -40,16 +42,12 @@ class BankHalifax
         return browser
     end
 
-    def getBalances(showInTerminal = false)
-        browser = self.login
+    def getBalances(showInTerminal = false, browser = self.login)
         data = {}
-
         data['isa'] = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'balance').text.split
         data['isa'] = data['isa'][data['isa'].count - 1].delete('£').delete(',').to_f
         data['isa_remaining'] = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'accountMsg', :index => 1).text.delete('£').delete(',').to_f
-
         browser.link(:title => 'View the latest transactions on your Ultimate Reward Current Account').when_present(5).click
-
         data['account_1_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
         data['account_1_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['account_1_available'] = data['account_1_available'].split
@@ -57,10 +55,8 @@ class BankHalifax
         data['account_1_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_1_overdraft'] = data['account_1_overdraft'].split
         data['account_1_overdraft'] = data['account_1_overdraft'][data['account_1_overdraft'].count - 1].delete('£').delete(',').to_f
-
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Reward Current Account').when_present(5).click
-
         data['account_2_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
         data['account_2_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['account_2_available'] = data['account_2_available'].split
@@ -68,7 +64,6 @@ class BankHalifax
         data['account_2_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_2_overdraft'] = data['account_2_overdraft'].split
         data['account_2_overdraft'] = data['account_2_overdraft'][data['account_2_overdraft'].count - 1].delete('£').delete(',').to_f
-
         if showInTerminal
             puts "\n[ #{Rainbow("Halifax").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -94,7 +89,6 @@ class BankHalifax
                 end
             end
         end
-
         return Array[browser, data]
     end
 

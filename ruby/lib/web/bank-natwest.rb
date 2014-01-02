@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class BankNatWest
     include CommandLineReporter
 
@@ -35,17 +37,15 @@ class BankNatWest
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to NatWest\x1B[0m\n"
         end
-        return browser
+        browser
     end
 
-    def getBalances(showInTerminal = false)
-        browser = self.login
+    def getBalances(showInTerminal = false, browser = self.login)
         f = 'ctl00_secframe'
         data = {}
         data['advantage_gold'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
-
         if showInTerminal
             puts "\n[ #{Rainbow("NatWest").foreground('#ff008a')} ]"
             table(:border => true) do
@@ -61,8 +61,7 @@ class BankNatWest
                 end
             end
         end
-
-        return Array[browser, data]
+        Array[browser, data]
     end
 
 end
