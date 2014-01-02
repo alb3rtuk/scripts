@@ -7,7 +7,7 @@ class TestBankHalifax < Test::Unit::TestCase
 
     def testLogin
 
-                halifax = BankHalifax.new(
+        halifax = BankHalifax.new(
             Encrypter.new.decrypt(HalifaxUsername),
             Encrypter.new.decrypt(HalifaxPassword),
             Encrypter.new.decrypt(HalifaxSecurity),

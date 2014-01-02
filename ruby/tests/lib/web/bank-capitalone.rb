@@ -23,9 +23,9 @@ class TestBankCapitalOne < Test::Unit::TestCase
         assert_equal(true, browser.input(:type => 'submit', :value => 'MAKE PAYMENT', :class => 'btn').exists?)
 
         balances = capitalOne.getBalances(false, browser)
-        balances[1].each { | key, value |
+        balances[1].each { |key, value|
             assert_equal(key.is_a?(String), true)
-            if(key == 'due_date')
+            if (key == 'due_date')
                 assert_equal(value.is_a?(DateTime), true)
             else
                 assert_equal(value.is_a?(Float), true)

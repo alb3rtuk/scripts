@@ -7,7 +7,7 @@ class TestNevilRoadSurgery < Test::Unit::TestCase
 
     def testLogin
         displays = 'single'
-            nrs = NevilRoadSurgery.new(
+        nrs = NevilRoadSurgery.new(
             Encrypter.new.decrypt(NevilRoadUsername),
             Encrypter.new.decrypt(NevilRoadPassword)
         )

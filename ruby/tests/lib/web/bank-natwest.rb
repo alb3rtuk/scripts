@@ -7,7 +7,7 @@ class TestBankNatWest < Test::Unit::TestCase
 
     def testLogin
 
-                natWest = BankNatWest.new(
+        natWest = BankNatWest.new(
             Encrypter.new.decrypt(NatWestUsername),
             Encrypter.new.decrypt(NatWestSecurityTop),
             Encrypter.new.decrypt(NatWestSecurityBottom),
