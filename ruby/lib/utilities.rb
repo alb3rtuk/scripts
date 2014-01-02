@@ -78,9 +78,9 @@ def getBrowser(displays = 'single', headless = false, browser = 'chrome')
         x = 0
         y = -0
     elsif displays == 'multiple'
-        width = 1920
+        width = 1820
         height = 2000
-        x = 3360
+        x = 3410
         y = -2000
     end
     browser.window.move_to(x, y)
