@@ -9,7 +9,7 @@ class Encrypter
     def initialize
         @key = $cryptoKey
         @hex = $cryptoHex
-        return self
+        self
     end
 
     # Encrypts a string. Please note, this is not bomb-proof.
@@ -19,7 +19,7 @@ class Encrypter
         c.key = @key = Digest::SHA1.hexdigest(@hex)
         e = c.update(string)
         e << c.final
-        return Base64.encode64(e)
+        Base64.encode64(e)
     end
 
     # Decrypts a string.
@@ -30,7 +30,7 @@ class Encrypter
         c.key = @key = Digest::SHA1.hexdigest(@hex)
         d = c.update(string)
         d << c.final
-        return d
+        d
     end
 
 end
