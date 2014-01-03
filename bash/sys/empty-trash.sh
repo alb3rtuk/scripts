@@ -15,7 +15,7 @@ if [ "$files" -le "0" ]; then
     exit
 fi
 
-read -p "You are about to `tput setab 1` permanently delete `tput setab 0` all files in the trash folder. Are you sure you want to continue? [y/N]" -n 1 -r
+read -p "You are about to `tput setab 1` permanently delete `tput setab 0` all files in the trash folder. Are you sure you want to continue? [y/n] => " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo
     sudo rm -rf ~/.Trash/*
