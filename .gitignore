@@ -12,5 +12,5 @@ Thumbs.db
 #########
 
 .idea
-cronlog.txt
-cronerror.txt
+cronlog.log
+cronerror.log
