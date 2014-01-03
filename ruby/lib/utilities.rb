@@ -89,11 +89,11 @@ def getBrowser(displays = 'single', headless = false, browser = 'chrome')
     browser
 end
 
-# Logs a message in backup/cronlog.txt
+# Logs a message in backup/cronlog.log
 # @return void
 def cronLog(message = '')
     timestamp = Time.now.strftime('%a %b %d %H:%I:%S %Z %Y')
-    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.txt', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
+    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
 end
 
 # Converts a number to 2 decimal points and adds thousands delimiter + currency symbol.
