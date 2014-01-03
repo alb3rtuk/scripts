@@ -17,10 +17,10 @@ class TestBankBarclayCard < Test::Unit::TestCase
         )
 
         puts "\n\n"
-        data = barclayCard.getBalances
+        balances = barclayCard.getBalances
         puts "\n"
 
-        browser = data[0]
+        browser = balances[0]
 
         # Test for payment elements
         assert_equal(true, browser.text_field(:id => 'otherAmount', :name => 'otherAmount', :type => 'text', :class => 'text').exists?)
@@ -28,7 +28,7 @@ class TestBankBarclayCard < Test::Unit::TestCase
         assert_equal(true, browser.select_list(:id => 'ASCSPn2', :name => 'accountSelect').option(:value => '4751270014064838').exists?)
         assert_equal(true, browser.input(:type => 'submit', :name => 'makePayment', :id => 'ASCSFn3').exists?)
 
-        data[1].each { |key, value|
+        balances[1].each { |key, value|
             assert_equal(key.is_a?(String), true)
             if (key == 'due_date')
                 assert_equal(value.is_a?(DateTime), true)
