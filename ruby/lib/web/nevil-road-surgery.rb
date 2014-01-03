@@ -12,7 +12,7 @@ class NevilRoadSurgery
         browser.text_field(:name => 'ctl00$ContentPlaceHolder1$logon_email').set @username
         browser.text_field(:name => 'ctl00$ContentPlaceHolder1$logon_password').set @password
         browser.input(:name => 'ctl00$ContentPlaceHolder1$buttonOK').click
-        return browser
+        browser
     end
 
     def orderAsthma(displays, headless = false)
