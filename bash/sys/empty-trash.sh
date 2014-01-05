@@ -11,15 +11,14 @@ do
 done
 
 if [ "$files" -le "0" ]; then
-    echo "Nothing to delete. Trash is already empty."
+    echo "\033[0mNothing to delete. Trash is already empty."
     exit
 fi
 
-read -p "You are about to `tput setab 1` permanently delete `tput setab 0` all files in the trash folder. Are you sure you want to continue? [y/n] => " -r
+read -p "`echo "\n\033[0m"`You are about to `tput setab 1` permanently delete `tput setab 0` all files in the trash folder. Are you sure you want to continue? [y/n] => " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo
     sudo rm -rf ~/.Trash/*
-    echo "\nTrash emptied."
+    echo "Trash emptied.\n"
 else
     echo "\nAborted."
 fi
