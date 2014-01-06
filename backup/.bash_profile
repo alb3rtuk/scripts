@@ -63,9 +63,10 @@ alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 alias tail-cron-mail='~/Repos/Scripts/bash/sys/tail-cron-mail.sh'
+alias update-apache='~/Repos/Scripts/bash/sys/update-apache.sh'
 alias update-bash-profile='~/Repos/Scripts/bash/sys/update-bash-profile.sh'
-alias update-launchd='~/Repos/Scripts/bash/sys/update-launchd.sh'
 alias update-crontab='~/Repos/Scripts/bash/sys/update-crontab.sh'
+alias update-launchd='~/Repos/Scripts/bash/sys/update-launchd.sh'
 
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
