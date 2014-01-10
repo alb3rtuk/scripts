@@ -5,11 +5,10 @@
 # when the system is booting.  Do not change this entry.
 ##
 127.0.0.1	    localhost
+127.0.0.1	    sleek
 255.255.255.255	broadcasthost
 ::1             localhost 
 fe80::1%lo0     localhost
-
-172.27.2.92     dev-vm
 
 ##
 # Adobe Activation Blocker                                                              
