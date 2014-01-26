@@ -78,9 +78,9 @@ def getBrowser(displays = 'single', headless = false, browser = 'chrome')
         x = 0
         y = -0
     elsif displays == 'multiple'
-        width = 1820
+        width = 1920
         height = 2000
-        x = 3410
+        x = 3360
         y = -2000
     end
     browser.window.move_to(x, y)
@@ -97,13 +97,25 @@ def cronLog(message = '')
 end
 
 # Converts a number to 2 decimal points and adds thousands delimiter + currency symbol.
-# @return number
+# @return string
 def toCurrency(number, symbol = '£', delimiter = ',')
     number = number.to_f
     minus = (number < 0) ? '-' : ''
     number = '%.2f' % number.abs
     number = number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
     "#{minus}#{symbol}#{number}"
+end
+
+# Removes the '£' sign and any ',' delimiters from a string
+# @return float
+def cleanCurrency(string)
+    if string.include? '£'
+        string = string.delete('£')
+    end
+    if string.include? ','
+        string = string.delete(',')
+    end
+    string.to_f
 end
 
 # Calculates how many days between 2 dates (must be in 2013-10-29 format).

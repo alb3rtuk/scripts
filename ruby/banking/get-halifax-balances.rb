@@ -7,9 +7,9 @@ halifax = BankHalifax.new(
     Encrypter.new.decrypt(HalifaxUsername),
     Encrypter.new.decrypt(HalifaxPassword),
     Encrypter.new.decrypt(HalifaxSecurity),
-    'single',
-    true,
-    true
+    ARGV[0],
+    ARGV[1].nil? ? true : false,
+    ARGV[1].nil? ? true : false
 )
 
 puts "\n"

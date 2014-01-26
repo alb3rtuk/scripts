@@ -55,29 +55,29 @@ class BankLloyds
     def getBalances(showInTerminal = false, browser = self.login)
         data = {}
         browser.link(:title => 'View the latest transactions on your Lloyds Account').when_present(5).click
-        data['account_1_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
-        data['account_1_available'] = browser.p(:class => 'accountMsg', :index => 0).text
-        data['account_1_available'] = data['account_1_available'].split
-        data['account_1_available'] = data['account_1_available'][data['account_1_available'].count - 1].delete('£').delete(',').to_f
+        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
+        data['account_1_available'] = data['account_1_available'][1].split('[')
+        data['account_1_available'] = cleanCurrency(data['account_1_available'][0].strip)
         data['account_1_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_1_overdraft'] = data['account_1_overdraft'].split
-        data['account_1_overdraft'] = data['account_1_overdraft'][data['account_1_overdraft'].count - 1].delete('£').delete(',').to_f
+        data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-        data['cc_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
+        data['cc_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text.delete('£'))
         data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['cc_available'] = data['cc_available'].split(':')
-        data['cc_available'] = data['cc_available'][data['cc_available'].count - 1].delete('£').delete(',').to_f
+        data['cc_available'] = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
         data['cc_limit'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['cc_limit'] = data['cc_limit'].split(':')
-        data['cc_limit'] = data['cc_limit'][data['cc_limit'].count - 1].delete('£').delete(',').to_f
+        data['cc_limit'] = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
         data['cc_minimum_payment'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'numbers').p(:index => 1).text.split
-        data['cc_minimum_payment'] = data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1].delete('£').delete(',').to_f
+        data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
         data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y')
         if showInTerminal
-            puts "\n[ #{Rainbow("Lloyds").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('Lloyds').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('Platinum MasterCard', :width => 20, :align => 'right')

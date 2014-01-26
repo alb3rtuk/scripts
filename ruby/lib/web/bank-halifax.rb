@@ -39,33 +39,33 @@ class BankHalifax
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Halifax\x1B[0m\n"
         end
-        return browser
+        browser
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
         data = {}
         data['isa'] = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'balance').text.split
-        data['isa'] = data['isa'][data['isa'].count - 1].delete('£').delete(',').to_f
-        data['isa_remaining'] = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'accountMsg', :index => 1).text.delete('£').delete(',').to_f
+        data['isa'] = cleanCurrency(data['isa'][data['isa'].count - 1])
+        data['isa_remaining'] = cleanCurrency(browser.div(:class => 'accountBalance', :index => 2).p(:class => 'accountMsg', :index => 1).text)
         browser.link(:title => 'View the latest transactions on your Ultimate Reward Current Account').when_present(5).click
-        data['account_1_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
-        data['account_1_available'] = browser.p(:class => 'accountMsg', :index => 0).text
-        data['account_1_available'] = data['account_1_available'].split
-        data['account_1_available'] = data['account_1_available'][data['account_1_available'].count - 1].delete('£').delete(',').to_f
+        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
+        data['account_1_available'] = data['account_1_available'][1].split('[')
+        data['account_1_available'] = cleanCurrency(data['account_1_available'][0].strip)
         data['account_1_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_1_overdraft'] = data['account_1_overdraft'].split
-        data['account_1_overdraft'] = data['account_1_overdraft'][data['account_1_overdraft'].count - 1].delete('£').delete(',').to_f
+        data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Reward Current Account').when_present(5).click
-        data['account_2_balance'] = browser.p(:class => 'balance', :index => 0).text.delete('£').delete(',').to_f
-        data['account_2_available'] = browser.p(:class => 'accountMsg', :index => 0).text
-        data['account_2_available'] = data['account_2_available'].split
-        data['account_2_available'] = data['account_2_available'][data['account_2_available'].count - 1].delete('£').delete(',').to_f
+        data['account_2_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_2_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
+        data['account_2_available'] = data['account_2_available'][1].split('[')
+        data['account_2_available'] = cleanCurrency(data['account_2_available'][0].strip)
         data['account_2_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_2_overdraft'] = data['account_2_overdraft'].split
-        data['account_2_overdraft'] = data['account_2_overdraft'][data['account_2_overdraft'].count - 1].delete('£').delete(',').to_f
+        data['account_2_overdraft'] = cleanCurrency(data['account_2_overdraft'][data['account_2_overdraft'].count - 1])
         if showInTerminal
-            puts "\n[ #{Rainbow("Halifax").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('Halifax').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('Ultimate Reward', :width => 20, :align => 'right')
@@ -89,7 +89,7 @@ class BankHalifax
                 end
             end
         end
-        return Array[browser, data]
+        Array[browser, data]
     end
 
 end

@@ -6,9 +6,9 @@ lloyds = BankLloyds.new(
     Encrypter.new.decrypt(LloydsUsername),
     Encrypter.new.decrypt(LloydsPassword),
     Encrypter.new.decrypt(LloydsSecurity),
-    'single',
-    true,
-    true
+    ARGV[0],
+    ARGV[1].nil? ? true : false,
+    ARGV[1].nil? ? true : false
 )
 
 puts "\n"

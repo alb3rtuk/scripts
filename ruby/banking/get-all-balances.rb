@@ -94,7 +94,7 @@ summary['total_credit_used'] =
     (natWestBalances['savings_account'] < 0 ? -natWestBalances['savings_account'] : 0) +
     (halifaxBalances['account_1_balance'] < 0 ? -halifaxBalances['account_1_balance'] : 0) +
     (halifaxBalances['account_2_balance'] < 0 ? -halifaxBalances['account_2_balance'] : 0) +
-    (lloydsBalances['account_1_balance'] < 0 ? -lloyds['account_1_balance'] : 0)
+    (lloydsBalances['account_1_balance'] < 0 ? -lloydsBalances['account_1_balance'] : 0)
 
 summary['total_credit'] =
     halifaxBalances['account_1_overdraft'] +
@@ -108,7 +108,7 @@ summary['total_cash'] =
     summary['total_available'] -
     summary['total_credit']
 
-puts "\n[ #{Rainbow("Summary").foreground('#ff008a')} ]"
+puts "\n[ #{Rainbow('Summary').foreground('#ff008a')} ]"
 table(:border => true) do
     row do
         column('Total Available', :width => 20, :align => 'right')
