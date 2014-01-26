@@ -9,7 +9,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
 class BankCreditCardPayer
 
     # Tell the class what banks & credit cards to initiallize.
-    def initialize(creditCard, bankAccounts)
+    def initialize(creditCard, bankAccounts, displays = 'single', headless = true, displayProgress = true)
         verifyInput(Array['barclaycard', 'capitalone', 'lloyds'], creditCard)
         bankAccounts.each do |bankAccount|
             verifyInput(Array['natwest', 'halifax', 'lloyds'], bankAccount)
@@ -25,22 +25,15 @@ class BankCreditCardPayer
 
         puts "\n"
 
-        # @todo REMOVE THIS
-        #@outstanding_balance = 69.55
-        #@due_date = DateTime.new(2014, 1, 15)
-        #@minimum_payment = 5
-        #@payment_accounts = {}
-        #@payment_accounts = [{"account_id" => "natwest", "account_name" => "NatWest Advantage Gold", "balance" => 2218.98, "available" => 2218.98}, {"account_id" => "halifax", "account_name" => "Halifax Reward Account", "balance" => 4192.52, "available" => 4192.52}]
-
         #Get Credit Cards
         if creditCard == 'barclaycard'
             @barclayCard = BankBarclayCard.new(
                 Encrypter.new.decrypt(BarclayCardUsername),
                 Encrypter.new.decrypt(BarclayCardPin),
                 Encrypter.new.decrypt(BarclayCardSecurity),
-                'single',
-                true,
-                true
+                displays,
+                headless,
+                displayProgress
             )
             @barclayCardResponse = @barclayCard.getBalances(false)
             @outstanding_balance = @barclayCardResponse[1]['balance']
@@ -50,9 +43,9 @@ class BankCreditCardPayer
             @capitalOne = BankCapitalOne.new(
                 Encrypter.new.decrypt(CapitalOneUsername),
                 Encrypter.new.decrypt(CapitalOneSecurity),
-                'single',
-                true,
-                true
+                displays,
+                headless,
+                displayProgress
             )
             @capitalOneResponse = @capitalOne.getBalances(false)
             @outstanding_balance = @capitalOneResponse[1]['balance']
@@ -63,9 +56,9 @@ class BankCreditCardPayer
                 Encrypter.new.decrypt(LloydsUsername),
                 Encrypter.new.decrypt(LloydsPassword),
                 Encrypter.new.decrypt(LloydsSecurity),
-                'single',
-                true,
-                true
+                displays,
+                headless,
+                displayProgress
             )
             @lloydsResponse = @lloyds.getBalances(false)
             @outstanding_balance = @lloydsResponse[1]['cc_balance']
@@ -84,9 +77,9 @@ class BankCreditCardPayer
                         Encrypter.new.decrypt(LloydsUsername),
                         Encrypter.new.decrypt(LloydsPassword),
                         Encrypter.new.decrypt(LloydsSecurity),
-                        'single',
-                        true,
-                        true
+                        displays,
+                        headless,
+                        displayProgress
                     )
                     @lloydsResponse = @lloyds.getBalances(false)
                 end
@@ -99,9 +92,9 @@ class BankCreditCardPayer
                     Encrypter.new.decrypt(HalifaxUsername),
                     Encrypter.new.decrypt(HalifaxPassword),
                     Encrypter.new.decrypt(HalifaxSecurity),
-                    'single',
-                    true,
-                    true
+                    displays,
+                    headless,
+                    displayProgress
                 )
                 @halifax = @halifax.getBalances(false)
                 payment_account['account_id'] = 'halifax'
@@ -113,9 +106,9 @@ class BankCreditCardPayer
                     Encrypter.new.decrypt(NatWestUsername),
                     Encrypter.new.decrypt(NatWestSecurityTop),
                     Encrypter.new.decrypt(NatWestSecurityBottom),
-                    'single',
-                    true,
-                    true
+                    displays,
+                    headless,
+                    displayProgress
                 )
                 @natwest = @natwest.getBalances(false)
                 payment_account['account_id'] = 'natwest'

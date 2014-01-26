@@ -4,6 +4,8 @@
 
 clear
 
+detectDisplays
+
 message red "Pay CapitalOne Platinum VISA"
 
-ruby ~/Repos/Scripts/ruby/banking/pay-capitalone.rb
+ruby ~/Repos/Scripts/ruby/banking/pay-capitalone.rb $displays $1
