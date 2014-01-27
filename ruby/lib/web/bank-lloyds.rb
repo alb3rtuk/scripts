@@ -119,7 +119,7 @@ class BankLloyds
         # Sanity Check #1
         if browser.label(:for => 'frmMakeTransfer1:datePickerRadios:0').text.downcase == 'as soon as possible'
             if @displayProgress
-                puts "\x1B[90mPassed sanity check #1. Arranging for payment to be made as soon as possible\x1B[0m"
+                puts "\x1B[90mPassed sanity check #1"
             end
             browser.radio(:id => 'frmMakeTransfer1:amountRadio:2', :name => 'frmMakeTransfer1:amountRadio', :value => '2').click
             browser.text_field(:id => 'frmMakeTransfer1:txtPayAmt', :name => 'frmMakeTransfer1:txtPayAmt', :class => 'amountFieldAmount').set amount
