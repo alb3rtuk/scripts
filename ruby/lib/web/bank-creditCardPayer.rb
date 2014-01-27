@@ -200,7 +200,7 @@ class BankCreditCardPayer
         puts "\x1B[90mYou are about to make a payment of \x1B[32m#{toCurrency(@chosenAmount)}\x1B[90m. Once started, the process cannot be aborted.\x1B[0m\n\n"
         @chosenAmount = toCurrency(@chosenAmount, '', '')
         proceed = false
-        until proceed == true
+        until proceed
             STDOUT.flush
             print "\x1B[42m Confirm \x1B[0m \x1B[32mAre you absolutely sure you want to continue? \x1B[90m[y/n]\x1B[0m => "
             userResponse = STDIN.gets.chomp
