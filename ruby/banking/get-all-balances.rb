@@ -111,10 +111,10 @@ summary['total_cash'] =
 puts "\n[ #{Rainbow('Summary').foreground('#ff008a')} ]"
 table(:border => true) do
     row do
-        column('Total Available', :width => 20, :align => 'right')
-        column('Total Cash', :width => 20, :align => 'right')
-        column('Total Credit', :width => 20, :align => 'right')
-        column('Credit Used', :width => 20, :align => 'right')
+        column('Total Available', :width => 19, :align => 'right')
+        column('Total Cash', :width => 19, :align => 'right')
+        column('Total Credit', :width => 19, :align => 'right')
+        column('Credit Used', :width => 19, :align => 'right')
     end
     row do
         column("#{toCurrency(summary['total_available'])}", :color => (summary['total_available'] >= 0) ? 'green' : 'red')

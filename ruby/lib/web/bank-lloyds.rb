@@ -80,14 +80,14 @@ class BankLloyds
             puts "\n[ #{Rainbow('Lloyds').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Platinum MasterCard', :width => 20, :align => 'right')
-                    column('Available Funds', :width => 20, :align => 'right')
-                    column('Credit Limit', :width => 20, :align => 'right')
-                    column('Minimum Payment', :width => 20, :align => 'right')
-                    column('Payment Date', :width => 20, :align => 'right')
-                    column('Current Account', :width => 20, :align => 'right')
-                    column('Available Funds', :width => 20, :align => 'right')
-                    column('O/D Limit', :width => 20, :align => 'right')
+                    column('Platinum MasterCard', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('Credit Limit', :width => 19, :align => 'right')
+                    column('Minimum Payment', :width => 19, :align => 'right')
+                    column('Payment Date', :width => 19, :align => 'right')
+                    column('Current Account', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('O/D Limit', :width => 19, :align => 'right')
                 end
                 row do
                     column("#{toCurrency(0 - data['cc_balance'])}", :color => (data['cc_balance'] > 0) ? 'red' : 'white')

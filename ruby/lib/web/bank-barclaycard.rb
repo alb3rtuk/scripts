@@ -48,12 +48,12 @@ class BankBarclayCard
             puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('BarclayCard Visa', :width => 20, :align => 'right')
-                    column('Available Funds', :width => 20, :align => 'right')
-                    column('Credit Limit', :width => 20, :align => 'right')
-                    column('Minimum Payment', :width => 20, :align => 'right')
-                    column('Payment Date', :width => 20, :align => 'right')
-                    column('Pending Transactions', :width => 20, :align => 'right')
+                    column('BarclayCard Visa', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('Credit Limit', :width => 19, :align => 'right')
+                    column('Minimum Payment', :width => 19, :align => 'right')
+                    column('Payment Date', :width => 19, :align => 'right')
+                    column('Pending', :width => 19, :align => 'right')
                 end
                 row do
                     column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')

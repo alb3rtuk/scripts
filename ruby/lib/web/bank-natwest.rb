@@ -50,9 +50,9 @@ class BankNatWest
             puts "\n[ #{Rainbow("NatWest").foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Advantage Gold', :width => 20, :align => 'right')
-                    column('Step Account', :width => 20, :align => 'right')
-                    column('Savings Account', :width => 20, :align => 'right')
+                    column('Advantage Gold', :width => 19, :align => 'right')
+                    column('Step Account', :width => 19, :align => 'right')
+                    column('Savings Account', :width => 19, :align => 'right')
                 end
                 row do
                     column("#{toCurrency(data['advantage_gold'])}", :color => (data['advantage_gold'] >= 0) ? 'green' : 'red')

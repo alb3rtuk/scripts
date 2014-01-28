@@ -68,14 +68,14 @@ class BankHalifax
             puts "\n[ #{Rainbow('Halifax').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Ultimate Reward', :width => 20, :align => 'right')
-                    column('Available Funds', :width => 20, :align => 'right')
-                    column('O/D Limit', :width => 20, :align => 'right')
-                    column('Reward Account', :width => 20, :align => 'right')
-                    column('Available Funds', :width => 20, :align => 'right')
-                    column('O/D Limit', :width => 20, :align => 'right')
-                    column('Variable ISA Saver', :width => 20, :align => 'right')
-                    column('Remaining Allowance', :width => 20, :align => 'right')
+                    column('Ultimate Reward', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('O/D Limit', :width => 19, :align => 'right')
+                    column('Reward Account', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('O/D Limit', :width => 19, :align => 'right')
+                    column('Variable ISA Saver', :width => 19, :align => 'right')
+                    column('Remaining Allowance', :width => 19, :align => 'right')
                 end
                 row do
                     column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] < 0) ? 'red' : 'white')
