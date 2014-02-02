@@ -39,6 +39,7 @@ alias get-natwest-balances='~/Repos/Scripts/bash/banking/get-natwest-balances.sh
 alias open-all-banks='~/Repos/Scripts/bash/banking/open-all-banks.sh'
 alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
 alias open-capitalone='~/Repos/Scripts/bash/banking/open-capitalone.sh'
+alias open-experian='~/Repos/Scripts/bash/banking/open-experian.sh'
 alias open-halifax='~/Repos/Scripts/bash/banking/open-halifax.sh'
 alias open-lloyds='~/Repos/Scripts/bash/banking/open-lloyds.sh'
 alias open-natwest='~/Repos/Scripts/bash/banking/open-natwest.sh'
