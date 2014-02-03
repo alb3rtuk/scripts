@@ -45,7 +45,7 @@ class BankBarclayCard
         data['pending_transactions'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 1).text.delete('£').delete(',').to_f
 
         if showInTerminal
-            puts "\n[ #{Rainbow("BarclayCard").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('BarclayCard').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('BarclayCard Visa', :width => 19, :align => 'right')
@@ -57,7 +57,7 @@ class BankBarclayCard
                 end
                 row do
                     column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['credit_limit'])}", :color => 'white')
                     column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
                     column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')

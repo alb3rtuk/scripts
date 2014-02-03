@@ -91,12 +91,12 @@ class BankLloyds
                 end
                 row do
                     column("#{toCurrency(0 - data['cc_balance'])}", :color => (data['cc_balance'] > 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['cc_available'])}", :color => (data['cc_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['cc_available'])}", :color => (data['cc_available'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['cc_limit'])}", :color => 'white')
                     column("#{toCurrency(data['cc_minimum_payment'])}", :color => 'white')
                     column("#{data['cc_due_date'].strftime('%B %d %Y')}", :color => 'white')
-                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] < 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] > 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['account_1_overdraft'])}", :color => 'white')
                 end
             end

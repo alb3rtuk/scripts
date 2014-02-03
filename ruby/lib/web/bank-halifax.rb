@@ -78,13 +78,13 @@ class BankHalifax
                     column('Remaining Allowance', :width => 19, :align => 'right')
                 end
                 row do
-                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] < 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] > 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['account_1_overdraft'])}", :color => 'white')
-                    column("#{toCurrency(data['account_2_balance'])}", :color => (data['account_2_balance'] < 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['account_2_available'])}", :color => (data['account_2_available'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['account_2_balance'])}", :color => (data['account_2_balance'] > 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['account_2_available'])}", :color => (data['account_2_available'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['account_2_overdraft'])}", :color => 'white')
-                    column("#{toCurrency(data['isa'])}", :color => (data['isa'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['isa'])}", :color => (data['isa'] > 0) ? 'green' : 'red')
                     column("#{toCurrency(data['isa_remaining'])}", :color => 'white')
                 end
             end

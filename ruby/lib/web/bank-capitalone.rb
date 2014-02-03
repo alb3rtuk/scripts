@@ -47,7 +47,7 @@ class BankCapitalOne
         data['minimum_payment'] = browser.td(:text, /Minimum payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y')
         if showInTerminal
-            puts "\n[ #{Rainbow("CapitalOne").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('CapitalOne').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('CapitalOne Visa', :width => 19, :align => 'right')
@@ -58,7 +58,7 @@ class BankCapitalOne
                 end
                 row do
                     column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'green' : 'white')
+                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'white' : 'red')
                     column("#{toCurrency(data['credit_limit'])}", :color => 'white')
                     column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
                     column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')
