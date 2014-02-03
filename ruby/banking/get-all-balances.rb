@@ -75,7 +75,7 @@ summary = {}
 summary['total_available'] =
     natWestBalances['advantage_gold'] +
     natWestBalances['step_account'] +
-    natWestBalances['savings_account'] +
+    # natWestBalances['savings_account'] +
     halifaxBalances['account_1_available'] +
     halifaxBalances['account_2_available'] +
     halifaxBalances['isa'] +
