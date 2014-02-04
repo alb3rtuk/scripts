@@ -1,12 +1,13 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/nevil-road-surgery.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
 
-nrs = NevilRoadSurgery.new(
-    Encrypter.new.decrypt(NevilRoadUsername),
-    Encrypter.new.decrypt(NevilRoadPassword)
+capitalOne = BankCapitalOne.new(
+    Encrypter.new.decrypt(CapitalOneUsername),
+    Encrypter.new.decrypt(CapitalOneSecurity),
+    'single',
+    true
 )
 
-nrs.orderAsthma('single', true)
-
+capitalOne.login()
 exit

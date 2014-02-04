@@ -9,15 +9,8 @@
         <key>Program</key>
         <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.order.asthma.inhaler.sh</string>
 
-        <key>StartCalendarInterval</key>
-        <dict>
-            <key>Minute</key>
-            <integer>15</integer>
-            <key>Hour</key>
-            <integer>9</integer>
-            <key>Day</key>
-            <integer>5</integer>
-        </dict>
+        <key>StartInterval</key>
+        <integer>3600</integer>
 
         <key>StandardOutPath</key>
         <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>
