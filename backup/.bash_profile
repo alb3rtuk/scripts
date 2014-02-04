@@ -53,6 +53,9 @@ alias encrypt='~/Repos/Scripts/bash/quick-commands/encrypt.sh'
 alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
+### SCRIPTS ##################
+alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
+
 ### SELENIUM #################
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
