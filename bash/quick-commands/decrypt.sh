@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 clearTerminal
 

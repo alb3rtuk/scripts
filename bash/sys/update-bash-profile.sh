@@ -3,7 +3,7 @@
 # Updates ~/.bash_profile with the bash_profile file found in this repo.
 # Scripts/backup/.bash_profile
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 cp ~/Repos/Scripts/backup/.bash_profile ~/.bash_profile
 

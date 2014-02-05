@@ -3,7 +3,7 @@
 # Updates the launchd directory automatically by creating symlinks to .plist files in this Repo.
 # Only touches launchd jobs that start with albert.*
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 plistDirectory="/Users/Albert/Repos/Scripts/launchd/"
 launchdDirectory="/Users/Albert/Library/LaunchAgents/"

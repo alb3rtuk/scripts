@@ -2,7 +2,7 @@
 
 # Runs all ruby tests in ~/Repos/Scripts/ruby/tests/.
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 input=$1
 

@@ -3,7 +3,7 @@
 # Updates the crons using the cron definition file in this Repo.
 # Fount at: ~/Repos/Scripts/bash/cron/crontab.txt
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 file="/Users/Albert/Repos/Scripts/backup/crontab.txt"
 

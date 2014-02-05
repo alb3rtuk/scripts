@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/common-utilities.sh
+. ~/Repos/Scripts/bash/common/utilities.sh
 
 sudo cp ~/Repos/Scripts/backup/hosts /private/etc/hosts
 message green "SUCCESS" "Updated: \033[33m/private/etc/hosts\033[0m"
