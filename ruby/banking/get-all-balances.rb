@@ -11,6 +11,15 @@ include CommandLineReporter
 
 notClean = (ARGV.empty?) ? false : true
 
+experian = BankExperian.new(
+    Encrypter.new.decrypt(ExperianUsername),
+    Encrypter.new.decrypt(ExperianPassword),
+    Encrypter.new.decrypt(ExperianSecurity),
+    'single',
+    true,
+    notClean
+)
+
 barclayCard = BankBarclayCard.new(
     Encrypter.new.decrypt(BarclayCardUsername),
     Encrypter.new.decrypt(BarclayCardPin),
@@ -55,34 +64,25 @@ natWest = BankNatWest.new(
     notClean
 )
 
-experian = BankExperian.new(
-    Encrypter.new.decrypt(ExperianUsername),
-    Encrypter.new.decrypt(ExperianPassword),
-    Encrypter.new.decrypt(ExperianSecurity),
-    'single',
-    true,
-    notClean
-)
-
-if notClean then puts "\n" end
-experianCreditInfo = experian.getCreditInfo()
+puts "\n" if notClean
+experianCreditInfo = experian.getCreditInfo
 experianCreditInfo = experianCreditInfo[1]
-if notClean then puts "\n" end
+puts "\n" if notClean
 natWestBalances = natWest.getBalances(true)
 natWestBalances = natWestBalances[1]
-if notClean then puts "\n" end
+puts "\n" if notClean
 halifaxBalances = halifax.getBalances(true)
 halifaxBalances = halifaxBalances[1]
-if notClean then puts "\n" end
+puts "\n" if notClean
 lloydsBalances = lloyds.getBalances(true)
 lloydsBalances = lloydsBalances[1]
-if notClean then puts "\n" end
+puts "\n" if notClean
 barclayCardBalances = barclayCard.getBalances(true)
 barclayCardBalances = barclayCardBalances[1]
-if notClean then puts "\n" end
+puts "\n" if notClean
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
-if notClean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
+puts "\n\x1B[90mGenerating Summary\x1B[0m\n" if notClean
 
 summary = {}
 summary['total_available'] =
