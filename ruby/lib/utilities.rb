@@ -70,7 +70,7 @@ end
 # @return [Watir::Browser]
 def getBrowser(displays = 'single', headless = false, browser = 'chrome')
     verifyInput(Array['single', 'multiple'], displays)
-    browser = Watir::Browser.new(!headless ? browser : 'phantomjs')
+    browser = Watir::Browser.new(headless ? 'phantomjs' : browser)
     x = y= width = height = 0
     if displays == 'single'
         width = 1680
