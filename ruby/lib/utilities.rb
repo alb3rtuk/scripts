@@ -92,7 +92,7 @@ end
 # Logs a message in backup/cronlog.log
 # @return void
 def cronLog(message = '')
-    timestamp = Time.now.strftime('%a %b %d %H:%I:%S %Z %Y')
+    timestamp = Time.now.strftime('%a %b %e %H:%M:%S %Z %Y')
     File.open('/Users/Albert/Repos/Scripts/backup/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
 end
 
