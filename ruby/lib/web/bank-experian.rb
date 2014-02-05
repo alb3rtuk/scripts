@@ -36,16 +36,16 @@ class BankExperian
 
     def getCreditInfo(showInTerminal = false, browser = self.login)
         data = {}
-        data['data'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
+        data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').text
 
         if showInTerminal
-            puts "\n[ #{Rainbow('Experian Credit Info').foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('Experian').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('data', :width => 19, :align => 'right')
+                    column('Credit Score', :width => 19, :align => 'right')
                 end
                 row do
-                    column("data", :color => 'white')
+                    column(data['credit_score'], :color => 'magenta')
                 end
             end
         end

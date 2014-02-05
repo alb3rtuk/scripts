@@ -21,7 +21,7 @@ class TestBankLloyds < Test::Unit::TestCase
         browser = lloyds.login
 
         # Test for payment elements
-        assert_equal(true, browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs', :title => 'Pay credit card').when_present(5).exists?)
+        assert_equal(true, browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs').when_present(5).exists?)
 
         balances = lloyds.getBalances(false, browser)
         balances[1].each { |key, value|

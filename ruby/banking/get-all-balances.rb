@@ -2,6 +2,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-barclaycard.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-experian.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-halifax.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-lloyds.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
@@ -54,6 +55,15 @@ natWest = BankNatWest.new(
     notClean
 )
 
+experian = BankExperian.new(
+    Encrypter.new.decrypt(ExperianUsername),
+    Encrypter.new.decrypt(ExperianPassword),
+    Encrypter.new.decrypt(ExperianSecurity),
+    'single',
+    true,
+    notClean
+)
+
 if notClean then puts "\n" end
 natWestBalances = natWest.getBalances(true)
 natWestBalances = natWestBalances[1]
@@ -69,6 +79,9 @@ barclayCardBalances = barclayCardBalances[1]
 if notClean then puts "\n" end
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
+if notClean then puts "\n" end
+experianCreditInfo = experian.getCreditInfo()
+experianCreditInfo = experianCreditInfo[1]
 if notClean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
 
 summary = {}
@@ -115,12 +128,14 @@ table(:border => true) do
         column('Total Cash', :width => 19, :align => 'right')
         column('Total Credit', :width => 19, :align => 'right')
         column('Credit Used', :width => 19, :align => 'right')
+        column('Credit Score', :width => 19, :align => 'right', :color => 'cyan')
     end
     row do
         column("#{toCurrency(summary['total_available'])}", :color => (summary['total_available'] >= 0) ? 'green' : 'red')
         column("#{toCurrency(summary['total_cash'])}", :color => (summary['total_cash'] >= 0) ? 'green' : 'red')
         column("#{toCurrency(summary['total_credit'])}", :color => 'white')
         column("#{toCurrency(0 - summary['total_credit_used'])}", :color => (summary['total_credit_used'] > 0) ? 'red' : 'white')
+        column(experianCreditInfo['credit_score'], :color => 'cyan')
     end
 end
 puts "\n"
