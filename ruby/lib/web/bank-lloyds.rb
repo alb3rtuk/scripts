@@ -114,7 +114,7 @@ class BankLloyds
         if @displayProgress
             puts "\x1B[90mAttempting to pay #{toCurrency(amount)} towards outstanding balance\x1B[0m"
         end
-        browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs', :title => 'Pay credit card').click
+        browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs').when_present(5).click
 
         # Sanity Check #1
         if browser.label(:for => 'frmMakeTransfer1:datePickerRadios:0').text.downcase == 'as soon as possible'
