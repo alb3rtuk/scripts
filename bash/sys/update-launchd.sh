@@ -9,7 +9,7 @@ plistDirectory="/Users/Albert/Repos/Scripts/launchd/"
 launchdDirectory="/Users/Albert/Library/LaunchAgents/"
 
 # First, remove all launchd jobs and symbolic links from LaunchAgents directory.
-cd $launchdDirectory
+cd ${launchdDirectory}
 for input in $(ls -lR $launchdDirectory | grep ^l); do
     if [[ $input == albert.*.plist ]]; then
         rm $input
@@ -21,7 +21,7 @@ for input in $(ls -lR $launchdDirectory | grep ^l); do
 done
 
 # Second, recreate all launchd jobs from the files in the git repo.
-cd $plistDirectory
+cd ${plistDirectory}
 for input in $(find . -type f -name "albert.*.plist"); do
     ln -s $plistDirectory${input:2} $launchdDirectory${input:2}
     launchctl load $launchdDirectory${input:2}
