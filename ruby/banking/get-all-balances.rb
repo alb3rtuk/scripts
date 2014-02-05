@@ -65,6 +65,9 @@ experian = BankExperian.new(
 )
 
 if notClean then puts "\n" end
+experianCreditInfo = experian.getCreditInfo()
+experianCreditInfo = experianCreditInfo[1]
+if notClean then puts "\n" end
 natWestBalances = natWest.getBalances(true)
 natWestBalances = natWestBalances[1]
 if notClean then puts "\n" end
@@ -79,16 +82,13 @@ barclayCardBalances = barclayCardBalances[1]
 if notClean then puts "\n" end
 capitalOneBalances = capitalOne.getBalances(true)
 capitalOneBalances = capitalOneBalances[1]
-if notClean then puts "\n" end
-experianCreditInfo = experian.getCreditInfo()
-experianCreditInfo = experianCreditInfo[1]
 if notClean then puts "\n\x1B[90mGenerating Summary\x1B[0m\n" end
 
 summary = {}
 summary['total_available'] =
     natWestBalances['advantage_gold'] +
     natWestBalances['step_account'] +
-    # natWestBalances['savings_account'] +
+  # natWestBalances['savings_account'] +
     halifaxBalances['account_1_available'] +
     halifaxBalances['account_2_available'] +
     halifaxBalances['isa'] +
