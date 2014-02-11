@@ -26,6 +26,7 @@ alias egrep='egrep --color=auto'
 # More (Misc) aliases..
 alias sb='source ~/.bash_profile'
 alias tig='/Users/Albert/bin/exec/tig'
+alias mysql='mysql app -uroot'
 
 #####################################################################################################
 
