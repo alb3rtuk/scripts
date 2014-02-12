@@ -4,6 +4,7 @@
 # Scripts/backup/.bash_profile
 
 . ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh
 
 cp ~/Repos/Scripts/backup/.bash_profile ~/.bash_profile
 
