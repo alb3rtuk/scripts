@@ -56,6 +56,8 @@ alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
 ### SCRIPTS ##################
+alias ec2-bootstrap='~/Repos/Scripts/bash/scripts/ec2-bootstrap.sh'
+alias ec2-login='~/Repos/Scripts/bash/scripts/ec2-login.sh'
 alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 
 ### SELENIUM #################
