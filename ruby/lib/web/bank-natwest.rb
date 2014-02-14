@@ -71,5 +71,4 @@ class BankNatWest
         end
         Array[browser, data]
     end
-
 end
