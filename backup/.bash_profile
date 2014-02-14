@@ -50,7 +50,6 @@ alias pay-capitalone='~/Repos/Scripts/bash/banking/pay-capitalone.sh'
 alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
 ### EC2 ######################
-alias ec2-bootstrap='~/Repos/Scripts/bash/ec2/ec2-bootstrap.sh'
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
