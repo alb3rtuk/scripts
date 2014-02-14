@@ -47,7 +47,7 @@ class BankNatWest
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         if showInTerminal
-            puts "\n[ #{Rainbow("NatWest").foreground('#ff008a')} ]"
+            puts "\n[ #{Rainbow('NatWest').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
                     column('Advantage Gold', :width => 19, :align => 'right')

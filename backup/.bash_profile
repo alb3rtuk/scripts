@@ -49,6 +49,13 @@ alias pay-barclaycard='~/Repos/Scripts/bash/banking/pay-barclaycard.sh'
 alias pay-capitalone='~/Repos/Scripts/bash/banking/pay-capitalone.sh'
 alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
+### EC2 ######################
+alias ec2-bootstrap='~/Repos/Scripts/bash/ec2/ec2-bootstrap.sh'
+alias ec2-login-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-login-eu-ireland.sh'
+alias ec2-login-us-west-california='~/Repos/Scripts/bash/ec2/ec2-login-us-west-california.sh'
+alias ec2-setup-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-setup-eu-ireland.sh'
+alias ec2-setup-us-west-california='~/Repos/Scripts/bash/ec2/ec2-setup-us-west-california.sh'
+
 ### QUICK COMMANDS ###########
 alias decrypt='~/Repos/Scripts/bash/quick-commands/decrypt.sh'
 alias encrypt='~/Repos/Scripts/bash/quick-commands/encrypt.sh'
@@ -56,8 +63,6 @@ alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
 alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
 
 ### SCRIPTS ##################
-alias ec2-bootstrap='~/Repos/Scripts/bash/scripts/ec2-bootstrap.sh'
-alias ec2-login='~/Repos/Scripts/bash/scripts/ec2-login.sh'
 alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 
 ### SELENIUM #################
