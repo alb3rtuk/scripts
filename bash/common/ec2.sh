@@ -18,7 +18,7 @@ initializeRegion() {
         fi
     done
     if [[ ${region} == "" ]] || [[ $match == 0 ]]; then
-        message red "INVALID REGION" "You must specify a region. Allowed values are:"
+        message red "ERROR" "You must specify a region (1st parameter). Valid regions are are:"
         for i in "${ec2_regions[@]}"
         do :
             echo ${i}
@@ -29,6 +29,7 @@ initializeRegion() {
     if [[ ${region} == "eu-west-1" ]]; then
         ssh_key="ec2-admin-eu-ireland"
         pem_file="~/.ssh/ec2-admin-eu-ireland.pem"
+        ami="ami-480bea3f"
     else
         message red "ERROR" "The region: \033[33m${region}\033[0m has not yet been defined in \033[33minitializeRegion()\033[0m"
         exit

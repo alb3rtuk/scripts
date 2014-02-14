@@ -14,9 +14,8 @@ fi
 
 cd ~/Repos/Chef/
 
-knife ec2 server delete ${node_id} --region ${region}
-knife node delete ${node_id}
+knife ec2 server delete ${node_id} --region ${region} --purge
 
-message green "SUCCESS" "EC2 instance with ID: \033[33m${node_id}\033[0m on \033[33m${region}\033[0m was successfully deleted. The Chef node was also removed."
+message green "SUCCESS" "EC2 instance with ID: \033[33m${node_id}\033[0m on \033[33m${region}\033[0m was successfully deleted. All associated Chef node & clients were also removed."
 
 exit
