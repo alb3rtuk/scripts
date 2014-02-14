@@ -53,8 +53,6 @@ alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 alias ec2-bootstrap='~/Repos/Scripts/bash/ec2/ec2-bootstrap.sh'
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
-alias ec2-delete-instance='~/Repos/Scripts/bash/ec2/ec2-delete-instance.sh'
-alias ec2-delete-node='~/Repos/Scripts/bash/ec2/ec2-delete-node.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 
 alias ec2-login-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-login-eu-ireland.sh'
