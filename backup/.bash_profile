@@ -51,6 +51,9 @@ alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
 ### EC2 ######################
 alias ec2-bootstrap='~/Repos/Scripts/bash/ec2/ec2-bootstrap.sh'
+alias ec2-new-instance='~/Repos/Scripts/bash/ec2/ec2-new-instance.sh'
+alias ec2-list-servers='~/Repos/Scripts/bash/ec2/ec2-list-servers.sh'
+
 alias ec2-login-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-login-eu-ireland.sh'
 alias ec2-login-us-west-california='~/Repos/Scripts/bash/ec2/ec2-login-us-west-california.sh'
 alias ec2-setup-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-setup-eu-ireland.sh'
