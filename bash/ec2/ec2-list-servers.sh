@@ -6,6 +6,10 @@ getRegions
 
 cd ~/Repos/Chef/
 
+clear
+
+message blue "EC2" "Fetching all \033[32mLIVE EC2 instances\033[0m."
+
 echo
 
 for i in "${ec2_regions[@]}"
