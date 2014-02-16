@@ -2,7 +2,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-
 cookbook=$1
 
 if [[ $cookbook == "" ]]; then
