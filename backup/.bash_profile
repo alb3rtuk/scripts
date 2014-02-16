@@ -49,6 +49,9 @@ alias pay-barclaycard='~/Repos/Scripts/bash/banking/pay-barclaycard.sh'
 alias pay-capitalone='~/Repos/Scripts/bash/banking/pay-capitalone.sh'
 alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
+### CHEF #####################
+alias knife-get-cookbook='~/Repos/Scripts/bash/chef/knife-get-cookbook.sh'
+
 ### EC2 ######################
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
