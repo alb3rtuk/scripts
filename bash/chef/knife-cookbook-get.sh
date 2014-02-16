@@ -11,21 +11,26 @@ fi
 
 cd ~/Repos/Chef/
 
-mkdir tmp
-cd tmp
-knife cookbook site download ${cookbook}
+# ONLY DOWNLOAD & UNZIP COOKBOOK IF IT DOESN'T EXIST.
+if [[ ! -d ~/Repos/Chef/cookbooks/${cookbook} ]]; then
+    mkdir tmp
+    cd tmp
+    knife cookbook site download ${cookbook}
 
-for file in ~/Repos/Chef/tmp/*
-do
-    tar xzvf ${file} -C ~/Repos/Chef/cookbooks/
-done
+    for file in ~/Repos/Chef/tmp/*
+    do
+        tar xzvf ${file} -C ~/Repos/Chef/cookbooks/
+    done
 
-cd ~/Repos/Chef/
-rm -rf tmp/
+    cd ~/Repos/Chef/
+    rm -rf tmp/
 
-git add cookbooks/${cookbook}
-git commit -m "Added cookbook: $cookbook"
-git push
+    git add cookbooks/${cookbook}
+    git commit -m "Added cookbook: $cookbook"
+    git push
+else
+    echo "Cookbook: \033[33m${cookbook}\033[0m has already been downloaded."
+fi
 
 knife cookbook upload ${cookbook}
 
