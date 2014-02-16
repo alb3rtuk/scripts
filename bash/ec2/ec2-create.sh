@@ -21,4 +21,14 @@ knife ec2 server create \
   --identity-file=${pem_file} \
   --ebs-size ${ebs_size} \
 
+ec2_instance_id=$(knife node show ${node_name} -a ec2.instance_id 2>&1)
+ec2_instance_id=${ec2_instance_id##*: }
+
+ec2_public_ipv4=$(knife node show ${node_name} -a ec2.public_ipv4 2>&1)
+ec2_public_ipv4=${ec2_public_ipv4##*: }
+
+knife node run_list add ${node_name} omnibus_updater apt openssl build-essential apache2 mysql
+
+ssh -i ${pem_file} ${ssh_user}@${ec2_public_ipv4} "sudo chef-client"
+
 exit
