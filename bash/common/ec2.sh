@@ -28,7 +28,7 @@ initializeRegion() {
     if [[ ${region} == "eu-west-1" ]]; then
         ssh_user="ubuntu"
         ssh_key="ec2-admin-eu-ireland"
-        pem_file="~/.ssh/ec2-admin-eu-ireland.pem"
+        pem_file="/Users/Albert/.ssh/ec2-admin-eu-ireland.pem"
         image="ami-480bea3f" # Ubuntu Server 13.10       / 64-bit
         image="ami-8e987ef9" # Ubuntu Server 12.04.3 LTS / 64-bit
         flavor="t1.micro"
@@ -37,7 +37,7 @@ initializeRegion() {
     elif [[ ${region} == "us-west-1" ]]; then
         ssh_user="ubuntu"
         ssh_key="ec2-admin-us-west-california"
-        pem_file="~/.ssh/ec2-admin-us-west-california.pem"
+        pem_file="/Users/Albert/.ssh/ec2-admin-us-west-california.pem"
         image="ami-4843740d"
         flavor="t1.micro"
         ebs_size="8"
