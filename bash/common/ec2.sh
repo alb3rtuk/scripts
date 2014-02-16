@@ -25,13 +25,31 @@ initializeRegion() {
         done
         exit
     fi
-
     if [[ ${region} == "eu-west-1" ]]; then
+        ssh_user="ubuntu"
         ssh_key="ec2-admin-eu-ireland"
         pem_file="~/.ssh/ec2-admin-eu-ireland.pem"
-        ami="ami-480bea3f"
+        image="ami-480bea3f"
+        flavor="t1.micro"
+        ebs_size="8"
+        groups="default"
+    elif [[ ${region} == "us-west-1" ]]; then
+        ssh_user="ubuntu"
+        ssh_key="ec2-admin-us-west-california"
+        pem_file="~/.ssh/ec2-admin-us-west-california.pem"
+        image="ami-4843740d"
+        flavor="t1.micro"
+        ebs_size="8"
+        groups="default"
     else
         message red "ERROR" "The region: \033[33m${region}\033[0m has not yet been defined in \033[33minitializeRegion()\033[0m"
+        exit
+    fi
+}
+
+validateNodeName() {
+    if [[ ${node_name} == "" ]]; then
+        message red "ERROR" "You must specify a node name (2nd parameter)."
         exit
     fi
 }
