@@ -63,13 +63,13 @@ alias ec2-login-us-west-california='~/Repos/Scripts/bash/ec2/ec2-login-us-west-c
 alias ec2-setup-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-setup-eu-ireland.sh'
 alias ec2-setup-us-west-california='~/Repos/Scripts/bash/ec2/ec2-setup-us-west-california.sh'
 
-### QUICK COMMANDS ###########
-alias decrypt='~/Repos/Scripts/bash/scripts/decrypt.sh'
-alias encrypt='~/Repos/Scripts/bash/scripts/encrypt.sh'
-alias rs='~/Repos/Scripts/bash/scripts/rs.sh'
+
 
 ### SCRIPTS ##################
-alias tail-cron-mail='~/Repos/Scripts/bash/scripts/tail-cron-mail.sh'
+alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
+alias decrypt='~/Repos/Scripts/bash/scripts/decrypt.sh'
+alias encrypt='~/Repos/Scripts/bash/scripts/encrypt.sh'
+alias rs='~/Repos/Scripts/bash/scripts/rs.sh'alias tail-cron-mail='~/Repos/Scripts/bash/scripts/tail-cron-mail.sh'
 alias update-apache='~/Repos/Scripts/bash/scripts/update-apache.sh'
 alias update-bash-profile='~/Repos/Scripts/bash/scripts/update-bash-profile.sh'
 alias update-crontab='~/Repos/Scripts/bash/scripts/update-crontab.sh'
