@@ -69,6 +69,11 @@ alias encrypt='~/Repos/Scripts/bash/scripts/encrypt.sh'
 alias rs='~/Repos/Scripts/bash/scripts/rs.sh'
 
 ### SCRIPTS ##################
+alias tail-cron-mail='~/Repos/Scripts/bash/scripts/tail-cron-mail.sh'
+alias update-apache='~/Repos/Scripts/bash/scripts/update-apache.sh'
+alias update-bash-profile='~/Repos/Scripts/bash/scripts/update-bash-profile.sh'
+alias update-crontab='~/Repos/Scripts/bash/scripts/update-crontab.sh'
+alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
 alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 
 ### SELENIUM #################
@@ -82,11 +87,7 @@ alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 alias find-files-larger-than-kb='~/Repos/Scripts/bash/sys/find-files-larger-than-kb.sh'
 alias find-files-smaller-than-kb='~/Repos/Scripts/bash/sys/find-files-smaller-than-kb.sh'
-alias tail-cron-mail='~/Repos/Scripts/bash/sys/tail-cron-mail.sh'
-alias update-apache='~/Repos/Scripts/bash/sys/update-apache.sh'
-alias update-bash-profile='~/Repos/Scripts/bash/sys/update-bash-profile.sh'
-alias update-crontab='~/Repos/Scripts/bash/sys/update-crontab.sh'
-alias update-launchd='~/Repos/Scripts/bash/sys/update-launchd.sh'
+
 
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
