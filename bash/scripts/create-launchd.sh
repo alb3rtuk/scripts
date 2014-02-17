@@ -2,6 +2,8 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
+cd ~/Repos/Scripts/
+
 job_name=$1
 
 if [[ ${job_name} == "" ]]; then
@@ -22,6 +24,8 @@ launchd_script="/Users/Albert/Repos/Scripts/launchd/albert.${job_name}.plist"
 touch ${shell_script}
 touch ${ruby_script}
 touch ${launchd_script}
+
+git add .
 
 # SETUP SHELL SCRIPT
 chmod 0755 ${shell_script}
