@@ -64,10 +64,10 @@ alias ec2-setup-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-setup-eu-ireland.sh'
 alias ec2-setup-us-west-california='~/Repos/Scripts/bash/ec2/ec2-setup-us-west-california.sh'
 
 ### QUICK COMMANDS ###########
-alias decrypt='~/Repos/Scripts/bash/quick-commands/decrypt.sh'
-alias encrypt='~/Repos/Scripts/bash/quick-commands/encrypt.sh'
-alias rs='~/Repos/Scripts/bash/quick-commands/rs.sh'
-alias vm='~/Repos/Scripts/bash/quick-commands/vm.sh'
+alias decrypt='~/Repos/Scripts/bash/scripts/decrypt.sh'
+alias encrypt='~/Repos/Scripts/bash/scripts/encrypt.sh'
+alias rs='~/Repos/Scripts/bash/scripts/rs.sh'
+alias vm='~/Repos/Scripts/bash/scripts/vm.sh'
 
 ### SCRIPTS ##################
 alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'

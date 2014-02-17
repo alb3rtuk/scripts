@@ -4,4 +4,4 @@
 
 clearTerminal
 
-ruby ~/Repos/Scripts/ruby/quick-commands/decrypt.rb $1
+ruby ~/Repos/Scripts/ruby/scripts/encrypt.rb $1
