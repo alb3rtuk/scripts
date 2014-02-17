@@ -78,7 +78,6 @@ alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-sur
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
 alias clear-terminal='~/Repos/Scripts/bash/sys/clear-terminal.sh'
 alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
-alias edit-bash='~/Repos/Scripts/bash/sys/edit-bash.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 alias find-files-larger-than-kb='~/Repos/Scripts/bash/sys/find-files-larger-than-kb.sh'
