@@ -16,7 +16,7 @@ fi
 
 read -p "`echo "\`tput setab 1\` WARNING \`tput setab 0\` \033[0mYou are about to permanently delete the cookbook: \033[33m${cookbook}\033[0m. \033[31mThis action cannot be undone!\033[0m Continue? \033[32m[y/n]\033[0m \033[37m=>\033[0m "`" -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "`tput setab 1` Script was aborted! `tput setab 0`"
+    echo "`tput setab 1` SCRIPT WAS ABORTED `tput setab 0`"
     exit
 fi
 

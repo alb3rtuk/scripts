@@ -13,7 +13,7 @@ fi
 
 read -p "`echo "\033[0mYour job will be called \033[35m[\033[0m \033[33malbert.${job_name}\033[0m \033[35m]\033[0m Would you like to continue? \033[32m[y/n]\033[0m \033[37m=>\033[0m "`" -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "`tput setab 1` Script was aborted! `tput setab 0`"
+    echo "`tput setab 1` SCRIPT WAS ABORTED `tput setab 0`"
     exit
 fi
 
