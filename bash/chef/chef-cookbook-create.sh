@@ -50,7 +50,6 @@ echo "#" >> ${default_recipe}
 echo "\033[36mConfigured\033[0m \033[33m${default_recipe}\033[0m"
 
 knife cookbook upload ${cookbook}
-echo "\033[36mUploaded cookbook to Chef server\033[0m"
 
 git add cookbooks/${cookbook}
 
