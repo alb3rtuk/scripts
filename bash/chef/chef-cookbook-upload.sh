@@ -22,6 +22,7 @@ cd ~/Repos/Chef/
 
 ruby ~/Repos/Scripts/ruby/chef/cookbook-version-incrementer.rb ${metadata_file}
 
+knife cookbook delete ${cookbook} -y
 knife cookbook upload ${cookbook}
 
 git add cookbooks/${cookbook}

@@ -27,7 +27,7 @@ ec2_instance_id=${ec2_instance_id##*: }
 ec2_public_ipv4=$(knife node show ${node_name} -a ec2.public_ipv4 2>&1)
 ec2_public_ipv4=${ec2_public_ipv4##*: }
 
-knife node run_list add ${node_name} apt apache2
+knife node run_list add ${node_name} apt apache2 git
 
 ssh -i ${pem_file} ${ssh_user}@${ec2_public_ipv4}
 
