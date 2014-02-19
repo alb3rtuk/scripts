@@ -50,9 +50,9 @@ alias pay-capitalone='~/Repos/Scripts/bash/banking/pay-capitalone.sh'
 alias pay-lloyds='~/Repos/Scripts/bash/banking/pay-lloyds.sh'
 
 ### CHEF #####################
-alias knife-cookbook-create='~/Repos/Scripts/bash/chef/knife-cookbook-create.sh'
-alias knife-cookbook-delete='~/Repos/Scripts/bash/chef/knife-cookbook-delete.sh'
-alias knife-cookbook-download='~/Repos/Scripts/bash/chef/knife-cookbook-download.sh'
+alias chef-cookbook-create='~/Repos/Scripts/bash/chef/chef-cookbook-create.sh'
+alias chef-cookbook-delete='~/Repos/Scripts/bash/chef/chef-cookbook-delete.sh'
+alias chef-cookbook-download='~/Repos/Scripts/bash/chef/chef-cookbook-download.sh'
 
 ### EC2 ######################
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'

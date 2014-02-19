@@ -22,7 +22,7 @@ fi
 
 cd ~/Repos/Chef
 
-knife cookbook delete ${cookbook}
+knife cookbook delete ${cookbook} -y
 echo "\033[36mRemoved: \033[33m${cookbook}\033[36m from Chef server\033[0m"
 
 rm -rf cookbooks/${cookbook}
