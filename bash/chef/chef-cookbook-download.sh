@@ -38,8 +38,5 @@ knife cookbook upload ${cookbook}
 echo "Uploaded cookbook to Chef server"
 
 git add cookbooks/${cookbook}
-git commit cookbooks/${cookbook} -m "Download/Added a new cookbook: $cookbook"
-git push
-echo "\033[36mCommited & pushed revision to GitHub repo\033[0m"
 
 exit

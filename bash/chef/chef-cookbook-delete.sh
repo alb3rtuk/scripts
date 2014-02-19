@@ -29,8 +29,5 @@ rm -rf cookbooks/${cookbook}
 echo "\033[36mDeleted:\033[0m \033[33mcookbooks/${cookbook}\033[0m"
 
 git add cookbooks/${cookbook} --all
-git commit -o cookbooks/${cookbook} -m "Removed cookbook: $cookbook"
-git push
-echo "\033[36mCommited & pushed revision to GitHub repo\033[0m"
 
 exit
