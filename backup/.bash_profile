@@ -60,10 +60,7 @@ alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 
-alias ec2-login-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-login-eu-ireland.sh'
-alias ec2-login-us-west-california='~/Repos/Scripts/bash/ec2/ec2-login-us-west-california.sh'
-alias ec2-setup-eu-ireland='~/Repos/Scripts/bash/ec2/ec2-setup-eu-ireland.sh'
-alias ec2-setup-us-west-california='~/Repos/Scripts/bash/ec2/ec2-setup-us-west-california.sh'
+alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 
 ### SCRIPTS ##################
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'

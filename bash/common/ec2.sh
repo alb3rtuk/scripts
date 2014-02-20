@@ -27,18 +27,26 @@ initializeRegion() {
     fi
     if [[ ${region} == "eu-west-1" ]]; then
         ssh_user="ubuntu"
-        ssh_key="ec2-admin-eu-ireland"
-        pem_file="/Users/Albert/.ssh/ec2-admin-eu-ireland.pem"
+        ssh_key="ec2-eu-west-1"
+        pem_file="/Users/Albert/.ssh/ec2-eu-west-1.pem"
         image="ami-480bea3f" # Ubuntu Server 13.10       / 64-bit
-        image="ami-8e987ef9" # Ubuntu Server 12.04.3 LTS / 64-bit
+      # image="ami-8e987ef9" # Ubuntu Server 12.04.3 LTS / 64-bit
         flavor="t1.micro"
         ebs_size="8"
         groups="default"
     elif [[ ${region} == "us-west-1" ]]; then
         ssh_user="ubuntu"
-        ssh_key="ec2-admin-us-west-california"
-        pem_file="/Users/Albert/.ssh/ec2-admin-us-west-california.pem"
+        ssh_key="ec2-us-west-1"
+        pem_file="/Users/Albert/.ssh/ec2-us-west-1.pem"
         image="ami-4843740d"
+        flavor="t1.micro"
+        ebs_size="8"
+        groups="default"
+    elif [[ ${region} == "us-west-2" ]]; then
+        ssh_user="ubuntu"
+        ssh_key="ec2-us-west-2"
+        pem_file="/Users/Albert/.ssh/ec2-us-west-2.pem"
+        image="ami-ace67f9c" # Ubuntu Server 13.10       / 64-bit
         flavor="t1.micro"
         ebs_size="8"
         groups="default"
@@ -51,6 +59,14 @@ initializeRegion() {
 validateNodeName() {
     if [[ ${node_name} == "" ]]; then
         message red "ERROR" "You must specify a node name (2nd parameter)."
+        exit
+    fi
+}
+
+
+validateSSHTarget() {
+    if [[ ${ssh_target} == "" ]]; then
+        message red "ERROR" "You must specify an SSH target (2nd parameter)."
         exit
     fi
 }
