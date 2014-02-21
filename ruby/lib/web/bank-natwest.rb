@@ -35,9 +35,9 @@ class BankNatWest
         browser.frame(:id => f).checkbox(:id => 'TimeoutCheckbox-LI6CBA').set
         browser.frame(:id => f).input(:id => 'ctl00_mainContent_Tab1_next_text_button_button').click
         # Occasional 'Important Information' Page
-        if browser.checkbox(:id => 'ctl00_mainContent_LI1CBA').exists?
-            browser.checkbox(:id => 'ctl00_mainContent_LI1CBA').set
-            browser.input(:id => 'ctl00$mainContent$FinishButton_button').click
+        if browser.frame(:id => f).checkbox(:id => 'ctl00_mainContent_LI1CBA').exists?
+            browser.frame(:id => f).checkbox(:id => 'ctl00_mainContent_LI1CBA').set
+            browser.frame(:id => f).input(:id => 'ctl00$mainContent$FinishButton_button').click
             if @displayProgress
                 puts "\x1B[90mSuccessfully bypassed (occasional) important information page\x1B[0m\n"
             end
