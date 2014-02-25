@@ -83,7 +83,6 @@ class BankLloyds
         data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-      # data['cc_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text.delete('£'))
         data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['cc_available'] = data['cc_available'].split(':')
         data['cc_available'] = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
