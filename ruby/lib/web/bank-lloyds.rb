@@ -45,6 +45,25 @@ class BankLloyds
                     puts "\x1B[90mSuccessfully bypassed (occasional) offers page\x1B[0m\n"
                 end
             end
+            # Occasional 'Important Update' Page
+            if browser.checkbox(:id => 'frmmandatoryMsgs:msgList1:0:chktmpMsgRead1').exists?
+                browser.checkbox(:id => 'frmmandatoryMsgs:msgList1:0:chktmpMsgRead1').set
+                if @displayProgress
+                    puts "\x1B[90mTicked checkbox to confirm I've read a message\x1B[0m\n"
+                end
+            end
+            if browser.checkbox(:id => 'frmmandatoryMsgs:tmpAllMsgsRead').exists?
+                browser.checkbox(:id => 'frmmandatoryMsgs:tmpAllMsgsRead').set
+                if @displayProgress
+                    puts "\x1B[90mTicked checkbox to never show a message again\x1B[0m\n"
+                end
+            end
+            if browser.input(:id => 'frmmandatoryMsgs:continue_to_your_accounts2').exists?
+                browser.input(:id => 'frmmandatoryMsgs:continue_to_your_accounts2').click
+                if @displayProgress
+                    puts "\x1B[90mSuccessfully bypassed (occasional) important information page\x1B[0m\n"
+                end
+            end
         end
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Lloyds\x1B[0m\n"
