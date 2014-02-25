@@ -83,13 +83,14 @@ class BankLloyds
         data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-        data['cc_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text.delete('£'))
+      # data['cc_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text.delete('£'))
         data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
         data['cc_available'] = data['cc_available'].split(':')
         data['cc_available'] = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
         data['cc_limit'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['cc_limit'] = data['cc_limit'].split(':')
         data['cc_limit'] = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
+        data['cc_balance'] = cleanCurrency((data['cc_limit'] - data['cc_available']).to_s)
         data['cc_minimum_payment'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'numbers').p(:index => 1).text.split
         data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
