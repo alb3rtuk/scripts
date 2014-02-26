@@ -36,8 +36,13 @@ class BankExperian
 
     def getCreditInfo(showInTerminal = false, browser = self.login)
         data = {}
-        data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').text
-
+        if browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
+            data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').text
+        elsif browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
+            data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScore').text
+        else
+            data['credit_score'] = 'ERROR'
+        end
         if showInTerminal
             puts "\n[ #{Rainbow('Experian').foreground('#ff008a')} ]"
             table(:border => true) do
