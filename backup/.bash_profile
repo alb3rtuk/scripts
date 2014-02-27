@@ -59,8 +59,10 @@ alias chef-cookbook-upload='~/Repos/Scripts/bash/chef/chef-cookbook-upload.sh'
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
-
 alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
+
+### NIMZO ##################
+alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
 
 ### SCRIPTS ##################
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
