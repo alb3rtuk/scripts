@@ -63,6 +63,7 @@ alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 
 ### NIMZO ##################
 alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
+alias nimzo-run-tests-quick='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-quick.sh'
 
 ### SCRIPTS ##################
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
