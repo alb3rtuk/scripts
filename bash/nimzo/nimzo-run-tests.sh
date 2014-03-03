@@ -4,6 +4,8 @@
 
 group=$1
 
+cd ~/Repos/Nimzo/tests-php/
+
 if [[ ${group} == "" ]]; then
     phpunit \
      --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
