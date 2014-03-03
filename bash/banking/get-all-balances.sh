@@ -2,6 +2,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-clear
+clearTerminal
 
 ruby ~/Repos/Scripts/ruby/banking/get-all-balances.rb $1
