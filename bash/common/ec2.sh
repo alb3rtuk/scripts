@@ -18,10 +18,10 @@ initializeRegion() {
         fi
     done
     if [[ ${region} == "" ]] || [[ $match == 0 ]]; then
-        message red "ERROR" "You must specify a region (1st parameter). Valid regions are are:"
+        message red "ERROR" "You must specify a region (1st parameter). Valid regions are:"
         for i in "${ec2_regions[@]}"
         do :
-            echo ${i}
+            echo "\033[33m${i}\033[0m"
         done
         exit
     fi
