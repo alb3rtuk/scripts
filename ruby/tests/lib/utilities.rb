@@ -102,4 +102,17 @@ class TestUtilities < Test::Unit::TestCase
         assert_equal(fileExists?('~/Repos/Scripts/backup/.bash_profile'), false)
     end
 
+    def testIsAlphaNumeric
+        assert_equal(isAlphaNumeric('abc123'), true)
+        assert_equal(isAlphaNumeric('abc'), true)
+        assert_equal(isAlphaNumeric('123'), true)
+        assert_equal(isAlphaNumeric(''), false)
+        assert_equal(isAlphaNumeric(123), false)
+        assert_equal(isAlphaNumeric('abc-123'), false)
+        assert_equal(isAlphaNumeric('abc/123'), false)
+        assert_equal(isAlphaNumeric('abc.txt'), false)
+        assert_equal(isAlphaNumeric('!'), false)
+        assert_equal(isAlphaNumeric('\should-also-be-false'), false)
+    end
+
 end

@@ -153,3 +153,9 @@ end
 def fileExists?(file)
     File.file?(file)
 end
+
+# Returns TRUE if a string is alpha-numeric, FALSE if not.
+# @return boolean
+def isAlphaNumeric(string)
+    ((string =~ /\A[[:alnum:]]+\z/) == 0) ? true : false
+end
