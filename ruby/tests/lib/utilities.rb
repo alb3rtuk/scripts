@@ -90,4 +90,16 @@ class TestUtilities < Test::Unit::TestCase
         assert_equal(toCurrency('-55.01'), '-£55.01')
     end
 
+    def testDirectoryExists
+        assert_equal(directoryExists?('non-existent-directory'), false)
+        assert_equal(directoryExists?('/Users/Albert/Repos/Scripts'), true)
+        assert_equal(directoryExists?('~/Repos/Scripts'), false)
+    end
+
+    def testFileExists
+        assert_equal(fileExists?('non-existent-file'), false)
+        assert_equal(fileExists?('/Users/Albert/Repos/Scripts/backup/.bash_profile'), true)
+        assert_equal(fileExists?('~/Repos/Scripts/backup/.bash_profile'), false)
+    end
+
 end

@@ -141,3 +141,15 @@ end
 def exitScript(msg = 'Something went wrong and the script died. Please check your code.')
     raise(RuntimeError, msg)
 end
+
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# @return boolean
+def directoryExists?(directory)
+    File.directory?(directory)
+end
+
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# @return boolean
+def fileExists?(file)
+    File.file?(file)
+end
