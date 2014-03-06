@@ -15,3 +15,5 @@ Thumbs.db
 
 backup/cronerror.log
 backup/cronlog.log
+
+.last_run.json
