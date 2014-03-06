@@ -64,14 +64,14 @@ class BankNatWest
                     column('Available Funds', :width => 19, :align => 'right')
                     column('O/D Limit', :width => 19, :align => 'right')
                     column('Step Account', :width => 19, :align => 'right')
-                    column('Savings Account', :width => 19, :align => 'right', :color => 'magenta')
+                    column('Savings Account', :width => 19, :align => 'right', :color => 'yellow')
                 end
                 row do
                     column("#{toCurrency(data['select_platinum_balance'])}", :color => (data['select_platinum_balance'] >= 0) ? 'green' : 'red')
                     column("#{toCurrency(data['select_platinum_available'])}", :color => (data['select_platinum_available'] >= 0) ? 'white' : 'red')
                     column("#{toCurrency(data['select_platinum_overdraft'])}", :color => (data['select_platinum_overdraft'] >= 0) ? 'white' : 'red')
                     column("#{toCurrency(data['step_account'])}", :color => (data['step_account'] >= 0) ? 'green' : 'red')
-                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'magenta' : 'red')
+                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'yellow' : 'red')
                 end
             end
         end
