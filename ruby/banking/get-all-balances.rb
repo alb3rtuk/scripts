@@ -86,7 +86,7 @@ puts "\n\x1B[90mGenerating Summary\x1B[0m\n" if notClean
 
 summary = {}
 summary['total_available'] =
-    natWestBalances['advantage_gold'] +
+    natWestBalances['select_platinum_available'] +
     natWestBalances['step_account'] +
   # natWestBalances['savings_account'] +
     halifaxBalances['account_1_available'] +
@@ -102,7 +102,7 @@ summary['total_credit_used'] =
     barclayCardBalances['balance'] +
     barclayCardBalances['pending_transactions'] +
     capitalOneBalances['balance'] +
-    (natWestBalances['advantage_gold'] < 0 ? -natWestBalances['advantage_gold'] : 0) +
+    (natWestBalances['select_platinum_balance'] < 0 ? -natWestBalances['select_platinum_balance'] : 0) +
     (natWestBalances['step_account'] < 0 ? -natWestBalances['step_account'] : 0) +
     (natWestBalances['savings_account'] < 0 ? -natWestBalances['savings_account'] : 0) +
     (halifaxBalances['account_1_balance'] < 0 ? -halifaxBalances['account_1_balance'] : 0) +
@@ -110,6 +110,7 @@ summary['total_credit_used'] =
     (lloydsBalances['account_1_balance'] < 0 ? -lloydsBalances['account_1_balance'] : 0)
 
 summary['total_credit'] =
+    natWestBalances['select_platinum_overdraft'] +
     halifaxBalances['account_1_overdraft'] +
     halifaxBalances['account_2_overdraft'] +
     lloydsBalances['cc_limit'] +

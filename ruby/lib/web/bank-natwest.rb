@@ -51,21 +51,27 @@ class BankNatWest
     def getBalances(showInTerminal = false, browser = self.login)
         f = 'ctl00_secframe'
         data = {}
-        data['advantage_gold'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['select_platinum_balance'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
+        data['select_platinum_available'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['select_platinum_overdraft'] = 7500 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         if showInTerminal
             puts "\n[ #{Rainbow('NatWest').foreground('#ff008a')} ]"
             table(:border => true) do
                 row do
-                    column('Advantage Gold', :width => 19, :align => 'right')
+                    column('Select Platinum', :width => 19, :align => 'right')
+                    column('Available Funds', :width => 19, :align => 'right')
+                    column('O/D Limit', :width => 19, :align => 'right')
                     column('Step Account', :width => 19, :align => 'right')
-                    column('Savings Account', :width => 19, :align => 'right')
+                    column('Savings Account', :width => 19, :align => 'right', :color => 'magenta')
                 end
                 row do
-                    column("#{toCurrency(data['advantage_gold'])}", :color => (data['advantage_gold'] >= 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['select_platinum_balance'])}", :color => (data['select_platinum_balance'] >= 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['select_platinum_available'])}", :color => (data['select_platinum_available'] >= 0) ? 'white' : 'red')
+                    column("#{toCurrency(data['select_platinum_overdraft'])}", :color => (data['select_platinum_overdraft'] >= 0) ? 'white' : 'red')
                     column("#{toCurrency(data['step_account'])}", :color => (data['step_account'] >= 0) ? 'green' : 'red')
-                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'green' : 'red')
+                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'magenta' : 'red')
                 end
             end
         end
