@@ -101,6 +101,7 @@ class BankLloyds
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
         data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y')
+        browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         if showInTerminal
             puts "\n[ #{Rainbow('Lloyds').foreground('#ff008a')} ]"
             table(:border => true) do
@@ -126,7 +127,6 @@ class BankLloyds
                 end
             end
         end
-        browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         Array[browser, data]
     end
 
@@ -139,7 +139,7 @@ class BankLloyds
         if @displayProgress
             puts "\x1B[90mAttempting to pay #{toCurrency(amount)} towards outstanding balance\x1B[0m"
         end
-        browser.link(:id => 'frm1:lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs').when_present(5).click
+        browser.link(:id => 'lstAccLst:1:accountOptions1:lstAccFuncs:0:lkAccFuncs').when_present(10).click
 
         # Sanity Check #1
         if browser.label(:for => 'frmMakeTransfer1:datePickerRadios:0').text.downcase == 'as soon as possible'
