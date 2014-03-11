@@ -64,6 +64,12 @@ class BankLloyds
                     puts "\x1B[90mSuccessfully bypassed (occasional) important information page\x1B[0m\n"
                 end
             end
+            if browser.li(:class => 'primaryAction').link(:index => 0).exists?
+                browser.li(:class => 'primaryAction').link(:index => 0).click
+                if @displayProgress
+                    puts "\x1B[90mSuccessfully bypassed (occasional) offers page\x1B[0m\n"
+                end
+            end
         end
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Lloyds\x1B[0m\n"
