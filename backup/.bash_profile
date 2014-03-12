@@ -62,8 +62,17 @@ alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 
 ### NIMZO ##################
+alias nimzo-create-modal='~/Repos/Scripts/bash/nimzo/nimzo-create-modal.sh'
+alias nimzo-create-overlay='~/Repos/Scripts/bash/nimzo/nimzo-create-overlay.sh'
+alias nimzo-create-page='~/Repos/Scripts/bash/nimzo/nimzo-create-page.sh'
+alias nimzo-create-widget='~/Repos/Scripts/bash/nimzo/nimzo-create-widget.sh'
+alias nimzo-delete-modal='~/Repos/Scripts/bash/nimzo/nimzo-delete-modal.sh'
+alias nimzo-delete-overlay='~/Repos/Scripts/bash/nimzo/nimzo-delete-overlay.sh'
+alias nimzo-delete-page='~/Repos/Scripts/bash/nimzo/nimzo-delete-page.sh'
+alias nimzo-delete-widget='~/Repos/Scripts/bash/nimzo/nimzo-delete-widget.sh'
 alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
 alias nimzo-run-tests-isolated='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isolated.sh'
+alias nimzo-watcher='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 
 ### SCRIPTS ##################
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
