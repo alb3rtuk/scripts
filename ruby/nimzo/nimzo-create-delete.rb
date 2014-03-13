@@ -6,6 +6,7 @@ action = ARGV[2]
 controllerFileUpperCase = ''
 controllerFileLowerCase = ''
 pathToRepo = '/Users/Albert/Repos/Nimzo/httpdocs'
+pathToRepoSlash = '/Users/Albert/Repos/Nimzo/httpdocs/'
 error = false
 filesToDelete = Array.new
 dirsToDelete = Array.new
@@ -51,6 +52,45 @@ controllerPath.split('/').each { |name|
     controllerFileUpperCase = "#{name.slice(0, 1).capitalize + name.slice(1..-1)}"
     controllerFileLowerCase = name
 }
+
+# Checks that all the previous directories have files.
+if controllerPath.index('/') != nil
+    controllerPathErSho = false
+    controllerPathCheck = ''
+    controllerPathCount = 0
+    controllerPathParts = controllerPath.split('/')
+    controllerPathParts.each { |currentPath|
+        controllerPathCount = controllerPathCount + 1
+        if (controllerPathCount < controllerPathParts.size)
+            controllerPathCheck = controllerPathCheck + currentPath + '/'
+            dirsToCheck = Array[
+                "#{pathToPrivate}/controllers/",
+                "#{pathToPrivate}/views/",
+                "#{pathToPublicDev}/",
+                "#{pathToPublicMin}/"
+            ]
+            dirsToCheck.each { |dirToCheck|
+                dirToCheck = "#{dirToCheck}#{controllerPathCheck}"
+                filesInPath = Dir["#{dirToCheck}*"]
+                if filesInPath.size <= 0
+                    if controllerPathErSho === false
+                        error = true
+                        controllerPathErSho = true
+                        puts "\x1B[41m ERROR \x1B[0m Blank nested paths not allowed! The following path(s) have no files:\n\x1B[0m"
+                    end
+                    puts "        \x1B[33m#{dirToCheck.gsub(pathToRepoSlash, '')}\x1B[0m"
+                end
+            }
+            if error === true
+                puts
+                puts "        You need to create the #{controllerType} \x1B[35m#{controllerPathCheck}\x1B[0m first.\x1B[0m"
+                puts "        \x1B[90mScript aborted.\x1B[0m"
+                puts
+                exit
+            end
+        end
+    }
+end
 
 # PHP Controller
 file1 = "#{pathToPrivate}/controllers/#{controllerPath}/#{controllerFileUpperCase}.php"
