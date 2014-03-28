@@ -257,5 +257,5 @@ elsif action == 'delete'
 end
 
 puts
-puts "\x1B[42m SUCCESS \x1B[0m The #{controllerType}: \x1B[35m#{controllerPath}\x1B[0m (and all its dependices) were successfully #{actionResult}."
+puts "\x1B[42m SUCCESS \x1B[0m The #{controllerType}: \x1B[35m#{controllerPath}\x1B[0m (and all its dependencies) have been successfully #{actionResult}."
 puts
