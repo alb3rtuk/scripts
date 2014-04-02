@@ -24,7 +24,7 @@ for file in $(find ${dir} -type f -name '*.js'); do
         if [[ $devFileLMT > $minFileLMT ]]; then
 
             # Compress/minimize the file
-            java -jar /Users/Albert/Bin/exec/yuicompressor-2.4.8.jar ${file} -o ${minFile}
+            java -jar /Users/Albert/Bin/exec/yuicompressor-2.4.8.jar ${file} -o ${minFile} --charset utf-8
 
             # Output filename to terminal
             find="/Users/Albert/Repos/Nimzo/httpdocs/"
