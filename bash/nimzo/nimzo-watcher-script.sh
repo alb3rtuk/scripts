@@ -16,14 +16,18 @@ echo "Last script run:  ${lastScriptRun}"
 if [[ ${storedModifiedTime} != ${lastModifiedTime} ]]; then
     lastModifiedFile=$(find . -type f -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f 2 -d" ")
     find="./"
-    replace="pubic/"
+    replace="public/"
     lastModifiedFile=${lastModifiedFile//$find/$replace}
-
     echo "$(date +"%T") - ${lastModifiedFile}" >> /tmp/nimzo-watcher-log.txt
-
+    echo ${lastModifiedTime} > /tmp/nimzo-watcher-last-change.txt
 fi
 
-echo
-tail -10 /tmp/nimzo-watcher-log.txt
+tail -30 /tmp/nimzo-watcher-log.txt
 
-echo ${lastModifiedTime} > /tmp/nimzo-watcher-last-change.txt
+# Must run compression at end, so the terminal output looks more neat :)
+if [[ ${storedModifiedTime} != ${lastModifiedTime} ]]; then
+    cd ~/Repos/Scripts/bash/nimzo
+    echo
+    ./nimzo-update.sh
+fi
+
