@@ -18,10 +18,19 @@ for file in $(find ${dir} -type f -name '*.js'); do
 
         # Get the last modified since epoch timestamps of both the dev + min files.
         devFileLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
-        minFileLMT=$(stat -f "%m %N" ${minFile} | cut -f 1 -d" ")
+        if [[ -f ${minFile} ]]; then
+            minFileLMT=$(stat -f "%m %N" ${minFile} | cut -f 1 -d" ")
+        else
+            minFileLMT=0
+        fi
 
         # If the DEV file LMT (last modified time) is greater than the MIN file LMT, run compression
-        if [[ $devFileLMT > $minFileLMT ]]; then
+        if [[ ${devFileLMT} > ${minFileLMT} ]] || [ ! -f ${minFile} ]; then
+
+            if [[ ! -f ${minFile} ]]; then
+                mkdir -p ${minFile%/*}
+                touch ${minFile}
+            fi
 
             # Compress/minimize the file
             java -jar /Users/Albert/Bin/exec/yuicompressor-2.4.8.jar ${file} -o ${minFile} --charset utf-8
@@ -29,8 +38,8 @@ for file in $(find ${dir} -type f -name '*.js'); do
             # Output filename to terminal
             find="/Users/Albert/Repos/Nimzo/httpdocs/"
             replace=""
-            minFileDisplay=${minFile//${find}/${replace}}
-            echo "Compressing: ${minFileDisplay}"
+            fileDisplay=${file//${find}/${replace}}
+            echo "Compressing: ${fileDisplay}"
 
             # Add the (possibly new) file to GIT
             cd ~/Repos/Nimzo/
