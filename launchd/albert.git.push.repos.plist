@@ -21,7 +21,7 @@
         <false/>
 
         <key>RunAtLoad</key>
-        <false/>
+        <true/>
 
     </dict>
 </plist>
