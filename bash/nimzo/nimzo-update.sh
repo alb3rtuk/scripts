@@ -54,10 +54,10 @@ for file in $(find ${dir} -type f -name '*.less'); do
     if [[ -s ${file} ]]; then
 
         # Get the last modified since epoch timestamps of .less file.
-        lessFileLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
+        devCssLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
 
         # If even ONE .less files is newer than the global minizmed CSS (app.min.css), re-compile the lot & exit loop
-        if [[ ${lessFileLMT} > ${minCssLMT} ]]; then
+        if [[ ${devCssLMT} > ${minCssLMT} ]]; then
             echo "Re-compiling: public/min/lib/css/app.min.css"
             cd ~/Repos/Nimzo/httpdocs
             lessc public/dev/lib/less/app.less > public/min/lib/css/app.min.css -x -s
