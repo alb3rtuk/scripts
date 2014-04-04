@@ -57,6 +57,8 @@ echo "            <integer>3</integer>" >> ${launchd_script}
 echo "            <key>Day</key>" >> ${launchd_script}
 echo "            <integer>1</integer>" >> ${launchd_script}
 echo "        </dict>\n" >> ${launchd_script}
+echo "        <key>StartInterval</key>" >> ${launchd_script}
+echo "        <integer>300</integer>\n" >> ${launchd_script}
 echo "        <key>StandardOutPath</key>" >> ${launchd_script}
 echo "        <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>" >> ${launchd_script}
 echo "        <key>StandardErrorPath</key>" >> ${launchd_script}
