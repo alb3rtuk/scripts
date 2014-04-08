@@ -68,9 +68,12 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
 
                 jsFile=1
 
+                cd ~/Repos/Nimzo
+
                 # Delete the current merged .js file.
                 for file in $(find ${jsDir} -type f -name '*.js'); do
                     rm -rf ${file}
+                    git rm ${file}
                 done
 
                 # Re-create the merged .js file.
@@ -109,10 +112,13 @@ for file in $(find ${dirToScan} -type f -name '*.less'); do
         # If even ONE .less files is newer than the global minizmed CSS (app.min.css), re-compile the lot & exit loop
         if [[ ${devCssLMT} > ${minCssLMT} ]]; then
 
+            cd ~/Repos/Nimzo
+
             # Delete the current compiled .css file.
             if [[ -d ${cssDir} ]]; then
                 for file in $(find ${cssDir} -type f -name '*.css'); do
                     rm -rf ${file}
+                    git rm ${file}
                 done
             fi
 
