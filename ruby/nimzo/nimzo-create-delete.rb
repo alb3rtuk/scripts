@@ -13,7 +13,7 @@ dirsToDelete = Array.new
 
 puts
 
-unless inArray(%w(modal overlay page widget), controllerType)
+unless inArray(%w(app modal overlay system widget), controllerType)
     exitScript("'#{controllerType}' is not a valid Controller Type.")
 end
 
@@ -21,26 +21,9 @@ unless inArray(%w(create delete), action)
     exitScript("'#{action}' is not a valid Action.")
 end
 
-case controllerType
-    when 'modal'
-        pathToPrivate = "#{pathToRepo}/private/ajax/v1/modal"
-        pathToPublicDev = "#{pathToRepo}/public/dev/ajax/v1/modal"
-        pathToPublicMin = "#{pathToRepo}/public/min/ajax/v1/modal"
-    when 'overlay'
-        pathToPrivate = "#{pathToRepo}/private/ajax/v1/overlay"
-        pathToPublicDev = "#{pathToRepo}/public/dev/ajax/v1/overlay"
-        pathToPublicMin = "#{pathToRepo}/public/min/ajax/v1/overlay"
-    when 'page'
-        pathToPrivate = "#{pathToRepo}/private/app/v1"
-        pathToPublicDev = "#{pathToRepo}/public/dev/app/v1"
-        pathToPublicMin = "#{pathToRepo}/public/min/app/v1"
-    when 'widget'
-        pathToPrivate = "#{pathToRepo}/private/ajax/v1/widget"
-        pathToPublicDev = "#{pathToRepo}/public/dev/ajax/v1/widget"
-        pathToPublicMin = "#{pathToRepo}/public/min/ajax/v1/widget"
-    else
-        exit
-end
+pathToPrivate = "#{pathToRepo}/private/#{controllerType}/v1"
+pathToPublicDev = "#{pathToRepo}/public/dev/#{controllerType}/v1"
+pathToPublicMin = "#{pathToRepo}/public/min/#{controllerType}/v1"
 
 unless isAlphaNumeric(controllerPath.gsub('/', ''))
     error = true
