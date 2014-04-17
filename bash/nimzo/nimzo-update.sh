@@ -6,8 +6,6 @@ dirToScan="/Users/Albert/Repos/Nimzo/httpdocs/public/dev"
 jsDir="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/js"
 cssDir="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/css"
 
-hash=$(date +"%m%d%y%k%M%S")
-
 if [[ ! -d ${jsDir} ]]; then
     cd /Users/Albert/Repos/Nimzo/httpdocs/public/min/lib
     mkdir -p js
@@ -18,7 +16,7 @@ if [[ ! -d ${cssDir} ]]; then
 fi
 
 jsFile=0
-for file in $(find ${jsDir} -type f -name '*.js'); do
+for file in $(find ${jsDir} -type f -name 'app*.js'); do
     jsFile=${file}
 done
 
@@ -63,28 +61,22 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
             cd ~/Repos/Nimzo/
             git add ${minFile}
 
-            # If the file which was comrpressed is within the /js-app directoy, re-create the merged .js file.
-            if [[ `dirname ${file}` == "/Users/Albert/Repos/Nimzo/httpdocs/public/dev/lib/js-app" ]]  || [[ ${jsFile} == 0 ]]; then
+            # If the file which was comrpressed is within the /app-js directoy, re-create the merged .js file.
+            if [[ `dirname ${file}` == "/Users/Albert/Repos/Nimzo/httpdocs/public/dev/lib/app-js" ]]  || [[ ${jsFile} == 0 ]]; then
 
                 jsFile=1
 
                 cd ~/Repos/Nimzo
 
-                # Delete the current merged .js file.
-                for file in $(find ${jsDir} -type f -name '*.js'); do
-                    rm -rf ${file}
-                    git rm ${file}
-                done
-
-                # Re-create the merged .js file.
-                minJsFile="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/js/app.min.${hash}.js"
+                # Re-create the merged .js file. (if doesn't exist)
+                minJsFile="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/js/app.min.js"
                 if [[ ! -f ${minJsFile} ]]; then
                     mkdir -p ${minJsFile%/*}
                     touch ${minJsFile}
                 fi
 
-                # Merge the contents of all the files in /js-app into a single file.
-                cd ~/Repos/Nimzo/httpdocs/public/min/lib/js-app
+                # Merge the contents of all the files in /app-js into a single file.
+                cd ~/Repos/Nimzo/httpdocs/public/min/lib/app-js
                 cat *.js > ${minJsFile}
 
                 echo "Recompiled: ${minJsFile}"
@@ -99,7 +91,7 @@ done
 
 # Compile Less
 minCssLMT=0
-for file in $(find ${cssDir} -type f -name 'app.min.*.css'); do
+for file in $(find ${cssDir} -type f -name 'app*.css'); do
     minCssLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
 done
 
@@ -109,38 +101,53 @@ for file in $(find ${dirToScan} -type f -name '*.less'); do
         # Get the last modified since epoch timestamps of .less file.
         devCssLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
 
-        # If even ONE .less files is newer than the global minizmed CSS (app.min.css), re-compile the lot & exit loop
-        if [[ ${devCssLMT} > ${minCssLMT} ]]; then
+        if [[ ${file} == *public/dev/lib/libs-less/* ]]; then
 
-            cd ~/Repos/Nimzo
+            find="public/dev/lib/libs-less/"
+            replace="public/min/lib/libs-css/"
+            minCssLibFile=${file//${find}/${replace}}
 
-            # Delete the current compiled .css file.
-            if [[ -d ${cssDir} ]]; then
-                for file in $(find ${cssDir} -type f -name '*.css'); do
-                    rm -rf ${file}
-                    git rm ${file}
-                done
+            find=".less"
+            replace=".min.css"
+            minCssLibFile=${minCssLibFile//${find}/${replace}}
+
+            if [[ ! -f ${minCssLibFile} ]]; then
+                mkdir -p ${minCssLibFile%/*}
+                touch ${minCssLibFile}
+                cd ~/Repos/Nimzo/
+                git add ${minCssLibFile}
+                minCssLibFileLMT=0
+            else
+                minCssLibFileLMT=$(stat -f "%m %N" ${minCssLibFile} | cut -f 1 -d" ")
             fi
 
-            # Re-create the compiled .css file.
-            minCssFile="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/css/app.min.${hash}.css"
-            if [[ ! -f ${minCssFile} ]]; then
-                mkdir -p ${minCssFile%/*}
-                touch ${minCssFile}
+            if [[ ${devCssLMT} > ${minCssLibFileLMT} ]]; then
+                lessc ${file} > ${minCssLibFile} -x -s
             fi
 
-            # Compile to Less into CSS
-            cd ~/Repos/Nimzo/httpdocs
-            lessc public/dev/lib/less/app.less > ${minCssFile} -x -s
+        else
 
-            echo "Recompiled: ${minCssFile}"
+            # If even ONE .less files is newer than the global minizmed CSS (app.min.css), re-compile the lot & exit loop
+            if [[ ${devCssLMT} > ${minCssLMT} ]]; then
 
-            # Add it to GIT.
-            cd ~/Repos/Nimzo/
-            git add ${minCssFile}
+                cd ~/Repos/Nimzo
 
-            # Break out of script, we only need to do this once.
-            break
+                # Re-create the compiled .css file. (if doesn't exist)
+                minCssFile="/Users/Albert/Repos/Nimzo/httpdocs/public/min/lib/css/app.min.css"
+                if [[ ! -f ${minCssFile} ]]; then
+                    mkdir -p ${minCssFile%/*}
+                    touch ${minCssFile}
+                    cd ~/Repos/Nimzo/
+                    git add ${minCssFile}
+                fi
+
+                # Compile to Less into CSS
+                cd ~/Repos/Nimzo/httpdocs
+                lessc public/dev/lib/less/app.less > ${minCssFile} -x -s
+
+                # Break out of script, we only need to do this once.
+                break
+            fi
         fi
     fi
 done
