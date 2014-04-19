@@ -13,17 +13,27 @@ dirsToDelete = Array.new
 
 puts
 
+controllerPathFirstArgument = controllerPath.split('/')
+controllerPathFirstArgument = controllerPathFirstArgument[0]
+
+if inArray(%w(app api ajax), controllerPathFirstArgument)
+    error = true
+    puts "\x1B[41m ERROR \x1B[0m Request route cannot start with: \x1B[33m#{controllerPathFirstArgument}\x1B[0m"
+end
+
 unless inArray(%w(app modal overlay system widget), controllerType)
-    exitScript("'#{controllerType}' is not a valid Controller Type.")
+    error = true
+    puts "\x1B[41m ERROR \x1B[0m \x1B[33m#{controllerType}\x1B[0m is not a valid Controller Type.\x1B[0m"
 end
 
 unless inArray(%w(create delete), action)
-    exitScript("'#{action}' is not a valid Action.")
+    error = true
+    puts "\x1B[41m ERROR \x1B[0m \x1B[33m#{action}\x1B[0m is not a valid Action.\x1B[0m"
 end
 
-pathToPrivate = "#{pathToRepo}/private/#{controllerType}/v1"
-pathToPublicDev = "#{pathToRepo}/public/dev/#{controllerType}/v1"
-pathToPublicMin = "#{pathToRepo}/public/min/#{controllerType}/v1"
+pathToPrivate = "#{pathToRepo}/private/#{controllerType}"
+pathToPublicDev = "#{pathToRepo}/public/dev/#{controllerType}"
+pathToPublicMin = "#{pathToRepo}/public/min/#{controllerType}"
 
 unless isAlphaNumeric(controllerPath.gsub('/', ''))
     error = true
