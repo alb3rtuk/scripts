@@ -16,7 +16,7 @@ puts
 controllerPathFirstArgument = controllerPath.split('/')
 controllerPathFirstArgument = controllerPathFirstArgument[0]
 
-if inArray(%w(app api ajax), controllerPathFirstArgument)
+if inArray(%w(api ajax), controllerPathFirstArgument)
     error = true
     puts "\x1B[41m ERROR \x1B[0m Request route cannot start with: \x1B[33m#{controllerPathFirstArgument}\x1B[0m"
 end
