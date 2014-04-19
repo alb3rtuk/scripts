@@ -22,7 +22,7 @@ done
 
 # Compress Javascript
 for file in $(find ${dirToScan} -type f -name '*.js'); do
-    if [[ -s ${file} ]]; then
+    if [[ -f ${file} ]]; then
 
         # Get the filename of the minimized file
         find="httpdocs/public/dev"
@@ -48,18 +48,20 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
                 touch ${minFile}
             fi
 
-            # Compress/minimize the file
-            java -jar /Users/Albert/Bin/exec/yuicompressor-2.4.8.jar ${file} -o ${minFile} --charset utf-8
-
-            # Output filename to terminal
-            find="/Users/Albert/Repos/Nimzo/httpdocs/"
-            replace=""
-            fileDisplay=${file//${find}/${replace}}
-            echo "Compressing: ${fileDisplay}"
-
             # Add the (possibly new) file to GIT
             cd ~/Repos/Nimzo/
             git add ${minFile}
+
+            if [[ -s ${file} ]]; then
+                # Compress/minimize the file (but only if it contains data).
+                java -jar /Users/Albert/Bin/exec/yuicompressor-2.4.8.jar ${file} -o ${minFile} --charset utf-8
+
+                # Output filename to terminal
+                find="/Users/Albert/Repos/Nimzo/httpdocs/"
+                replace=""
+                fileDisplay=${file//${find}/${replace}}
+                echo "Compressing: ${fileDisplay}"
+            fi
 
             # If the file which was comrpressed is within the /app-js directoy, re-create the merged .js file.
             if [[ `dirname ${file}` == "/Users/Albert/Repos/Nimzo/httpdocs/public/dev/lib/app-js" ]]  || [[ ${jsFile} == 0 ]]; then
@@ -96,7 +98,7 @@ for file in $(find ${cssDir} -type f -name 'app*.css'); do
 done
 
 for file in $(find ${dirToScan} -type f -name '*.less'); do
-    if [[ -s ${file} ]]; then
+    if [[ -f ${file} ]]; then
 
         # Get the last modified since epoch timestamps of .less file.
         devCssLMT=$(stat -f "%m %N" ${file} | cut -f 1 -d" ")
