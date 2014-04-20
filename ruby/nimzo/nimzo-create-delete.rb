@@ -6,6 +6,7 @@ action = ARGV[2]
 controllerFileUpperCase = ''
 controllerFileLowerCase = ''
 pathToRepo = '/Users/Albert/Repos/Nimzo/httpdocs'
+pathToTests = '/Users/Albert/Repos/Nimzo/tests-php'
 pathToRepoSlash = '/Users/Albert/Repos/Nimzo/httpdocs/'
 error = false
 filesToDelete = Array.new
@@ -34,6 +35,7 @@ end
 pathToPrivate = "#{pathToRepo}/private/#{controllerType}"
 pathToPublicDev = "#{pathToRepo}/public/dev/#{controllerType}"
 pathToPublicMin = "#{pathToRepo}/public/min/#{controllerType}"
+pathToTestsFinal = "#{pathToTests}/private/#{controllerType}"
 
 unless isAlphaNumeric(controllerPath.gsub('/', ''))
     error = true
@@ -85,26 +87,7 @@ if controllerPath.index('/') != nil
     }
 end
 
-# PHP Controller
-file1 = "#{pathToPrivate}/controllers/#{controllerPath}/#{controllerFileUpperCase}.php"
-if fileExists?(file1)
-    if action == 'create'
-        error = true
-        puts "\x1B[41m ERROR \x1B[0m A private file already exists: \x1B[33m#{file1.gsub("#{pathToRepo}/", '')}\x1B[0m"
-    elsif action == 'delete'
-        filesToDelete.push(file1)
-    end
-end
-# PHTML View
-file2 = "#{pathToPrivate}/views/#{controllerPath}/#{controllerFileUpperCase}.phtml"
-if fileExists?(file2)
-    if action == 'create'
-        error = true
-        puts "\x1B[41m ERROR \x1B[0m A private file already exists: \x1B[33m#{file2.gsub("#{pathToRepo}/", '')}\x1B[0m"
-    elsif action == 'delete'
-        filesToDelete.push(file2)
-    end
-end
+
 # PHP Helper Path
 dir1 = "#{pathToPrivate}/helpers/#{controllerPath}"
 if directoryExists?(dir1)
@@ -115,18 +98,40 @@ if directoryExists?(dir1)
         dirsToDelete.push(dir1)
     end
 end
-# Public DEV .js
-file3 = "#{pathToPublicDev}/#{controllerPath}/#{controllerFileLowerCase}.js"
+# PHP Controller
+file1 = "#{pathToPrivate}/controllers/#{controllerPath}/#{controllerFileUpperCase}.php"
+if fileExists?(file1)
+    if action == 'create'
+        error = true
+        puts "\x1B[41m ERROR \x1B[0m A private file already exists: \x1B[33m#{file1.gsub("#{pathToRepo}/", '')}\x1B[0m"
+    elsif action == 'delete'
+        filesToDelete.push(file1)
+    end
+end
+
+# PHP Controller (Test)
+file2 = "#{pathToTestsFinal}/controllers/#{controllerPath}/#{controllerFileUpperCase}Test.php"
+if fileExists?(file2)
+    if action == 'create'
+        error = true
+        puts "\x1B[41m ERROR \x1B[0m A private file already exists: \x1B[33m#{file2.gsub("#{pathToRepo}/", '')}\x1B[0m"
+    elsif action == 'delete'
+        filesToDelete.push(file2)
+    end
+end
+
+# PHTML View
+file3 = "#{pathToPrivate}/views/#{controllerPath}/#{controllerFileUpperCase}.phtml"
 if fileExists?(file3)
     if action == 'create'
         error = true
-        puts "\x1B[41m ERROR \x1B[0m A public  file already exists: \x1B[33m#{file3.gsub("#{pathToRepo}/", '')}\x1B[0m"
+        puts "\x1B[41m ERROR \x1B[0m A private file already exists: \x1B[33m#{file3.gsub("#{pathToRepo}/", '')}\x1B[0m"
     elsif action == 'delete'
         filesToDelete.push(file3)
     end
 end
-# Public DEV .less
-file4 = "#{pathToPublicDev}/#{controllerPath}/#{controllerFileLowerCase}.less"
+# Public DEV .js
+file4 = "#{pathToPublicDev}/#{controllerPath}/#{controllerFileLowerCase}.js"
 if fileExists?(file4)
     if action == 'create'
         error = true
@@ -135,8 +140,8 @@ if fileExists?(file4)
         filesToDelete.push(file4)
     end
 end
-# Public MIN .min.js
-file5 = "#{pathToPublicMin}/#{controllerPath}/#{controllerFileLowerCase}.min.js"
+# Public DEV .less
+file5 = "#{pathToPublicDev}/#{controllerPath}/#{controllerFileLowerCase}.less"
 if fileExists?(file5)
     if action == 'create'
         error = true
@@ -145,10 +150,20 @@ if fileExists?(file5)
         filesToDelete.push(file5)
     end
 end
+# Public MIN .min.js
+file6 = "#{pathToPublicMin}/#{controllerPath}/#{controllerFileLowerCase}.min.js"
+if fileExists?(file6)
+    if action == 'create'
+        error = true
+        puts "\x1B[41m ERROR \x1B[0m A public  file already exists: \x1B[33m#{file6.gsub("#{pathToRepo}/", '')}\x1B[0m"
+    elsif action == 'delete'
+        filesToDelete.push(file6)
+    end
+end
 
 # If we're deleting files, this makes sure we do not miss the parent directories.
 if action == 'delete'
-    filesToCleanse = [file1, file2, file3, file4, file5]
+    filesToCleanse = [file2, file3, file4, file5, file6]
     filesToCleanse.each { |file|
         if directoryExists?(File.dirname(file))
             dirsToDelete.push(File.dirname(file))
@@ -200,35 +215,41 @@ actionResult = ((action == 'create') ? "\x1B[32mcreated\x1B[0m" : "\x1B[31mdelet
 
 # Excecute the action.
 if action == 'create'
-    # PHP Controller
-    FileUtils::mkpath(File.dirname(file1))
-    File::new(file1, 'w')
-
-    # PHTML View
-    FileUtils::mkpath(File.dirname(file2))
-    File::new(file2, 'w')
 
     # PHP Helper Path
     FileUtils::mkdir_p(dir1)
 
-    # Public DEV .js
+    # PHP Controller
+    FileUtils::mkpath(File.dirname(file1))
+    File::new(file1, 'w')
+
+    # PHP Controller (Test)
+    FileUtils::mkpath(File.dirname(file2))
+    File::new(file2, 'w')
+
+    # PHTML View
     FileUtils::mkpath(File.dirname(file3))
     File::new(file3, 'w')
 
-    # Public DEV .less
+    # Public DEV .js
     FileUtils::mkpath(File.dirname(file4))
     File::new(file4, 'w')
 
-    # Public MIN .min.js
+    # Public DEV .less
     FileUtils::mkpath(File.dirname(file5))
     File::new(file5, 'w')
 
+    # Public MIN .min.js
+    FileUtils::mkpath(File.dirname(file6))
+    File::new(file6, 'w')
+
     puts "#{actionTitle} \x1B[90m#{dir1}\x1B[0m"
     puts "#{actionTitle} \x1B[33m#{file1}\x1B[0m"
-    puts "#{actionTitle} \x1B[33m#{file2}\x1B[0m"
     puts "#{actionTitle} \x1B[33m#{file3}\x1B[0m"
     puts "#{actionTitle} \x1B[33m#{file4}\x1B[0m"
     puts "#{actionTitle} \x1B[33m#{file5}\x1B[0m"
+    puts "#{actionTitle} \x1B[33m#{file6}\x1B[0m"
+    puts "#{actionTitle} \x1B[33m#{file2}\x1B[0m"
 
 elsif action == 'delete'
     unless dirsToDelete.empty?
