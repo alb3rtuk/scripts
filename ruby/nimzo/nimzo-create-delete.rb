@@ -42,9 +42,9 @@ end
 
 # Get controller filename from path.
 controllerPath.split('/').each { |name|
-    controllerFileUpperCase = "#{name.slice(0, 1).capitalize + name.slice(1..-1)}"
-    controllerFileLowerCase = name
+    controllerFileUpperCase = "#{controllerFileUpperCase}#{name.slice(0, 1).capitalize + name.slice(1..-1)}"
 }
+controllerFileLowerCase = controllerFileUpperCase[0, 1].downcase + controllerFileUpperCase[1..-1]
 
 # Checks that all the previous directories have files.
 if controllerPath.index('/') != nil
