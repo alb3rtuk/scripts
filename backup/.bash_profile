@@ -61,6 +61,9 @@ alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 
+alias nimzo-create-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-create-page-legacy.sh'
+alias nimzo-delete-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-delete-page-legacy.sh'
+
 ### NIMZO ##################
 alias nimzo-create-modal='~/Repos/Scripts/bash/nimzo/nimzo-create-modal.sh'
 alias nimzo-create-overlay='~/Repos/Scripts/bash/nimzo/nimzo-create-overlay.sh'
