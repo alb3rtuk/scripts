@@ -72,6 +72,7 @@ alias nimzo-delete-page='~/Repos/Scripts/bash/nimzo/nimzo-delete-page.sh'
 alias nimzo-delete-widget='~/Repos/Scripts/bash/nimzo/nimzo-delete-widget.sh'
 alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
 alias nimzo-run-tests-isolated='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isolated.sh'
+alias nimzo-run-tests-show-groups='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-show-groups.sh'
 alias nimzo-watcher='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 alias nimzo-update='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
 
