@@ -163,7 +163,7 @@ end
 
 # If we're deleting files, this makes sure we do not miss the parent directories.
 if action == 'delete'
-    filesToCleanse = [file2, file3, file4, file5, file6]
+    filesToCleanse = [file1, file2, file3, file4, file5, file6]
     filesToCleanse.each { |file|
         if directoryExists?(File.dirname(file))
             dirsToDelete.push(File.dirname(file))
