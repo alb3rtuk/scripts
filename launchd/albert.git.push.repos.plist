@@ -10,7 +10,7 @@
         <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.git.push.repos.sh</string>
 
         <key>StartInterval</key>
-        <integer>3600</integer>
+        <integer>600</integer>
 
         <key>StandardOutPath</key>
         <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>

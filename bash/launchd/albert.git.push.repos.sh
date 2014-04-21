@@ -11,6 +11,4 @@ git push > /dev/null 2>&1
 cd ~/Repos/Sleek/
 git push > /dev/null 2>&1
 
-logCron "Launchd job: 'albert.git.push.repos' ran successfully. All repos pushed to git."
-
 exit
