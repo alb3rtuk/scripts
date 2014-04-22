@@ -83,19 +83,27 @@ class NimzoCreateDelete
             "#{@pathToTest}controllers/"
         ]
 
-        # If we're creating stuff..
+        routeCount = 0
         subDir = ''
         filenameUpperCase = ''
+
         @route.split('/').each { |routeParameter|
 
+            routeCount = routeCount + 1
             subDir = "#{subDir}#{routeParameter}/"
+
+            filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
+            filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
+
+            # If this is a 'delete' run, only spring to life once we're on the last loop (if that makes sense).
+            # We don't want to be deleting recursively..
+            if @action == 'delete' && routeCount < @route.split('/').size
+                next
+            end
 
             pseudoOutput = Array.new
             pseudoPaths = Array.new
             pseudoFiles = Array.new
-
-            filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
-            filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
 
             baseDirs.each { |dir|
                 dir = "#{dir}#{subDir}"
@@ -123,11 +131,11 @@ class NimzoCreateDelete
                     files.each { |file|
                         if (@action == 'create' && !File.file?(file)) || (@action == 'delete' && File.file?(file))
                             pseudoFiles.push(file)
-                            count = 0
+                            fileCount = 0
                             fileDisplay = ''
                             file.split('/').each { |filePart|
-                                count = count + 1
-                                if count < file.split('/').length
+                                fileCount = fileCount + 1
+                                if fileCount < file.split('/').length
                                     fileDisplay = "#{fileDisplay}/#{filePart}"
                                 else
                                     fileDisplay = "#{fileDisplay}/\x1B[36m#{filePart}\x1B[0m"
@@ -154,15 +162,15 @@ class NimzoCreateDelete
         }
         if @paths.empty? && @files.empty?
             if @action == 'create'
-                self.error('This route already exists..')
+                self.error("The route: \x1B[35m#{@route}\x1B[0m already exists..")
             elsif @action == 'delete'
-                self.error('This route doesn\'t exist..')
+                self.error("The route: \x1B[35m#{@route}\x1B[0m doesn't exist..")
             end
         else
             if @action == 'create'
-                @output.unshift("\x1B[42m CREATE \x1B[0m  For this route, the following file(s)/directori(es) will need to be created:\n")
+                @output.unshift("\x1B[42m CREATE \x1B[0m  Determining files/directories which need to be created:\n")
             elsif @action == 'delete'
-                @output.unshift("\x1B[41m DELETE \x1B[0m  Gathering file(s)/directori(es) to remove:\n")
+                @output.unshift("\x1B[41m DELETE \x1B[0m  Gathering files/directories for removal:\n")
             end
         end
 
@@ -192,11 +200,11 @@ class NimzoCreateDelete
             if @action == 'create'
                 system ('clear')
                 self.flushBuffer
-                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these file(s)/directori(es). Are you sure you want to continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             elsif @action == 'delete'
                 system ('clear')
                 self.flushBuffer
-                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m COMPLETELY DELETE \x1B[0m\x1B[90m these files/directories. Are you sure you want to continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             end
         end
     end
