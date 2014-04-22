@@ -22,9 +22,7 @@ class NimzoCreateDelete
         @pathToTests = '/Users/Albert/Repos/Nimzo/tests-php'
 
 
-
         self.validateParameters
-        self.validateRoute
         self.run
     end
 
@@ -53,11 +51,6 @@ class NimzoCreateDelete
             self.error("Request route cannot start with: \x1B[33m#{routeSplit}\x1B[0m")
         end
 
-    end
-
-    # Make sure the route doesn't already exist and that it isn't a nested path with blank previous paths (if that makes sense).
-    def validateRoute
-
         # Make sure that ALL characters within the route are AlphaNumeric.
         unless isAlphaNumeric(@route.gsub('/', ''))
             @errors = true
@@ -67,7 +60,7 @@ class NimzoCreateDelete
         # Make sure that the FIRST character of ANY route parameter is a letter, not a number.
         routeSplit = @route.split('/')
         routeSplit.each { |routeParameter|
-            if (routeParameter[0,1] =~ /[A-Za-z]/) != 0
+            if (routeParameter[0, 1] =~ /[A-Za-z]/) != 0
                 self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
             end
         }
