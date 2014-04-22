@@ -24,13 +24,21 @@ class NimzoCreateDelete
     # Validate the input parameters
     def validateParameters
 
-        # Make sure the particular controller type is valid. This error cannot be reached through incorrect user input.
+        # Make sure the particular controller type is valid.
+        # This error cannot be reached through incorrect user input.
         unless inArray(%w(app modal overlay system widget), @type)
             @errors = true
             self.error("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
         end
 
-        # Make sure route doesn't start with API or AJAX
+        # Make sure the particular action is valid.
+        # This error cannot be reached through incorrect user input.
+        unless inArray(%w(create delete), @action)
+            @errors = true
+            self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
+        end
+
+        # Make sure route doesn't start with API or AJAX.
         routeFirstParameter = @route.split('/')
         routeFirstParameter = routeFirstParameter[0]
         if inArray(%w(api ajax), routeFirstParameter, true)
