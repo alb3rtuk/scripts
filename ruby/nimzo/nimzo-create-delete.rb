@@ -16,15 +16,21 @@ class NimzoCreateDelete
         @errors = false
         @output = Array.new
 
-        @pathToRepo = '/Users/Albert/Repos/Nimzo/'
+        @pathToRepo = '/Users/Albert/Repos/Nimzo'
+        @pathToPhp = "#{@pathToRepo}/httpdocs/private/#{@type}"
+        @pathToDev = "#{@pathToRepo}/httpdocs/public/dev/#{@type}"
+        @pathToMin = "#{@pathToRepo}/httpdocs/public/min/#{@type}"
+        @pathToTest = "#{@pathToRepo}/tests-php/private/#{@type}"
+
         @route.split('/').each { |routeParameter|
             @filenameUpperCase = "#{@filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
         }
         @filenameLowerCase = @filenameUpperCase[0, 1].downcase + @filenameUpperCase[1..-1]
 
         self.validateParameters
-
+        self.validateRoute
         self.run
+
     end
 
     # Validate the input parameters
@@ -66,12 +72,44 @@ class NimzoCreateDelete
     end
 
     # Makes sure that the route to the controller doens't have blank (nested) paths on the way. This is a no no!
-    def validateRouteDoesntContainBlankPaths
-
+    def validateRoute
+        if @route.index('/') != nil
+            baseDirs = Array[
+                "#{@pathToPhp}/controllers/",
+                "#{@pathToPhp}/views/",
+                "#{@pathToDev}/",
+            ]
+            errorShown = false
+            count = 0
+            subDir = ''
+            @route.split('/').each { |routeParameter|
+                count = count + 1
+                if count < @route.split('/').size
+                    subDir = "#{subDir}#{routeParameter}/"
+                    baseDirs.each { |dir|
+                        dir = "#{dir}#{subDir}"
+                        if Dir["#{dir}*"].size <= 0
+                            @errors = true
+                            unless errorShown
+                                errorShown = true
+                                self.error("Blank \x1B[33mRouting Paths\x1B[0m not allowed! The following directori(es) had no file(s):\n", false)
+                            end
+                            self.output("        \x1B[33m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
+                        end
+                    }
+                end
+                # If blank path was found, exit on first occurence.
+                if @errors
+                    self.output('')
+                    self.output("        You need to create \x1B[35m#{subDir}\x1B[0m first.\x1B[0m")
+                    self.die
+                end
+            }
+        end
     end
 
     # Log something to the output buffer.
-    def logOutput(text = '')
+    def output(text = '')
         @output.push(text)
     end
 
@@ -94,12 +132,12 @@ class NimzoCreateDelete
             puts 'No errors!'
 
         end
-        self.displayOutput
+        self.die
     end
 
     # No matter what, at the end of EVERY script run, whatever's in the @OUTPUT buffer will
     # get echoed to Terminal.
-    def displayOutput
+    def die
         unless @output.empty?
             puts
             @output.each { |message| puts "#{message}\x1B[0m" }
