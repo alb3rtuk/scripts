@@ -15,6 +15,14 @@ class NimzoCreateDelete
         @errors = false
         @output = Array.new
 
+        @filenameUpperCase = ''
+        @filenameLowerCase = ''
+        @pathToRepo = '/Users/Albert/Repos/Nimzo/httpdocs'
+        @pathToRepoSlash = '/Users/Albert/Repos/Nimzo/httpdocs/'
+        @pathToTests = '/Users/Albert/Repos/Nimzo/tests-php'
+
+
+
         self.validateParameters
         self.validateRoute
         self.run
@@ -50,6 +58,12 @@ class NimzoCreateDelete
     # Make sure the route doesn't already exist and that it isn't a nested path with blank previous paths (if that makes sense).
     def validateRoute
 
+        # Make sure that ALL characters within the route are AlphaNumeric.
+        unless isAlphaNumeric(@route.gsub('/', ''))
+            @errors = true
+            self.error("Name must be alphanumeric and contain only slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
+        end
+
     end
 
     # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
@@ -68,6 +82,7 @@ class NimzoCreateDelete
     def run
         unless @errors
 
+            puts 'No errors!'
 
         end
         self.displayOutput
