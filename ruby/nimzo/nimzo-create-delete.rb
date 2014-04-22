@@ -156,7 +156,7 @@ class NimzoCreateDelete
                 @files.concat(pseudoFiles)
             end
             unless pseudoPaths.empty? && pseudoFiles.empty?
-                pseudoOutput.unshift("          \x1B[35m#{subDir[0..-2]}\x1B[0m")
+                pseudoOutput.unshift("          \x1B[90m#{@type.upcase}\x1B[0m => \x1B[35m#{subDir[0..-2]}\x1B[0m")
                 pseudoOutput.push('')
                 @output.concat(pseudoOutput)
             end
