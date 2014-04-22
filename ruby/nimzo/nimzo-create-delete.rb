@@ -47,10 +47,10 @@ class NimzoCreateDelete
         end
 
         # Make sure route doesn't start with API or AJAX.
-        routeFirstParameter = @route.split('/')
-        routeFirstParameter = routeFirstParameter[0]
-        if inArray(%w(api ajax), routeFirstParameter, true)
-            self.error("Request route cannot start with: \x1B[33m#{routeFirstParameter}\x1B[0m")
+        routeSplit = @route.split('/')
+        routeSplit = routeSplit[0]
+        if inArray(%w(api ajax), routeSplit, true)
+            self.error("Request route cannot start with: \x1B[33m#{routeSplit}\x1B[0m")
         end
 
     end
@@ -61,8 +61,16 @@ class NimzoCreateDelete
         # Make sure that ALL characters within the route are AlphaNumeric.
         unless isAlphaNumeric(@route.gsub('/', ''))
             @errors = true
-            self.error("Name must be alphanumeric and contain only slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
+            self.error("Route parameters must be alphanumeric and seperated by slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
         end
+
+        # Make sure that the FIRST character of ANY route parameter is a letter, not a number.
+        routeSplit = @route.split('/')
+        routeSplit.each { |routeParameter|
+            if (routeParameter[0,1] =~ /[A-Za-z]/) != 0
+                self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
+            end
+        }
 
     end
 
