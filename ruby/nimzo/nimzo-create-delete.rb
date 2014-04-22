@@ -9,23 +9,26 @@ class NimzoCreateDelete
     # @param action
     def initialize(route, type, action)
 
-        @route = route.downcase
+        @route = route.downcase.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
         @type = type.downcase
         @action = action.downcase
 
         @errors = false
         @output = Array.new
 
-        @pathToRepo = '/Users/Albert/Repos/Nimzo'
-        @pathToPhp = "#{@pathToRepo}/httpdocs/private/#{@type}/"
-        @pathToDev = "#{@pathToRepo}/httpdocs/public/dev/#{@type}/"
-        @pathToMin = "#{@pathToRepo}/httpdocs/public/min/#{@type}/"
-        @pathToTest = "#{@pathToRepo}/tests-php/private/#{@type}/"
+        @pathToRepo = $PATH_TO_REPO
+        @pathToPhp = "#{$PATH_TO_PHP}/httpdocs/private/#{@type}/"
+        @pathToDev = "#{$PATH_TO_DEV}/httpdocs/public/dev/#{@type}/"
+        @pathToMin = "#{$PATH_TO_MIN}/httpdocs/public/min/#{@type}/"
+        @pathToTest = "#{$PATH_TO_TESTS}/tests-php/private/#{@type}/"
 
         @route.split('/').each { |routeParameter|
             @filenameUpperCase = "#{@filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
         }
         @filenameLowerCase = @filenameUpperCase[0, 1].downcase + @filenameUpperCase[1..-1]
+
+        @files = Array.new
+        @paths = Array.new
 
         self.validateParameters
         self.validateRoute
@@ -71,44 +74,55 @@ class NimzoCreateDelete
 
     end
 
-    # Makes sure that the route to the controller doens't have blank (nested) paths on the way. This is a no no!
+    # Makes sure that the route to the controller doesn't have blank (nested) paths on the way. This is a no no!
+    # If only SOME paths are blank, the script will assume that these were deleted by mistake, and ask to re-create them.
     def validateRoute
+        pseudoOutput = Array.new
+        baseDirs = Array[
+            "#{@pathToPhp}helpers/",
+            "#{@pathToPhp}controllers/",
+            "#{@pathToPhp}views/",
+            "#{@pathToDev}",
+            "#{@pathToTest}controllers/"
+        ]
+        count = 0
+        subDir = ''
+        @route.split('/').each { |routeParameter|
+            count = count + 1
+            # Makes sure not to include the final parameter (as this will obviously be empty)
+            if count < @route.split('/').size
+                subDir = "#{subDir}#{routeParameter}/"
+                baseDirs.each { |dir|
+                    dir = "#{dir}#{subDir}"
 
-        # Make sure there are no blank (nested paths)
-        if @route.index('/') != nil
-            baseDirs = Array[
-                "#{@pathToPhp}controllers/",
-                "#{@pathToPhp}views/",
-                "#{@pathToDev}",
-                "#{@pathToTest}controllers/"
-            ]
-            errorShown = false
-            count = 0
-            subDir = ''
-            @route.split('/').each { |routeParameter|
-                count = count + 1
-                if count < @route.split('/').size
-                    subDir = "#{subDir}#{routeParameter}/"
-                    baseDirs.each { |dir|
-                        dir = "#{dir}#{subDir}"
+                    if dir == "#{@pathToPhp}helpers/#{subDir}"
+                        unless File.directory?("#{dir}")
+                            @errors = true
+                            pseudoOutput.push("        \x1B[32m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
+                        end
+                    else
                         if Dir["#{dir}*"].size <= 0
                             @errors = true
-                            unless errorShown
-                                errorShown = true
-                                self.error("Blank \x1B[33mRouting Paths\x1B[0m not allowed! The following directori(es) had no file(s):\n", false)
-                            end
-                            self.output("        \x1B[33m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
+                            pseudoOutput.push("        \x1B[33m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
                         end
-                    }
-                end
-                # If blank path was found, exit on first occurence.
-                if @errors
-                    self.output('')
-                    self.output("        You need to create \x1B[35m#{subDir[0..-2]}\x1B[0m first.\x1B[0m")
-                    self.die
-                end
-            }
+                    end
+
+                }
+            end
+            # If blank path(s) were found, exit on first occurence.
+            if @errors
+                break
+            end
+        }
+
+        if @errors
+            pseudoOutput.unshift("\x1B[41m ERROR \x1B[0m Blank \x1B[33mRouting Paths\x1B[0m not allowed! The following directori(es) had no file(s):\n")
+            pseudoOutput.push('')
+            pseudoOutput.push("        You need to create \x1B[35m#{subDir[0..-2]}\x1B[0m first.\x1B[0m")
+            @output.concat(pseudoOutput)
+            self.die
         end
+
     end
 
     # Log something to the output buffer.
@@ -154,4 +168,4 @@ class NimzoCreateDelete
 
 end
 
-NimzoCreateDelete.new(ARGV[0].sub(/^[\/]*/, '').sub(/(\/)+$/, ''), ARGV[1], ARGV[2])
+NimzoCreateDelete.new(ARGV[0], ARGV[1], ARGV[2])
