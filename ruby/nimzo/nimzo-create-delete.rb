@@ -1,5 +1,5 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/nimzo/nimzo.rb'
+require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo.rb'
 
 class NimzoCreateDelete
 
@@ -8,12 +8,26 @@ class NimzoCreateDelete
         @route = route
         @type = type
 
+        @errors = false
+        @output = Array.new
+
         self.validateParameters
         self.validateRoute
+        self.run
 
     end
 
+    def run
+        if @output.empty?
+            puts "No errors!"
+        else
+            puts @output.inspect
+        end
+    end
+
     def validateParameters
+
+        @output.push('testing 1 2 3')
 
     end
 
