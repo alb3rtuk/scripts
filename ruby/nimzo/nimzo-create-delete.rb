@@ -8,24 +8,24 @@ class NimzoCreateDelete
     # @param type
     # @param action
     def initialize(route, type, action)
-        @route = route
-        @type = type
-        @action = action
+
+        @route = route.downcase
+        @type = type.downcase
+        @action = action.downcase
 
         @errors = false
         @output = Array.new
 
-        @filenameUpperCase = ''
-        @filenameLowerCase = ''
-        @pathToRepo = '/Users/Albert/Repos/Nimzo/httpdocs'
-        @pathToRepoSlash = '/Users/Albert/Repos/Nimzo/httpdocs/'
-        @pathToTests = '/Users/Albert/Repos/Nimzo/tests-php'
-
+        @pathToRepo = '/Users/Albert/Repos/Nimzo/'
+        @route.split('/').each { |routeParameter|
+            @filenameUpperCase = "#{@filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
+        }
+        @filenameLowerCase = @filenameUpperCase[0, 1].downcase + @filenameUpperCase[1..-1]
 
         self.validateParameters
+
         self.run
     end
-
 
     # Validate the input parameters
     def validateParameters
@@ -46,9 +46,8 @@ class NimzoCreateDelete
 
         # Make sure route doesn't start with API or AJAX.
         routeSplit = @route.split('/')
-        routeSplit = routeSplit[0]
-        if inArray(%w(api ajax), routeSplit, true)
-            self.error("Request route cannot start with: \x1B[33m#{routeSplit}\x1B[0m")
+        if inArray(%w(api ajax), routeSplit[0], true)
+            self.error("Request route cannot start with: \x1B[33m#{routeSplit[0]}\x1B[0m")
         end
 
         # Make sure that ALL characters within the route are AlphaNumeric.
@@ -58,13 +57,22 @@ class NimzoCreateDelete
         end
 
         # Make sure that the FIRST character of ANY route parameter is a letter, not a number.
-        routeSplit = @route.split('/')
-        routeSplit.each { |routeParameter|
+        @route.split('/').each { |routeParameter|
             if (routeParameter[0, 1] =~ /[A-Za-z]/) != 0
                 self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
             end
         }
 
+    end
+
+    # Makes sure that the route to the controller doens't have blank (nested) paths on the way. This is a no no!
+    def validateRouteDoesntContainBlankPaths
+
+    end
+
+    # Log something to the output buffer.
+    def logOutput(text = '')
+        @output.push(text)
     end
 
     # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
