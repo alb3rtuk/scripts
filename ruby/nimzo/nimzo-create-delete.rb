@@ -77,10 +77,11 @@ class NimzoCreateDelete
 
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
+            "#{@pathToTest}helpers/",
+            "#{@pathToTest}controllers/",
             "#{@pathToPhp}controllers/",
             "#{@pathToPhp}views/",
-            "#{@pathToDev}",
-            "#{@pathToTest}controllers/"
+            "#{@pathToDev}"
         ]
 
         routeCount = 0
@@ -107,7 +108,7 @@ class NimzoCreateDelete
 
             baseDirs.each { |dir|
                 dir = "#{dir}#{subDir}"
-                if dir == "#{@pathToPhp}helpers/#{subDir}"
+                if dir == "#{@pathToPhp}helpers/#{subDir}" || dir == "#{@pathToTest}helpers/#{subDir}"
                     if (@action == 'create' && !File.directory?(dir)) || (@action == 'delete' && File.directory?(dir))
                         pseudoOutput.push("          \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
                         pseudoPaths.push(dir)
@@ -120,8 +121,8 @@ class NimzoCreateDelete
                         when "#{@pathToPhp}views/#{subDir}"
                             files.push("#{dir}#{filenameUpperCase}.phtml")
                         when "#{@pathToDev}#{subDir}"
-                            files.push("#{dir}#{filenameLowerCase}.js")
                             files.push("#{dir}#{filenameLowerCase}.less")
+                            files.push("#{dir}#{filenameLowerCase}.js")
                         when "#{@pathToTest}controllers/#{subDir}"
                             files.push("#{dir}#{filenameUpperCase}Test.php")
                         else
@@ -194,18 +195,27 @@ class NimzoCreateDelete
         end
     end
 
-    # The final function which doesn all the processing. If errors are present, no processing will be done.
+    # The final function which does all the processing. If errors are present, no processing will be done.
     def run
         unless @errors
             if @action == 'create'
                 system ('clear')
                 self.flushBuffer
                 self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+
             elsif @action == 'delete'
                 system ('clear')
                 self.flushBuffer
                 self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+
             end
+
+            # @todo REMOVE THIS LATER
+            puts
+            @paths.each { |value| puts "          \x1B[0m#{value}\x1B[0m" }
+            @files.each { |value| puts "          \x1B[90m#{value}\x1B[0m" }
+            puts
+
         end
     end
 
