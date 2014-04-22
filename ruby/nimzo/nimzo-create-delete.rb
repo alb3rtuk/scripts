@@ -3,10 +3,14 @@ require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo.rb'
 
 class NimzoCreateDelete
 
-    def initialize(action, route, type)
-        @action = action
+    # The point of entry!
+    # @param route
+    # @param type
+    # @param action
+    def initialize(route, type, action)
         @route = route
         @type = type
+        @action = action
 
         @errors = false
         @output = Array.new
@@ -14,20 +18,18 @@ class NimzoCreateDelete
         self.validateParameters
         self.validateRoute
         self.run
-
     end
 
-    def run
-        if @output.empty?
-            puts "No errors!"
-        else
-            puts @output.inspect
-        end
-    end
 
+    # Validates the input parameters
     def validateParameters
 
-        @output.push('testing 1 2 3')
+        # Make sure route doesn't start with API or AJAX
+        routeFirstParameter = @route.split('/')
+        routeFirstParameter = routeFirstParameter[0]
+        if inArray(%w(api ajax), routeFirstParameter, true)
+            self.error("Request route cannot start with: \x1B[33m#{routeFirstParameter}\x1B[0m", true)
+        end
 
     end
 
@@ -35,6 +37,43 @@ class NimzoCreateDelete
 
     end
 
+    # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
+    # the script goes straight to run & subsequently displays output & dies.
+    # @param text
+    # @param exit
+    def error(text = '', exit = false)
+        @errors = true
+        @output.push("\x1B[41m ERROR \x1B[0m #{text}")
+        if exit
+            self.run
+        end
+    end
+
+    # The final function which doesn all the processing. If errors are present, no processing will be done.
+    def run
+        unless @errors
+
+
+        end
+        self.displayOutput
+    end
+
+    # No matter what, at the end of EVERY script run, whatever's in the @OUTPUT buffer will
+    # get echoed to Terminal.
+    def displayOutput
+        unless @output.empty?
+            puts
+            @output.each { |message|
+                puts message
+            }
+            if @errors
+                puts "        \x1B[90mScript aborted.\x1B[0m"
+            end
+            puts
+        end
+        exit
+    end
+
 end
 
-NimzoCreateDelete.new(ARGV[2], ARGV[0].sub(/^[\/]*/, '').sub(/(\/)+$/, ''), ARGV[1])
+NimzoCreateDelete.new(ARGV[0].sub(/^[\/]*/, '').sub(/(\/)+$/, ''), ARGV[1], ARGV[2])
