@@ -21,18 +21,25 @@ class NimzoCreateDelete
     end
 
 
-    # Validates the input parameters
+    # Validate the input parameters
     def validateParameters
+
+        # Make sure the particular controller type is valid. This error cannot be reached through incorrect user input.
+        unless inArray(%w(app modal overlay system widget), @type)
+            @errors = true
+            self.error("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
+        end
 
         # Make sure route doesn't start with API or AJAX
         routeFirstParameter = @route.split('/')
         routeFirstParameter = routeFirstParameter[0]
         if inArray(%w(api ajax), routeFirstParameter, true)
-            self.error("Request route cannot start with: \x1B[33m#{routeFirstParameter}\x1B[0m", true)
+            self.error("Request route cannot start with: \x1B[33m#{routeFirstParameter}\x1B[0m")
         end
 
     end
 
+    # Make sure the route doesn't already exist and that it isn't a nested path with blank previous paths (if that makes sense).
     def validateRoute
 
     end
@@ -41,7 +48,7 @@ class NimzoCreateDelete
     # the script goes straight to run & subsequently displays output & dies.
     # @param text
     # @param exit
-    def error(text = '', exit = false)
+    def error(text = '', exit = true)
         @errors = true
         @output.push("\x1B[41m ERROR \x1B[0m #{text}")
         if exit
@@ -63,9 +70,7 @@ class NimzoCreateDelete
     def displayOutput
         unless @output.empty?
             puts
-            @output.each { |message|
-                puts message
-            }
+            @output.each { |message| puts "#{message}\x1B[0m" }
             if @errors
                 puts "        \x1B[90mScript aborted.\x1B[0m"
             end
