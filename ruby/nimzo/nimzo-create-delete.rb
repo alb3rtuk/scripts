@@ -17,10 +17,10 @@ class NimzoCreateDelete
         @output = Array.new
 
         @pathToRepo = '/Users/Albert/Repos/Nimzo'
-        @pathToPhp = "#{@pathToRepo}/httpdocs/private/#{@type}"
-        @pathToDev = "#{@pathToRepo}/httpdocs/public/dev/#{@type}"
-        @pathToMin = "#{@pathToRepo}/httpdocs/public/min/#{@type}"
-        @pathToTest = "#{@pathToRepo}/tests-php/private/#{@type}"
+        @pathToPhp = "#{@pathToRepo}/httpdocs/private/#{@type}/"
+        @pathToDev = "#{@pathToRepo}/httpdocs/public/dev/#{@type}/"
+        @pathToMin = "#{@pathToRepo}/httpdocs/public/min/#{@type}/"
+        @pathToTest = "#{@pathToRepo}/tests-php/private/#{@type}/"
 
         @route.split('/').each { |routeParameter|
             @filenameUpperCase = "#{@filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
@@ -73,11 +73,14 @@ class NimzoCreateDelete
 
     # Makes sure that the route to the controller doens't have blank (nested) paths on the way. This is a no no!
     def validateRoute
+
+        # Make sure there are no blank (nested paths)
         if @route.index('/') != nil
             baseDirs = Array[
-                "#{@pathToPhp}/controllers/",
-                "#{@pathToPhp}/views/",
-                "#{@pathToDev}/",
+                "#{@pathToPhp}controllers/",
+                "#{@pathToPhp}views/",
+                "#{@pathToDev}",
+                "#{@pathToTest}controllers/"
             ]
             errorShown = false
             count = 0
@@ -101,7 +104,7 @@ class NimzoCreateDelete
                 # If blank path was found, exit on first occurence.
                 if @errors
                     self.output('')
-                    self.output("        You need to create \x1B[35m#{subDir}\x1B[0m first.\x1B[0m")
+                    self.output("        You need to create \x1B[35m#{subDir[0..-2]}\x1B[0m first.\x1B[0m")
                     self.die
                 end
             }
