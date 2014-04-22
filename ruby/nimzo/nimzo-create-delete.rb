@@ -1,5 +1,7 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo.rb'
+require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo-file-maker.rb'
+require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo-file-rewriter.rb'
 
 class NimzoCreateDelete
 
@@ -17,21 +19,16 @@ class NimzoCreateDelete
         @output = Array.new
 
         @pathToRepo = $PATH_TO_REPO
-        @pathToPhp = "#{$PATH_TO_PHP}/httpdocs/private/#{@type}/"
-        @pathToDev = "#{$PATH_TO_DEV}/httpdocs/public/dev/#{@type}/"
-        @pathToMin = "#{$PATH_TO_MIN}/httpdocs/public/min/#{@type}/"
-        @pathToTest = "#{$PATH_TO_TESTS}/tests-php/private/#{@type}/"
+        @pathToPhp = "#{@pathToRepo}/httpdocs/private/#{@type}/"
+        @pathToDev = "#{@pathToRepo}/httpdocs/public/dev/#{@type}/"
+        @pathToMin = "#{@pathToRepo}/httpdocs/public/min/#{@type}/"
+        @pathToTest = "#{@pathToRepo}/tests-php/private/#{@type}/"
 
-        @route.split('/').each { |routeParameter|
-            @filenameUpperCase = "#{@filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
-        }
-        @filenameLowerCase = @filenameUpperCase[0, 1].downcase + @filenameUpperCase[1..-1]
-
-        @files = Array.new
         @paths = Array.new
+        @files = Array.new
 
         self.validateParameters
-        self.validateRoute
+        self.scanRoute
         self.run
 
     end
@@ -74,10 +71,10 @@ class NimzoCreateDelete
 
     end
 
-    # Makes sure that the route to the controller doesn't have blank (nested) paths on the way. This is a no no!
-    # If only SOME paths are blank, the script will assume that these were deleted by mistake, and ask to re-create them.
-    def validateRoute
-        pseudoOutput = Array.new
+    # Scans the route to the controller and creates all the files (that don't exist yet) along the way.
+    # Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
+    def scanRoute
+
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
             "#{@pathToPhp}controllers/",
@@ -85,44 +82,85 @@ class NimzoCreateDelete
             "#{@pathToDev}",
             "#{@pathToTest}controllers/"
         ]
-        count = 0
-        subDir = ''
-        @route.split('/').each { |routeParameter|
-            count = count + 1
-            # Makes sure not to include the final parameter (as this will obviously be empty)
-            if count < @route.split('/').size
+
+        # If we're creating stuff..
+        if @action == 'create'
+            subDir = ''
+            filenameUpperCase = ''
+            @route.split('/').each { |routeParameter|
+
                 subDir = "#{subDir}#{routeParameter}/"
+
+                pseudoOutput = Array.new
+                pseudoPaths = Array.new
+                pseudoFiles = Array.new
+
+                filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
+                filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
+
                 baseDirs.each { |dir|
                     dir = "#{dir}#{subDir}"
-
                     if dir == "#{@pathToPhp}helpers/#{subDir}"
-                        unless File.directory?("#{dir}")
-                            @errors = true
-                            pseudoOutput.push("        \x1B[32m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
+                        unless File.directory?(dir)
+                            pseudoOutput.push("           \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                            pseudoPaths.push(dir)
                         end
                     else
-                        if Dir["#{dir}*"].size <= 0
-                            @errors = true
-                            pseudoOutput.push("        \x1B[33m#{dir.gsub("#{@pathToRepo}/", '')[0..-2]}\x1B[0m")
+                        files = Array.new
+                        case dir
+                            when "#{@pathToPhp}controllers/#{subDir}"
+                                files.push("#{dir}#{filenameUpperCase}.php")
+                            when "#{@pathToPhp}views/#{subDir}"
+                                files.push("#{dir}#{filenameUpperCase}.phtml")
+                            when "#{@pathToDev}#{subDir}"
+                                files.push("#{dir}#{filenameLowerCase}.js")
+                                files.push("#{dir}#{filenameLowerCase}.less")
+                            when "#{@pathToTest}controllers/#{subDir}"
+                                files.push("#{dir}#{filenameUpperCase}Test.php")
+                            else
+                                @errors = true
+                                self.error('Path not found.')
                         end
+                        files.each { |file|
+                            unless File.file?(file)
+                                pseudoFiles.push(file)
+                                count = 0
+                                fileDisplay = ''
+                                file.split('/').each { | filePart |
+                                    count = count + 1
+                                    if count < file.split('/').length
+                                        fileDisplay = "#{fileDisplay}/#{filePart}"
+                                    else
+                                        fileDisplay = "#{fileDisplay}/\x1B[36m#{filePart}\x1B[0m"
+                                    end
+                                }
+                                # Remove preceeding slash (/) as a result of above loop..
+                                fileDisplay[0] = ''
+                                pseudoOutput.push("           \x1B[33m#{fileDisplay.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                            end
+                        }
                     end
-
                 }
-            end
-            # If blank path(s) were found, exit on first occurence.
-            if @errors
-                break
-            end
-        }
+                unless pseudoPaths.empty?
+                    @paths.concat(pseudoPaths)
+                end
+                unless pseudoFiles.empty?
+                    @files.concat(pseudoFiles)
+                end
+                unless pseudoPaths.empty? && pseudoFiles.empty?
+                    pseudoOutput.unshift("           \x1B[35m#{subDir[0..-2]}\x1B[0m")
+                    pseudoOutput.push('')
+                    @output.concat(pseudoOutput)
+                end
+            }
+            if @paths.empty? && @files.empty?
 
-        if @errors
-            pseudoOutput.unshift("\x1B[41m ERROR \x1B[0m Blank \x1B[33mRouting Paths\x1B[0m not allowed! The following directori(es) had no file(s):\n")
-            pseudoOutput.push('')
-            pseudoOutput.push("        You need to create \x1B[35m#{subDir[0..-2]}\x1B[0m first.\x1B[0m")
-            @output.concat(pseudoOutput)
-            self.die
+                self.error('This route already exists..')
+
+            else
+                @output.unshift("\x1B[42m CONFIRM \x1B[0m  For this route, the following file(s)/directori(es) will need to be created:\n")
+            end
         end
-
     end
 
     # Log something to the output buffer.
@@ -146,7 +184,7 @@ class NimzoCreateDelete
     def run
         unless @errors
 
-            puts 'No errors!'
+#            @output.unshift("\x1B[42m CONFIRM \x1B[0m  Would you like to create the following file(s)/diretori(es):\n")
 
         end
         self.die
