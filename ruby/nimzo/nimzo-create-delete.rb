@@ -84,83 +84,88 @@ class NimzoCreateDelete
         ]
 
         # If we're creating stuff..
-        if @action == 'create'
-            subDir = ''
-            filenameUpperCase = ''
-            @route.split('/').each { |routeParameter|
+        subDir = ''
+        filenameUpperCase = ''
+        @route.split('/').each { |routeParameter|
 
-                subDir = "#{subDir}#{routeParameter}/"
+            subDir = "#{subDir}#{routeParameter}/"
 
-                pseudoOutput = Array.new
-                pseudoPaths = Array.new
-                pseudoFiles = Array.new
+            pseudoOutput = Array.new
+            pseudoPaths = Array.new
+            pseudoFiles = Array.new
 
-                filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
-                filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
+            filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
+            filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
 
-                baseDirs.each { |dir|
-                    dir = "#{dir}#{subDir}"
-                    if dir == "#{@pathToPhp}helpers/#{subDir}"
-                        unless File.directory?(dir)
-                            pseudoOutput.push("           \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
-                            pseudoPaths.push(dir)
-                        end
-                    else
-                        files = Array.new
-                        case dir
-                            when "#{@pathToPhp}controllers/#{subDir}"
-                                files.push("#{dir}#{filenameUpperCase}.php")
-                            when "#{@pathToPhp}views/#{subDir}"
-                                files.push("#{dir}#{filenameUpperCase}.phtml")
-                            when "#{@pathToDev}#{subDir}"
-                                files.push("#{dir}#{filenameLowerCase}.js")
-                                files.push("#{dir}#{filenameLowerCase}.less")
-                            when "#{@pathToTest}controllers/#{subDir}"
-                                files.push("#{dir}#{filenameUpperCase}Test.php")
-                            else
-                                @errors = true
-                                self.error('Path not found.')
-                        end
-                        files.each { |file|
-                            unless File.file?(file)
-                                pseudoFiles.push(file)
-                                count = 0
-                                fileDisplay = ''
-                                file.split('/').each { | filePart |
-                                    count = count + 1
-                                    if count < file.split('/').length
-                                        fileDisplay = "#{fileDisplay}/#{filePart}"
-                                    else
-                                        fileDisplay = "#{fileDisplay}/\x1B[36m#{filePart}\x1B[0m"
-                                    end
-                                }
-                                # Remove preceeding slash (/) as a result of above loop..
-                                fileDisplay[0] = ''
-                                pseudoOutput.push("           \x1B[33m#{fileDisplay.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
-                            end
-                        }
+            baseDirs.each { |dir|
+                dir = "#{dir}#{subDir}"
+                if dir == "#{@pathToPhp}helpers/#{subDir}"
+                    if (@action == 'create' && !File.directory?(dir)) || (@action == 'delete' && File.directory?(dir))
+                        pseudoOutput.push("          \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                        pseudoPaths.push(dir)
                     end
-                }
-                unless pseudoPaths.empty?
-                    @paths.concat(pseudoPaths)
-                end
-                unless pseudoFiles.empty?
-                    @files.concat(pseudoFiles)
-                end
-                unless pseudoPaths.empty? && pseudoFiles.empty?
-                    pseudoOutput.unshift("           \x1B[35m#{subDir[0..-2]}\x1B[0m")
-                    pseudoOutput.push('')
-                    @output.concat(pseudoOutput)
+                else
+                    files = Array.new
+                    case dir
+                        when "#{@pathToPhp}controllers/#{subDir}"
+                            files.push("#{dir}#{filenameUpperCase}.php")
+                        when "#{@pathToPhp}views/#{subDir}"
+                            files.push("#{dir}#{filenameUpperCase}.phtml")
+                        when "#{@pathToDev}#{subDir}"
+                            files.push("#{dir}#{filenameLowerCase}.js")
+                            files.push("#{dir}#{filenameLowerCase}.less")
+                        when "#{@pathToTest}controllers/#{subDir}"
+                            files.push("#{dir}#{filenameUpperCase}Test.php")
+                        else
+                            @errors = true
+                            self.error('Path not found.')
+                    end
+                    files.each { |file|
+                        if (@action == 'create' && !File.file?(file)) || (@action == 'delete' && File.file?(file))
+                            pseudoFiles.push(file)
+                            count = 0
+                            fileDisplay = ''
+                            file.split('/').each { |filePart|
+                                count = count + 1
+                                if count < file.split('/').length
+                                    fileDisplay = "#{fileDisplay}/#{filePart}"
+                                else
+                                    fileDisplay = "#{fileDisplay}/\x1B[36m#{filePart}\x1B[0m"
+                                end
+                            }
+                            # Remove preceeding slash (/) as a result of above loop..
+                            fileDisplay[0] = ''
+                            pseudoOutput.push("          \x1B[33m#{fileDisplay.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                        end
+                    }
                 end
             }
-            if @paths.empty? && @files.empty?
-
+            unless pseudoPaths.empty?
+                @paths.concat(pseudoPaths)
+            end
+            unless pseudoFiles.empty?
+                @files.concat(pseudoFiles)
+            end
+            unless pseudoPaths.empty? && pseudoFiles.empty?
+                pseudoOutput.unshift("          \x1B[35m#{subDir[0..-2]}\x1B[0m")
+                pseudoOutput.push('')
+                @output.concat(pseudoOutput)
+            end
+        }
+        if @paths.empty? && @files.empty?
+            if @action == 'create'
                 self.error('This route already exists..')
-
-            else
-                @output.unshift("\x1B[42m CONFIRM \x1B[0m  For this route, the following file(s)/directori(es) will need to be created:\n")
+            elsif @action == 'delete'
+                self.error('This route doesn\'t exist..')
+            end
+        else
+            if @action == 'create'
+                @output.unshift("\x1B[42m CREATE \x1B[0m  For this route, the following file(s)/directori(es) will need to be created:\n")
+            elsif @action == 'delete'
+                @output.unshift("\x1B[41m DELETE \x1B[0m  Gathering file(s)/directori(es) to remove:\n")
             end
         end
+
     end
 
     # Log something to the output buffer.
@@ -176,31 +181,55 @@ class NimzoCreateDelete
         @errors = true
         @output.push("\x1B[41m ERROR \x1B[0m #{text}")
         if exit
-            self.run
+            @errors = true
+            self.flushBuffer
         end
     end
 
     # The final function which doesn all the processing. If errors are present, no processing will be done.
     def run
         unless @errors
-
-#            @output.unshift("\x1B[42m CONFIRM \x1B[0m  Would you like to create the following file(s)/diretori(es):\n")
-
+            if @action == 'create'
+                system ('clear')
+                self.flushBuffer
+                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these file(s)/directori(es). Are you sure you want to continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            elsif @action == 'delete'
+                system ('clear')
+                self.flushBuffer
+                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m COMPLETELY DELETE \x1B[0m\x1B[90m these files/directories. Are you sure you want to continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            end
         end
-        self.die
     end
 
-    # No matter what, at the end of EVERY script run, whatever's in the @OUTPUT buffer will
-    # get echoed to Terminal.
-    def die
+    # Confirmation message. Returns and continues script on 'y' or 'Y'.. exits on anythng else.
+    def confirm(confirmTxt = "\x1B[90mContinue? [y/n]\x1B[0m => ?", abortTxt = nil)
+        STDOUT.flush
+        print confirmTxt
+        continue = STDIN.gets.chomp
+        if continue != 'y' && continue != 'Y'
+            self.abandonShip(abortTxt)
+        end
+    end
+
+    # Flushes the output buffer.
+    def flushBuffer
         unless @output.empty?
             puts
             @output.each { |message| puts "#{message}\x1B[0m" }
             if @errors
-                puts "        \x1B[90mScript aborted.\x1B[0m"
+                self.abandonShip
+            else
+                @output = Array.new
             end
-            puts
         end
+    end
+
+    # Aborts the script.
+    def abandonShip(abortTxt = "        \x1B[90mScript aborted.\x1B[0m")
+        unless abortTxt.nil?
+            puts abortTxt
+        end
+        puts
         exit
     end
 
