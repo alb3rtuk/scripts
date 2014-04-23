@@ -120,7 +120,8 @@ class NimzoFileMaker
     def createFileController(file, route)
         className = ''
         route.split('/').each { |routeParameter|
-            className = "#{className}#{routeParameter.capitalize}"
+            routeParameter[0] = routeParameter.upcase[0..0]
+            className = "#{className}#{routeParameter}"
         }
         File.open(file, 'w') { |file|
             file.puts '<?php'
