@@ -268,11 +268,11 @@ class NimzoCreateDelete
                     FileUtils.rm_rf(path)
                 }
             end
-            unless @files.empty? && @paths.empty?
-                NimzoRewriter.new(@type)
-            end
             @output.push('')
             self.flushBuffer
+        end
+        unless @files.empty? && @paths.empty?
+            NimzoRewriter.new(@type)
         end
     end
 
