@@ -73,7 +73,7 @@ class NimzoCreateDelete
 
     # IF CREATE: Scans the route and creates all the files (that don't exist yet) along the way.
     #            Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
-    # IF DELETE: Scans ONLY the last directory in the route and delete all the files (if they exist).
+    # IF DELETE: Scans ONLY the last directory in the route and delete all the files recursively (if they exist).
     # @param route
     def scanRoute(route = @route)
 
@@ -88,6 +88,7 @@ class NimzoCreateDelete
 
         routeCount = 0
         subDir = ''
+        subDirs = Array.new
         filenameUpperCase = ''
 
         route.split('/').each { |routeParameter|
@@ -110,6 +111,16 @@ class NimzoCreateDelete
 
             baseDirs.each { |dir|
                 dir = "#{dir}#{subDir}"
+
+                # If deleting, this checks if there are any FURTHER files/directories deeper in the 'route'.
+                # If so, adds them to an Array for later checking.
+                if @action == 'delete'
+                    subFilesFound = Dir.glob("#{dir}**/*")
+                    unless subFilesFound.empty?
+                        subDirs.concat(subFilesFound)
+                    end
+                end
+
                 if dir == "#{@pathToPhp}helpers/#{subDir}" || dir == "#{@pathToTest}helpers/#{subDir}"
                     if (@action == 'create' && !File.directory?(dir)) || (@action == 'delete' && File.directory?(dir))
                         pseudoOutput.push("          \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
@@ -177,6 +188,33 @@ class NimzoCreateDelete
             end
         end
 
+        # If we're deleting stuff, check if there are subPaths (past the point we're deleting from).
+        if @action == 'delete' && !subDirs.empty?
+
+            subFiles = Array.new
+            subPaths = Array.new
+            pseudoOutput = Array.new
+
+            subDirs.each { |subFile|
+                if File.directory?(subFile)
+                    unless inArray(@paths, subFile)
+                        subPaths.push(subFile)
+                        pseudoOutput.push("          \x1B[90m#{subFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                    end
+                elsif File.file?(subFile)
+                    unless inArray(@files, subFile)
+                        subFiles.push(subFile)
+                        pseudoOutput.push("          \x1B[0m#{subFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+                    end
+                end
+            }
+
+            unless pseudoOutput.empty?
+                @output.push("\x1B[41m DELETE \x1B[0m\x1B[90m  The following files/directories will \x1B[0m\x1B[41m ALSO \x1B[0m\x1B[90m be deleted:\n")
+                @output.concat(pseudoOutput)
+                @output.push('')
+            end
+        end
     end
 
     # Log something to the output buffer.
@@ -210,8 +248,7 @@ class NimzoCreateDelete
             elsif @action == 'delete'
                 system ('clear')
                 self.flushBuffer
-                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
-
+                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             end
 
         end
