@@ -11,7 +11,7 @@ class NimzoCreateDelete
     # @param action
     def initialize(route, type, action)
 
-        @route = route.downcase.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
+        @route = route.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
         @type = type.downcase
         @action = action.downcase
 
@@ -95,7 +95,7 @@ class NimzoCreateDelete
             subDir = "#{subDir}#{routeParameter}/"
 
             filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
-            filenameLowerCase = filenameUpperCase[0, 1].downcase + filenameUpperCase[1..-1]
+            filenameLowerCase = filenameUpperCase[0, 1] + filenameUpperCase[1..-1]
 
             # If this is a 'delete' run, only spring to life once we're on the last loop (if that makes sense).
             # We don't want to be deleting recursively..
