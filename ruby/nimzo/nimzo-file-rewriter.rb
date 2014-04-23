@@ -13,11 +13,17 @@ class NimzoRewriter
             exit
         end
 
-        @type = type
-        @route = ''
+        @type = type.downcase
+        @routes = Array.new
 
-
-        puts "ROUTE: \x1B[35m#{@route}\x1B[0m"
+        # Get all the routes (for this content type).
+        paths = Dir.glob("#{$PATH_TO_PHP}#{@type}/controllers/**/")
+        paths.each { |route|
+            route = route.sub("#{$PATH_TO_PHP}#{@type}/controllers/", '')[0..-2]
+            unless route == ''
+                @routes.push(route)
+            end
+        }
 
         self.rewriteLess
         self.rewriteReferences
@@ -26,6 +32,24 @@ class NimzoRewriter
 
     # Re-write import-*.less file.
     def rewriteLess
+        File.open("#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less", 'w') { |file|
+            count = 0
+            @routes.each { |route|
+                filename = ''
+                route.split('/').each { |routeParameter|
+                    routeParameter[0] = routeParameter.upcase[0..0]
+                    filename = "#{filename}#{routeParameter}"
+                }
+                filename[0] = filename.downcase[0..0]
+                importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
+                count = count + 1
+                if count < @routes.size
+                    file.puts importLess
+                else
+                    file.write importLess
+                end
+            }
+        }
     end
 
     # Re-write (App, Modal, Overlay, System, Widget) reference file.
@@ -35,5 +59,13 @@ class NimzoRewriter
 end
 
 if ARGV[0] == 'rewrite'
-    NimzoRewriter.new($1)
+    if ARGV[1] != nil
+        NimzoRewriter.new(ARGV[1])
+    else
+        NimzoRewriter.new('app')
+        NimzoRewriter.new('modal')
+        NimzoRewriter.new('overlay')
+        NimzoRewriter.new('system')
+        NimzoRewriter.new('widget')
+    end
 end
