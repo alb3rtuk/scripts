@@ -7,4 +7,4 @@ controllerName=$1
 
 validateControllerName
 
-ruby ~/Repos/Scripts/ruby/nimzo/nimzo-create-delete.rb ${controllerName} widget create
+ruby ~/Repos/Scripts/ruby/nimzo/nimzo-remove-delete.rb ${controllerName} widget create

@@ -257,7 +257,7 @@ class NimzoCreateDelete
                     @output.push("\x1B[31m Deleted: #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
                     # Remove file from Git.
                     system ("cd #{$PATH_TO_REPO}")
-                    system ("git rm --cached #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
+                    system ("git rm -f #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
                     FileUtils.rm_rf(file)
                     FileUtils.rm_rf(File.dirname(file))
                 }
