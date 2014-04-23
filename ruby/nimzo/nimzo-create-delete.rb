@@ -246,7 +246,7 @@ class NimzoCreateDelete
             self.flushBuffer
             self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             puts
-            NimzoFileMaker.new(@paths, @files, '          ')
+            NimzoFileMaker.new(@type, @paths, @files, '          ')
             puts
         elsif @action == 'delete'
             system ('clear')
