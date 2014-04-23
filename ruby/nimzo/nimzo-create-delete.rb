@@ -210,6 +210,8 @@ class NimzoCreateDelete
             }
 
             unless pseudoOutput.empty?
+                @paths.concat(subPaths)
+                @files.concat(subFiles)
                 @output.push("\x1B[41m DELETE \x1B[0m\x1B[90m  The following files/directories will \x1B[0m\x1B[41m ALSO \x1B[0m\x1B[90m be deleted:\n")
                 @output.concat(pseudoOutput)
                 @output.push('')
@@ -249,6 +251,19 @@ class NimzoCreateDelete
                 system ('clear')
                 self.flushBuffer
                 self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+
+                unless @files.empty?
+                    @files.each { |file|
+                        puts file
+                    }
+                end
+
+                unless @paths.empty?
+                    @paths.each { |path|
+                        puts path
+                    }
+                end
+
             end
 
         end
