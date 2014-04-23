@@ -32,24 +32,27 @@ class NimzoRewriter
 
     # Re-write import-*.less file.
     def rewriteLess
-        File.open("#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less", 'w') { |file|
-            count = 0
-            @routes.each { |route|
-                filename = ''
-                route.split('/').each { |routeParameter|
-                    routeParameter[0] = routeParameter.upcase[0..0]
-                    filename = "#{filename}#{routeParameter}"
+        file = "#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less"
+        if File.file?(file)
+            File.open(file, 'w') { |file|
+                count = 0
+                @routes.each { |route|
+                    filename = ''
+                    route.split('/').each { |routeParameter|
+                        routeParameter[0] = routeParameter.upcase[0..0]
+                        filename = "#{filename}#{routeParameter}"
+                    }
+                    filename[0] = filename.downcase[0..0]
+                    importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
+                    count = count + 1
+                    if count < @routes.size
+                        file.puts importLess
+                    else
+                        file.write importLess
+                    end
                 }
-                filename[0] = filename.downcase[0..0]
-                importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
-                count = count + 1
-                if count < @routes.size
-                    file.puts importLess
-                else
-                    file.write importLess
-                end
             }
-        }
+        end
     end
 
     # Re-write (App, Modal, Overlay, System, Widget) reference file.
