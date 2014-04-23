@@ -202,19 +202,15 @@ class NimzoCreateDelete
                 system ('clear')
                 self.flushBuffer
                 self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
-
+                puts
+                NimzoFileMaker.new(@paths, @files, '          ')
+                puts
             elsif @action == 'delete'
                 system ('clear')
                 self.flushBuffer
                 self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
 
             end
-
-            # @todo REMOVE THIS LATER
-            puts
-            @paths.each { |value| puts "          \x1B[0m#{value}\x1B[0m" }
-            @files.each { |value| puts "          \x1B[90m#{value}\x1B[0m" }
-            puts
 
         end
     end
