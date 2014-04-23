@@ -71,9 +71,11 @@ class NimzoCreateDelete
 
     end
 
-    # Scans the route to the controller and creates all the files (that don't exist yet) along the way.
-    # Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
-    def scanRoute
+    # IF CREATE: Scans the route and creates all the files (that don't exist yet) along the way.
+    #            Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
+    # IF DELETE: Scans ONLY the last directory in the route and delete all the files (if they exist).
+    # @param route
+    def scanRoute(route = @route)
 
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
@@ -88,7 +90,7 @@ class NimzoCreateDelete
         subDir = ''
         filenameUpperCase = ''
 
-        @route.split('/').each { |routeParameter|
+        route.split('/').each { |routeParameter|
 
             routeCount = routeCount + 1
             subDir = "#{subDir}#{routeParameter}/"
@@ -98,7 +100,7 @@ class NimzoCreateDelete
 
             # If this is a 'delete' run, only spring to life once we're on the last loop (if that makes sense).
             # We don't want to be deleting recursively..
-            if @action == 'delete' && routeCount < @route.split('/').size
+            if @action == 'delete' && routeCount < route.split('/').size
                 next
             end
 
@@ -163,9 +165,9 @@ class NimzoCreateDelete
         }
         if @paths.empty? && @files.empty?
             if @action == 'create'
-                self.error("The route: \x1B[35m#{@route}\x1B[0m already exists..")
+                self.error("The route: \x1B[35m#{route}\x1B[0m already exists..")
             elsif @action == 'delete'
-                self.error("The route: \x1B[35m#{@route}\x1B[0m doesn't exist..")
+                self.error("The route: \x1B[35m#{route}\x1B[0m doesn't exist..")
             end
         else
             if @action == 'create'
