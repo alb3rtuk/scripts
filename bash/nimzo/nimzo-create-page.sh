@@ -7,4 +7,4 @@ controllerName=$1
 
 validateControllerName
 
-ruby ~/Repos/Scripts/ruby/nimzo/nimzo-remove-delete.rb ${controllerName} app create
+ruby ~/Repos/Scripts/ruby/nimzo/nimzo-create-remove.rb ${controllerName} app create
