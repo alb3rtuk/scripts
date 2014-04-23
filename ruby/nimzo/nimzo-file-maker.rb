@@ -116,14 +116,14 @@ class NimzoFileMaker
     end
 
     # Creates the Controller.
-    # @param file
-    def createFileController(file, route)
+    # @param filename
+    def createFileController(filename, route)
         className = ''
         route.split('/').each { |routeParameter|
             routeParameter[0] = routeParameter.upcase[0..0]
             className = "#{className}#{routeParameter}"
         }
-        File.open(file, 'w') { |file|
+        File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
             file.puts "namespace #{@namespace};"
@@ -144,25 +144,27 @@ class NimzoFileMaker
     end
 
     # Creates the .js (MIN) file.
-    # @param file
-    def createFileJsMin(file, route)
+    # @param filename
+    def createFileJsMin(filename, route)
         jsObjectName = ''
         route.split('/').each { |routeParameter|
-            jsObjectName = "#{jsObjectName}#{routeParameter.capitalize}"
+            routeParameter[0] = routeParameter.upcase[0..0]
+            jsObjectName = "#{jsObjectName}#{routeParameter}"
         }
-        File.open(file, 'w') { |file|
+        File.open(filename, 'w') { |file|
             file.write "var #{@namespace}_#{jsObjectName}={}"
         }
     end
 
     # Creates the .js (DEV) file.
-    # @param file
-    def createFileJs(file, route)
+    # @param filename
+    def createFileJs(filename, route)
         jsObjectName = ''
         route.split('/').each { |routeParameter|
-            jsObjectName = "#{jsObjectName}#{routeParameter.capitalize}"
+            routeParameter[0] = routeParameter.upcase[0..0]
+            jsObjectName = "#{jsObjectName}#{routeParameter}"
         }
-        File.open(file, 'w') { |file|
+        File.open(filename, 'w') { |file|
             file.puts "var #{@namespace}_#{jsObjectName} = {"
             file.write '}'
         }
@@ -174,15 +176,16 @@ class NimzoFileMaker
     end
 
     # Creates the PHPUnit Test.
-    # @param file
-    def createFileTest(file, route)
+    # @param filename
+    def createFileTest(filename, route)
         className = ''
         group = @namespace
         route.split('/').each { |routeParameter|
-            className = "#{className}#{routeParameter.capitalize}"
+            routeParameter[0] = routeParameter.upcase[0..0]
+            className = "#{className}#{routeParameter}"
         }
         className = "#{className}Test"
-        File.open(file, 'w') { |file|
+        File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
             file.puts "namespace #{@namespace};"
@@ -192,7 +195,8 @@ class NimzoFileMaker
             file.puts '/**'
             file.puts " * @group #{group}"
             route.split('/').each { |routeParameter|
-                group = "#{group}/#{routeParameter.capitalize}"
+                routeParameter[0] = routeParameter.upcase[0..0]
+                group = "#{group}/#{routeParameter}"
                 file.puts " * @group #{group}"
             }
             file.puts " * @package #{@namespace}"
@@ -226,6 +230,6 @@ class NimzoFileMaker
 
     # Creates the View.
     # @param file
-    def createFileView(file, route)
+    def createFileView(filename, route)
     end
 end
