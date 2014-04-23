@@ -39,14 +39,12 @@ class NimzoCreateDelete
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
         unless inArray(%w(app modal overlay system widget), @type)
-            @errors = true
             self.error("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
         end
 
         # Make sure the particular action is valid.
         # This error cannot be reached through incorrect user input.
         unless inArray(%w(create delete), @action)
-            @errors = true
             self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
         end
 
@@ -58,7 +56,6 @@ class NimzoCreateDelete
 
         # Make sure that ALL characters within the route are AlphaNumeric.
         unless isAlphaNumeric(@route.gsub('/', ''))
-            @errors = true
             self.error("Route parameters must be alphanumeric and seperated by slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
         end
 
@@ -83,7 +80,8 @@ class NimzoCreateDelete
             "#{@pathToTest}controllers/",
             "#{@pathToPhp}controllers/",
             "#{@pathToPhp}views/",
-            "#{@pathToDev}"
+            "#{@pathToDev}",
+            "#{@pathToMin}"
         ]
 
         routeCount = 0
@@ -110,6 +108,7 @@ class NimzoCreateDelete
             pseudoFiles = Array.new
 
             baseDirs.each { |dir|
+
                 dir = "#{dir}#{subDir}"
 
                 # If deleting, this checks if there are any FURTHER files/directories deeper in the 'route'.
@@ -136,15 +135,19 @@ class NimzoCreateDelete
                         when "#{@pathToDev}#{subDir}"
                             files.push("#{dir}#{filenameLowerCase}.less")
                             files.push("#{dir}#{filenameLowerCase}.js")
+                        when "#{@pathToMin}#{subDir}"
+                            files.push("#{dir}#{filenameLowerCase}.min.js")
                         when "#{@pathToTest}controllers/#{subDir}"
                             files.push("#{dir}#{filenameUpperCase}Test.php")
                         else
-                            @errors = true
                             self.error('Path not found.')
                     end
                     files.each { |file|
-                        if (@action == 'create' && !File.file?(file)) || (@action == 'delete' && File.file?(file))
+                        if (@action == 'create' && !File.file?(file)) || ((@action == 'delete' && File.file?(file)) || (@action == 'delete' && File.directory?(File.dirname(file))))
+
                             pseudoFiles.push(file)
+                            pseudoPaths.push(File.dirname(file))
+
                             fileCount = 0
                             fileDisplay = ''
                             file.split('/').each { |filePart|
@@ -162,6 +165,10 @@ class NimzoCreateDelete
                     }
                 end
             }
+
+            pseudoPaths.uniq
+            pseudoFiles.uniq
+
             unless pseudoPaths.empty?
                 @paths.concat(pseudoPaths)
             end
@@ -199,20 +206,20 @@ class NimzoCreateDelete
                 if File.directory?(subFile)
                     unless inArray(@paths, subFile)
                         subPaths.push(subFile)
-                        pseudoOutput.push("          \x1B[90m#{subFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
                     end
                 elsif File.file?(subFile)
                     unless inArray(@files, subFile)
                         subFiles.push(subFile)
-                        pseudoOutput.push("          \x1B[0m#{subFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
                     end
                 end
             }
 
-            unless pseudoOutput.empty?
+            unless subPaths.empty? && subFiles.empty?
+                subPaths.each { |path| pseudoOutput.push("          \x1B[90m#{path.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m") }
+                subFiles.each { |file| pseudoOutput.push("          \x1B[0m#{file.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m") }
                 @paths.concat(subPaths)
                 @files.concat(subFiles)
-                @output.push("\x1B[41m DELETE \x1B[0m\x1B[90m  The following files/directories will \x1B[0m\x1B[41m ALSO \x1B[0m\x1B[90m be deleted:\n")
+                @output.push("\x1B[41m NOTICE \x1B[0m\x1B[90m  The following files/directories will also be deleted:\n")
                 @output.concat(pseudoOutput)
                 @output.push('')
             end
@@ -227,45 +234,42 @@ class NimzoCreateDelete
     # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
     # the script goes straight to run & subsequently displays output & dies.
     # @param text
-    # @param exit
-    def error(text = '', exit = true)
-        @errors = true
+    def error(text = '')
         @output.push("\x1B[41m ERROR \x1B[0m #{text}")
-        if exit
-            @errors = true
-            self.flushBuffer
-        end
+        self.flushBuffer(true)
     end
 
     # The final function which does all the processing. If errors are present, no processing will be done.
     def run
-        unless @errors
-            if @action == 'create'
-                system ('clear')
-                self.flushBuffer
-                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
-                puts
-                NimzoFileMaker.new(@paths, @files, '          ')
-                puts
-            elsif @action == 'delete'
-                system ('clear')
-                self.flushBuffer
-                self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
-
-                unless @files.empty?
-                    @files.each { |file|
-                        puts file
-                    }
-                end
-
-                unless @paths.empty?
-                    @paths.each { |path|
-                        puts path
-                    }
-                end
-
+        if @action == 'create'
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            puts
+            NimzoFileMaker.new(@paths, @files, '          ')
+            puts
+        elsif @action == 'delete'
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            unless @files.empty?
+                @files.each { |file|
+                    @output.push("\x1B[31m Deleted: #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    # Remove file from Git.
+                    system ("cd #{$PATH_TO_REPO}")
+                    system ("git rm --cached #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
+                    FileUtils.rm_rf(file)
+                    FileUtils.rm_rf(File.dirname(file))
+                }
             end
-
+            unless @paths.empty?
+                @paths.each { |path|
+                    @output.push("\x1B[31m Deleted: #{path.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    FileUtils.rm_rf(path)
+                }
+            end
+            @output.push('')
+            self.flushBuffer
         end
     end
 
@@ -280,15 +284,14 @@ class NimzoCreateDelete
     end
 
     # Flushes the output buffer.
-    def flushBuffer
+    def flushBuffer(exit = false)
         unless @output.empty?
             puts
             @output.each { |message| puts "#{message}\x1B[0m" }
-            if @errors
+            if exit
                 self.abandonShip
-            else
-                @output = Array.new
             end
+            @output = Array.new
         end
     end
 

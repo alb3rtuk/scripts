@@ -32,10 +32,10 @@ class NimzoFileMaker
         unless path.kind_of?(String)
             exitScript("Expected String, you passed (#{path.class})")
         end
-        puts "          \x1B[0m#{path}\x1B[0m"
-
-        # @todo FILE CREATE CODE goes here!
-
+        unless File.directory?(path)
+            puts " \x1B[32mCreated:\x1B[0m \x1B[90m#{path.sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+            FileUtils::mkdir_p(path)
+        end
     end
 
     # @param files
@@ -45,11 +45,12 @@ class NimzoFileMaker
         end
         unless files.empty?
             files.each { |file|
-                puts "          \x1B[90m#{file}\x1B[0m"
-
-
-                # @todo FILE CREATE CODE goes here!
-
+                puts " \x1B[32mCreated:\x1B[0m \x1B[0m#{file.sub("#{$PATH_TO_REPO}/", '')[0..-1]}\x1B[0m"
+                self.createPath(File.dirname(file))
+                File::new(file, 'w')
+                # Add file to Git.
+                system ("cd #{$PATH_TO_REPO}")
+                system ("git add #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
             }
         end
     end
