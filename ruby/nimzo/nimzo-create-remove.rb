@@ -34,6 +34,11 @@ class NimzoCreateRemove
 
         if @type == 'lib'
             self.processClass
+        elsif @type == 'script'
+
+            puts 'Code for creating SCRIPT goes here!'
+            exit
+
         else
             self.determineRoute
             self.processRoute
@@ -46,7 +51,7 @@ class NimzoCreateRemove
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app lib modal overlay system widget), @type)
+        unless inArray(%w(app lib script modal overlay system widget), @type)
             self.error("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
         end
 
@@ -70,8 +75,8 @@ class NimzoCreateRemove
             @route = "#{routeSplit[0].downcase}/#{className}"
 
             # Make sure namespace doesn't start with following values, these are just confusing.
-            if inArray(%w(bin lib), routeSplit[0], true) &&
-                self.error("Namespace shouldn't be: \x1B[33m#{routeSplit[0]}\x1B[0m")
+            if inArray(%w(bin lib script scripts), routeSplit[0], true) &&
+                self.error("Namespace shouldn't be \x1B[33m#{routeSplit[0]}\x1B[0m due to possible confusion.")
             end
 
             # Make sure that ALL characters within the route are AlphaNumeric.
@@ -82,8 +87,8 @@ class NimzoCreateRemove
         else
             # Make sure route doesn't start with API or AJAX
             routeSplit = @route.split('/')
-            if inArray(%w(api ajax), routeSplit[0], true) &&
-                self.error("Request route cannot start with: \x1B[33m#{routeSplit[0]}\x1B[0m")
+            if inArray(%w(api ajax script), routeSplit[0], true) &&
+                self.error("Request route cannot start with \x1B[33m#{routeSplit[0]}\x1B[0m as these are parameters the system uses.")
             end
 
             # Make sure that ALL characters within the route are AlphaNumeric.
