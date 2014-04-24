@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# This is the common script for the following 2 files:
+#
+# nimzo-create.sh
+# nimzo-remove.sh
+#
+# NO OTHER files should include this!
+
+cd ~/Repos/Nimzo/
+
 # Make type lowercase.
 type=`echo ${type} | tr '[:upper:]' '[:lower:]'`
 

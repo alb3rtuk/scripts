@@ -69,7 +69,6 @@ class NimzoRewriter
         unless File.file?(filename)
             FileUtils::mkdir_p(File.dirname(filename))
             File::new(filename, 'w')
-            system ("cd #{$PATH_TO_REPO}")
             system ("git add #{filename.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
         end
         File.open(filename, 'w') { |file|
