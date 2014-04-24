@@ -6,15 +6,15 @@ class NimzoRewriter
     # Determines the route on instantion.
     def initialize(type)
 
+        @type = type.downcase
+        @routes = Array.new
+
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app modal overlay system widget), type)
+        unless inArray(%w(app modal overlay system widget), @type)
             puts("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
             exit
         end
-
-        @type = type.downcase
-        @routes = Array.new
 
         # Get all the routes (for this content type).
         paths = Dir.glob("#{$PATH_TO_PHP}#{@type}/controllers/**/")
