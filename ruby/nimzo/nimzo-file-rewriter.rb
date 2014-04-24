@@ -73,7 +73,7 @@ class NimzoRewriter
             system ("git add #{filename.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
         end
         File.open(filename, 'w') { |file|
-            file.puts '<?php '
+            file.puts '<?php'
             file.puts ''
             file.puts 'namespace Ref;'
             file.puts ''
