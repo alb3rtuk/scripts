@@ -31,8 +31,14 @@ class NimzoCreateRemove
         @files = Array.new
 
         self.validateParameters
-        self.scanRoute
-        self.run
+
+        if @type == 'lib'
+            puts @route
+            exit
+        else
+            self.determineRoute
+            self.processRoute
+        end
 
     end
 
@@ -41,8 +47,8 @@ class NimzoCreateRemove
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app modal overlay system widget), @type)
-            self.error("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
+        unless inArray(%w(app lib modal overlay system widget), @type)
+            self.error("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
         end
 
         # Make sure the particular action is valid.
@@ -51,23 +57,38 @@ class NimzoCreateRemove
             self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
         end
 
-        # Make sure route doesn't start with API or AJAX.
-        routeSplit = @route.split('/')
-        if inArray(%w(api ajax), routeSplit[0], true)
-            self.error("Request route cannot start with: \x1B[33m#{routeSplit[0]}\x1B[0m")
-        end
-
-        # Make sure that ALL characters within the route are AlphaNumeric.
-        unless isAlphaNumeric(@route.gsub('/', ''))
-            self.error("Route parameters must be alphanumeric and seperated by slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
-        end
-
-        # Make sure that the FIRST character of ANY route parameter is a letter, not a number.
-        @route.split('/').each { |routeParameter|
-            if (routeParameter[0, 1] =~ /[A-Za-z]/) != 0
-                self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
+        if @type == 'lib'
+            # Make sure the route consists of a parent directory and a classname
+            unless @route.include?('/')
+                self.error("You must specify a \x1B[33mfolder\x1B[0m and a \x1B[33mclassname\x1B[0m (IE: core/AjaxRequest)")
             end
-        }
+
+            # If more than 1 slash is present, this cuts it down to only 1. Everything after the 2nd will be ommited.
+            # Also capitalizes the 2nd part & removes file extension (if exists)
+            routeSplit = @route.split('/')
+            className = File.basename(routeSplit[1], File.extname(routeSplit[1]))
+            className[0] = className.upcase[0..0]
+            @route = "#{routeSplit[0].downcase}/#{className}"
+
+        else
+            # Make sure route doesn't start with API or AJAX
+            routeSplit = @route.split('/')
+            if inArray(%w(api ajax), routeSplit[0], true) &&
+                self.error("Request route cannot start with: \x1B[33m#{routeSplit[0]}\x1B[0m")
+            end
+
+            # Make sure that ALL characters within the route are AlphaNumeric.
+            unless isAlphaNumeric(@route.gsub('/', ''))
+                self.error("Route parameters must be alphanumeric and seperated by slashes ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
+            end
+
+            # Make sure that the FIRST character of ANY route parameter is a letter, not a number.
+            @route.split('/').each { |routeParameter|
+                if (routeParameter[0, 1] =~ /[A-Za-z]/) != 0
+                    self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
+                end
+            }
+        end
 
     end
 
@@ -76,7 +97,7 @@ class NimzoCreateRemove
     # IF REMOVE: Scans ONLY the last directory in the route and removes all the files recursively (if they exist).
     # @param route
 
-    def scanRoute(route = @route)
+    def determineRoute(route = @route)
 
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
@@ -230,21 +251,8 @@ class NimzoCreateRemove
         end
     end
 
-    # Log something to the output buffer.
-    def output(text = '')
-        @output.push(text)
-    end
-
-    # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
-    # the script goes straight to run & subsequently displays output & dies.
-    # @param text
-    def error(text = '')
-        @output.push("\x1B[41m ERROR \x1B[0m #{text}")
-        self.flushBuffer(true)
-    end
-
     # The final function which does all the processing. If errors are present, no processing will be done.
-    def run
+    def processRoute
         if @action == CREATE
             system ('clear')
             self.flushBuffer
@@ -280,6 +288,15 @@ class NimzoCreateRemove
         end
     end
 
+    # Aborts the script.
+    def abandonShip(abortTxt = "        \x1B[90mScript aborted.\x1B[0m")
+        unless abortTxt.nil?
+            puts abortTxt
+        end
+        puts
+        exit
+    end
+
     # Confirmation message. Returns and continues script on 'y' or 'Y'.. exits on anythng else.
     def confirm(confirmTxt = "\x1B[90mContinue? [y/n]\x1B[0m => ?", abortTxt = nil)
         STDOUT.flush
@@ -289,6 +306,15 @@ class NimzoCreateRemove
             self.abandonShip(abortTxt)
         end
     end
+
+    # If an error occurs, it's added to the @OUTPUT array and if 'exit' flag set to TRUE,
+    # the script goes straight to run & subsequently displays output & dies.
+    # @param text
+    def error(text = '')
+        @output.push("\x1B[41m ERROR \x1B[0m #{text}")
+        self.flushBuffer(true)
+    end
+
 
     # Flushes the output buffer.
     def flushBuffer(exit = false)
@@ -302,13 +328,9 @@ class NimzoCreateRemove
         end
     end
 
-    # Aborts the script.
-    def abandonShip(abortTxt = "        \x1B[90mScript aborted.\x1B[0m")
-        unless abortTxt.nil?
-            puts abortTxt
-        end
-        puts
-        exit
+    # Log something to the output buffer.
+    def output(text = '')
+        @output.push(text)
     end
 
 end
