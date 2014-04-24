@@ -74,6 +74,11 @@ class NimzoCreateRemove
                 self.error("Namespace shouldn't be: \x1B[33m#{routeSplit[0]}\x1B[0m")
             end
 
+            # Make sure that ALL characters within the route are AlphaNumeric.
+            unless isAlphaNumeric(@route.gsub('/', ''))
+                self.error("\x1B[33mFolder\x1B[0m and a \x1B[33mclassname\x1B[0m must be alphanumeric and seperated by a slash ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
+            end
+
         else
             # Make sure route doesn't start with API or AJAX
             routeSplit = @route.split('/')
