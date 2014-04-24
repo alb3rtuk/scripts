@@ -170,7 +170,7 @@ class NimzoCreateRemove
 
             # If this is a 'remove' run, only spring to life once we're on the last loop (if that makes sense).
             # We don't want to be deleting recursively..
-            if @action == REMOVE && routeCount < route.split('/').size
+            if @action == REMOVE && routeCount < @route.split('/').size
                 next
             end
 
@@ -254,9 +254,9 @@ class NimzoCreateRemove
         }
         if @paths.empty? && @files.empty?
             if @action == CREATE
-                self.error("The route: \x1B[35m#{route}\x1B[0m already exists..")
+                self.error("The route: \x1B[35m#{@route}\x1B[0m already exists..")
             elsif @action == REMOVE
-                self.error("The route: \x1B[35m#{route}\x1B[0m doesn't exist..")
+                self.error("The route: \x1B[35m#{@route}\x1B[0m doesn't exist..")
             end
         else
             if @action == CREATE
