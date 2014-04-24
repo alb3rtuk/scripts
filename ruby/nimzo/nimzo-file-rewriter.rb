@@ -32,33 +32,61 @@ class NimzoRewriter
 
     # Re-write import-*.less file.
     def rewriteLess
-        file = "#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less"
-        if File.file?(file)
-            File.open(file, 'w') { |file|
-                count = 0
-                @routes.each { |route|
-                    filename = ''
-                    route.split('/').each { |routeParameter|
-                        routeParameter[0] = routeParameter.upcase[0..0]
-                        filename = "#{filename}#{routeParameter}"
-                    }
-                    filename[0] = filename.downcase[0..0]
-                    importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
-                    count = count + 1
-                    if count < @routes.size
-                        file.puts importLess
-                    else
-                        file.write importLess
-                    end
-                }
-            }
+        filename = "#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less"
+        # If file doens't exist, create it and add it to Git.
+        unless File.file?(filename)
+            FileUtils::mkdir_p(filename)
+            File::new(filename, 'w')
+            system ("cd #{$PATH_TO_REPO}")
+            system ("git add #{filename.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
         end
+        File.open(filename, 'w') { |file|
+            count = 0
+            @routes.each { |route|
+                filename = ''
+                route.split('/').each { |routeParameter|
+                    routeParameter[0] = routeParameter.upcase[0..0]
+                    filename = "#{filename}#{routeParameter}"
+                }
+                filename[0] = filename.downcase[0..0]
+                importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
+                count = count + 1
+                if count < @routes.size
+                    file.puts importLess
+                else
+                    file.write importLess
+                end
+            }
+        }
     end
 
     # Re-write (App, Modal, Overlay, System, Widget) reference file.
     def rewriteReferences
+        className = @type
+        className[0] = className.upcase[0..0]
+        filename = "#{$PATH_TO_PHP}lib/ref/#{className}.php"
+        # If file doens't exist, create it and add it to Git.
+        unless File.file?(filename)
+            FileUtils::mkdir_p(File.dirname(filename))
+            File::new(filename, 'w')
+            system ("cd #{$PATH_TO_REPO}")
+            system ("git add #{filename.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
+        end
+        File.open(filename, 'w') { |file|
+            file.puts '<?php '
+            file.puts ''
+            file.puts 'namespace Ref;'
+            file.puts ''
+            file.puts '/**'
+            file.puts ' * @package Ref'
+            file.puts ' */'
+            file.puts "class #{className}"
+            file.puts '{'
+            @routes.each { |route|
+            }
+            file.write '}'
+        }
     end
-
 end
 
 if ARGV[0] == 'rewrite'
