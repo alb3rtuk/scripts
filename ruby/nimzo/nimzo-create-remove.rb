@@ -69,6 +69,11 @@ class NimzoCreateRemove
             className[0] = className.upcase[0..0]
             @route = "#{routeSplit[0].downcase}/#{className}"
 
+            # Make sure namespace doesn't start with following values, these are just confusing.
+            if inArray(%w(bin lib), routeSplit[0], true) &&
+                self.error("Namespace shouldn't be: \x1B[33m#{routeSplit[0]}\x1B[0m")
+            end
+
         else
             # Make sure route doesn't start with API or AJAX
             routeSplit = @route.split('/')
