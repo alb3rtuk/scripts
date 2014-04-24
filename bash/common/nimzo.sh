@@ -13,11 +13,12 @@ cd ~/Repos/Nimzo/
 type=`echo ${type} | tr '[:upper:]' '[:lower:]'`
 
 # Check that type exists.
-if [[ ${type} != "lib" ]] && [[ ${type} != "app" ]] && [[ ${type} != "modal" ]] && [[ ${type} != "overlay" ]] && [[ ${type} != "system" ]] && [[ ${type} != "widget" ]]; then
+if [[ ${type} != "lib" ]] && [[ ${type} != "script" ]] && [[ ${type} != "app" ]] && [[ ${type} != "modal" ]] && [[ ${type} != "overlay" ]] && [[ ${type} != "system" ]] && [[ ${type} != "widget" ]]; then
     echo
     message red "ERROR" "You must specify what you want to create. Valid parameters are:"
     echo
     echo "        \033[36mlib\033[0m"
+    echo "        \033[36mscript\033[0m"
     echo "        \033[33mapp\033[0m"
     echo "        \033[33mmodal\033[0m"
     echo "        \033[33moverlay\033[0m"
@@ -28,7 +29,7 @@ if [[ ${type} != "lib" ]] && [[ ${type} != "app" ]] && [[ ${type} != "modal" ]] 
 fi
 
 # Check that route exists.
-if [[ ${type} == "lib" ]]; then
+if [[ ${type} == "lib" ]] || [[ ${type} == "script" ]]; then
     if [[ ${route} == "" ]]; then
         echo
         message red "ERROR" "You must specify a 'folder/classname'. Valid parameters are:"

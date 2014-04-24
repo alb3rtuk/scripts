@@ -12,7 +12,7 @@ class NimzoRewriter
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
         unless inArray(%w(app modal overlay system widget), @type)
-            puts("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
+            puts("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
             exit
         end
 

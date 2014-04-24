@@ -5,13 +5,18 @@ require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo-file-rewriter.rb'
 
 class NimzoCreateRemove
 
+    LIB = 'lib'
     CREATE = 'create'
     REMOVE = 'remove'
+    SCRIPT = 'script'
+
 
     # The point of entry!
     # @param route
     # @param type
     # @param action
+
+
     def initialize(type, route, action)
 
         @type = type.downcase
@@ -32,13 +37,8 @@ class NimzoCreateRemove
 
         self.validateParameters
 
-        if @type == 'lib'
+        if @type == LIB || @type == SCRIPT
             self.processClass
-        elsif @type == 'script'
-
-            puts 'Code for creating SCRIPT goes here!'
-            exit
-
         else
             self.determineRoute
             self.processRoute
@@ -61,12 +61,16 @@ class NimzoCreateRemove
             self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
         end
 
-        if @type == 'lib'
+        if @type == LIB || @type == SCRIPT
+
             # Make sure the route consists of a parent directory and a classname
             unless @route.include?('/')
                 self.error("You must specify a \x1B[33mfolder\x1B[0m and a \x1B[33mclassname\x1B[0m (IE: core/AjaxRequest)")
             end
 
+            # Right now I'm only allowing the creation of scripts 1 folder deep.
+            # Although the PHP supports infinite folders, I want to keep it from getting too confusing.
+            #
             # If more than 1 slash is present, this cuts it down to only 1. Everything after the 2nd will be ommited.
             # Also capitalizes the 2nd part & removes file extension (if exists)
             routeSplit = @route.split('/')
@@ -74,9 +78,9 @@ class NimzoCreateRemove
             className[0] = className.upcase[0..0]
             @route = "#{routeSplit[0].downcase}/#{className}"
 
-            # Make sure namespace doesn't start with following values, these are just confusing.
+            # Make sure folder doesn't start with following values. These will just create confusion.
             if inArray(%w(bin lib script scripts), routeSplit[0], true) &&
-                self.error("Namespace shouldn't be \x1B[33m#{routeSplit[0]}\x1B[0m due to possible confusion.")
+                self.error("Namespace/preceeding folder shouldn't be \x1B[33m#{routeSplit[0]}\x1B[0m due to possible confusion.")
             end
 
             # Make sure that ALL characters within the route are AlphaNumeric.
@@ -110,8 +114,17 @@ class NimzoCreateRemove
     def processClass
 
         routeSplit = @route.split('/')
-        filename = "#{$PATH_TO_PHP}lib/#{routeSplit[0]}/#{routeSplit[1]}.php"
-        filenameTest = "#{$PATH_TO_TESTS}lib/#{routeSplit[0]}/#{routeSplit[1]}Test.php"
+
+        if @type == LIB
+            filename = "#{$PATH_TO_PHP}lib/#{routeSplit[0]}/#{routeSplit[1]}.php"
+            filenameTest = "#{$PATH_TO_TESTS}lib/#{routeSplit[0]}/#{routeSplit[1]}Test.php"
+        elsif @type == SCRIPT
+            filename = "#{$PATH_TO_PHP}script/#{routeSplit[0]}/#{routeSplit[1]}.php"
+            filenameTest = "#{$PATH_TO_TESTS}script/#{routeSplit[0]}/#{routeSplit[1]}Test.php"
+        else
+            self.error('Type is not supported.')
+        end
+
 
         if @action == CREATE
 

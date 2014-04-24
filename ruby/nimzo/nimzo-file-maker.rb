@@ -11,10 +11,14 @@ class NimzoFileMaker
     TYPE_TEST = 'test'
     TYPE_VIEW = 'view'
 
+    LIB = 'lib'
+    SCRIPT = 'script'
+
     # @param type
     # @param paths
     # @param files
     # @param space
+
     def initialize(type = '', paths = Array.new, files = Array.new, space = '')
 
         @type = type.downcase
@@ -23,14 +27,14 @@ class NimzoFileMaker
         @space = space
         @namespace = ''
 
-        if @type != 'lib'
+        if @type != LIB && @type != SCRIPT
             @namespace = @type.capitalize
         end
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app lib modal overlay system widget), @type)
-            puts("\x1B[33m#{@type}\x1B[0m is not a valid controller type. There is an error in your bash script, not your input.")
+        unless inArray(%w(app lib modal overlay script system widget), @type)
+            puts("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
             exit
         end
 
@@ -93,12 +97,10 @@ class NimzoFileMaker
         if file.include? "#{$PATH_TO_PHP}#{@type}/controllers/"
             self.createFileController(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/controllers/", ''))
             return
-        end
-        if file.include? "#{$PATH_TO_MIN}#{@type}"
+        elsif file.include? "#{$PATH_TO_MIN}#{@type}"
             self.createFileJsMin(file, File.dirname(file).sub("#{$PATH_TO_MIN}#{@type}", ''))
             return
-        end
-        if file.include? "#{$PATH_TO_DEV}#{@type}"
+        elsif file.include? "#{$PATH_TO_DEV}#{@type}"
             if file.reverse[0..2].reverse == '.js'
                 self.createFileJs(file, File.dirname(file).sub("#{$PATH_TO_DEV}#{@type}", ''))
                 return
@@ -106,24 +108,22 @@ class NimzoFileMaker
                 self.createFileLess(file, File.dirname(file).sub("#{$PATH_TO_DEV}#{@type}", ''))
                 return
             end
-        end
-        if file.include? "#{$PATH_TO_TESTS}#{@type}/controllers/"
+        elsif file.include? "#{$PATH_TO_TESTS}#{@type}/controllers/"
             self.createFileTest(file, File.dirname(file).sub("#{$PATH_TO_TESTS}#{@type}/controllers/", ''))
             return
-        end
-        if file.include? "#{$PATH_TO_PHP}#{@type}/views/"
+        elsif file.include? "#{$PATH_TO_PHP}#{@type}/views/"
             self.createFileView(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/views/", ''))
             return
-        end
-        if file.include? "#{$PATH_TO_PHP}lib/"
+        elsif (file.include? "#{$PATH_TO_PHP}#{LIB}/") || (file.include? "#{$PATH_TO_PHP}#{SCRIPT}/")
             self.createFileLib(file)
             return
-        end
-        if file.include? "#{$PATH_TO_TESTS}lib/"
+        elsif (file.include? "#{$PATH_TO_TESTS}#{LIB}/") || (file.include? "#{$PATH_TO_TESTS}#{SCRIPT}/")
             self.createFileLibTest(file)
             return
+        else
+            exitScript("Couldn't determine file type. Please note that the file '\x1B[33m#{file}\x1B[0m' has already been created and will need to be deleted manually.")
         end
-        exitScript("Couldn't determine file type. Please note that the file '\x1B[33m#{file}\x1B[0m' has already been created and will need to be deleted manually.")
+
     end
 
     # Creates the Controller.
@@ -321,18 +321,22 @@ class NimzoFileMaker
     # @param filename
     def getLibFileData(filename)
         fileSplit = nil
-        if filename.include? "#{$PATH_TO_PHP}lib/"
-            fileSplit = filename.sub("#{$PATH_TO_PHP}lib/", '')
-        elsif filename.include? "#{$PATH_TO_TESTS}lib/"
-            fileSplit = filename.sub("#{$PATH_TO_TESTS}lib/", '')
+        if filename.include? "#{$PATH_TO_PHP}#{@type}/"
+            fileSplit = filename.sub("#{$PATH_TO_PHP}#{@type}/", '')
+        elsif filename.include? "#{$PATH_TO_TESTS}#{@type}/"
+            fileSplit = filename.sub("#{$PATH_TO_TESTS}#{@type}/", '')
         else
             exitScript('Filesplit couldn\'t determine file type properly. This statement should never be reached.')
         end
         fileSplit = fileSplit.split('/')
-        if fileSplit[0].downcase != 'core'
-            namespace = fileSplit[0].capitalize
-        else
-            namespace = nil
+        if @type == LIB
+            if fileSplit[0].downcase != 'core'
+                namespace = fileSplit[0].capitalize
+            else
+                namespace = nil
+            end
+        elsif @type == SCRIPT
+            namespace = 'Script'
         end
         className = File.basename(fileSplit[1], File.extname(fileSplit[1]))
         className[0] = className.upcase[0..0]
