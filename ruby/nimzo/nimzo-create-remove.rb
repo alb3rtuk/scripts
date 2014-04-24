@@ -33,8 +33,7 @@ class NimzoCreateRemove
         self.validateParameters
 
         if @type == 'lib'
-            puts @route
-            exit
+            self.processClass
         else
             self.determineRoute
             self.processRoute
@@ -92,12 +91,49 @@ class NimzoCreateRemove
 
     end
 
+    # Creates a class within the /lib directory + also creates the UNIT Test boiler plate.
+    def processClass
+
+        routeSplit = @route.split('/')
+        filename = "#{$PATH_TO_PHP}lib/#{routeSplit[0]}/#{routeSplit[1]}.php"
+        filenameTest = "#{$PATH_TO_TESTS}lib/#{routeSplit[0]}/#{routeSplit[1]}Test.php"
+
+        if @action == CREATE
+
+            # Make sure the files don't already exist.
+            # The last thing we want to do is overwrite files.
+            if File.file?(filename)
+                self.error("File already exists: \x1B[33m#{filename}\x1B[0m")
+                exit
+            elsif File.file?(filenameTest)
+                self.error("File already exists: \x1B[33m#{filenameTest}\x1B[0m")
+                exit
+            end
+
+            @files.push(filename)
+            @files.push(filenameTest)
+            @output.push("\x1B[42m CREATE \x1B[0m  Determining files/directories which need to be created:\n")
+            @output.push("          \x1B[33m#{filename.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            @output.push("          \x1B[33m#{filenameTest.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m\n")
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            puts
+            NimzoFileMaker.new(@type, @paths, @files, '          ')
+            puts
+        elsif @action == REMOVE
+
+            # @todo FINISH THIS!
+            puts 'Lib REMOVE code goes here!'
+            exit
+
+        end
+    end
+
     # IF CREATE: Scans the route and creates all the files (that don't exist yet) along the way.
     #            Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
     # IF REMOVE: Scans ONLY the last directory in the route and removes all the files recursively (if they exist).
-    # @param route
-
-    def determineRoute(route = @route)
+    def determineRoute
 
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
@@ -114,7 +150,7 @@ class NimzoCreateRemove
         subDirs = Array.new
         filenameUpperCase = ''
 
-        route.split('/').each { |routeParameter|
+        @route.split('/').each { |routeParameter|
 
             routeCount = routeCount + 1
             subDir = "#{subDir}#{routeParameter}/"
