@@ -249,61 +249,85 @@ class NimzoFileMaker
     # @param filename
     def createFileLib(filename)
         className, namespace = getLibFileData(filename)
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            unless namespace.nil?
+                file.puts "namespace #{namespace};"
+                file.puts ''
+            end
+            file.puts '/**'
+            if namespace.nil?
+                file.puts " * Class #{className}"
+            else
+                file.puts " * @package #{namespace}"
+            end
+            file.puts ' */'
+            file.puts "class #{className}"
+            file.puts '{'
+            file.write '}'
+        }
+    end
 
-        puts className
-        puts namespace
-        exit
-
-        #
-        #File.open(filename, 'w') { |file|
-        #    file.puts '<?php'
-        #    file.puts ''
-        #    unless namespace.nil?
-        #        file.puts "namespace #{namespace};"
-        #        file.puts ''
-        #        file.puts 'use PHPUnit_Framework_TestCase;'
-        #        file.puts ''
-        #    end
-        #    file.puts '/**'
-        #    file.puts " * @group #{group}"
-        #    route.split('/').each { |routeParameter|
-        #        routeParameter[0] = routeParameter.upcase[0..0]
-        #        group = "#{group}/#{routeParameter}"
-        #        file.puts " * @group #{group}"
-        #    }
-        #    file.puts " * @package #{@namespace}"
-        #    file.puts ' */'
-        #    file.puts "class #{className} extends PHPUnit_Framework_TestCase"
-        #    file.puts '{'
-        #    file.puts '    /**'
-        #    file.puts '     * @return void'
-        #    file.puts '     */'
-        #    file.puts '    public function setUp()'
-        #    file.puts '    {'
-        #    file.puts '    }'
-        #    file.puts ''
-        #    file.puts '    /**'
-        #    file.puts '     * @return void'
-        #    file.puts '     */'
-        #    file.puts '    public function tearDown()'
-        #    file.puts '    {'
-        #    file.puts '    }'
-        #    file.puts ''
-        #    file.puts '    /**'
-        #    file.puts '     * @return void'
-        #    file.puts '     */'
-        #    file.puts '    public function testSomething()'
-        #    file.puts '    {'
-        #    file.puts '        $this->assertTrue(true);'
-        #    file.puts '    }'
-        #    file.write '}'
-        #}
+    # Create test for file within /lib
+    # @param filename
+    def createFileLibTest(filename)
+        className, namespace = getLibFileData(filename)
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            unless namespace.nil?
+                file.puts "namespace #{namespace};"
+                file.puts ''
+                file.puts 'use PHPUnit_Framework_TestCase;'
+                file.puts ''
+            end
+            file.puts '/**'
+            if namespace.nil?
+                file.puts ' * @group Core'
+            else
+                file.puts " * @group   #{namespace}"
+                file.puts " * @package #{namespace}"
+            end
+            file.puts ' */'
+            file.puts "class #{className} extends PHPUnit_Framework_TestCase"
+            file.puts '{'
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function setUp()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function tearDown()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function testSomething()'
+            file.puts '    {'
+            file.puts '        $this->assertTrue(true);'
+            file.puts '    }'
+            file.write '}'
+        }
     end
 
     # Extracts namespace + className from lib filename. Used internally.
     # @param filename
     def getLibFileData(filename)
-        fileSplit = filename.sub("#{$PATH_TO_PHP}lib/", '')
+        fileSplit = nil
+        if filename.include? "#{$PATH_TO_PHP}lib/"
+            fileSplit = filename.sub("#{$PATH_TO_PHP}lib/", '')
+        elsif filename.include? "#{$PATH_TO_TESTS}lib/"
+            fileSplit = filename.sub("#{$PATH_TO_TESTS}lib/", '')
+        else
+            exitScript('Filesplit couldn\'t determine file type properly. This statement should never be reached.')
+        end
         fileSplit = fileSplit.split('/')
         if fileSplit[0].downcase != 'core'
             namespace = fileSplit[0].capitalize
@@ -313,11 +337,5 @@ class NimzoFileMaker
         className = File.basename(fileSplit[1], File.extname(fileSplit[1]))
         className[0] = className.upcase[0..0]
         return className, namespace
-    end
-
-    # Create test for file within /lib
-    # @param filename
-    def createFileLibTest(filename)
-        puts filename
     end
 end
