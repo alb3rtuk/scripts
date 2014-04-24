@@ -3,16 +3,19 @@ require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo.rb'
 require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo-file-maker.rb'
 require '/Users/Albert/Repos/Scripts/ruby/nimzo/nimzo-file-rewriter.rb'
 
-class NimzoCreateDelete
+class NimzoCreateRemove
+
+    CREATE = 'create'
+    REMOVE = 'remove'
 
     # The point of entry!
     # @param route
     # @param type
     # @param action
-    def initialize(route, type, action)
+    def initialize(type, route, action)
 
-        @route = route.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
         @type = type.downcase
+        @route = route.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
         @action = action.downcase
 
         @errors = false
@@ -44,7 +47,7 @@ class NimzoCreateDelete
 
         # Make sure the particular action is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(create delete), @action)
+        unless inArray([CREATE, REMOVE], @action)
             self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
         end
 
@@ -70,8 +73,9 @@ class NimzoCreateDelete
 
     # IF CREATE: Scans the route and creates all the files (that don't exist yet) along the way.
     #            Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
-    # IF DELETE: Scans ONLY the last directory in the route and delete all the files recursively (if they exist).
+    # IF REMOVE: Scans ONLY the last directory in the route and removes all the files recursively (if they exist).
     # @param route
+
     def scanRoute(route = @route)
 
         baseDirs = Array[
@@ -97,9 +101,9 @@ class NimzoCreateDelete
             filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
             filenameLowerCase = filenameUpperCase.downcase[0, 1] + filenameUpperCase[1..-1]
 
-            # If this is a 'delete' run, only spring to life once we're on the last loop (if that makes sense).
+            # If this is a 'remove' run, only spring to life once we're on the last loop (if that makes sense).
             # We don't want to be deleting recursively..
-            if @action == 'delete' && routeCount < route.split('/').size
+            if @action == REMOVE && routeCount < route.split('/').size
                 next
             end
 
@@ -113,7 +117,7 @@ class NimzoCreateDelete
 
                 # If deleting, this checks if there are any FURTHER files/directories deeper in the 'route'.
                 # If so, adds them to an Array for later checking.
-                if @action == 'delete'
+                if @action == REMOVE
                     subFilesFound = Dir.glob("#{dir}**/*")
                     unless subFilesFound.empty?
                         subDirs.concat(subFilesFound)
@@ -121,7 +125,7 @@ class NimzoCreateDelete
                 end
 
                 if dir == "#{@pathToPhp}helpers/#{subDir}" || dir == "#{@pathToTest}helpers/#{subDir}"
-                    if (@action == 'create' && !File.directory?(dir)) || (@action == 'delete' && File.directory?(dir))
+                    if (@action == CREATE && !File.directory?(dir)) || (@action == REMOVE && File.directory?(dir))
                         pseudoOutput.push("          \x1B[32m#{dir.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
                         pseudoPaths.push(dir)
                     end
@@ -143,7 +147,7 @@ class NimzoCreateDelete
                             self.error('Path not found.')
                     end
                     files.each { |file|
-                        if (@action == 'create' && !File.file?(file)) || ((@action == 'delete' && File.file?(file)) || (@action == 'delete' && File.directory?(File.dirname(file))))
+                        if (@action == CREATE && !File.file?(file)) || ((@action == REMOVE && File.file?(file)) || (@action == REMOVE && File.directory?(File.dirname(file))))
 
                             pseudoFiles.push(file)
                             pseudoPaths.push(File.dirname(file))
@@ -182,21 +186,21 @@ class NimzoCreateDelete
             end
         }
         if @paths.empty? && @files.empty?
-            if @action == 'create'
+            if @action == CREATE
                 self.error("The route: \x1B[35m#{route}\x1B[0m already exists..")
-            elsif @action == 'delete'
+            elsif @action == REMOVE
                 self.error("The route: \x1B[35m#{route}\x1B[0m doesn't exist..")
             end
         else
-            if @action == 'create'
+            if @action == CREATE
                 @output.unshift("\x1B[42m CREATE \x1B[0m  Determining files/directories which need to be created:\n")
-            elsif @action == 'delete'
-                @output.unshift("\x1B[41m DELETE \x1B[0m  Gathering files/directories for removal:\n")
+            elsif @action == REMOVE
+                @output.unshift("\x1B[41m REMOVE \x1B[0m  Gathering files/directories for removal:\n")
             end
         end
 
         # If we're deleting stuff, check if there are subPaths (past the point we're deleting from).
-        if @action == 'delete' && !subDirs.empty?
+        if @action == REMOVE && !subDirs.empty?
 
             subFiles = Array.new
             subPaths = Array.new
@@ -219,7 +223,7 @@ class NimzoCreateDelete
                 subFiles.each { |file| pseudoOutput.push("          \x1B[0m#{file.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m") }
                 @paths.concat(subPaths)
                 @files.concat(subFiles)
-                @output.push("\x1B[41m NOTICE \x1B[0m\x1B[90m  The following files/directories will also be deleted:\n")
+                @output.push("\x1B[41m NOTICE \x1B[0m\x1B[90m  The following files/directories will also be removed:\n")
                 @output.concat(pseudoOutput)
                 @output.push('')
             end
@@ -241,20 +245,20 @@ class NimzoCreateDelete
 
     # The final function which does all the processing. If errors are present, no processing will be done.
     def run
-        if @action == 'create'
+        if @action == CREATE
             system ('clear')
             self.flushBuffer
             self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             puts
             NimzoFileMaker.new(@type, @paths, @files, '          ')
             puts
-        elsif @action == 'delete'
+        elsif @action == REMOVE
             system ('clear')
             self.flushBuffer
-            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY DELETE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY REMOVE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             unless @files.empty?
                 @files.each { |file|
-                    @output.push("\x1B[31m Deleted: #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    @output.push("\x1B[31m Removed: #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
                     # Remove file from Git.
                     system ("cd #{$PATH_TO_REPO}")
                     system ("git rm -f #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
@@ -264,7 +268,7 @@ class NimzoCreateDelete
             end
             unless @paths.empty?
                 @paths.each { |path|
-                    @output.push("\x1B[31m Deleted: #{path.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    @output.push("\x1B[31m Removed: #{path.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
                     FileUtils.rm_rf(path)
                 }
             end
@@ -309,4 +313,4 @@ class NimzoCreateDelete
 
 end
 
-NimzoCreateDelete.new(ARGV[0], ARGV[1], ARGV[2])
+NimzoCreateRemove.new(ARGV[0], ARGV[1], ARGV[2])
