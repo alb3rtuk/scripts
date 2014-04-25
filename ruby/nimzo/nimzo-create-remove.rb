@@ -222,6 +222,7 @@ class NimzoCreateRemove
                     end
                 }
             end
+            system ('git add . --all')
             @output.push('')
             self.flushBuffer
         end
@@ -232,6 +233,9 @@ class NimzoCreateRemove
     def createLibScript
 
         routeSplit = @route.split('/')
+        filename = ''
+        filenameTest =''
+
 
         if @type == LIB
             filename = "#{$PATH_TO_PHP}lib/#{routeSplit[0]}/#{routeSplit[1]}.php"
@@ -269,9 +273,39 @@ class NimzoCreateRemove
             puts
         elsif @action == REMOVE
 
-            # @todo FINISH THIS!
-            puts 'REMOVE code goes here!'
-            exit
+            filesToDelete = Array.new
+
+            # Check that the files we're trying to delete actually exist.
+            if File.file?(filename)
+                filesToDelete.push(filename)
+                @output.push("          \x1B[33m#{filename.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            end
+            if File.file?(filenameTest)
+                filesToDelete.push(filenameTest)
+                @output.push("          \x1B[33m#{filenameTest.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            end
+
+            # If helper files don't exist, abandon ship!
+            if filesToDelete.empty?
+                self.error("The file \x1B[35m#{filename.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m doesn't exist.")
+            end
+
+            @output.push('')
+            @output.unshift("\x1B[41m REMOVE \x1B[0m  Gathering files/directories for removal:\n")
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY REMOVE \x1B[0m\x1B[90m all of these files. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            unless filesToDelete.empty?
+                filesToDelete.each { |file|
+                    @output.push("\x1B[31mRemoved:  #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    # Remove file from Git.
+                    system ("git rm -f #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
+                    FileUtils.rm_rf(file)
+                }
+            end
+            system ('git add . --all')
+            @output.push('')
+            self.flushBuffer
 
         end
 

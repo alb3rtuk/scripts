@@ -58,9 +58,9 @@ class NimzoFileMaker
         unless path.kind_of?(String)
             exitScript("Expected String, you passed (#{path.class})")
         end
-        unless File.directory?(path)
-            FileUtils::mkdir_p(path)
-            puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{path.sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+        unless File.directory?(File.dirname(path))
+            FileUtils::mkdir_p(File.dirname(path))
+            puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{File.dirname(path).sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
         end
     end
 
@@ -68,6 +68,9 @@ class NimzoFileMaker
     def createFiles(files = @files)
         unless files.kind_of?(Array)
             exitScript("Expected Array, you passed (#{files.class})")
+        end
+        unless files.empty?
+            files.each { |file| self.createPath(file) }
         end
         unless files.empty?
             files.each { |file| self.createFile(file) }
