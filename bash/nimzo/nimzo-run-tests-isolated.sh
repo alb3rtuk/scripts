@@ -6,6 +6,10 @@ group=$1
 
 cd ~/Repos/Nimzo/tests-php/
 
+echo
+message magenta "PHPUNIT" "Initializing tests..."
+echo
+
 if [[ ${group} == "" ]]; then
     phpunit \
      --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
