@@ -46,7 +46,7 @@ function message()
     else
         error "The color '$color' isn't defined."
     fi
-    echo "`tput setab "$colorDigit"` $title `tput setab 0` $message\033[0m"
+    echo "`tput setab "$colorDigit"` $title `tput setab 0` \033[0m$message\033[0m"
 }
 
 # Displays error message and dies.
