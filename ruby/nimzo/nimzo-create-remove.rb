@@ -17,11 +17,12 @@ class NimzoCreateRemove
     # @param action
 
 
-    def initialize(type, route, action)
+    def initialize(type, route, action, helper = nil)
 
         @type = type.downcase
         @route = route.sub(/^[\/]*/, '').sub(/(\/)+$/, '').squeeze('/')
         @action = action.downcase
+        @helper = helper
 
         @errors = false
         @output = Array.new
@@ -398,4 +399,4 @@ class NimzoCreateRemove
 
 end
 
-NimzoCreateRemove.new(ARGV[0], ARGV[1], ARGV[2])
+NimzoCreateRemove.new(ARGV[0], ARGV[1], ARGV[2], ARGV[3])
