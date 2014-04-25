@@ -184,12 +184,47 @@ class NimzoCreateRemove
             puts
         elsif @action == REMOVE
 
-            # @todo FINISH THIS!
-            puts 'REMOVE code goes here!'
-            exit
+            filesToDelete = Array.new
 
+            # Check that the helper files we're trying to delete exist.
+            if File.file?(helperFile)
+                filesToDelete.push(helperFile)
+                @output.push("          \x1B[33m#{helperFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            end
+            if File.file?(helperFileTest)
+                filesToDelete.push(helperFileTest)
+                @output.push("          \x1B[33m#{helperFileTest.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            end
+
+            # If helper files don't exist, abandon ship!
+            if filesToDelete.empty?
+                self.error("The helper \x1B[35m#{@helper}\x1B[0m doesn't exist for \x1B[44m #{@type.capitalize} \x1B[0m \x1B[35m#{@route}\x1B[0m")
+            end
+
+            @output.push('')
+            @output.unshift("\x1B[41m REMOVE \x1B[0m  Gathering files/directories for removal:\n")
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY REMOVE \x1B[0m\x1B[90m all of these files. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            unless filesToDelete.empty?
+                filesToDelete.each { |file|
+                    @output.push("\x1B[31mRemoved:  #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    # Remove file from Git.
+                    system ("git rm -f #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
+                    FileUtils.rm_rf(file)
+
+                    # When deleting the last file in a direcotry, Ruby for some stupid reason deletes
+                    # the parent directory as well. This in turn crashed the unit tests so instead of trying to
+                    # figure this out, I'm just going to check & re-create the directory if it's been wiped. Easy peasy.
+                    dir = File.dirname(file)
+                    unless File.directory?(dir)
+                        FileUtils::mkdir_p(dir)
+                    end
+                }
+            end
+            @output.push('')
+            self.flushBuffer
         end
-
         self.runUnitTests
     end
 
