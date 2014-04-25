@@ -33,7 +33,7 @@ class NimzoFileMaker
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app lib modal overlay script system widget), @type)
+        unless inArray(%w(page lib modal overlay script system widget), @type)
             puts("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
             exit
         end
@@ -142,12 +142,14 @@ class NimzoFileMaker
 
     # Creates the Controller.
     # @param filename
+    # @param route
     def createFileController(filename, route)
         className = ''
         route.split('/').each { |routeParameter|
             routeParameter[0] = routeParameter.upcase[0..0]
             className = "#{className}#{routeParameter}"
         }
+        className = "#{@type.capitalize}_#{className}"
         File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
@@ -170,6 +172,7 @@ class NimzoFileMaker
 
     # Creates the .js (MIN) file.
     # @param filename
+    # @param route
     def createFileJsMin(filename, route)
         jsObjectName = ''
         route.split('/').each { |routeParameter|
@@ -183,7 +186,23 @@ class NimzoFileMaker
 
     # Creates the .js (DEV) file.
     # @param filename
+    # @param route
     def createFileJs(filename, route)
+        jsObjectName = ''
+        route.split('/').each { |routeParameter|
+            routeParameter[0] = routeParameter.upcase[0..0]
+            jsObjectName = "#{jsObjectName}#{routeParameter}"
+        }
+        File.open(filename, 'w') { |file|
+            file.puts "var #{@namespace}_#{jsObjectName} = {"
+            file.write '};'
+        }
+    end
+
+    # Creates the .less file.
+    # @param filename
+    # @param route
+    def createFileLess(filename, route)
         jsObjectName = ''
         route.split('/').each { |routeParameter|
             routeParameter[0] = routeParameter.upcase[0..0]
@@ -195,13 +214,9 @@ class NimzoFileMaker
         }
     end
 
-    # Creates the .less file.
-    # @param file
-    def createFileLess(file, route)
-    end
-
     # Creates the PHPUnit Test.
     # @param filename
+    # @param route
     def createFileTest(filename, route)
         className = ''
         group = @namespace
@@ -209,7 +224,7 @@ class NimzoFileMaker
             routeParameter[0] = routeParameter.upcase[0..0]
             className = "#{className}#{routeParameter}"
         }
-        className = "#{className}Test"
+        className = "#{@type.capitalize}_#{className}Test"
         File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
@@ -218,11 +233,11 @@ class NimzoFileMaker
             file.puts 'use PHPUnit_Framework_TestCase;'
             file.puts ''
             file.puts '/**'
-            file.puts " * @group #{group}"
+            file.puts " * @group   #{group}"
             route.split('/').each { |routeParameter|
                 routeParameter[0] = routeParameter.upcase[0..0]
                 group = "#{group}/#{routeParameter}"
-                file.puts " * @group #{group}"
+                file.puts " * @group   #{group}"
             }
             file.puts " * @package #{@namespace}"
             file.puts ' */'

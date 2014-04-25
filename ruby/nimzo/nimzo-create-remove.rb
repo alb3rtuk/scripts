@@ -38,7 +38,7 @@ class NimzoCreateRemove
         if @type == LIB || @type == SCRIPT
             self.createLibScript
         else
-            if inArray(%w(apphelper modalhelper overlayhelper systemhelper widgethelper), @type)
+            if inArray(%w(pagehelper modalhelper overlayhelper systemhelper widgethelper), @type)
                 self.createHelper
             else
                 self.createRoute
@@ -52,7 +52,7 @@ class NimzoCreateRemove
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app apphelper lib script modal modalhelper overlay overlayhelper system systemhelper widget widgethelper), @type)
+        unless inArray(%w(page pagehelper lib script modal modalhelper overlay overlayhelper system systemhelper widget widgethelper), @type)
             self.error("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
         end
 
@@ -109,7 +109,7 @@ class NimzoCreateRemove
             }
 
             # Make sure the helper parameter is correct (if this is a 'helper' run)
-            if inArray(%w(apphelper modalhelper overlayhelper systemhelper widgethelper), @type)
+            if inArray(%w(pagehelper modalhelper overlayhelper systemhelper widgethelper), @type)
 
                 # Make sure @helper is not nil
                 if @helper.nil? || @helper == ''
@@ -133,8 +133,8 @@ class NimzoCreateRemove
     def createHelper
 
         case @type
-            when 'apphelper'
-                @type = 'system'
+            when 'pagehelper'
+                @type = 'page'
             when 'modalhelper'
                 @type = 'modal'
             when 'overlayhelper'
@@ -261,15 +261,14 @@ class NimzoCreateRemove
         routeCount = 0
         subDir = ''
         subDirs = Array.new
-        filenameUpperCase = ''
+        filename = ''
 
         @route.split('/').each { |routeParameter|
 
             routeCount = routeCount + 1
             subDir = "#{subDir}#{routeParameter}/"
 
-            filenameUpperCase = "#{filenameUpperCase}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
-            filenameLowerCase = filenameUpperCase.downcase[0, 1] + filenameUpperCase[1..-1]
+            filename = "#{filename}#{routeParameter.slice(0, 1).capitalize + routeParameter.slice(1..-1)}"
 
             # If this is a 'remove' run, only spring to life once we're on the last loop (if that makes sense).
             # We don't want to be deleting recursively..
@@ -303,16 +302,16 @@ class NimzoCreateRemove
                     files = Array.new
                     case dir
                         when "#{@pathToPhp}controllers/#{subDir}"
-                            files.push("#{dir}#{filenameUpperCase}.php")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}.php")
                         when "#{@pathToPhp}views/#{subDir}"
-                            files.push("#{dir}#{filenameUpperCase}.phtml")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}.phtml")
                         when "#{@pathToDev}#{subDir}"
-                            files.push("#{dir}#{filenameLowerCase}.less")
-                            files.push("#{dir}#{filenameLowerCase}.js")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}.less")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}.js")
                         when "#{@pathToMin}#{subDir}"
-                            files.push("#{dir}#{filenameLowerCase}.min.js")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}.min.js")
                         when "#{@pathToTest}controllers/#{subDir}"
-                            files.push("#{dir}#{filenameUpperCase}Test.php")
+                            files.push("#{dir}#{@type.capitalize}_#{filename}Test.php")
                         else
                             self.error('Path not found.')
                     end

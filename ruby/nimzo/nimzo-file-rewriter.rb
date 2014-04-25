@@ -11,7 +11,7 @@ class NimzoRewriter
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app modal overlay system widget), @type)
+        unless inArray(%w(page modal overlay system widget), @type)
             puts("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
             exit
         end
@@ -49,7 +49,7 @@ class NimzoRewriter
                     routeParameter[0] = routeParameter.upcase[0..0]
                     filename = "#{filename}#{routeParameter}"
                 }
-                filename[0] = filename.downcase[0..0]
+                filename = "#{@type.capitalize}_#{filename}"
                 importLess = "@import '../../../#{@type}/#{route}/#{filename}';"
                 count = count + 1
                 if count < @routes.size
@@ -61,7 +61,7 @@ class NimzoRewriter
         }
     end
 
-    # Re-write (App, Modal, Overlay, System, Widget) reference file.
+    # Re-write (Page, Modal, Overlay, System, Widget) reference file.
     def rewriteReferences
         className = @type
         className[0] = className.upcase[0..0]
@@ -93,7 +93,7 @@ if ARGV[0] == 'rewrite'
     if ARGV[1] != nil
         NimzoRewriter.new(ARGV[1])
     else
-        NimzoRewriter.new('app')
+        NimzoRewriter.new('page')
         NimzoRewriter.new('modal')
         NimzoRewriter.new('overlay')
         NimzoRewriter.new('system')
