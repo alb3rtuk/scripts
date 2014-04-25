@@ -64,8 +64,9 @@ alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 alias nimzo-create-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-create-page-legacy.sh'
 alias nimzo-remove-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-remove-page-legacy.sh'
 
-### NIMZO ##################
+### NIMZO ########€€##########
 alias nimzo-create='~/Repos/Scripts/bash/nimzo/nimzo-create.sh'
+alias nimzo-delete='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
 alias nimzo-remove='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
 alias nimzo-write='~/Repos/Scripts/bash/nimzo/nimzo-write.sh'
 alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
@@ -73,6 +74,17 @@ alias nimzo-run-tests-isolated='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isola
 alias nimzo-show-groups='~/Repos/Scripts/bash/nimzo/nimzo-show-groups.sh'
 alias nimzo-update='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
 alias nimzo-watcher='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
+
+### NIMZO (SHORT) ############
+alias nc='~/Repos/Scripts/bash/nimzo/nimzo-create.sh'
+alias nd='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
+alias nr='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
+alias nw='~/Repos/Scripts/bash/nimzo/nimzo-write.sh'
+alias nt='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
+alias nti='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isolated.sh'
+alias nsg='~/Repos/Scripts/bash/nimzo/nimzo-show-groups.sh'
+alias nu='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
+alias nw='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 
 ### SCRIPTS ##################
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
