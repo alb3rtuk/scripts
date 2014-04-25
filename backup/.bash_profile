@@ -65,6 +65,7 @@ alias nimzo-create-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-create-page-leg
 alias nimzo-remove-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-remove-page-legacy.sh'
 
 ### NIMZO ########€€##########
+alias nimzo-compile-less='~/Repos/Scripts/bash/nimzo/nimzo-compile-less.sh'
 alias nimzo-create='~/Repos/Scripts/bash/nimzo/nimzo-create.sh'
 alias nimzo-delete='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
 alias nimzo-remove='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
@@ -76,6 +77,7 @@ alias nimzo-update='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
 alias nimzo-watcher='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 
 ### NIMZO (SHORT) ############
+alias ncl='~/Repos/Scripts/bash/nimzo/nimzo-compile-less.sh'
 alias nc='~/Repos/Scripts/bash/nimzo/nimzo-create.sh'
 alias nd='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
 alias nr='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
