@@ -60,7 +60,7 @@ class NimzoFileMaker
         end
         unless File.directory?(path)
             FileUtils::mkdir_p(path)
-            puts " \x1B[32mCreated:\x1B[0m \x1B[90m#{path.sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+            puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{path.sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
         end
     end
 
@@ -88,19 +88,30 @@ class NimzoFileMaker
             system ("cd #{$PATH_TO_REPO}")
             system ("git add #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}")
             populateFile(file)
-            puts " \x1B[32mCreated:\x1B[0m \x1B[0m#{file.sub("#{$PATH_TO_REPO}/", '')[0..-1]}\x1B[0m"
+            puts "\x1B[32mCreated:\x1B[0m  \x1B[0m#{file.sub("#{$PATH_TO_REPO}/", '')[0..-1]}\x1B[0m"
         end
     end
 
     # Figures out what kind of file this is (controller, .js, test, etc) and then goes to create it.
     def populateFile(file)
         if file.include? "#{$PATH_TO_PHP}#{@type}/controllers/"
+            # Controller
             self.createFileController(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/controllers/", ''))
             return
+        elsif file.include? "#{$PATH_TO_TESTS}#{@type}/controllers/"
+            # Controller (Test)
+            self.createFileTest(file, File.dirname(file).sub("#{$PATH_TO_TESTS}#{@type}/controllers/", ''))
+            return
+        elsif file.include? "#{$PATH_TO_PHP}#{@type}/views/"
+            # View
+            self.createFileView(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/views/", ''))
+            return
         elsif file.include? "#{$PATH_TO_MIN}#{@type}"
+            # Min .JS
             self.createFileJsMin(file, File.dirname(file).sub("#{$PATH_TO_MIN}#{@type}", ''))
             return
         elsif file.include? "#{$PATH_TO_DEV}#{@type}"
+            # Dev .JS / .Less
             if file.reverse[0..2].reverse == '.js'
                 self.createFileJs(file, File.dirname(file).sub("#{$PATH_TO_DEV}#{@type}", ''))
                 return
@@ -108,22 +119,25 @@ class NimzoFileMaker
                 self.createFileLess(file, File.dirname(file).sub("#{$PATH_TO_DEV}#{@type}", ''))
                 return
             end
-        elsif file.include? "#{$PATH_TO_TESTS}#{@type}/controllers/"
-            self.createFileTest(file, File.dirname(file).sub("#{$PATH_TO_TESTS}#{@type}/controllers/", ''))
-            return
-        elsif file.include? "#{$PATH_TO_PHP}#{@type}/views/"
-            self.createFileView(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/views/", ''))
-            return
         elsif (file.include? "#{$PATH_TO_PHP}#{LIB}/") || (file.include? "#{$PATH_TO_PHP}#{SCRIPT}/")
+            # /lib OR /script PHP File
             self.createFileLib(file)
             return
         elsif (file.include? "#{$PATH_TO_TESTS}#{LIB}/") || (file.include? "#{$PATH_TO_TESTS}#{SCRIPT}/")
+            # /lib OR /script PHP File (Test)
             self.createFileLibTest(file)
             return
+        elsif file.include? "#{$PATH_TO_PHP}#{@type}/helpers/"
+            # Helper (Test)
+            self.createHelper(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/helpers/", ''))
+            return
+        elsif file.include? "#{$PATH_TO_TESTS}#{@type}/helpers/"
+            # Helper (Test)
+            self.createHelperTest(file, File.dirname(file).sub("#{$PATH_TO_TESTS}#{@type}/helpers/", ''))
+            return
         else
-            exitScript("Couldn't determine file type. Please note that the file '\x1B[33m#{file}\x1B[0m' has already been created and will need to be deleted manually.")
+            exitScript("\nCouldn't determine file type.\nPlease note that the file '\x1B[33m#{file}\x1B[0m' has already been created and will need to be deleted manually.")
         end
-
     end
 
     # Creates the Controller.
@@ -317,9 +331,93 @@ class NimzoFileMaker
         }
     end
 
+    # Create Helper Class
+    # @param filename
+    # @param route
+    def createHelper(filename, route)
+        className, namespace = getLibFileData(filename, route)
+        group = ''
+        count = 0
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            file.puts "namespace #{namespace};"
+            file.puts ''
+            file.puts '/**'
+            namespace.split("\\").each { |namespaceParameter|
+                count = count + 1
+                if count == 1
+                    group = "#{namespaceParameter}"
+                else
+                    group = "#{group}/#{namespaceParameter}"
+                end
+                file.puts " * @group   #{group}"
+            }
+            file.puts " * @package #{namespace}"
+            file.puts ' */'
+            file.puts "class #{className}"
+            file.puts '{'
+            file.write '}'
+        }
+    end
+
+    # Create Helper Class (Test)
+    # @param filename
+    # @param route
+    def createHelperTest(filename, route)
+        className, namespace = getLibFileData(filename, route)
+        group = ''
+        count = 0
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            file.puts "namespace #{namespace};"
+            file.puts ''
+            file.puts 'use PHPUnit_Framework_TestCase;'
+            file.puts ''
+            file.puts '/**'
+            namespace.split("\\").each { |namespaceParameter|
+                count = count + 1
+                if count == 1
+                    group = "#{namespaceParameter}"
+                else
+                    group = "#{group}/#{namespaceParameter}"
+                end
+                file.puts " * @group   #{group}"
+            }
+            file.puts " * @package #{namespace}"
+            file.puts ' */'
+            file.puts "class #{className} extends PHPUnit_Framework_TestCase"
+            file.puts '{'
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function setUp()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function tearDown()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function testSomething()'
+            file.puts '    {'
+            file.puts '        $this->assertTrue(true);'
+            file.puts '    }'
+            file.write '}'
+        }
+    end
+
     # Extracts namespace + className from lib filename. Used internally.
     # @param filename
-    def getLibFileData(filename)
+    # @param route
+    def getLibFileData(filename, route = nil)
         fileSplit = nil
         if filename.include? "#{$PATH_TO_PHP}#{@type}/"
             fileSplit = filename.sub("#{$PATH_TO_PHP}#{@type}/", '')
@@ -337,9 +435,21 @@ class NimzoFileMaker
             end
         elsif @type == SCRIPT
             namespace = 'Script'
+        else
+            namespace = "#{@type.capitalize}"
+            route.split('/').each { |routeParameter|
+                namespace = "#{namespace}\\#{routeParameter.capitalize}"
+            }
         end
-        className = File.basename(fileSplit[1], File.extname(fileSplit[1]))
-        className[0] = className.upcase[0..0]
+
+        if @type == LIB || @type == SCRIPT
+            className = File.basename(fileSplit[1], File.extname(fileSplit[1]))
+            className[0] = className.upcase[0..0]
+        else
+            className = File.basename(filename, File.extname(filename))
+            className[0] = className.upcase[0..0]
+        end
+
         return className, namespace
     end
 end

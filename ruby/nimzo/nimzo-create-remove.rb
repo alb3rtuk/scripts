@@ -10,13 +10,10 @@ class NimzoCreateRemove
     REMOVE = 'remove'
     SCRIPT = 'script'
 
-
     # The point of entry!
     # @param route
     # @param type
     # @param action
-
-
     def initialize(type, route, action, helper = nil)
 
         @type = type.downcase
@@ -39,10 +36,13 @@ class NimzoCreateRemove
         self.validateParameters
 
         if @type == LIB || @type == SCRIPT
-            self.processClass
+            self.createLibScript
         else
-            self.determineRoute
-            self.processRoute
+            if inArray(%w(apphelper modalhelper overlayhelper systemhelper widgethelper), @type)
+                self.createHelper
+            else
+                self.createRoute
+            end
         end
 
     end
@@ -52,7 +52,7 @@ class NimzoCreateRemove
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(app lib script modal overlay system widget), @type)
+        unless inArray(%w(app apphelper lib script modal modalhelper overlay overlayhelper system systemhelper widget widgethelper), @type)
             self.error("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
         end
 
@@ -107,12 +107,94 @@ class NimzoCreateRemove
                     self.error("Route parameters cannot start with a digit (IE: 0-9). You passed: \x1B[33m#{@route}\x1B[0m")
                 end
             }
+
+            # Make sure the helper parameter is correct (if this is a 'helper' run)
+            if inArray(%w(apphelper modalhelper overlayhelper systemhelper widgethelper), @type)
+
+                # Make sure @helper is not nil
+                if @helper.nil? || @helper == ''
+                    self.error('@helper variable is nil or not set.')
+                end
+
+                @helper = File.basename(@helper, File.extname(@helper))
+                @helper[0] = @helper.upcase[0..0]
+
+                # Make sure helper is alphanumeric.
+                # Make sure that ALL characters within the route are AlphaNumeric.
+                unless isAlphaNumeric(@helper)
+                    self.error("Helper name must be alphanumeric. You passed: \x1B[33m#{@helper}\x1B[0m")
+                end
+            end
         end
 
     end
 
+    # Creates a helper class.
+    def createHelper
+
+        case @type
+            when 'apphelper'
+                @type = 'system'
+            when 'modalhelper'
+                @type = 'modal'
+            when 'overlayhelper'
+                @type = 'overlay'
+            when 'systemhelper'
+                @type = 'system'
+            when 'widgethelper'
+                @type = 'widget'
+            else
+                self.error('Type not supported.')
+        end
+
+        helperPath = "#{$PATH_TO_PHP}#{@type}/helpers/#{@route}/"
+        helperPathTest = "#{$PATH_TO_TESTS}#{@type}/helpers/#{@route}/"
+        helperFile = "#{helperPath}#{@helper}.php"
+        helperFileTest = "#{helperPathTest}#{@helper}Test.php"
+
+        if @action == CREATE
+
+            # Check that the helper paths even exist.
+            unless File.directory?(helperPath)
+                self.error("The route \x1B[35m#{@route}\x1B[0m doesn't exist for content type: \x1B[44m #{@type.capitalize} \x1B[0m")
+            end
+            unless File.directory?(helperPathTest)
+                self.error("The route \x1B[35m#{@route}\x1B[0m doesn't exist for content type: \x1B[44m #{@type.capitalize} \x1B[0m")
+            end
+
+            # Now check that the helper files DON'T exist.
+            if File.file?(helperFile)
+                self.error("The file \x1B[33m#{helperFile}\x1B[0m already exists.")
+            end
+            if File.file?(helperFileTest)
+                self.error("The file \x1B[33m#{helperFileTest}\x1B[0m already exists.")
+            end
+
+            @files.push(helperFile)
+            @files.push(helperFileTest)
+
+            @output.push("\x1B[42m CREATE \x1B[0m  Determining files/directories which need to be created:\n")
+            @output.push("          \x1B[33m#{helperFile.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            @output.push("          \x1B[33m#{helperFileTest.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m\n")
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            puts
+            NimzoFileMaker.new(@type, @paths, @files, '          ')
+            puts
+        elsif @action == REMOVE
+
+            # @todo FINISH THIS!
+            puts 'REMOVE code goes here!'
+            exit
+
+        end
+
+        self.runUnitTests
+    end
+
     # Creates a class within the /lib directory + also creates the UNIT Test boiler plate.
-    def processClass
+    def createLibScript
 
         routeSplit = @route.split('/')
 
@@ -153,16 +235,18 @@ class NimzoCreateRemove
         elsif @action == REMOVE
 
             # @todo FINISH THIS!
-            puts 'Lib REMOVE code goes here!'
+            puts 'REMOVE code goes here!'
             exit
 
         end
+
+        self.runUnitTests
     end
 
     # IF CREATE: Scans the route and creates all the files (that don't exist yet) along the way.
     #            Has ability to create nested paths (IE: if only '/dashboard' exists you can still create '/dashboard/messages/new').
     # IF REMOVE: Scans ONLY the last directory in the route and removes all the files recursively (if they exist).
-    def determineRoute
+    def createRoute
 
         baseDirs = Array[
             "#{@pathToPhp}helpers/",
@@ -314,6 +398,7 @@ class NimzoCreateRemove
                 @output.push('')
             end
         end
+        self.processRoute
     end
 
     # The final function which does all the processing. If errors are present, no processing will be done.
@@ -325,13 +410,16 @@ class NimzoCreateRemove
             puts
             NimzoFileMaker.new(@type, @paths, @files, '          ')
             puts
+            unless @files.empty? && @paths.empty?
+                NimzoRewriter.new(@type)
+            end
         elsif @action == REMOVE
             system ('clear')
             self.flushBuffer
             self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[41m PERMANENTLY REMOVE \x1B[0m\x1B[90m all of these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
             unless @files.empty?
                 @files.each { |file|
-                    @output.push("\x1B[31m Removed: #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    @output.push("\x1B[31mRemoved:  #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
                     # Remove file from Git.
                     system ("git rm -f #{file.sub("#{$PATH_TO_REPO}", '')[1..-1]} > /dev/null 2>&1")
                     FileUtils.rm_rf(file)
@@ -340,16 +428,24 @@ class NimzoCreateRemove
             end
             unless @paths.empty?
                 @paths.each { |path|
-                    @output.push("\x1B[31m Removed: #{path.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
+                    @output.push("\x1B[31mRemoved:  #{path.sub("#{$PATH_TO_REPO}", '')[1..-1]}\x1B[0m")
                     FileUtils.rm_rf(path)
                 }
             end
             @output.push('')
             self.flushBuffer
+            unless @files.empty? && @paths.empty?
+                NimzoRewriter.new(@type)
+            end
         end
-        unless @files.empty? && @paths.empty?
-            NimzoRewriter.new(@type)
-        end
+
+        self.runUnitTests
+    end
+
+    # Run (system) unit tests.
+    def runUnitTests
+        puts "\x1B[45m SYSTEM \x1B[0m  Initializing tests...\n\n"
+        system('phpunit --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php --no-configuration --colors --group System /Users/Albert/Repos/Nimzo/tests-php')
     end
 
     # Aborts the script.
@@ -378,7 +474,6 @@ class NimzoCreateRemove
         @output.push("\x1B[41m ERROR \x1B[0m #{text}")
         self.flushBuffer(true)
     end
-
 
     # Flushes the output buffer.
     def flushBuffer(exit = false)
