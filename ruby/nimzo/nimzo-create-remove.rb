@@ -222,7 +222,6 @@ class NimzoCreateRemove
                     end
                 }
             end
-            system ('git add . --all')
             @output.push('')
             self.flushBuffer
         end
@@ -303,7 +302,6 @@ class NimzoCreateRemove
                     FileUtils.rm_rf(file)
                 }
             end
-            system ('git add . --all')
             @output.push('')
             self.flushBuffer
 

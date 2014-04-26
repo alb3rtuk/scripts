@@ -206,13 +206,13 @@ class NimzoFileMaker
     # @param filename
     # @param route
     def createFileLess(filename, route)
-        jsObjectName = ''
+        lessObjectName = ''
         route.split('/').each { |routeParameter|
             routeParameter[0] = routeParameter.upcase[0..0]
-            jsObjectName = "#{jsObjectName}#{routeParameter}"
+            lessObjectName = "#{lessObjectName}#{routeParameter}"
         }
         File.open(filename, 'w') { |file|
-            file.puts "var #{@namespace}_#{jsObjectName} = {"
+            file.puts "div##{@namespace}_#{lessObjectName} {"
             file.write '}'
         }
     end
