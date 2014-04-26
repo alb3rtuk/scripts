@@ -13,12 +13,13 @@ cd ~/Repos/Nimzo/
 type=`echo ${type} | tr '[:upper:]' '[:lower:]'`
 
 # Check that type exists.
-if [[ ${type} != "lib" ]] && [[ ${type} != "script" ]] && [[ ${type} != "page" ]] && [[ ${type} != "modal" ]] && [[ ${type} != "overlay" ]] && [[ ${type} != "system" ]] && [[ ${type} != "widget" ]] && [[ ${type} != "pagehelper" ]] && [[ ${type} != "modalhelper" ]] && [[ ${type} != "overlayhelper" ]] && [[ ${type} != "systemhelper" ]] && [[ ${type} != "widgethelper" ]]; then
+if [[ ${type} != "lib" ]] && [[ ${type} != "script" ]] && [[ ${type} != "sleek" ]] && [[ ${type} != "page" ]] && [[ ${type} != "modal" ]] && [[ ${type} != "overlay" ]] && [[ ${type} != "system" ]] && [[ ${type} != "widget" ]] && [[ ${type} != "pagehelper" ]] && [[ ${type} != "modalhelper" ]] && [[ ${type} != "overlayhelper" ]] && [[ ${type} != "systemhelper" ]] && [[ ${type} != "widgethelper" ]]; then
     echo
     message red "ERROR" "You must specify what you want to create. Valid parameters are:"
     echo
     echo "        \033[36mlib\033[0m"
     echo "        \033[36mscript\033[0m"
+    echo "        \033[36msleek\033[0m"
     echo "        \033[33mmodal\033[0m"
     echo "        \033[33mmodalhelper\033[0m"
     echo "        \033[33moverlay\033[0m"
@@ -41,6 +42,16 @@ if [[ ${type} == "lib" ]] || [[ ${type} == "script" ]]; then
         echo
         echo "        \033[33mcore/SomeClass\033[0m"
         echo "        \033[33mcore/SomeClass.php\033[0m"
+        echo
+        exit
+    fi
+elif [[ ${type} == "sleek" ]]; then
+    if [[ ${route} == "" ]]; then
+        echo
+        message red "ERROR" "You must specify a \033[35m'folder/classname'\033[0m [ to be placed inside \033[33mprivate/lib/sleek/library\033[0m ]. Valid parameters are:"
+        echo
+        echo "        \033[33mcommon/SleekSomeClass\033[0m"
+        echo "        \033[33mcommin/SleekSomeClass.php\033[0m"
         echo
         exit
     fi

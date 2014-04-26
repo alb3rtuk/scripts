@@ -9,6 +9,7 @@ class NimzoCreateRemove
     CREATE = 'create'
     REMOVE = 'remove'
     SCRIPT = 'script'
+    SLEEK = 'sleek'
 
     # The point of entry!
     # @param route
@@ -37,6 +38,8 @@ class NimzoCreateRemove
 
         if @type == LIB || @type == SCRIPT
             self.createLibScript
+        elsif @type == SLEEK
+            self.creatSleekClass
         else
             if inArray(%w(pagehelper modalhelper overlayhelper systemhelper widgethelper), @type)
                 self.createHelper
@@ -52,8 +55,8 @@ class NimzoCreateRemove
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(page pagehelper lib script modal modalhelper overlay overlayhelper system systemhelper widget widgethelper), @type)
-            self.error("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
+        unless inArray(%w(page pagehelper lib script sleek modal modalhelper overlay overlayhelper system systemhelper widget widgethelper), @type)
+            self.error("\x1B[33m#{@type.upcase}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
         end
 
         # Make sure the particular action is valid.
@@ -62,17 +65,15 @@ class NimzoCreateRemove
             self.error("\x1B[33m#{@action}\x1B[0m is not a valid action. There is an error in your bash script, not your input.")
         end
 
-        if @type == LIB || @type == SCRIPT
+        if @type == LIB || @type == SCRIPT || @type == SLEEK
 
             # Make sure the route consists of a parent directory and a classname
             unless @route.include?('/')
                 self.error("You must specify a \x1B[33mfolder\x1B[0m and a \x1B[33mclassname\x1B[0m (IE: core/AjaxRequest)")
             end
 
-            # Right now I'm only allowing the creation of scripts 1 folder deep.
-            # Although the PHP supports infinite folders, I want to keep it from getting too confusing.
-            #
             # If more than 1 slash is present, this cuts it down to only 1. Everything after the 2nd will be ommited.
+            # IE: 'something/to/create' becomes 'something/to'.
             # Also capitalizes the 2nd part & removes file extension (if exists)
             routeSplit = @route.split('/')
             className = File.basename(routeSplit[1], File.extname(routeSplit[1]))
@@ -80,8 +81,8 @@ class NimzoCreateRemove
             @route = "#{routeSplit[0].downcase}/#{className}"
 
             # Make sure folder doesn't start with following values. These will just create confusion.
-            if inArray(%w(bin lib script scripts), routeSplit[0], true) &&
-                self.error("Namespace/preceeding folder shouldn't be \x1B[33m#{routeSplit[0]}\x1B[0m due to possible confusion.")
+            if inArray(%w(bin lib script scripts sleek), routeSplit[0], true) &&
+                self.error("Namespace/preceeding folder shouldn't be \x1B[33m#{routeSplit[0].upcase}\x1B[0m due to possible confusion.")
             end
 
             # Make sure that ALL characters within the route are AlphaNumeric.
@@ -89,6 +90,12 @@ class NimzoCreateRemove
                 self.error("\x1B[33mFolder\x1B[0m and a \x1B[33mclassname\x1B[0m must be alphanumeric and seperated by a slash ('/'). You passed: \x1B[33m#{@route}\x1B[0m")
             end
 
+            if @type == SLEEK
+                # Make sure all SLEEK classes are prefixed with 'Sleek'
+                if routeSplit[1][0..4].downcase != 'sleek'
+                    self.error("Classes within this namespace must have prefix \x1B[35m'Sleek'\x1B[0m. You passed: \x1B[33m #{routeSplit[1]}\x1B[0m")
+                end
+            end
         else
             # Make sure route doesn't start with API or AJAX
             routeSplit = @route.split('/')
@@ -228,13 +235,61 @@ class NimzoCreateRemove
         self.runUnitTests
     end
 
+    # Create Sleek classes + tests
+    def creatSleekClass
+
+        routeSplit = @route.split('/')
+        if routeSplit.size > 2
+            self.error('Size of split route should not be greater than 2!')
+        end
+
+        pathName = routeSplit[0].downcase
+        className = routeSplit[1]
+        className[0] = className[0..0].upcase
+
+        filename = "#{$PATH_TO_PHP}lib/sleek/library/#{pathName}/#{className}.php"
+        filenameTest = "#{$PATH_TO_TESTS}lib/sleek/library/#{pathName}/#{className}Test.php"
+
+        if @action == CREATE
+
+            # Make sure the files don't already exist.
+            # The last thing we want to do is overwrite files.
+            if File.file?(filename)
+                self.error("File already exists: \x1B[33m#{filename}\x1B[0m")
+                exit
+            elsif File.file?(filenameTest)
+                self.error("File already exists: \x1B[33m#{filenameTest}\x1B[0m")
+                exit
+            end
+
+            @files.push(filename)
+            @files.push(filenameTest)
+            @output.push("\x1B[42m CREATE \x1B[0m  Determining files/directories which need to be created:\n")
+            @output.push("          \x1B[33m#{filename.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m")
+            @output.push("          \x1B[33m#{filenameTest.sub("#{@pathToRepo}/", '')[0..-1]}\x1B[0m\n")
+            system ('clear')
+            self.flushBuffer
+            self.confirm("          \x1B[90mYou're about to \x1B[0m\x1B[42m CREATE \x1B[0m\x1B[90m these files/directories. Continue? [y/n]\x1B[0m => ", "          \x1B[90mScript aborted.\x1B[0m")
+            puts
+            NimzoFileMaker.new(@type, @paths, @files, '          ')
+            puts
+
+        elsif @action == REMOVE
+
+            # @todo REMOVE THIS
+            puts 'REMOVE CODE GOES HERE!'
+            exit
+
+        end
+        self.runUnitTests
+    end
+
     # Creates a class within the /lib directory + also creates the UNIT Test boiler plate.
     def createLibScript
 
         routeSplit = @route.split('/')
         filename = ''
         filenameTest =''
-
 
         if @type == LIB
             filename = "#{$PATH_TO_PHP}lib/#{routeSplit[0]}/#{routeSplit[1]}.php"
@@ -245,7 +300,6 @@ class NimzoCreateRemove
         else
             self.error('Type is not supported.')
         end
-
 
         if @action == CREATE
 
@@ -306,7 +360,6 @@ class NimzoCreateRemove
             self.flushBuffer
 
         end
-
         self.runUnitTests
     end
 
@@ -504,7 +557,6 @@ class NimzoCreateRemove
                 NimzoRewriter.new(@type)
             end
         end
-
         self.runUnitTests
     end
 

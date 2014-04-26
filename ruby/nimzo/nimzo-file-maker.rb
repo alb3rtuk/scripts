@@ -13,12 +13,12 @@ class NimzoFileMaker
 
     LIB = 'lib'
     SCRIPT = 'script'
+    SLEEK = 'sleek/library'
 
     # @param type
     # @param paths
     # @param files
     # @param space
-
     def initialize(type = '', paths = Array.new, files = Array.new, space = '')
 
         @type = type.downcase
@@ -33,7 +33,7 @@ class NimzoFileMaker
 
         # Make sure the particular controller type is valid.
         # This error cannot be reached through incorrect user input.
-        unless inArray(%w(page lib modal overlay script system widget), @type)
+        unless inArray(%w(page lib modal overlay script sleek system widget), @type)
             puts("\x1B[33m#{@type}\x1B[0m is not a valid type. There is an error in your bash script, not your input.")
             exit
         end
@@ -97,7 +97,15 @@ class NimzoFileMaker
 
     # Figures out what kind of file this is (controller, .js, test, etc) and then goes to create it.
     def populateFile(file)
-        if file.include? "#{$PATH_TO_PHP}#{@type}/controllers/"
+        if file.include? "#{$PATH_TO_PHP}#{LIB}/#{SLEEK}/"
+            # Sleek - Sleek stuff MUST come before lib!
+            self.createSleekFile(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{LIB}/#{SLEEK}/", ''))
+            return
+        elsif file.include? "#{$PATH_TO_TESTS}#{LIB}/#{SLEEK}/"
+            # Sleek (Test) - Sleek stuff MUST come before lib!
+            self.createSleekTest(file, File.dirname(file).sub("#{$PATH_TO_TESTS}#{LIB}/#{SLEEK}/", ''))
+            return
+        elsif file.include? "#{$PATH_TO_PHP}#{@type}/controllers/"
             # Controller
             self.createFileController(file, File.dirname(file).sub("#{$PATH_TO_PHP}#{@type}/controllers/", ''))
             return
@@ -432,16 +440,83 @@ class NimzoFileMaker
         }
     end
 
+    # @param filename
+    # @param route
+    def createSleekFile(filename, route)
+        className = getLibFileData(filename, route)
+        className = className[0]
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            file.puts 'namespace Sleek;'
+            file.puts ''
+            file.puts '/**'
+            file.puts ' * @package Sleek'
+            file.puts ' */'
+            file.puts "class #{className}"
+            file.puts '{'
+            file.write '}'
+        }
+    end
+
+    # @param filename
+    # @param route
+    def createSleekTest(filename, route)
+        className = getLibFileData(filename, route)
+        className = className[0]
+        File.open(filename, 'w') { |file|
+            file.puts '<?php'
+            file.puts ''
+            file.puts 'namespace Sleek;'
+            file.puts ''
+            file.puts 'use PHPUnit_Framework_TestCase;'
+            file.puts ''
+            file.puts '/**'
+            file.puts ' * @group Sleek'
+            file.puts ' * @package Sleek'
+            file.puts ' */'
+            file.puts "class #{className} extends PHPUnit_Framework_TestCase"
+            file.puts '{'
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function setUp()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function tearDown()'
+            file.puts '    {'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return void'
+            file.puts '     */'
+            file.puts '    public function testSomething()'
+            file.puts '    {'
+            file.puts '        $this->assertTrue(true);'
+            file.puts '    }'
+            file.write '}'
+        }
+    end
+
     # Extracts namespace + className from lib filename. Used internally.
     # @param filename
     # @param route
     def getLibFileData(filename, route = nil)
         fileSplit = nil
-        if filename.include? "#{$PATH_TO_PHP}#{@type}/"
+        if filename.include? "#{$PATH_TO_PHP}lib/sleek/library/"
+            fileSplit = filename.sub("#{$PATH_TO_PHP}lib/sleek/library/", '')
+        elsif filename.include? "#{$PATH_TO_TESTS}lib/sleek/library/"
+            fileSplit = filename.sub("#{$PATH_TO_PHP}lib/sleek/library/", '')
+        elsif filename.include? "#{$PATH_TO_PHP}#{@type}/"
             fileSplit = filename.sub("#{$PATH_TO_PHP}#{@type}/", '')
         elsif filename.include? "#{$PATH_TO_TESTS}#{@type}/"
             fileSplit = filename.sub("#{$PATH_TO_TESTS}#{@type}/", '')
         else
+            puts filename
             exitScript('Filesplit couldn\'t determine file type properly. This statement should never be reached.')
         end
         fileSplit = fileSplit.split('/')
