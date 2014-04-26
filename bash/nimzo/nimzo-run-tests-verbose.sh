@@ -15,14 +15,14 @@ if [[ ${group} == "" ]]; then
      --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
      --no-configuration \
      --colors \
-     /Users/Albert/Repos/Nimzo/tests-php \
-     -- verbose
+     -- verbose \
+     /Users/Albert/Repos/Nimzo/tests-php
 else
     phpunit \
      --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
      --no-configuration \
      --colors \
      --group ${group} \
+     -- verbose \
      /Users/Albert/Repos/Nimzo/tests-php
-     -- verbose
 fi
