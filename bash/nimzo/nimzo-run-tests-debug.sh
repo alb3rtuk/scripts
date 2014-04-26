@@ -15,7 +15,7 @@ if [[ ${group} == "" ]]; then
      --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
      --no-configuration \
      --colors \
-     -- verbose \
+     --debug \
      /Users/Albert/Repos/Nimzo/tests-php
 else
     phpunit \
@@ -23,6 +23,6 @@ else
      --no-configuration \
      --colors \
      --group ${group} \
-     -- verbose \
+     --debug \
      /Users/Albert/Repos/Nimzo/tests-php
 fi
