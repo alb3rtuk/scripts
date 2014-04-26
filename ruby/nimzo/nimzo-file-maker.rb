@@ -453,8 +453,24 @@ class NimzoFileMaker
             file.puts '/**'
             file.puts ' * @package Sleek'
             file.puts ' */'
-            file.puts "class #{className}"
+            file.puts "class #{className} extends Sleek"
             file.puts '{'
+            file.puts '    /**'
+            file.puts "     * @return #{className}"
+            file.puts '     */'
+            file.puts '    public function __construct()'
+            file.puts '    {'
+            file.puts '        parent::__construct();'
+            file.puts '    }'
+            file.puts ''
+            file.puts '    /**'
+            file.puts '     * @return string'
+            file.puts '     */'
+            file.puts '    public function render()'
+            file.puts '    {'
+            file.puts '        $output = \'\';'
+            file.puts '        return $output;'
+            file.puts '    }'
             file.write '}'
         }
     end
@@ -464,6 +480,8 @@ class NimzoFileMaker
     def createSleekTest(filename, route)
         className = getLibFileData(filename, route)
         className = className[0]
+        classNameLC = className[0]
+        classNameLC[0] = classNameLC[0..0].downcase
         File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
@@ -478,10 +496,16 @@ class NimzoFileMaker
             file.puts "class #{className} extends PHPUnit_Framework_TestCase"
             file.puts '{'
             file.puts '    /**'
+            file.puts "     * @var #{className} $#{classNameLC}"
+            file.puts '     */'
+            file.puts "    private $#{classNameLC};"
+            file.puts ''
+            file.puts '    /**'
             file.puts '     * @return void'
             file.puts '     */'
             file.puts '    public function setUp()'
             file.puts '    {'
+            file.puts "        $this->#{classNameLC} = new #{className}();"
             file.puts '    }'
             file.puts ''
             file.puts '    /**'
@@ -489,12 +513,13 @@ class NimzoFileMaker
             file.puts '     */'
             file.puts '    public function tearDown()'
             file.puts '    {'
+            file.puts "        unset($this->#{classNameLC});"
             file.puts '    }'
             file.puts ''
             file.puts '    /**'
             file.puts '     * @return void'
             file.puts '     */'
-            file.puts '    public function testSomething()'
+            file.puts "    public function test#{className}()"
             file.puts '    {'
             file.puts '        $this->assertTrue(true);'
             file.puts '    }'
