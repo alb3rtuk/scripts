@@ -74,6 +74,7 @@ alias nimzo-run-tests='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
 alias nimzo-run-tests-isolated='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isolated.sh'
 alias nimzo-show-groups='~/Repos/Scripts/bash/nimzo/nimzo-show-groups.sh'
 alias nimzo-update='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
+alias nimzo-update-sleek='~/Repos/Scripts/bash/nimzo/nimzo-update-sleek.sh'
 alias nimzo-watcher='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 
 ### NIMZO (SHORT) ############
@@ -85,6 +86,7 @@ alias nt='~/Repos/Scripts/bash/nimzo/nimzo-run-tests.sh'
 alias nti='~/Repos/Scripts/bash/nimzo/nimzo-run-tests-isolated.sh'
 alias nsg='~/Repos/Scripts/bash/nimzo/nimzo-show-groups.sh'
 alias nu='~/Repos/Scripts/bash/nimzo/nimzo-update.sh'
+alias nus='~/Repos/Scripts/bash/nimzo/nimzo-update-sleek.sh'
 alias nw='~/Repos/Scripts/bash/nimzo/nimzo-watcher.sh'
 
 ### SCRIPTS ##################
