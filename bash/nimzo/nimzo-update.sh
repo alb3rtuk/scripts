@@ -61,6 +61,9 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
                 replace=""
                 fileDisplay=${file//${find}/${replace}}
                 echo "Compressing: ${fileDisplay}"
+            else
+                # Clear the file
+                cat /dev/null > ${minFile}
             fi
 
             # If the file which was comrpressed is within the /app-js directoy, re-create the merged .js file.
