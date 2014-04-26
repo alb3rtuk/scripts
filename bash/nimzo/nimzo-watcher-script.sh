@@ -34,7 +34,7 @@ cd ~/Repos/Sleek/httpdocs/
 sleekLMT=0
 nimzoLMT=0
 # Gets the last modified of the Sleek files
-dirs=("/Users/Albert/Repos/Sleek/httpdocs/sleek" "/Users/Albert/Repos/Sleek/httpdocs/tests")
+dirs=("/Users/Albert/Repos/Sleek/httpdocs/sleek")
 for dir in "${dirs[@]}"; do :
     cd ${dir}
     LMT=$(find . -type f -print0 | xargs -0 stat -f "%m %N" | sort -rn | head -1 | cut -f 1 -d" ")
