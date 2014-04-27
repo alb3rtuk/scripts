@@ -4,6 +4,13 @@
 
 # Script to kick-off my Nimzo test (boiler plate) generator for Sleek.
 
+tmpfile="/tmp/sleek-phpunit-boilerplate.php"
+
+if [[ ! -f ${tmpfile} ]]; then
+    mkdir -p ${tmpfile}
+    touch ${tmpfile}
+fi
+
 file=$1
 if [[ ${file} == "" ]]; then
     echo
@@ -36,3 +43,5 @@ message magenta "SLEEK" "Generating PHPUnit Test for: \033[33m${output}\033[0m"
 echo
 php -f PHPUnit_SleekTestGenerator.php ${output}
 echo
+
+open -a phpstorm ${tmpfile}
