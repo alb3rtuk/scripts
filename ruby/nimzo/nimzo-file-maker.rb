@@ -451,6 +451,10 @@ class NimzoFileMaker
             file.puts 'namespace Sleek;'
             file.puts ''
             file.puts '/**'
+            file.puts ' * @doc         <div style="font: bold 20px Arial; color: red;">DOCUMENTATION INCOMPLETE!</div>'
+            file.puts " * @exampleInit $element = new #{className}();"
+            file.puts ' * @example     $element->getMarkup();'
+            file.puts ' *'
             file.puts ' * @package Sleek'
             file.puts ' */'
             file.puts "class #{className} extends Sleek"
