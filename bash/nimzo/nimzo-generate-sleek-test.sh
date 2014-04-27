@@ -42,6 +42,6 @@ echo
 message magenta "SLEEK" "Generating PHPUnit Test for: \033[33m${output}\033[0m"
 echo
 php -f PHPUnit_SleekTestGenerator.php ${output}
-echo
 
+# Open the generated file in PHPStorm
 open -a phpstorm ${tmpfile}
