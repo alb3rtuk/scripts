@@ -480,8 +480,9 @@ class NimzoFileMaker
     def createSleekTest(filename, route)
         className = getLibFileData(filename, route)
         className = className[0]
-        classNameLC = className[0]
+        classNameLC = className.dup
         classNameLC[0] = classNameLC[0..0].downcase
+        classNameLC = classNameLC[0..-5]
         File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
