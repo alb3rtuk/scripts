@@ -65,6 +65,7 @@ alias nimzo-create-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-create-page-leg
 alias nimzo-remove-page-legacy='~/Repos/Scripts/bash/nimzo/nimzo-remove-page-legacy.sh'
 
 ### NIMZO ########€€##########
+alias nimzo-chown='~/Repos/Scripts/bash/nimzo/nimzo-chown.sh'
 alias nimzo-compile-less='~/Repos/Scripts/bash/nimzo/nimzo-compile-less.sh'
 alias nimzo-create='~/Repos/Scripts/bash/nimzo/nimzo-create.sh'
 alias nimzo-delete='~/Repos/Scripts/bash/nimzo/nimzo-remove.sh'
@@ -114,6 +115,8 @@ alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'
 alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 alias find-files-larger-than-kb='~/Repos/Scripts/bash/sys/find-files-larger-than-kb.sh'
 alias find-files-smaller-than-kb='~/Repos/Scripts/bash/sys/find-files-smaller-than-kb.sh'
+alias get-octal-value='~/Repos/Scripts/bash/sys/get-octal-value.sh'
+
 
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
