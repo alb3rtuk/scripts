@@ -16,13 +16,14 @@ class NimzoGenertateSleekTestValidator
         end
 
         fileName = "#{className.dup}.php"
-        fileLocation = Dir.glob("#{$PATH_TO_PHP}lib/sleek/**/#{fileName}")
+        fileName[0] = fileName[0..0].upcase
+        fileLocation = Dir.glob("#{$PATH_TO_PHP}**/#{fileName}")
 
         # Validate that the file even exists & that there is ONLY 1!
         if fileLocation.size === 0
-            self.error("No file(s) found for class: \x1B[33m#{className}\x1B[0m")
+            self.error("No file(s) found for class '\x1B[33m#{className}\x1B[0m'. Check your capitilaztion, search is case-sensitive.")
         elsif fileLocation.size > 1
-            self.error("More than 1 file found for class: \x1B[33m#{className}\x1B[0m")
+            self.error("More than 1 file found for class '\x1B[33m#{className}\x1B[0m'")
         end
 
         puts fileLocation[0]

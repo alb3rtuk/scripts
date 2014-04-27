@@ -22,6 +22,8 @@ if [[ ${file} == "" ]]; then
     exit
 fi
 
+cd ~/Repos/Nimzo/
+
 # Do some quick validation in Ruby..
 output=$(ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-sleek-test.rb ${file})
 
