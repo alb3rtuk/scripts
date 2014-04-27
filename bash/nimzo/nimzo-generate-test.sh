@@ -4,10 +4,11 @@
 
 # Script to kick-off my Nimzo test (boiler plate) generator for Sleek.
 
-tmpfile="/tmp/sleek-phpunit-boilerplate.php"
+tmpfile="/tmp/phpunit-test.php"
+
+cd ~/Repos/Nimzo/
 
 if [[ ! -f ${tmpfile} ]]; then
-    mkdir -p ${tmpfile}
     touch ${tmpfile}
 fi
 
@@ -22,14 +23,12 @@ if [[ ${file} == "" ]]; then
     exit
 fi
 
-cd ~/Repos/Nimzo/
-
 # Do some quick validation in Ruby..
-output=$(ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-sleek-test.rb ${file})
+output=$(ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-test.rb ${file})
 
 # If Ruby doesn't return an exit code of 0 (IE: full steam ahead), abandon ship!
 if [[ ! -f ${output} ]]; then
-    ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-sleek-test.rb ${file}
+    ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-test.rb ${file}
     exit
 fi
 
