@@ -508,7 +508,7 @@ class NimzoFileMaker
             file.puts '     */'
             file.puts '    public function setUp()'
             file.puts '    {'
-            file.puts "        $this->#{classNameLC} = new #{className}();"
+            file.puts "        $this->#{classNameLC} = new #{classUT}();"
             file.puts '    }'
             file.puts ''
             file.puts '    /**'
