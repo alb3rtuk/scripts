@@ -33,7 +33,7 @@ class NimzoRewriter
 
     # Re-write import-*.less file.
     def rewriteLess
-        filename = "#{$PATH_TO_DEV}lib/less/imports/import-#{@type}.less"
+        filename = "#{$PATH_TO_DEV}lib/app-less/imports/import-#{@type}.less"
         # If file doens't exist, create it and add it to Git.
         unless File.file?(filename)
             FileUtils::mkdir_p(filename)
