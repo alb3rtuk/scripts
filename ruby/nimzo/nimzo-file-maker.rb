@@ -483,6 +483,8 @@ class NimzoFileMaker
         classNameLC = className.dup
         classNameLC[0] = classNameLC[0..0].downcase
         classNameLC = classNameLC[0..-5]
+        classUT = className.dup
+        classUT = classUT[0..-5]
         File.open(filename, 'w') { |file|
             file.puts '<?php'
             file.puts ''
@@ -497,7 +499,7 @@ class NimzoFileMaker
             file.puts "class #{className} extends PHPUnit_Framework_TestCase"
             file.puts '{'
             file.puts '    /**'
-            file.puts "     * @var #{className} $#{classNameLC}"
+            file.puts "     * @var #{classUT}"
             file.puts '     */'
             file.puts "    private $#{classNameLC};"
             file.puts ''
@@ -520,9 +522,14 @@ class NimzoFileMaker
             file.puts '    /**'
             file.puts '     * @return void'
             file.puts '     */'
-            file.puts "    public function test#{className}()"
+            file.puts "    public function test#{classUT}()"
             file.puts '    {'
-            file.puts '        $this->assertTrue(true);'
+            file.puts "        $expectedResult = '<>';"
+            file.puts ''
+            file.puts "        $this->#{classNameLC};"
+            file.puts ''
+            file.puts "        $actualResult   = $this->#{classNameLC}->getMarkup();"
+            file.puts '        $this->assertEquals($expectedResult, $actualResult);'
             file.puts '    }'
             file.write '}'
         }
