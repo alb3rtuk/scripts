@@ -18,6 +18,11 @@ fi
 # Do some quick validation in Ruby..
 ruby ~/Repos/Scripts/ruby/nimzo/nimzo-generate-sleek-test.rb ${file}
 
+# If Ruby doesn't return an exit code of 0 (IE: full steam ahead), abandon ship!
+if [[ $? != 0 ]]; then
+    exit
+fi
+
 # If the Ruby validation passes, continue to PHP.
 cd ~/Repos/Nimzo/tests-php/bin
 echo
