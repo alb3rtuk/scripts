@@ -27,6 +27,7 @@ alias egrep='egrep --color=auto'
 alias sb='source ~/.bash_profile'
 alias tig='/Users/Albert/bin/exec/tig'
 alias mysql='mysql app -uroot'
+alias composer='/usr/local/bin/composer/./composer.phar'
 
 #####################################################################################################
 
