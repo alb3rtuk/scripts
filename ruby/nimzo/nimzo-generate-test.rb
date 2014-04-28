@@ -11,7 +11,7 @@ class NimzoGenertateSleekTestValidator
         className = className[0]
 
         # Validate that the string passed is AlphaNumeric
-        unless isAlphaNumeric(className)
+        unless isAlphaNumeric(className.gsub('_', ''))
             self.error("\x1B[33mClassname\x1B[0m must be alphanumeric. You passed: \x1B[33m#{className}\x1B[0m")
         end
 
