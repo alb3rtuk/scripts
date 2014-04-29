@@ -148,6 +148,7 @@ for file in $(find ${dirToScan} -type f -name '*.less'); do
 
                 # Compile to Less into CSS
                 cd ~/Repos/Nimzo/httpdocs
+                lessc public/dev/lib/app-less/app.less > public/min/lib/app-css/app.css
                 lessc public/dev/lib/app-less/app.less > ${minCssFile} -x -s
 
                 # Break out of script, we only need to do this once.
