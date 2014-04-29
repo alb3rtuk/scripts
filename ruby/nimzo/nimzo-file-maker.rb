@@ -494,7 +494,9 @@ class NimzoFileMaker
             file.puts ''
             file.puts 'namespace Sleek;'
             file.puts ''
+            file.puts 'use PHPUnit_Asserter;'
             file.puts 'use PHPUnit_Framework_TestCase;'
+            file.puts 'use PHPUnit_Helper;'
             file.puts ''
             file.puts '/**'
             file.puts ' * @group Sleek'
@@ -502,6 +504,10 @@ class NimzoFileMaker
             file.puts ' */'
             file.puts "class #{className} extends PHPUnit_Framework_TestCase"
             file.puts '{'
+            file.puts '    /**'
+            file.puts '     * @var PHPUnit_Asserter'
+            file.puts '     */'
+            file.puts '    private $PHPUnit_Asserter;'
             file.puts '    /**'
             file.puts "     * @var #{classUT}"
             file.puts '     */'
@@ -513,6 +519,10 @@ class NimzoFileMaker
             file.puts '    public function setUp()'
             file.puts '    {'
             file.puts "        $this->#{classNameLC} = new #{classUT}();"
+            file.puts ''
+            file.puts '        if(is_null($this->PHPUnit_Asserter)) {'
+            file.puts '            $this->PHPUnit_Asserter = new PHPUnit_Asserter();'
+            file.puts '        }'
             file.puts '    }'
             file.puts ''
             file.puts '    /**'
