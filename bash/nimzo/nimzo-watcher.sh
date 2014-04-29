@@ -4,8 +4,13 @@
 
 clearTerminal
 
+cd ~/Repos/Scripts/bash/nimzo
+
+# Run on load.
 ./nimzo-update.sh
 
+# Clear log file.
 echo "" > /tmp/nimzo-watcher-log.txt
-cd ~/Repos/Scripts/bash/nimzo
+
+# Start script.
 watch -n 1 ./nimzo-watcher-script.sh
