@@ -28,7 +28,6 @@ class NimzoRewriter
         self.rewriteLess
         self.rewriteReferences
 
-
     end
 
     # Re-write import-*.less file.
@@ -66,7 +65,7 @@ class NimzoRewriter
         className = @type
         className[0] = className.upcase[0..0]
         filename = "#{$PATH_TO_PHP}lib/ref/#{className}.php"
-        # If file doens't exist, create it and add it to Git.
+        # If file doesn't exist, create it and add it to Git.
         unless File.file?(filename)
             FileUtils::mkdir_p(File.dirname(filename))
             File::new(filename, 'w')
@@ -77,13 +76,45 @@ class NimzoRewriter
             file.puts ''
             file.puts 'namespace Ref;'
             file.puts ''
+            file.puts 'use Annotator;'
+            file.puts 'use Dto\Content;'
+            file.puts ''
             file.puts '/**'
+            file.puts " * #{className} URLs are referenced here."
+            file.puts ' * This class is AUTOMATICALLY GENERATED so changing things is pointless! It will simply get deleted on next re-write.'
+            file.puts ' *'
             file.puts ' * @package Ref'
+            file.puts ' * @noUnitTest'
             file.puts ' */'
             file.puts "class #{className}"
             file.puts '{'
             @routes.each { |route|
+                classNameCamelCased = ''
+                route.split('/').each { |routeParameter|
+                    routeUpperCase = routeParameter.dup
+                    routeUpperCase[0] = routeUpperCase[0..0].upcase
+                    classNameCamelCased = "#{classNameCamelCased}_#{routeUpperCase}"
+                }
+                classNameCamelCased[0] = ''
+                classNameCamelCased[0] = classNameCamelCased[0..0].downcase
+                file.puts '    /**'
+                file.puts "     * @url #{route}"
+                file.puts '     * @return string'
+                file.puts '     */'
+                file.puts "    public static function #{classNameCamelCased}()"
+                file.puts '    {'
+                file.puts "        return #{className}::Url();"
+                file.puts '    }'
+                file.puts ''
             }
+            file.puts '    /**'
+            file.puts '     * Internal helper method used for returning the full file path to an image.'
+            file.puts '     * @return string'
+            file.puts '     */'
+            file.puts '    private static function Url()'
+            file.puts '    {'
+            file.puts "        return Content::#{@type.upcase} . '/' . Annotator::getPreviousAnnotation('url', 2);"
+            file.puts '    }'
             file.write '}'
         }
     end
