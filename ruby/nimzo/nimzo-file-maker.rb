@@ -58,9 +58,16 @@ class NimzoFileMaker
         unless path.kind_of?(String)
             exitScript("Expected String, you passed (#{path.class})")
         end
-        unless File.directory?(File.dirname(path))
-            FileUtils::mkdir_p(File.dirname(path))
-            puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{File.dirname(path).sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+        if path.include?('.')
+            unless File.directory?(File.dirname(path))
+                FileUtils::mkdir_p(File.dirname(path))
+                puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{File.dirname(path).sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+            end
+        else
+            unless File.directory?(path)
+                FileUtils::mkdir_p(path)
+                puts "\x1B[32mCreated:\x1B[0m  \x1B[90m#{File.dirname(path).sub("#{$PATH_TO_PHP}/", '')[0..-1]}\x1B[0m"
+            end
         end
     end
 
