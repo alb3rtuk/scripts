@@ -67,7 +67,7 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
             fi
 
             # If the file which was comrpressed is within the /app-js directoy, re-create the merged .js file.
-            if [[ `dirname ${file}` == "/Users/Albert/Repos/Nimzo/httpdocs/public/dev/lib/app-js" ]]  || [[ ${jsFile} == 0 ]]; then
+            if [[ `dirname ${file}` == */Users/Albert/Repos/Nimzo/httpdocs/public/dev/lib/app-js* ]]  || [[ ${jsFile} == 0 ]]; then
 
                 jsFile=1
 
@@ -82,7 +82,7 @@ for file in $(find ${dirToScan} -type f -name '*.js'); do
 
                 # Merge the contents of all the files in /app-js into a single file.
                 cd ~/Repos/Nimzo/httpdocs/public/min/lib/app-js
-                cat *.js > ${minJsFile}
+                find . -iname "*.js" -exec cat "{}" \; > ${minJsFile}
 
                 echo "Recompiled: ${minJsFile}"
 
