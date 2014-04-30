@@ -7,7 +7,7 @@ group=$1
 cd ~/Repos/Nimzo/tests-php/
 
 echo
-message magenta "PHPUNIT" "Initializing tests..."
+message magenta "PHPUNIT" "Initializing tests... \033[33m$(date)\033[0m"
 echo
 
 if [[ ${group} == "" ]]; then
