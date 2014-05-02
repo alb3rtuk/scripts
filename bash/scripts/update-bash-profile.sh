@@ -9,3 +9,4 @@
 cp ~/Repos/Scripts/backup/.bash_profile ~/.bash_profile
 
 message green "SUCCESS" "Bash Profile has been updated. Don't forget to run $ `tput setab 3` . ~/.bash_profile `tput setab 0` or $ `tput setab 3` sb `tput setab 0`"
+echo
