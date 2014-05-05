@@ -14,7 +14,6 @@ phpunit \
 --bootstrap /Users/Albert/Repos/Nimzo/tests-php/bin/PHPUnit_Bootstrap.php \
 --no-configuration \
 --colors \
---group Ref \
 /Users/Albert/Repos/Nimzo/tests-php
 
 ruby ~/Repos/Nimzo-Ruby/tests/TestRunner.rb false
