@@ -15,7 +15,7 @@ done
 
 if [ "$files" -le "0" ]; then
     echo "\033[0mNothing to delete. Trash is already empty."
-    puts
+    echo
     exit
 fi
 
