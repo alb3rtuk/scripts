@@ -9,7 +9,7 @@ cd ~/Repos/Nimzo/tests-php/
 clear
 
 echo
-message magenta "PHPUNIT" "Initializing tests... \033[33m$(date)\033[0m"
+message magenta " PHPUNIT " "Initializing tests... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
 if [[ ${group} == "" ]]; then
