@@ -181,7 +181,7 @@ class NimzoFileMaker
             file.puts '    /**'
             file.puts '     * @return void'
             file.puts '     */'
-            file.puts '    public static function init()'
+            file.puts '    public static function init($data = null)'
             file.puts '    {'
             file.puts '    }'
             file.write '}'
