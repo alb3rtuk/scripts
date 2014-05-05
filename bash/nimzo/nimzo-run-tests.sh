@@ -17,3 +17,4 @@ phpunit \
 /Users/Albert/Repos/Nimzo/tests-php
 
 ruby ~/Repos/Nimzo-Ruby/tests/TestRunner.rb false
+echo
