@@ -81,7 +81,7 @@ class NimzoCreateRemove
             @route = "#{routeSplit[0].downcase}/#{className}"
 
             # Make sure folder doesn't start with following values. These will just create confusion.
-            if inArray(%w(bin lib script scripts sleek), routeSplit[0], true) &&
+            if inArray(%w(bin lib script scripts sleek), routeSplit[0], true)
                 self.error("Namespace/preceeding folder shouldn't be \x1B[33m#{routeSplit[0].upcase}\x1B[0m due to possible confusion.")
             end
 
@@ -99,7 +99,7 @@ class NimzoCreateRemove
         else
             # Make sure route doesn't start with API or AJAX
             routeSplit = @route.split('/')
-            if inArray(%w(api ajax script), routeSplit[0], true) &&
+            if inArray(%w(api ajax script), routeSplit[0], true)
                 self.error("Request route cannot start with \x1B[33m#{routeSplit[0]}\x1B[0m as these are parameters the system uses.")
             end
 
