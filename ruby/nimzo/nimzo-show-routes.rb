@@ -14,7 +14,7 @@ class DisplayRoutes
             puts
             puts "  \x1B[36m#{type.upcase}\x1B[0m"
             routes.getRoutesForType(type).each { |route|
-                puts "  \x1B[90m#{route}\x1B[0m"
+                puts "  #{route}"
             }
         }
         puts
