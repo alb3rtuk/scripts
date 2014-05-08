@@ -128,9 +128,12 @@ alias find-files-larger-than-kb='~/Repos/Scripts/bash/sys/find-files-larger-than
 alias find-files-smaller-than-kb='~/Repos/Scripts/bash/sys/find-files-smaller-than-kb.sh'
 alias get-octal-value='~/Repos/Scripts/bash/sys/get-octal-value.sh'
 
-
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
+
+### TESTS ####################
+alias tomcat-start='~/Repos/Scripts/bash/tomcat/tomcat-start.sh'
+alias tomcat-stop='~/Repos/Scripts/bash/tomcat/tomcat-stop.sh'
 
 #####################################################################################################
 
