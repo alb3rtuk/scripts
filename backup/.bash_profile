@@ -4,6 +4,9 @@
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export JAVA_HOME=$(/usr/libexec/java_home)
+export MAVEN_HOME="/usr/local/Cellar/maven/3.2.1/libexec"
+export TOMCAT_HOME="/Library/Tomcat-7"
+export CATALINA_HOME="/Library/Tomcat-7"
 
 #####################################################################################################
 #
@@ -116,6 +119,12 @@ alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 ### SELENIUM #################
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
+### TOMCAT ###################
+alias glassfish-start='~/Repos/Scripts/bash/servers/glassfish-start.sh'
+alias tomcat-restart='~/Repos/Scripts/bash/servers/tomcat-restart.sh'
+alias tomcat-start='~/Repos/Scripts/bash/servers/tomcat-start.sh'
+alias tomcat-stop='~/Repos/Scripts/bash/servers/tomcat-stop.sh'
+
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
 alias clear-terminal='~/Repos/Scripts/bash/sys/clear-terminal.sh'
@@ -128,11 +137,6 @@ alias get-octal-value='~/Repos/Scripts/bash/sys/get-octal-value.sh'
 
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
-
-### TESTS ####################
-alias tomcat-restart='~/Repos/Scripts/bash/tomcat/tomcat-restart.sh'
-alias tomcat-start='~/Repos/Scripts/bash/tomcat/tomcat-start.sh'
-alias tomcat-stop='~/Repos/Scripts/bash/tomcat/tomcat-stop.sh'
 
 #####################################################################################################
 
