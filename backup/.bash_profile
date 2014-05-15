@@ -119,11 +119,11 @@ alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 ### SELENIUM #################
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
-### TOMCAT ###################
-alias glassfish-start='~/Repos/Scripts/bash/servers/glassfish-start.sh'
-alias tomcat-restart='~/Repos/Scripts/bash/servers/tomcat-restart.sh'
-alias tomcat-start='~/Repos/Scripts/bash/servers/tomcat-start.sh'
-alias tomcat-stop='~/Repos/Scripts/bash/servers/tomcat-stop.sh'
+### JAVA #####################
+alias deploy-ebay-service='~/Repos/Scripts/bash/java/deploy-ebay-service.sh'
+alias tomcat-restart='~/Repos/Scripts/bash/java/tomcat-restart.sh'
+alias tomcat-start='~/Repos/Scripts/bash/java/tomcat-start.sh'
+alias tomcat-stop='~/Repos/Scripts/bash/java/tomcat-stop.sh'
 
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'

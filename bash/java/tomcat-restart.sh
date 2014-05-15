@@ -9,5 +9,6 @@ echo
 cd /Library/Tomcat/bin
 ./shutdown.sh
 echo
+sleep 2
 ./startup.sh
 echo
