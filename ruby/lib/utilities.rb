@@ -69,10 +69,17 @@ end
 
 # Get a Watir Browser object.
 # @return [Watir::Browser]
-def getBrowser(displays = 'single', headless = false, browser = 'chrome')
+def getBrowser(displays = 'single', headless = false)
     verifyInput(Array['single', 'multiple'], displays)
-    browser = Watir::Browser.new(headless ? 'phantomjs' : browser)
-    x = y= width = height = 0
+
+    if headless == false
+        browser = Watir::Browser.new :chrome, :switches => %w(--ignore-certificate-errors --test-type)
+    else
+        browser = Watir::Browser.new :phantomjs, :switches => %w(--ignore-certificate-errors --test-type)
+    end
+
+    x = y = width = height = 0
+
     if displays == 'single'
         width = 1680
         height = 2000
@@ -84,6 +91,7 @@ def getBrowser(displays = 'single', headless = false, browser = 'chrome')
         x = 3360
         y = -2000
     end
+
     browser.window.move_to(x, y)
     browser.window.resize_to(width, height)
     browser.window.use
