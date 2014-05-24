@@ -121,7 +121,7 @@ alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
 ### JAVA #####################
-alias deploy-ebay-service='~/Repos/Scripts/bash/java/deploy-ebay-service.sh'
+alias tail-catalina-out='~/Repos/Scripts/bash/java/tail-catalina-out.sh'
 alias tomcat-restart='~/Repos/Scripts/bash/java/tomcat-restart.sh'
 alias tomcat-start='~/Repos/Scripts/bash/java/tomcat-start.sh'
 alias tomcat-stop='~/Repos/Scripts/bash/java/tomcat-stop.sh'
