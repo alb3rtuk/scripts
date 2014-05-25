@@ -8,6 +8,9 @@ git push > /dev/null 2>&1
 cd ~/Repos/Nimzo-Ruby/
 git push > /dev/null 2>&1
 
+cd ~/Repos/Nimzo-Java/
+git push > /dev/null 2>&1
+
 cd ~/Repos/Scripts/
 git push > /dev/null 2>&1
 
