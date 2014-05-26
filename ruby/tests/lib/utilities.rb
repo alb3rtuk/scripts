@@ -4,7 +4,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 class TestUtilities < Test::Unit::TestCase
 
     def testConfigFileExists
-        assert_equal(File.exists?('/Users/Albert/bin/config/private.rb'), true)
+        assert_equal(File.exists?('/Users/Albert/Repos/Scripts/.secrets/secrets.rb'), true)
     end
 
     def testVerifyInput

@@ -5,7 +5,7 @@ require 'watir-webdriver'
 require 'openssl'
 require 'time'
 require 'fileutils'
-require '/Users/Albert/bin/config/private.rb'
+require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 
 # Will exit script if element is not contained in arrayOfValidElements.
