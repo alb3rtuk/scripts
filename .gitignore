@@ -11,8 +11,8 @@ Thumbs.db
 # OTHER #
 #########
 
-.idea/
-.secrets/
+.idea/*
+.secrets/*
 
 backup/cronerror.log
 backup/cronlog.log
