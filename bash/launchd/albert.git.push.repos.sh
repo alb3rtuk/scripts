@@ -2,7 +2,7 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-cd ~/Repos/Nimzo/
+cd ~/Repos/nimzo-php/
 git push > /dev/null 2>&1
 
 cd ~/Repos/Nimzo-Ruby/
