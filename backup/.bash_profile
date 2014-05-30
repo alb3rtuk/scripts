@@ -82,6 +82,7 @@ alias play-frozen='~/Repos/Scripts/bash/media/play-frozen.sh'
 >>> NIMZO ALIASES <<<
 
 ### SCRIPTS ##################
+alias choc='~/Repos/Scripts/bash/scripts/choc.sh'
 alias create-launchd='~/Repos/Scripts/bash/scripts/create-launchd.sh'
 alias decrypt='~/Repos/Scripts/bash/scripts/decrypt.sh'
 alias encrypt='~/Repos/Scripts/bash/scripts/encrypt.sh'
