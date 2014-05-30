@@ -67,6 +67,9 @@ alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
 
+### MEDIA ####################
+alias play-frozen='~/Repos/Scripts/bash/media/play-frozen.sh'
+
 >>> NIMZO ALIASES <<<
 
 ### SCRIPTS ##################
