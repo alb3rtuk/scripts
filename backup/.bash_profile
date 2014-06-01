@@ -61,11 +61,12 @@ alias chef-cookbook-upload='~/Repos/Scripts/bash/chef/chef-cookbook-upload.sh'
 
 ### EC2 ######################
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
-alias ec2-db-login='~/repos/scripts/bash/ec2/ec2-db-login.sh'
-alias ec2-db-setup='~/Repos/Scripts/bash/ec2/ec2-db-setup.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
 alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
-alias ec2-login='~/Repos/Scripts/bash/ec2/ec2-login.sh'
+alias ec2-mysql-login='~/repos/scripts/bash/ec2/ec2-mysql-login.sh'
+alias ec2-mysql-setup='~/Repos/Scripts/bash/ec2/ec2-mysql-setup.sh'
+alias ec2-server-login='~/repos/scripts/bash/ec2/ec2-server-login.sh'
+alias ec2-server-setup='~/Repos/Scripts/bash/ec2/ec2-server-setup.sh'
 
 ### GIT ######################
 alias git-status-all='~/Repos/Scripts/bash/git/git-status-all.sh'
@@ -75,9 +76,6 @@ alias tail-catalina-out='~/Repos/Scripts/bash/java/tail-catalina-out.sh'
 alias tomcat-restart='~/Repos/Scripts/bash/java/tomcat-restart.sh'
 alias tomcat-start='~/Repos/Scripts/bash/java/tomcat-start.sh'
 alias tomcat-stop='~/Repos/Scripts/bash/java/tomcat-stop.sh'
-
-### MEDIA ####################
-alias play-frozen='~/Repos/Scripts/bash/media/play-frozen.sh'
 
 >>> NIMZO ALIASES <<<
 
