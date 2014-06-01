@@ -66,7 +66,7 @@ alias ec2-list='~/Repos/Scripts/bash/ec2/ec2-list.sh'
 alias ec2-mysql-login='~/repos/scripts/bash/ec2/ec2-mysql-login.sh'
 alias ec2-mysql-setup='~/Repos/Scripts/bash/ec2/ec2-mysql-setup.sh'
 alias ec2-server-login='~/repos/scripts/bash/ec2/ec2-server-login.sh'
-alias ec2-server-setup='~/Repos/Scripts/bash/ec2/ec2-server-setup.sh'
+alias ec2-server-update='~/Repos/Scripts/bash/ec2/ec2-server-update.sh'
 
 ### GIT ######################
 alias git-status-all='~/Repos/Scripts/bash/git/git-status-all.sh'
