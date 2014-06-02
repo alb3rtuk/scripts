@@ -55,6 +55,7 @@ cd Repos
 git clone git@github.com:alb3rtuk/nimzo-java.git
 git clone git@github.com:alb3rtuk/nimzo-php.git
 git clone git@github.com:alb3rtuk/nimzo-ruby.git
+git clone git@github.com:alb3rtuk/sleek.git
 
 # CHMOD shell scripts
 cd ~/Repos/nimzo-ruby/scripts/system/
