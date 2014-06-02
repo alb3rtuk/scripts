@@ -12,7 +12,12 @@ echo
 cd ~/Repos/nimzo-ruby/
 git push
 
+# COPY YUI-COMPRESSOR TO SERVER
+scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-ruby/config/yuicompressor-2.4.8.jar ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:/tmp/yuicompressor-2.4.8.jar
+
 ssh -t -l ${EC2_SERVER_USER} -i ${PEM_EU_WEST_1} ${EC2_SERVER_HOST} '
+sudo mv /tmp/yuicompressor-2.4.8.jar /bin/yuicompressor-2.4.8.jar;
+sudo chmod 0755 /bin/yuicompressor-2.4.8.jar;
 cd ~/Repos/nimzo-ruby/scripts/server;
 git pull;
 ./server-update.sh;
