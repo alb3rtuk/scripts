@@ -13,10 +13,8 @@ cd ~/Repos/nimzo-php/
 git push
 
 ssh -t -l ${EC2_SERVER_USER} -i ${PEM_EU_WEST_1} ${EC2_SERVER_HOST} '
-cd ~/Repos/nimzo-php/;
-git pull;
-rm -rf ~/Repos/nimzo-php/httpdocs/.secrets;
-mkdir ~/Repos/nimzo-php/httpdocs/.secrets;
+cd $HOME/Repos/nimzo-ruby/scripts/server;
+./server-update-php.sh;
 '
 
 scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-php/httpdocs/.secrets/* ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-php/httpdocs/.secrets
