@@ -23,14 +23,12 @@ git pull;
 ./server-update.sh;
 rm -rf ~/Repos/nimzo-ruby/.secrets;
 mkdir ~/Repos/nimzo-ruby/.secrets;
-rm -rf ~/Repos/nimzo-php/httpdocs/.secrets;
-mkdir ~/Repos/nimzo-php/httpdocs/.secrets;
 '
 
 # COPY SECRETS TO SERVER
 scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-ruby/.secrets/* ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-ruby/.secrets
-scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-php/httpdocs/.secrets/* ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-php/httpdocs/.secrets
-scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-java/ebay-service/src/main/resources/eBayAppConfig.properties ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-java/ebay-service/src/main/resources/eBayAppConfig.properties
+#scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-php/httpdocs/.secrets/* ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-php/httpdocs/.secrets
+#scp -i ${PEM_EU_WEST_1} -r ~/Repos/nimzo-java/ebay-service/src/main/resources/eBayAppConfig.properties ${EC2_SERVER_USER}@${EC2_SERVER_HOST}:~/Repos/nimzo-java/ebay-service/src/main/resources/eBayAppConfig.properties
 
 echo
 message green "EC2" "Update complete!"
