@@ -33,24 +33,28 @@ sudo mkdir /usr/local/tomcat/
 sudo mv apache-tomcat-7.0.54/* /usr/local/tomcat/
 rm apache-tomcat-7.0.54.tar.gz
 
+# Set Environment Variables
+export TOMCAT_HOME=/usr/local/tomcat
+export CATALINA_HOME=/usr/local/tomcat
+
 # Start Tomcat
 cd /usr/local/tomcat/bin
 ./startup.sh
 
-# Install Maven
-cd /tmp
-# Go to "http://maven.apache.org/download.cgi" and find the latest binary (NOT SOURCE) version.
-wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/maven/maven-3/3.x.x/binaries/apache-maven-3.2.1-bin.tar.gz
-sudo tar -zxvf apache-maven-3.2.1-bin.tar.gz -C /opt/ # <-- Will extract into /opt
-rm apache-maven-3.2.1-bin.tar.gz
-# Setup the Maven environment variables in a shared profile.
-sudo nano /etc/profile.d/maven.sh
-# Add the following 3 lines (make sure VERSION number is correct!)
-export M2_HOME=/opt/apache-maven-3.2.1
-export M2=$M2_HOME/bin
-PATH=$M2:$PATH
-# Now LOGOUT and LOG BACK IN. Test it works by running:
-mvn -version
+## Install Maven
+#cd /tmp
+## Go to "http://maven.apache.org/download.cgi" and find the latest binary (NOT SOURCE) version.
+#wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/maven/maven-3/3.x.x/binaries/apache-maven-3.2.1-bin.tar.gz
+#sudo tar -zxvf apache-maven-3.2.1-bin.tar.gz -C /opt/ # <-- Will extract into /opt
+#rm apache-maven-3.2.1-bin.tar.gz
+## Setup the Maven environment variables in a shared profile.
+#sudo nano /etc/profile.d/maven.sh
+## Add the following 3 lines (make sure VERSION number is correct!)
+#export M2_HOME=/opt/apache-maven-3.2.1
+#export M2=$M2_HOME/bin
+#PATH=$M2:$PATH
+## Now LOGOUT and LOG BACK IN. Test it works by running:
+#mvn -version
 
 # Setup GIT RSA key.
 cd ~/.ssh
