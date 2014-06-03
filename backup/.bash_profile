@@ -67,7 +67,7 @@ alias ec2-mysql-login='~/repos/scripts/bash/ec2/ec2-mysql-login.sh'
 alias ec2-mysql-setup='~/Repos/Scripts/bash/ec2/ec2-mysql-setup.sh'
 alias ec2-server-deploy-ebay-service='~/Repos/Scripts/bash/ec2/ec2-server-deploy-ebay-service.sh'
 alias ec2-server-login='~/repos/scripts/bash/ec2/ec2-server-login.sh'
-alias ec2-server-update-ruby='~/Repos/Scripts/bash/ec2/ec2-server-update-ruby.sh'
+alias ec2-server-update='~/Repos/Scripts/bash/ec2/ec2-server-update.sh'
 alias ec2-server-update-php='~/Repos/Scripts/bash/ec2/ec2-server-update-php.sh'
 
 ### GIT ######################

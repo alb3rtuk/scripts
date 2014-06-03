@@ -19,6 +19,8 @@ ssh -t -l ${EC2_SERVER_USER} -i ${PEM_EU_WEST_1} ${EC2_SERVER_HOST} '
 sudo mv /tmp/yuicompressor-2.4.8.jar /bin/yuicompressor-2.4.8.jar;
 sudo chmod 0755 /bin/yuicompressor-2.4.8.jar;
 cd ~/Repos/nimzo-ruby/scripts/server;
+git stash;
+git stash drop;
 git pull;
 ./server-update.sh;
 rm -rf ~/Repos/nimzo-ruby/.secrets;
