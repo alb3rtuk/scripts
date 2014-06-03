@@ -5,6 +5,7 @@
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/mysql_host.sh
 . ~/Repos/Scripts/.secrets/mysql_user_root.sh
+. ~/Repos/Scripts/.secrets/mysql_user_app.sh
 
 echo
 message green "EC2" "Setting up user 'nimzo-app' on MySQL instance.. \033[33m${EC2_MYSQL_HOST}\033[0m"
