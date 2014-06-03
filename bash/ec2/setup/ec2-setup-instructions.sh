@@ -26,19 +26,31 @@ sudo /sbin/chkconfig --levels 235 httpd on
 sudo service httpd restart
 
 # Install Apache Tomcat 7 (newer versions might be available at: http://tomcat.apache.org/download-70.cgi)
-cd ~
-mkdir tmp
-cd tmp
+cd /tmp
 wget http://mirror.gopotato.co.uk/apache/tomcat/tomcat-7/v7.0.54/bin/apache-tomcat-7.0.54.tar.gz
 tar xzvf apache-tomcat-7.0.54.tar.gz
 sudo mkdir /usr/local/tomcat/
 sudo mv apache-tomcat-7.0.54/* /usr/local/tomcat/
-cd ..
-rm -rf tmp/
+rm apache-tomcat-7.0.54.tar.gz
 
 # Start Tomcat
 cd /usr/local/tomcat/bin
 ./startup.sh
+
+# Install Maven
+cd /tmp
+# Go to "http://maven.apache.org/download.cgi" and find the latest binary (NOT SOURCE) version.
+wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/maven/maven-3/3.x.x/binaries/apache-maven-3.2.1-bin.tar.gz
+sudo tar -zxvf apache-maven-3.2.1-bin.tar.gz -C /opt/ # <-- Will extract into /opt
+rm apache-maven-3.2.1-bin.tar.gz
+# Setup the Maven environment variables in a shared profile.
+sudo nano /etc/profile.d/maven.sh
+# Add the following 3 lines (make sure VERSION number is correct!)
+export M2_HOME=/opt/apache-maven-3.2.1
+export M2=$M2_HOME/bin
+PATH=$M2:$PATH
+# Now LOGOUT and LOG BACK IN. Test it works by running:
+mvn -version
 
 # Setup GIT RSA key.
 cd ~/.ssh
@@ -63,16 +75,7 @@ chmod 0755 chmod-shell-scripts.sh
 ./chmod-shell-scripts.sh
 
 # Install PHPUnit
-cd ~/
-mkdir tmp
-cd tmp
+cd /tmp
 wget https://phar.phpunit.de/phpunit.phar
 chmod +x phpunit.phar
 sudo mv phpunit.phar /usr/local/bin/phpunit
-cd ..
-rm -rf tmp
-
-# SETUP SUDOERS FILE (MUST ADD THE FOLLOWING LINES)
-sudo visuo # DO NOT USE NANO OR PLAIN VIM!!!!!
-# root       ALL=(ALL:ALL)      ALL
-# ec2-user   ALL=(ALL:ALL)      ALL
