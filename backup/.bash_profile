@@ -93,7 +93,6 @@ alias update-apache='~/Repos/Scripts/bash/scripts/update-apache.sh'
 alias update-bash-profile='~/Repos/Scripts/bash/scripts/update-bash-profile.sh'
 alias update-crontab='~/Repos/Scripts/bash/scripts/update-crontab.sh'
 alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
-alias update-sleek='~/Repos/Scripts/bash/scripts/update-sleek.sh'
 
 ### SELENIUM #################
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
