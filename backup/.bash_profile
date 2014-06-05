@@ -106,6 +106,7 @@ alias empty-trash='~/Repos/Scripts/bash/sys/empty-trash.sh'
 alias find-files-larger-than-kb='~/Repos/Scripts/bash/sys/find-files-larger-than-kb.sh'
 alias find-files-smaller-than-kb='~/Repos/Scripts/bash/sys/find-files-smaller-than-kb.sh'
 alias get-octal-value='~/Repos/Scripts/bash/sys/get-octal-value.sh'
+alias symlink-all='~/Repos/Scripts/bash/sys/symlink-all.sh'
 
 ### TESTS ####################
 alias run-ruby-tests='~/Repos/Scripts/bash/tests/run-ruby-tests.sh'
