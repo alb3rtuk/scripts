@@ -5,8 +5,10 @@
 # when the system is booting.  Do not change this entry.
 ##
 127.0.0.1       localhost
-127.0.0.1       localhost.nimzo
-127.0.0.1       localhost.docs
+127.0.0.1       localhost.brooklins-legacy
+127.0.0.1       localhost.nimzo-php
+127.0.0.1       localhost.nimzo-php-docs
+127.0.0.1       localhost.sleek-furniture
 255.255.255.255	broadcasthost
 ::1             localhost 
 fe80::1%lo0     localhost
