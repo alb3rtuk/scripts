@@ -6,6 +6,7 @@
 ##
 127.0.0.1       localhost
 127.0.0.1       localhost.brooklins-legacy
+127.0.0.1       localhost.eBay
 127.0.0.1       localhost.nimzo-php
 127.0.0.1       localhost.nimzo-php-docs
 127.0.0.1       localhost.sleek-furniture
