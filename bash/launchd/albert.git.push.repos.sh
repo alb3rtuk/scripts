@@ -14,6 +14,9 @@ git push > /dev/null 2>&1
 cd ~/Repos/brooklins-legacy/
 git push > /dev/null 2>&1
 
+cd ~/Repos/eBay/
+git push > /dev/null 2>&1
+
 cd ~/Repos/nimzo-java/
 git push > /dev/null 2>&1
 
