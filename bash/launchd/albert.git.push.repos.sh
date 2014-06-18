@@ -23,6 +23,9 @@ git push > /dev/null 2>&1
 cd ~/Repos/nimzo-php/
 git push > /dev/null 2>&1
 
+cd ~/Repos/nimzo-php-docs/
+git push > /dev/null 2>&1
+
 cd ~/Repos/nimzo-ruby/
 git push > /dev/null 2>&1
 
