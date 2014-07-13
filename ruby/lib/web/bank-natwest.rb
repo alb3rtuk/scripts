@@ -41,6 +41,11 @@ class BankNatWest
             if @displayProgress
                 puts "\x1B[90mSuccessfully bypassed (occasional) important information page\x1B[0m\n"
             end
+        elsif browser.frame(:id => f).input(:value => 'Confirm').exists?
+            browser.frame(:id => f).input(:value => 'Confirm').click
+            if @displayProgress
+                puts "\x1B[90mSuccessfully bypassed (occasional) important information page\x1B[0m\n"
+            end
         end
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to NatWest\x1B[0m\n"

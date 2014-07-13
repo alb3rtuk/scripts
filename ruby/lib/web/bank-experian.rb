@@ -36,6 +36,7 @@ class BankExperian
 
     def getCreditInfo(showInTerminal = false, browser = self.login)
         data = {}
+        sleep(8)
         if browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
             data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').text
         elsif browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
