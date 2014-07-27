@@ -15,21 +15,23 @@ class IConsign
         browser
     end
 
-    def processOrder(browser, name, address1, address2, city, county, postcode, phone, email, reference, items, weight)
+    def processOrder(browser, name, address1, address2, city, county, postcode, phone, email, reference, items, weight, userID)
         browser.text_field(:name => 'ctl00$mainContent$contact').set name
-        browser.text_field(:name => 'ctl00$mainContent$customerRef').set name
+        browser.text_field(:name => 'ctl00$mainContent$customerRef').set userID
         browser.text_field(:name => 'ctl00$mainContent$alternativeRef').set reference
+        browser.text_field(:name => 'ctl00$mainContent$telephone').set phone
+        browser.text_field(:name => 'ctl00$mainContent$emailAddress').set email
         browser.text_field(:name => 'ctl00$mainContent$postCode').set postcode
         browser.checkbox(:id => 'ctl00_mainContent_signatureOptional').click
-        browser.link(:id => 'mb_close_link').when_present(5).click
+        sleep(1)
+        browser.link(:id => 'mb_close_link').click
         browser.text_field(:name => 'ctl00$mainContent$address1').set address1
         browser.text_field(:name => 'ctl00$mainContent$address2').set address2
         browser.text_field(:name => 'ctl00$mainContent$postalTown').set city
         browser.text_field(:name => 'ctl00$mainContent$county').set county
-        browser.text_field(:name => 'ctl00$mainContent$telephone').set phone
-        browser.text_field(:name => 'ctl00$mainContent$emailAddress').set email
         browser.text_field(:name => 'ctl00$mainContent$domesticItems').set items
         browser.text_field(:name => 'ctl00$mainContent$domesticWeight').set weight
+        browser.input(:type => 'radio', :id => 'ctl00_mainContent_preDelEmail').click
         browser
     end
 
