@@ -97,6 +97,9 @@ alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
 ### SELENIUM #################
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
+### SLEEK ####################
+alias sleek-process-orders='~/Repos/Scripts/bash/sleek/sleek-process-orders.sh'
+
 ### SYS ######################
 alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
 alias clear-terminal='~/Repos/Scripts/bash/sys/clear-terminal.sh'
