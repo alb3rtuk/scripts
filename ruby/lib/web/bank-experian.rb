@@ -21,13 +21,13 @@ class BankExperian
         browser.goto(@login_uri)
         browser.text_field(:name => 'Username', :id => 'Username').set @username
         browser.text_field(:name => 'Password', :id => 'Password').set @password
-        browser.input(:type => 'button', :id => 'ensSubmitButton').click
+        browser.input(:type => 'submit', :id => 'SubmitButton').click
         if @displayProgress
             puts "\x1B[90mSuccessfully bypassed first page\x1B[0m"
         end
         browser.text_field(:name => 'Character1').set getCharAt(browser.div(:class => 'form-label', :index => 0).when_present(15).text.gsub(/[^0-9]/, ''), @security)
         browser.text_field(:name => 'Character2').set getCharAt(browser.div(:class => 'form-label', :index => 1).when_present(15).text.gsub(/[^0-9]/, ''), @security)
-        browser.input(:type => 'button', :id => 'ensSubmitButton').click
+        browser.input(:type => 'submit', :id => 'SubmitButton').click
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Experian\x1B[0m\n"
         end
