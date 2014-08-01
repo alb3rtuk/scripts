@@ -143,9 +143,6 @@ ebayBrowser = ebay.login(ARGV[0])
 
 ordersInfo.each do |order|
 
-    puts "#{order['itemName']} - #{order['street1']}, #{order['street2']},  #{order['cityName']}, #{order['postalCode'].upcase}"
-    puts
-
     ebayBrowser = ebay.getOrder(ebayBrowser, order['transID'], order['itemID'])
 
     iConsignBrowser = iConsign.processOrder(
@@ -164,24 +161,27 @@ ordersInfo.each do |order|
         order['userID']
     )
     orderCount = orderCount - 1
-    proceed = false
-    until proceed
-        STDOUT.flush
-        print "\x1B[42m Continue \x1B[0m \x1B[32mPress ENTER to submit this order (#{orderCount} left) \x1B[0m=> "
-        userResponse = STDIN.gets.chomp
-        if userResponse == ''
-            proceed = true
-        elsif userResponse != ''
-            puts "\n\x1B[41m Aborted! \x1B[0\n\n"
-            exit
-        end
-    end
-    puts
+
+    sleep(1)
+
+    #proceed = false
+    #until proceed
+    #    STDOUT.flush
+    #    print "\x1B[42m Continue \x1B[0m \x1B[32m#{orderCount} orders left. \x1B[0m=> "
+    #    userResponse = STDIN.gets.chomp
+    #    if userResponse == ''
+    #        proceed = true
+    #    elsif userResponse != ''
+    #        puts "\n\x1B[41m Aborted! \x1B[0\n\n"
+    #        exit
+    #    end
+    #end
 
     ebayBrowser.checkbox(:id => 'shippedflag').click
     ebayBrowser.input(:type => 'submit', :id => 'cmdsave').click
     iConsignBrowser.input(:type => 'submit', :id => 'ctl00_mainContent_SavePrint').click
 
+    puts "\x1B[42m DONE! \x1B[0m \x1B[32m#{orderCount} orders left. \x1B[0m "
     sleep(1)
 end
 
