@@ -48,8 +48,7 @@ m#{scriptData['folder'].upcase}\033[0m\n\n"
         previousFolder = scriptData['folder']
     end
 
-    terminalOutput << "
-\033[36m\xe2\x86\x92 #{scriptData['name']}\033[0m"
+    terminalOutput << "\033[36m\xe2\x86\x92 #{scriptData['name']}\033[0m"
 
     if scriptData['description'] != nil
         terminalOutput << "\033[37m - #{scriptData['description']}\033[0m"
