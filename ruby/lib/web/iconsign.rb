@@ -35,4 +35,61 @@ class IConsign
         browser
     end
 
+    def getSentConsignments(browser)
+        browser.goto('https://iconsign.ukmail.com/IConsign/FindConsignments.aspx')
+
+        totalPages = browser.span(:id => 'ctl00_mainContent_resultLabel').text
+        totalPages = totalPages.gsub(/[^0-9]/, '').to_f
+        totalPages = totalPages / 20
+        totalPages = totalPages.ceil
+        currentPage = 1
+        consignmentData = Array.new
+
+
+        until currentPage > totalPages
+            puts "Currently on: Page #{currentPage}"
+            browser.execute_script("javascript:__doPostBack('ctl00$mainContent$consignmentGridView','Page$#{currentPage}')")
+            table = browser.table(:id => 'ctl00_mainContent_consignmentGridView')
+            tableRowCount = 0
+            table.rows.each do |tableRow|
+                tableRowCount = tableRowCount + 1
+                if tableRowCount == 1
+                    next
+                end
+                rowData = {}
+                cellCount = 0
+                tableRow.cells.each do |tableCell|
+                    cellCount = cellCount + 1
+                    if cellCount == 5
+                        rowData['customerRef'] = tableCell.text
+                    elsif cellCount == 6
+                        rowData['altRef'] = tableCell.text
+                    elsif cellCount == 7
+                        rowData['consignmentNumber'] = tableCell.text
+                    elsif cellCount == 8
+                        rowData['collectionDate'] = tableCell.text
+                    elsif cellCount == 10
+                        rowData['postCode'] = tableCell.text
+                    end
+                end
+                consignmentData << rowData
+            end
+            consignmentData.pop
+            currentPage = currentPage + 1
+        end
+
+        lastColletionDate = 0
+        output = ''
+
+        consignmentData.each do |consignment|
+            if lastColletionDate != consignment['collectionDate']
+                output.insert(0, "\n")
+            end
+            output.insert(0, "#{consignment['collectionDate']} - #{consignment['consignmentNumber']} - #{consignment['altRef']} - #{consignment['customerRef']} - #{consignment['postCode']}\n")
+            lastColletionDate = consignment['collectionDate']
+        end
+
+        File.open('/tmp/iconsign-fix.txt', 'w') { |file| file.write(output) }
+    end
+
 end
