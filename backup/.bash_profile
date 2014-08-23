@@ -63,6 +63,7 @@ alias ec2-server-update='~/Repos/Scripts/bash/ec2/ec2-server-update.sh'
 alias ec2-server-update-php='~/Repos/Scripts/bash/ec2/ec2-server-update-php.sh'
 
 ### GIT ######################
+alias git-push-all='~/Repos/Scripts/bash/git/git-push-all.sh'
 alias git-status-all='~/Repos/Scripts/bash/git/git-status-all.sh'
 
 ### JAVA #####################
