@@ -1,7 +1,5 @@
 #!/bin/sh
-
-# Updates ~/.bash_profile with the bash_profile file found in this repo.
-# Scripts/backup/.bash_profile
+# Updates ~/.bash_profile with the the content of ~/Repos/Scripts/backup/.bash_profile & pulls in 'nimzo' aliases as well.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

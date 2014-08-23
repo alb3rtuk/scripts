@@ -63,7 +63,7 @@ alias ec2-server-update='~/Repos/Scripts/bash/ec2/ec2-server-update.sh'
 alias ec2-server-update-php='~/Repos/Scripts/bash/ec2/ec2-server-update-php.sh'
 
 ### GIT ######################
-alias git-push-all='~/Repos/Scripts/bash/git/git-push-all.sh'
+alias git-sync-all='~/Repos/Scripts/bash/git/git-sync-all.sh'
 alias git-status-all='~/Repos/Scripts/bash/git/git-status-all.sh'
 
 ### JAVA #####################
@@ -96,7 +96,6 @@ alias sleek-iconsign-fix='~/Repos/Scripts/bash/sleek/sleek-iconsign-fix.sh'
 alias sleek-process-orders='~/Repos/Scripts/bash/sleek/sleek-process-orders.sh'
 
 ### SYS ######################
-alias chmod-shell-scripts='~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh'
 alias clear-terminal='~/Repos/Scripts/bash/sys/clear-terminal.sh'
 alias close-all-windows='~/Repos/Scripts/bash/sys/close-all-windows.sh'
 alias edit-crontab='~/Repos/Scripts/bash/sys/edit-crontab.sh'

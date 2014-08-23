@@ -12,4 +12,3 @@ cd ~/Repos/nimzo-ruby/scripts/nimzo
 find . -type f -name "*.sh" -exec echo "chmod 0755 {}" \; -exec chmod 0755 {} \;
 echo
 message green "SUCCESS" "All shell scripts have been chmod'ed to 0755"
-echo

@@ -1,12 +1,11 @@
 #!/bin/sh
-# Pulls, then pushes all my Git repos from/to GitHub.
+# Pulls & pushes all my Git repos from/to GitHub.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
 echo
-message magenta " GIT " "Pushing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
+message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
-
 
 echo "\033[35m~/Repos/Chef/\033[0m"
 cd ~/Repos/Chef/
