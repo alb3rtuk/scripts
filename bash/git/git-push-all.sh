@@ -1,51 +1,61 @@
 #!/bin/sh
-# Gets the status of all my Git repos.
+# Pulls, then pushes all my Git repos from/to GitHub.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
 echo
-message magenta " GIT " "Getting status of all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
+message magenta " GIT " "Pushing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
 
 echo "\033[35m~/Repos/Chef/\033[0m"
 cd ~/Repos/Chef/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/Raillercoaster/\033[0m"
 cd ~/Repos/Raillercoaster/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/Scripts/\033[0m"
 cd ~/Repos/Scripts/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/brooklins-legacy/\033[0m"
 cd ~/Repos/brooklins-legacy/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/nimzo-java/\033[0m"
 cd ~/Repos/nimzo-java/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/nimzo-legacy/\033[0m"
 cd ~/Repos/nimzo-legacy/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/nimzo-php/\033[0m"
 cd ~/Repos/nimzo-php/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/nimzo-ruby/\033[0m"
 cd ~/Repos/nimzo-ruby/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/sleek/\033[0m"
 cd ~/Repos/sleek/
-git status
+git pull
+git push
 
 echo "\033[35m~/Repos/sleek-furniture/\033[0m"
 cd ~/Repos/sleek-furniture/
-git status
+git pull
+git push
 
 exit
