@@ -58,4 +58,6 @@ cd ~/Repos/sleek-furniture/
 git pull
 git push
 
+echo
+
 exit
