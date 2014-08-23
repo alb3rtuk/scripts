@@ -122,11 +122,15 @@ summary['total_cash'] =
     summary['total_available'] -
     summary['total_credit']
 
+# TEMP ADJUSTMENT TO ACCOUNT FOR PAYPAL HOLD (£5,323.19)
+summary['total_cash_adjusted'] = summary['total_cash'] + 323.19
+
 puts "\n[ #{Rainbow('Summary').foreground('#ff008a')} ]"
 table(:border => true) do
     row do
         column('Total Available', :width => 19, :align => 'right')
         column('Total Cash', :width => 19, :align => 'right')
+        column('After Feb 21', :width => 19, :align => 'right')
         column('Total Credit', :width => 19, :align => 'right')
         column('Credit Used', :width => 19, :align => 'right')
         column('Credit Score', :width => 19, :align => 'right', :color => 'cyan')
@@ -134,6 +138,7 @@ table(:border => true) do
     row do
         column("#{toCurrency(summary['total_available'])}", :color => (summary['total_available'] >= 0) ? 'green' : 'red')
         column("#{toCurrency(summary['total_cash'])}", :color => (summary['total_cash'] >= 0) ? 'green' : 'red')
+        column("#{toCurrency(summary['total_cash_adjusted'])}", :color => (summary['total_cash_adjusted'] >= 0) ? 'green' : 'red')
         column("#{toCurrency(summary['total_credit'])}", :color => 'white')
         column("#{toCurrency(0 - summary['total_credit_used'])}", :color => (summary['total_credit_used'] > 0) ? 'red' : 'white')
         column(experianCreditInfo['credit_score'], :color => 'cyan')

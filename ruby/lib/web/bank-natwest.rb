@@ -63,8 +63,6 @@ class BankNatWest
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
 
         # TEMP £5000 ADJUSTMENT TO MINIMIZE OVERDRAFT FEES
-        data['select_platinum_balance'] = data['select_platinum_balance'] - 5000
-        data['select_platinum_available'] =  data['select_platinum_available'] - 5000
         data['savings_account'] = data['savings_account'] + 5000
 
         if showInTerminal
