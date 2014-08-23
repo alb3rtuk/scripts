@@ -1,6 +1,5 @@
 #!/bin/sh
-
-# Script to setup nimzo-app user on a new DB instance.
+# Sets up the 'nimzo-app' user on the EC2 MySQL instance.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/mysql_host.sh

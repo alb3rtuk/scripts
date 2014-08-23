@@ -1,4 +1,5 @@
 #!/bin/sh
+# Logs me into my EC2 MySQL instance.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/mysql_host.sh

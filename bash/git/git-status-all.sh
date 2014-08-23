@@ -1,4 +1,5 @@
 #!/bin/sh
+# Gets the status of all my Git repos.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

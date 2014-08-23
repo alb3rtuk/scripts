@@ -1,4 +1,5 @@
 #!/bin/sh
+# Deletes a EC2 instance and disassociates it with Chef.
 
 . ~/Repos/Scripts/bash/common/ec2.sh
 

@@ -1,4 +1,5 @@
 #!/bin/sh
+# Delets a cookbook.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

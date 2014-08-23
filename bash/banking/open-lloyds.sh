@@ -1,4 +1,5 @@
 #!/bin/sh
+# Opens my Lloyds account.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

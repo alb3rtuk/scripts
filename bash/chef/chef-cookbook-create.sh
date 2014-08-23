@@ -1,4 +1,5 @@
 #!/bin/sh
+# Creates a cookbook.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

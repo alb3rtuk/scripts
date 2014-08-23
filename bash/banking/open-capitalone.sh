@@ -1,4 +1,5 @@
 #!/bin/sh
+# Opens my Capital One account.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

@@ -1,4 +1,5 @@
 #!/bin/sh
+# Downloads a cookbook.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

@@ -1,4 +1,5 @@
 #!/bin/sh
+# Lists all currently active EC2 instances.
 
 . ~/Repos/Scripts/bash/common/ec2.sh
 

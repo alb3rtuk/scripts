@@ -1,4 +1,5 @@
 #!/bin/sh
+# Updates all PHP (nimzo-php) on my EC2 instance.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/secrets_pem.sh

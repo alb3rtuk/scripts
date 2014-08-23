@@ -1,4 +1,5 @@
 #!/bin/sh
+# Deploys eBay Service (Java) to EC2 instance.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/secrets_pem.sh

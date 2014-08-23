@@ -1,4 +1,6 @@
 #!/bin/sh
+# Updates all scripts (nimzo-ruby) on my EC2 instance.
+
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/secrets_pem.sh

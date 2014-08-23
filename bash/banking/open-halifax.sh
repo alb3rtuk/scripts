@@ -1,4 +1,5 @@
 #!/bin/sh
+# Opens my Halifax account.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 

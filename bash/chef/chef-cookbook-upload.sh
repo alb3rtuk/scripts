@@ -1,4 +1,5 @@
 #!/bin/sh
+# Uploads a cookbook.
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
