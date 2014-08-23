@@ -3,17 +3,17 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 # Read contents of ~/.bash_profile into variable.
 bashProfile = File.read('/Users/Albert/.bash_profile')
 
-# Array of scripts + related information
-bashScripts = Array.new
+# Hashset of scripts + related information
+bashScripts = {}
 
-# Loop through all the files within the scripts directory and get info.
-Dir.glob('/Users/Albert/Repos/Scripts/bash/*/**').each do |scriptPath|
+def getScriptInfo(bashProfile, bashScripts, scriptPath)
     aliasName = File.basename(scriptPath, '.sh')
     folderName = scriptPath.split('/')
     folderName = folderName[folderName.count - 2]
 
     if bashProfile.include?("alias #{aliasName}=")
         scriptInfo = {}
+        scriptInfo['pathName'] = "#{folderName}#{aliasName}";
         scriptInfo['name'] = aliasName
         scriptInfo['folder'] = folderName
         scriptInfo['description'] = nil
@@ -27,9 +27,20 @@ Dir.glob('/Users/Albert/Repos/Scripts/bash/*/**').each do |scriptPath|
             end
         end
 
-        bashScripts << scriptInfo
+        bashScripts["#{folderName}#{aliasName}"] = scriptInfo
 
     end
+
+end
+
+# Loop through all the files within the scripts directory and get info.
+Dir.glob('/Users/Albert/Repos/Scripts/bash/*/**').each do |scriptPath|
+    getScriptInfo(bashProfile, bashScripts, scriptPath)
+end
+
+# Loop through all the files within the scripts directory and get info.
+Dir.glob('/Users/Albert/Repos/nimzo-ruby/scripts/*/**').each do |scriptPath|
+    getScriptInfo(bashProfile, bashScripts, scriptPath)
 end
 
 # The output string to be displayed in the terminal.
@@ -39,12 +50,10 @@ terminalOutput = ''
 previousFolder = ''
 
 # Loop through the Script data and compose output string.
-bashScripts.each do |scriptData|
+bashScripts.sort.map do |scriptkey, scriptData|
 
     if scriptData['folder'] != previousFolder
-
-        terminalOutput << "\033[33
-m#{scriptData['folder'].upcase}\033[0m\n\n"
+        terminalOutput << "\n \x1B[44m #{scriptData['folder'].upcase} \033[0m\n"
         previousFolder = scriptData['folder']
     end
 
@@ -54,6 +63,10 @@ m#{scriptData['folder'].upcase}\033[0m\n\n"
         terminalOutput << "\033[37m - #{scriptData['description']}\033[0m"
     else
         terminalOutput << "\033[37m - N/A\033[0m\n"
+    end
+
+    if scriptkey
+        # DO NOTHING (This is to shut up the IDE)
     end
 
 end

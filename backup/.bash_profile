@@ -96,6 +96,7 @@ alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
 ### SLEEK ####################
+alias sleek-iconsign-find-non-collected='~/Repos/Scripts/bash/sleek/sleek-iconsign-find-non-collected.sh'
 alias sleek-iconsign-fix='~/Repos/Scripts/bash/sleek/sleek-iconsign-fix.sh'
 alias sleek-process-orders='~/Repos/Scripts/bash/sleek/sleek-process-orders.sh'
 
