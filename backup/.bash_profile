@@ -51,6 +51,13 @@ alias chef-cookbook-delete='~/Repos/Scripts/bash/chef/chef-cookbook-delete.sh'
 alias chef-cookbook-download='~/Repos/Scripts/bash/chef/chef-cookbook-download.sh'
 alias chef-cookbook-upload='~/Repos/Scripts/bash/chef/chef-cookbook-upload.sh'
 
+### DEVELOPMENT ##############
+alias tail-catalina-out='~/Repos/Scripts/bash/development/tail-catalina-out.sh'
+alias tail-php-logs='~/Repos/Scripts/bash/development/tail-php-logs.sh'
+alias tomcat-restart='~/Repos/Scripts/bash/development/tomcat-restart.sh'
+alias tomcat-start='~/Repos/Scripts/bash/development/tomcat-start.sh'
+alias tomcat-stop='~/Repos/Scripts/bash/development/tomcat-stop.sh'
+
 ### EC2 ######################
 alias ec2-create='~/Repos/Scripts/bash/ec2/ec2-create.sh'
 alias ec2-delete='~/Repos/Scripts/bash/ec2/ec2-delete.sh'
@@ -65,12 +72,6 @@ alias ec2-server-update-php='~/Repos/Scripts/bash/ec2/ec2-server-update-php.sh'
 ### GIT ######################
 alias git-sync-all='~/Repos/Scripts/bash/git/git-sync-all.sh'
 alias git-status-all='~/Repos/Scripts/bash/git/git-status-all.sh'
-
-### JAVA #####################
-alias tail-catalina-out='~/Repos/Scripts/bash/java/tail-catalina-out.sh'
-alias tomcat-restart='~/Repos/Scripts/bash/java/tomcat-restart.sh'
-alias tomcat-start='~/Repos/Scripts/bash/java/tomcat-start.sh'
-alias tomcat-stop='~/Repos/Scripts/bash/java/tomcat-stop.sh'
 
 >>> NIMZO ALIASES <<<
 
