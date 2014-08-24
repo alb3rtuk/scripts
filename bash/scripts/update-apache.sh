@@ -23,4 +23,6 @@ message magenta "SUCCESS" "Restarted Apache"
 dscacheutil -flushcache
 message magenta "SUCCESS" "Flushed DNS Cache"
 
+sudo apachectl configtest
+
 exit
