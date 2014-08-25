@@ -92,6 +92,9 @@ alias open-lloyds='~/Repos/Scripts/bash/selenium/open-lloyds.sh'
 alias open-natwest='~/Repos/Scripts/bash/selenium/open-natwest.sh'
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
+### SHOW #####################
+alias show-bank-transactions='~/Repos/Scripts/bash/show/show-bank-transactions.sh'
+
 ### SLEEK ####################
 alias sleek-iconsign-find-non-collected='~/Repos/Scripts/bash/sleek/sleek-iconsign-find-non-collected.sh'
 alias sleek-iconsign-fix='~/Repos/Scripts/bash/sleek/sleek-iconsign-fix.sh'
