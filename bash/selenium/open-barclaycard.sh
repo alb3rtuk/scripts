@@ -5,4 +5,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/banking/open-barclaycard.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-barclaycard.rb $displays

@@ -5,4 +5,4 @@
 
 clearTerminal
 
-ruby ~/Repos/Scripts/ruby/banking/get-all-balances.rb $1
+ruby ~/Repos/Scripts/ruby/selenium/get-all-balances.rb $1

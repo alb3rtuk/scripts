@@ -5,4 +5,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/banking/open-experian.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-experian.rb $displays

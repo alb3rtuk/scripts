@@ -5,4 +5,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/banking/open-capitalone.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-capitalone.rb $displays

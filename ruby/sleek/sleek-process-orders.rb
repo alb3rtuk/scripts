@@ -1,7 +1,7 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/iconsign.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/ebay.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/iconsign.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/ebay.rb'
 require 'rest_client'
 require 'json'
 

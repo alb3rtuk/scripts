@@ -5,4 +5,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/banking/open-halifax.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-halifax.rb $displays

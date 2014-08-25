@@ -36,15 +36,6 @@ alias apigen='php $HOME/Repos/nimzo-php-docs/lib/apigen.php'
 
 #####################################################################################################
 
-### BANKING ##################
-alias get-all-balances='~/Repos/Scripts/bash/banking/get-all-balances.sh'
-alias open-barclaycard='~/Repos/Scripts/bash/banking/open-barclaycard.sh'
-alias open-capitalone='~/Repos/Scripts/bash/banking/open-capitalone.sh'
-alias open-experian='~/Repos/Scripts/bash/banking/open-experian.sh'
-alias open-halifax='~/Repos/Scripts/bash/banking/open-halifax.sh'
-alias open-lloyds='~/Repos/Scripts/bash/banking/open-lloyds.sh'
-alias open-natwest='~/Repos/Scripts/bash/banking/open-natwest.sh'
-
 ### CHEF #####################
 alias chef-cookbook-create='~/Repos/Scripts/bash/chef/chef-cookbook-create.sh'
 alias chef-cookbook-delete='~/Repos/Scripts/bash/chef/chef-cookbook-delete.sh'
@@ -89,6 +80,13 @@ alias update-crontab='~/Repos/Scripts/bash/scripts/update-crontab.sh'
 alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
 
 ### SELENIUM #################
+alias get-all-balances='~/Repos/Scripts/bash/selenium/get-all-balances.sh'
+alias open-barclaycard='~/Repos/Scripts/bash/selenium/open-barclaycard.sh'
+alias open-capitalone='~/Repos/Scripts/bash/selenium/open-capitalone.sh'
+alias open-experian='~/Repos/Scripts/bash/selenium/open-experian.sh'
+alias open-halifax='~/Repos/Scripts/bash/selenium/open-halifax.sh'
+alias open-lloyds='~/Repos/Scripts/bash/selenium/open-lloyds.sh'
+alias open-natwest='~/Repos/Scripts/bash/selenium/open-natwest.sh'
 alias open-nevil-road-surgery='~/Repos/Scripts/bash/selenium/open-nevil-road-surgery.sh'
 
 ### SLEEK ####################

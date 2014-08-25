@@ -5,4 +5,4 @@
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/banking/open-natwest.rb $displays
+ruby ~/Repos/Scripts/ruby/selenium/open-natwest.rb $displays

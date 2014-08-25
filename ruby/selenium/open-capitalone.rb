@@ -1,6 +1,6 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-capitalone.rb'
 
 displays = ARGV[0]
 

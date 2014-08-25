@@ -1,11 +1,11 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-barclaycard.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-capitalone.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-experian.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-halifax.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-lloyds.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/web/bank-natwest.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-barclaycard.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-capitalone.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-experian.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-halifax.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-lloyds.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-natwest.rb'
 
 include CommandLineReporter
 
