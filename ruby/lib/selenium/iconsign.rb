@@ -83,15 +83,15 @@ class IConsign
 
         consignmentData.each do |consignment|
             if lastColletionDate != consignment['collectionDate']
-                # output.insert(0, "\n")
+                output.insert(0, "\n")
             end
-            # output.insert(0, "#{consignment['collectionDate']} - #{consignment['consignmentNumber']} - #{consignment['altRef']} - #{consignment['customerRef']} - #{consignment['postCode']}\n")
-            output.insert(0, "#{consignment['consignmentNumber']}\n")
+            output.insert(0, "#{consignment['collectionDate']} - #{consignment['consignmentNumber']} - #{consignment['altRef']} - #{consignment['customerRef']} - #{consignment['postCode']}\n")
+            # output.insert(0, "#{consignment['consignmentNumber']}\n")
             lastColletionDate = consignment['collectionDate']
         end
 
-        #File.open('/tmp/iconsign-fix.txt', 'w') { |file| file.write(output) }
-        File.open('/tmp/iconsign-sent-consignments.txt', 'w') { |file| file.write(output) }
+        File.open('/tmp/iconsign-fix.txt', 'w') { |file| file.write(output) }
+        # File.open('/tmp/iconsign-sent-consignments.txt', 'w') { |file| file.write(output) }
     end
 
 end

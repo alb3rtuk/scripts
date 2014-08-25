@@ -1,6 +1,6 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 
-currentConsignment = 40795470000002
+currentConsignment = 40795470000771
 endConsignment = 40795470001145
 
 sentConsignments = Array.new
