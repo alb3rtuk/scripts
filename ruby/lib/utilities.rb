@@ -6,6 +6,8 @@ require 'openssl'
 require 'time'
 require 'fileutils'
 require 'date'
+require 'rubygems'
+require 'mysql'
 require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 

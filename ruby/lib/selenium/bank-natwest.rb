@@ -3,7 +3,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 class BankNatWest
     include CommandLineReporter
 
-    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false)
+    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false, databaseConnection)
         @username = username
         @security_top = security_top
         @security_bottom = security_bottom
@@ -11,6 +11,7 @@ class BankNatWest
         @headless = headless
         @displayProgress = displayProgress
         @login_uri = 'https://www.nwolb.com/default.aspx'
+        @databaseConnection = databaseConnection
     end
 
     # Gets you as far as NatWest account overview screen & then returns the browser for (possible) further manipulation.
@@ -51,6 +52,54 @@ class BankNatWest
             puts "\x1B[90mSuccessfully logged in to NatWest\x1B[0m\n"
         end
         browser
+    end
+
+    def runExtraction(showInTerminal = false)
+        attempt = 0
+        succeeded = false
+        while succeeded == false
+            begin
+                attempt = attempt + 1
+                data = getAllData(showInTerminal)
+                data = data[1]
+            rescue
+                succeeded = false
+                if showInTerminal
+                    puts "\x1B[31mAttempt #{attempt} failed.\x1B[0m"
+                end
+            else
+                succeeded = true
+                if showInTerminal
+                    puts "\x1B[32mSuccess (NatWest)\x1B[0m"
+                end
+            ensure
+                if succeeded
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
+                    insertTransactions(data['select_platinum_transactions'], 1)
+                    insertTransactions(data['step_account_transactions'], 2)
+                    insertTransactions(data['savings_account_transactions'], 3)
+                else
+                    if attempt >= 5
+                        succeeded = true
+                        if showInTerminal
+                            puts "\x1B[31mSite is either down or there is an error in the NatWest script.\x1B[0m"
+                        end
+                    end
+                end
+            end
+        end
+
+    end
+
+    def insertTransactions(data, bank_account_id)
+        data.each do |transaction|
+            result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
+            if result.num_rows == 0
+                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
+            end
+        end
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
@@ -207,7 +256,7 @@ class BankNatWest
             newData = {}
             # Date
             date = Date.parse(transaction['date'])
-            newData['date'] = date.strftime('%Y-%m-d')
+            newData['date'] = date.strftime('%Y-%m-%d')
             # Type
             newData['type'] = transaction['type']
             # Description
