@@ -86,4 +86,137 @@ class BankNatWest
         end
         Array[browser, data]
     end
+
+    def getAllData(showInTerminal = false, browser = self.login)
+        f = 'ctl00_secframe'
+        data_platinum = Array.new
+        data_step = Array.new
+        data_savings = Array.new
+
+        # Get balances first
+        data = getBalances(false, browser)
+        data = data[1]
+
+        if showInTerminal
+            puts "\x1B[90mSuccessfully retrieved balances\x1B[0m"
+        end
+
+        # Get PLATINUM transactions
+        browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87_AS5ALBAnchor').click
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'W2').select
+        browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
+        if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
+            if showInTerminal
+                puts "\x1B[90mNo transactions found in last 2 weeks for Platinum Account\x1B[0m"
+            end
+        else
+            if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
+                browser.frame(:id => f).link(:title => 'Show all items on a single page').click
+            end
+            data_platinum = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved Platinum Account transactions\x1B[0m"
+            end
+        end
+        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+
+        # Get STEP transactions
+        browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_FAB7EFB59260BED0F1081E761570BF4227C37E6B_AS5ALBAnchor').click
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'FAB7EFB59260BED0F1081E761570BF4227C37E6B').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'W2').select
+        browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
+        if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
+            if showInTerminal
+                puts "\x1B[90mNo transactions found in last 2 weeks for STEP Account\x1B[0m"
+            end
+        else
+            if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
+                browser.frame(:id => f).link(:title => 'Show all items on a single page').click
+            end
+            data_step = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved STEP Account transactions\x1B[0m"
+            end
+        end
+        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+
+        # Get Savings transactions
+        browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_CE99D6FF6219B59BB28B6A42825D98D60B92326C_AS5ALBAnchor').click
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'CE99D6FF6219B59BB28B6A42825D98D60B92326C').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'W2').select
+        browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
+        if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
+            if showInTerminal
+                puts "\x1B[90mNo transactions found in last 2 weeks for Savings Account\x1B[0m"
+            end
+        else
+            if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
+                browser.frame(:id => f).link(:title => 'Show all items on a single page').click
+            end
+            data_savings = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved Savings Account transactions\x1B[0m"
+            end
+        end
+        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+
+        # Add transactions to final array
+        data['select_platinum_transactions'] = data_platinum
+        data['step_account_transactions'] = data_step
+        data['savings_account_transactions'] = data_savings
+
+        Array[browser, data]
+    end
+
+    # Takes table and gets transactions from that.
+    def getTransactionsFromTable(table)
+        rowCount = 0
+        transactions = Array.new
+        table.rows.each do |tableRow|
+            rowCount = rowCount + 1
+            if rowCount <= 2
+                next
+            end
+            rowData = {}
+            cellCount = 0
+            tableRow.cells.each do |tableCell|
+                cellCount = cellCount + 1
+                if cellCount == 1
+                    rowData['date'] = tableCell.text
+                elsif cellCount == 2
+                    rowData['type'] = tableCell.text
+                elsif cellCount == 3
+                    rowData['description'] = tableCell.text
+                elsif cellCount == 4
+                    rowData['paid_in'] = tableCell.text
+                elsif cellCount == 5
+                    rowData['paid_out'] = tableCell.text
+                end
+            end
+            transactions << rowData
+        end
+        transactions.pop
+        sanitizeTransactions(transactions)
+    end
+
+    # Takes transaction data and sanitizes it.
+    def sanitizeTransactions(transactions)
+        sanitizedArray = Array.new
+        transactions.each do |transaction|
+            newData = {}
+            # Date
+            date = Date.parse(transaction['date'])
+            newData['date'] = date.strftime('%Y-%m-d')
+            # Type
+            newData['type'] = transaction['type']
+            # Description
+            newData['description'] = transaction['description']
+            # Paid In/Out
+            newData['paid_in'] = transaction['paid_in'].to_f
+            newData['paid_out'] = transaction['paid_out'].to_f
+            sanitizedArray << newData
+        end
+        sanitizedArray
+    end
 end

@@ -5,6 +5,7 @@ require 'watir-webdriver'
 require 'openssl'
 require 'time'
 require 'fileutils'
+require 'date'
 require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 
