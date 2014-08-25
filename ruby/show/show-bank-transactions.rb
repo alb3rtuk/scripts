@@ -20,9 +20,6 @@ class ShowBankTransactions
 
         @rule = getRuleString(202)
 
-        # Get bank account data SQL result (array)
-        @bankAccounts = @databaseConnection.query('SELECT * FROM bank_account ORDER BY bank_id, id ASC')
-
         # Get banks into Hash
         @banks = {}
         banksSQL = @databaseConnection.query('SELECT * FROM bank ORDER BY id ASC')
@@ -31,14 +28,16 @@ class ShowBankTransactions
         end
         banksSQL.free
 
-        @balanceDisplayColumnWidth_1 = 15
-        @balanceDisplayColumnWidth_2 = 20
-        @balanceDisplayColumnWidth_3 = 12
-        @balanceDisplayColumnWidth_4 = 12
-        @balanceDisplayColumnWidth_5 = 12
-        @balanceDisplayColumnWidth_6 = 30
-        @balanceDisplayColumnWidth_7 = 10
-
+        @colWidth1 = 15
+        @colWidth2 = 20
+        @colWidth_3 = 12
+        @colWidth_4 = 12
+        @colWidth_5 = 12
+        @colWidth_6 = 20
+        @colWidth_7 = 20
+        @colWidth_8 = 22
+        @colWidth_9 = 10
+        @colWidthTotal = @colWidth1 + @colWidth2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
     end
 
@@ -47,6 +46,7 @@ class ShowBankTransactions
 
         puts "\n"
         displayBankAccounts
+        displayCreditCards
         puts "\n"
     end
 
@@ -55,42 +55,97 @@ class ShowBankTransactions
         puts "#{Rainbow(' BANK ACCOUNTS ').background('#ff008a')}"
         table(:border => false) do
             row do
-                column(' Bank Name', :width => @balanceDisplayColumnWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @balanceDisplayColumnWidth_2, :align => 'left')
-                column('Balance', :width => @balanceDisplayColumnWidth_3, :align => 'right')
-                column('Available', :width => @balanceDisplayColumnWidth_4, :align => 'right')
-                column('Overdraft', :width => @balanceDisplayColumnWidth_5, :align => 'right')
-                column('Last Fetch', :width => @balanceDisplayColumnWidth_6, :align => 'right')
-                column('Age', :width => @balanceDisplayColumnWidth_7, :align => 'left')
+                column(' Bank Name', :width => @colWidth1, :align => 'left', :bold => 'true')
+                column('Account Name', :width => @colWidth2, :align => 'left')
+                column('Balance', :width => @colWidth_3, :align => 'right')
+                column('Available', :width => @colWidth_4, :align => 'right')
+                column('Overdraft', :width => @colWidth_5, :align => 'right')
+                column('', :width => @colWidth_6, :align => 'right')
+                column('', :width => @colWidth_7, :align => 'right')
+                column('Last Fetch', :width => @colWidth_8, :align => 'right')
+                column('Age', :width => @colWidth_9, :align => 'left')
             end
             row do
-                column(getRuleString(@balanceDisplayColumnWidth_1))
-                column(getRuleString(@balanceDisplayColumnWidth_2))
-                column(getRuleString(@balanceDisplayColumnWidth_3))
-                column(getRuleString(@balanceDisplayColumnWidth_4))
-                column(getRuleString(@balanceDisplayColumnWidth_5))
-                column(getRuleString(@balanceDisplayColumnWidth_6))
-                column(getRuleString(@balanceDisplayColumnWidth_7))
+                column(getRuleString(@colWidth1))
+                column(getRuleString(@colWidth2))
+                column(getRuleString(@colWidth_3))
+                column(getRuleString(@colWidth_4))
+                column(getRuleString(@colWidth_5))
+                column(getRuleString(@colWidth_6))
+                column(getRuleString(@colWidth_7))
+                column(getRuleString(@colWidth_8))
+                column(getRuleString(@colWidth_9))
             end
-            @bankAccounts.each_hash do |row|
+            bankAccounts = @databaseConnection.query("SELECT * FROM bank_account WHERE bank_account_type_id='1' ORDER BY bank_id, id ASC")
+            bankAccounts.each_hash do |row|
                 if row['bank_account_type_id'].to_i == 1
                     bankAndColor = getBankAndColor(row['bank_id'])
                     balances = @databaseConnection.query("SELECT * FROM bank_account_type_bank_account WHERE bank_account_id='#{row['id']}'")
                     balances = balances.fetch_hash
-
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                         column(row['title'], :color => bankAndColor[1])
                         column(getAsCurrency(balances['balance'])[0], :color => getAsCurrency(balances['balance'])[1])
                         column(getAsCurrency(balances['balance_available'])[0])
                         column(getAsCurrency(balances['balance_overdraft'])[0])
-                        column("  #{balances['date_fetched']}")
+                        column('')
+                        column('')
+                        column("#{balances['date_fetched']}")
                         column('N/A')
                     end
                 end
             end
         end
+        puts "#{getRuleString(@colWidthTotal)}\n\n\n"
+    end
 
+    # Display CreditCards
+    def displayCreditCards
+        puts "#{Rainbow(' CREDIT CARDS ').background('#ff008a')}"
+        table(:border => false) do
+            row do
+                column(' Bank Name', :width => @colWidth1, :align => 'left', :bold => 'true')
+                column('Account Name', :width => @colWidth2, :align => 'left')
+                column('Balance', :width => @colWidth_3, :align => 'right')
+                column('Available', :width => @colWidth_4, :align => 'right')
+                column('Limit', :width => @colWidth_5, :align => 'right')
+                column('Minimum Payment', :width => @colWidth_6, :align => 'right')
+                column('Payment Date', :width => @colWidth_7, :align => 'right')
+                column('Last Fetch', :width => @colWidth_8, :align => 'right')
+                column('Age', :width => @colWidth_9, :align => 'left')
+            end
+            row do
+                column(getRuleString(@colWidth1))
+                column(getRuleString(@colWidth2))
+                column(getRuleString(@colWidth_3))
+                column(getRuleString(@colWidth_4))
+                column(getRuleString(@colWidth_5))
+                column(getRuleString(@colWidth_6))
+                column(getRuleString(@colWidth_7))
+                column(getRuleString(@colWidth_8))
+                column(getRuleString(@colWidth_9))
+            end
+            bankAccounts = @databaseConnection.query("SELECT * FROM bank_account WHERE bank_account_type_id='2' ORDER BY bank_id, id ASC")
+            bankAccounts.each_hash do |row|
+                if row['bank_account_type_id'].to_i == 2
+                    bankAndColor = getBankAndColor(row['bank_id'])
+                    balances = @databaseConnection.query("SELECT * FROM bank_account_type_credit_card WHERE bank_account_id='#{row['id']}'")
+                    balances = balances.fetch_hash
+                    row do
+                        column(" #{bankAndColor[0]}", :color => bankAndColor[1])
+                        column(row['title'], :color => bankAndColor[1])
+                        column(getAsCurrency(balances['balance'])[0], :color => getAsCurrency(balances['balance'])[1])
+                        column(getAsCurrency(balances['balance_available'])[0])
+                        column(getAsCurrency(balances['balance_limit'])[0])
+                        column(getAsCurrency(balances['minimum_payment'])[0])
+                        column(balances['minimum_payment_date'])
+                        column("#{balances['date_fetched']}")
+                        column('N/A')
+                    end
+                end
+            end
+        end
+        puts "#{getRuleString(@colWidthTotal)}\n\n\n"
     end
 
     # Returns name of bank account + associated color.
