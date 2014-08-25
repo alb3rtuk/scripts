@@ -5,4 +5,4 @@
 
 clearTerminal
 
-ruby ~/Repos/Scripts/ruby/show/show-bank-transactions.rb $1
+ruby ~/Repos/Scripts/ruby/show/show-bank-transactions.rb
