@@ -140,7 +140,7 @@ class BankNatWest
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
-                puts "\x1B[90mNo transactions found in last 2 weeks for Platinum Account\x1B[0m"
+                puts "\x1B[90mNo transactions found in last 2 weeks for \x1B[33mPlatinum Account\x1B[0m\x1B[0m"
             end
         else
             if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
@@ -148,7 +148,7 @@ class BankNatWest
             end
             data_platinum = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
             if showInTerminal
-                puts "\x1B[90mSuccessfully retrieved Platinum Account transactions\x1B[0m"
+                puts "\x1B[90mSuccessfully retrieved \x1B[33mPlatinum Account\x1B[0m transactions\x1B[0m"
             end
         end
         browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
@@ -160,7 +160,7 @@ class BankNatWest
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
-                puts "\x1B[90mNo transactions found in last month for STEP Account\x1B[0m"
+                puts "\x1B[90mNo transactions found in last month for \x1B[33mSTEP Account\x1B[0m\x1B[0m"
             end
         else
             if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
@@ -168,7 +168,7 @@ class BankNatWest
             end
             data_step = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
             if showInTerminal
-                puts "\x1B[90mSuccessfully retrieved STEP Account transactions\x1B[0m"
+                puts "\x1B[90mSuccessfully retrieved \x1B[33mSTEP Account\x1B[0m transactions\x1B[0m"
             end
         end
         browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
@@ -180,7 +180,7 @@ class BankNatWest
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
-                puts "\x1B[90mNo transactions found in last month for Savings Account\x1B[0m"
+                puts "\x1B[90mNo transactions found in last month for \x1B[33mSavings Account\x1B[0m\x1B[0m"
             end
         else
             if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
@@ -188,7 +188,7 @@ class BankNatWest
             end
             data_savings = getTransactionsFromTable(browser.frame(:id => f).table(:id => 'ctl00_mainContent_SS4ITA'))
             if showInTerminal
-                puts "\x1B[90mSuccessfully retrieved Savings Account transactions\x1B[0m"
+                puts "\x1B[90mSuccessfully retrieved \x1B[33mSavings Account\x1B[0m transactions\x1B[0m"
             end
         end
         browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
