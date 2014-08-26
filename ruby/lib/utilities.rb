@@ -212,8 +212,7 @@ end
 def getSecondsAgo(timeStamp)
     timeStamp = DateTime.strptime(timeStamp, '%Y-%m-%dT%H:%M:%S%z')
     timeNow = DateTime.now
-    age = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
-    age
+    ((timeNow - timeStamp) * 24 * 60 * 60).to_i
 end
 
 # Returns a formatted of a timestamp. Numerous formats.
@@ -224,6 +223,5 @@ def formatTimestamp(timeStamp, format = 1)
     case format
         when 1
             return dateFormatted.strftime('%d-%m-%Y %H:%M:%S')
-
     end
 end
