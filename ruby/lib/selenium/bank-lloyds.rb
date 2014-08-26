@@ -140,7 +140,7 @@ class BankLloyds
         data['account_1_overdraft'] = data['account_1_overdraft'].split
         data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances for Current Account\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mCurrent Account\x1B[0m\x1B[0m"
         end
         data_current = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
         if browser.input(:type => 'image', :title => 'Previous').exists?
@@ -148,7 +148,7 @@ class BankLloyds
             data_current.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView')))
         end
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved transactions for Current Account\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mCurrent Account\x1B[0m\x1B[0m"
         end
 
         # Get Credit Card Data
@@ -167,7 +167,7 @@ class BankLloyds
         data['cc_due_date'] = data['cc_due_date'].split(':')
         data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y').strftime('%Y-%m-%d')
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances for Platinum Mastercard\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved balances for \x1B[36mPlatinum Mastercard\x1B[0m\x1B[0m"
         end
 
         if browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard').exists?
@@ -180,7 +180,7 @@ class BankLloyds
             end
         end
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved transactions for Platinum Mastercard\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[36mPlatinum Mastercard\x1B[0m\x1B[0m"
         end
 
         # Add transactions to final array

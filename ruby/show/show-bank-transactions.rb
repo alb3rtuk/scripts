@@ -46,13 +46,13 @@ class ShowBankTransactions
 
         # Column widths for balances
         @colWidth_1 = 20
-        @colWidth_2 = 20
+        @colWidth_2 = 25
         @colWidth_3 = 20
         @colWidth_4 = 20
         @colWidth_5 = 20
         @colWidth_6 = 20
         @colWidth_7 = 20
-        @colWidth_8 = 26
+        @colWidth_8 = 21
         @colWidth_9 = 27
         @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
@@ -66,8 +66,8 @@ class ShowBankTransactions
     def run
         puts "\n"
         displayTransactions
-        displayBankAccounts
         displayCreditCards
+        displayBankAccounts
         puts "\n"
     end
 
@@ -93,7 +93,7 @@ class ShowBankTransactions
                 column(getRuleString(@transWidth_6))
                 column(getRuleString(@transWidth_7))
             end
-            transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions ORDER BY date ASC, bank_account_id ASC, type LIMIT 300')
+            transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions WHERE date > DATE_SUB(CURDATE(), INTERVAL 45 DAY) ORDER BY date ASC, bank_account_id ASC, type ASC')
             transactions.each_hash do |row|
                 bankAndColor = getBankAndColor(@bankAccounts[row['bank_account_id']]['bank_id'])
 
@@ -102,7 +102,7 @@ class ShowBankTransactions
                 timeAgo = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
 
                 if timeAgo < 172800
-                    displayTransactionsDeployPastWeek
+                    displayTransactionsDeployPast48Hours
                 elsif timeAgo < 604608
                     displayTransactionsDeployPastWeek
                 elsif timeAgo < 2626560
@@ -114,8 +114,7 @@ class ShowBankTransactions
                     column(@bankAccounts[row['bank_account_id']]['title'], :color => bankAndColor[1])
                     column(timeStamp.strftime('%d %b %Y'), :color => 'white')
                     column(row['type'], :color => 'white')
-                    column(row['description'][0..(@transWidth_5 - 2
-                    )])
+                    column(row['description'][0..(@transWidth_5 - 2)])
                     column((row['paid_in'].to_f == 0) ? '' : getAsCurrency(row['paid_in'])[0], :color => 'white')
                     column((row['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - row['paid_out'].to_f)[0], :color => 'red')
                 end
@@ -123,7 +122,6 @@ class ShowBankTransactions
         end
         puts "#{getRuleString(@colWidthTotal)}\n\n"
     end
-
 
     def displayTransactionsDeployPastMonth
         unless @pastMonthDeployed
@@ -163,7 +161,7 @@ class ShowBankTransactions
         unless @past48HoursDeployed
             displayTransactionsBlankRow
             row do
-                @pastWeekDeployed = true
+                @past48HoursDeployed = true
                 column("\x1B[46m PAST 48 HOURS \x1B[0")
                 column('')
                 column('')
@@ -172,7 +170,6 @@ class ShowBankTransactions
                 column('')
                 column('')
             end
-            displayTransactionsBlankRow
         end
     end
 
@@ -200,8 +197,8 @@ class ShowBankTransactions
                 column('Overdraft', :width => @colWidth_5, :align => 'right')
                 column('—', :width => @colWidth_6, :align => 'right')
                 column('—', :width => @colWidth_7, :align => 'right')
-                column('Last Fetch', :width => @colWidth_8, :align => 'right')
-                column('Age', :width => @colWidth_9, :align => 'right')
+                column('', :width => @colWidth_8, :align => 'right')
+                column('', :width => @colWidth_9, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth_1))
@@ -220,7 +217,7 @@ class ShowBankTransactions
                     bankAndColor = getBankAndColor(row['bank_id'])
                     balances = @databaseConnection.query("SELECT * FROM bank_account_type_bank_account WHERE bank_account_id='#{row['id']}' ORDER BY date_fetched DESC LIMIT 1")
                     balances = balances.fetch_hash
-                    balances['date_fetched'] = normalizeTimestamp(balances['date_fetched'])
+                    balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                         column(row['title'], :color => bankAndColor[1])
@@ -229,13 +226,13 @@ class ShowBankTransactions
                         column(getAsCurrency(balances['balance_overdraft'])[0], :color => 'white')
                         column('—', :color => 'white')
                         column('—', :color => 'white')
-                        column("#{formatTimestamp(balances['date_fetched'])}", :color => 'white')
-                        column("#{getTimeAgoInHumanReadable(balances['date_fetched'])}", :color => 'yellow')
+                        column("#{formatTimestamp(balances['date_fetched_string'])}", :color => 'white')
+                        column("#{getTimeAgoInHumanReadable(balances['date_fetched_string'])}", :color => 'yellow')
                     end
                 end
             end
         end
-        puts "#{getRuleString(@colWidthTotal)}\n\n\n"
+        puts "#{getRuleString(@colWidthTotal)}\n"
     end
 
     # Display CreditCards
@@ -250,8 +247,8 @@ class ShowBankTransactions
                 column('Limit', :width => @colWidth_5, :align => 'right')
                 column('Minimum Payment', :width => @colWidth_6, :align => 'right')
                 column('Payment Date', :width => @colWidth_7, :align => 'right')
-                column('Last Fetch', :width => @colWidth_8, :align => 'right')
-                column('Age', :width => @colWidth_9, :align => 'right')
+                column('', :width => @colWidth_8, :align => 'right')
+                column('', :width => @colWidth_9, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth_1))
@@ -268,24 +265,43 @@ class ShowBankTransactions
             bankAccounts.each_hash do |row|
                 if row['bank_account_type_id'].to_i == 2
                     bankAndColor = getBankAndColor(row['bank_id'])
-                    balances = @databaseConnection.query("SELECT * FROM bank_account_type_credit_card WHERE bank_account_id='#{row['id']}'")
+                    balances = @databaseConnection.query("SELECT * FROM bank_account_type_credit_card WHERE bank_account_id='#{row['id']}' ORDER BY date_fetched DESC LIMIT 1")
                     balances = balances.fetch_hash
-                    balances['date_fetched'] = normalizeTimestamp(balances['date_fetched'])
+                    balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                         column(row['title'], :color => bankAndColor[1])
-                        column(getAsCurrency(balances['balance'])[0], :color => getAsCurrency(balances['balance'])[1])
-                        column(getAsCurrency(balances['balance_available'])[0])
-                        column(getAsCurrency(balances['balance_limit'])[0])
-                        column(getAsCurrency(balances['minimum_payment'])[0])
-                        column(balances['minimum_payment_date'])
-                        column("#{formatTimestamp(balances['date_fetched'])}", :color => 'white')
-                        column("#{getTimeAgoInHumanReadable(balances['date_fetched'])}", :color => 'yellow')
+                        creditCardBalance = 0 - balances['balance'].to_f
+
+                        minimumPaymentDate = balances['minimum_payment_date']
+                        if minimumPaymentDate == '0000-00-00'
+                            minimumPaymentDate = '1983-10-29'
+                        end
+                        timeStamp = DateTime.strptime(minimumPaymentDate, '%Y-%m-%d')
+                        timeNow = DateTime.now
+                        minimumPaymentDateIn = (timeStamp - timeNow).to_i
+                        if minimumPaymentDateIn <= 3
+                            minimumPaymentColor = 'red'
+                        else
+                            minimumPaymentColor = 'cyan'
+                        end
+
+                        column(getAsCurrency(creditCardBalance)[0], :color => (getAsCurrency(creditCardBalance)[1] == 'red') ? 'red' : 'white')
+                        column(getAsCurrency(balances['balance_available'])[0], :color => 'white')
+                        column(getAsCurrency(balances['balance_limit'])[0], :color => 'white')
+                        column(getAsCurrency(balances['minimum_payment'])[0], :color => (balances['minimum_payment'].to_f > 0) ? ((minimumPaymentDateIn <= 3) ? 'red' : 'cyan') : 'white')
+                        if minimumPaymentDateIn < 0
+                            column('—', :color => 'white')
+                        else
+                            column("#{DateTime.strptime(minimumPaymentDate, '%Y-%m-%d').strftime('%d %b')} [#{minimumPaymentDateIn} days]", :color => minimumPaymentColor)
+                        end
+                        column("#{formatTimestamp(balances['date_fetched_string'])}", :color => 'white')
+                        column("#{getTimeAgoInHumanReadable(balances['date_fetched_string'])}", :color => 'yellow')
                     end
                 end
             end
         end
-        puts "#{getRuleString(@colWidthTotal)}\n\n\n"
+        puts "#{getRuleString(@colWidthTotal)}\n\n"
     end
 
     # Returns name of bank account + associated color.
