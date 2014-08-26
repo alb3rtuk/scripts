@@ -3,7 +3,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 class BankNatWest
     include CommandLineReporter
 
-    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false, databaseConnection)
+    def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
         @username = username
         @security_top = security_top
         @security_bottom = security_bottom
@@ -62,10 +62,12 @@ class BankNatWest
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
                 data = data[1]
-            rescue
+            rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed.\x1B[0m"
+                    puts e.message
+                    puts e.backtrace
                 end
             else
                 succeeded = true
@@ -81,7 +83,7 @@ class BankNatWest
                     insertTransactions(data['step_account_transactions'], 2)
                     insertTransactions(data['savings_account_transactions'], 3)
                 else
-                    if attempt >= 1
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the NatWest script.\x1B[0m"
@@ -102,6 +104,7 @@ class BankNatWest
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
+        showInTerminal
         f = 'ctl00_secframe'
         data = {}
         data['select_platinum_balance'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
@@ -113,25 +116,6 @@ class BankNatWest
         # TEMP £5000 ADJUSTMENT TO MINIMIZE OVERDRAFT FEES
         data['savings_account'] = data['savings_account'] + 5000
 
-        if showInTerminal
-            puts "\n[ #{Rainbow('NatWest').foreground('#ff008a')} ]"
-            table(:border => true) do
-                row do
-                    column('Select Platinum', :width => 19, :align => 'right')
-                    column('Available Funds', :width => 19, :align => 'right')
-                    column('O/D Limit', :width => 19, :align => 'right')
-                    column('Step Account', :width => 19, :align => 'right')
-                    column('Savings Account', :width => 19, :align => 'right', :color => 'yellow')
-                end
-                row do
-                    column("#{toCurrency(data['select_platinum_balance'])}", :color => (data['select_platinum_balance'] >= 0) ? 'green' : 'red')
-                    column("#{toCurrency(data['select_platinum_available'])}", :color => (data['select_platinum_available'] >= 0) ? 'white' : 'red')
-                    column("#{toCurrency(data['select_platinum_overdraft'])}", :color => (data['select_platinum_overdraft'] >= 0) ? 'white' : 'red')
-                    column("#{toCurrency(data['step_account'])}", :color => (data['step_account'] >= 0) ? 'green' : 'red')
-                    column("#{toCurrency(data['savings_account'])}", :color => (data['savings_account'] >= 0) ? 'yellow' : 'red')
-                end
-            end
-        end
         Array[browser, data]
     end
 
@@ -176,7 +160,7 @@ class BankNatWest
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
-                puts "\x1B[90mNo transactions found in last 2 weeks for STEP Account\x1B[0m"
+                puts "\x1B[90mNo transactions found in last month for STEP Account\x1B[0m"
             end
         else
             if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?
@@ -196,7 +180,7 @@ class BankNatWest
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
-                puts "\x1B[90mNo transactions found in last 2 weeks for Savings Account\x1B[0m"
+                puts "\x1B[90mNo transactions found in last month for Savings Account\x1B[0m"
             end
         else
             if browser.frame(:id => f).link(:title => 'Show all items on a single page').exists?

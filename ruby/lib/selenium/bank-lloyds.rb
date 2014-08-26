@@ -3,7 +3,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 class BankLloyds
     include CommandLineReporter
 
-    def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false)
+    def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
         @username = username
         @password = password
         @security = security
@@ -11,6 +11,7 @@ class BankLloyds
         @headless = headless
         @displayProgress = displayProgress
         @login_uri = 'https://online.lloydsbank.co.uk/personal/logon/login.jsp'
+        @databaseConnection = databaseConnection
     end
 
     # Gets you as far as Lloyds account overview screen & then returns the browser for (possible) further manipulation.
@@ -74,12 +75,63 @@ class BankLloyds
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Lloyds\x1B[0m\n"
         end
+        sleep(2)
         browser
+    end
+
+    def runExtraction(showInTerminal = false)
+        attempt = 0
+        succeeded = false
+        while succeeded == false
+            begin
+                attempt = attempt + 1
+                data = getAllData(showInTerminal)
+                data = data[1]
+            rescue Exception => e
+                succeeded = false
+                if showInTerminal
+                    puts "\x1B[31mAttempt #{attempt} failed.\x1B[0m"
+                    puts e.message
+                    puts e.backtrace
+                end
+            else
+                succeeded = true
+                if showInTerminal
+                    puts "\x1B[32mSuccess (Lloyds)\x1B[0m"
+                end
+            ensure
+                if succeeded
+                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}')")
+                    insertTransactions(data['cc_transactions'], 7)
+                    insertTransactions(data['account_1_transactions'], 8)
+                else
+                    if attempt >= 1
+                        succeeded = true
+                        if showInTerminal
+                            puts "\x1B[31mSite is either down or there is an error in the Lloyds script.\x1B[0m"
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    def insertTransactions(data, bank_account_id)
+        data.each do |transaction|
+            result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
+            if result.num_rows == 0
+                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
+            end
+        end
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
         data = {}
-        browser.link(:title => 'View the latest transactions on your Lloyds Account').when_present(5).click
+        data_credit_card = Array.new
+
+        # Get Current Account Data
+        browser.link(:id => 'lstAccLst:0:lkImageRetail1').when_present(5).click
         data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
         data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
         data['account_1_available'] = data['account_1_available'][1].split('[')
@@ -87,6 +139,19 @@ class BankLloyds
         data['account_1_overdraft'] = browser.p(:class => 'accountMsg', :index => 1).text
         data['account_1_overdraft'] = data['account_1_overdraft'].split
         data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
+        if showInTerminal
+            puts "\x1B[90mSuccessfully retrieved balances for Current Account\x1B[0m"
+        end
+        data_current = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
+        if browser.input(:type => 'image', :title => 'Previous').exists?
+            browser.input(:type => 'image', :title => 'Previous').click
+            data_current.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView')))
+        end
+        if showInTerminal
+            puts "\x1B[90mSuccessfully retrieved transactions for Current Account\x1B[0m"
+        end
+
+        # Get Credit Card Data
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
         data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
@@ -100,34 +165,140 @@ class BankLloyds
         data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
-        data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y')
-        browser.link(:id => 'lkAccOverView_retail').when_present(5).click
+        data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y').strftime('%Y-%m-%d')
         if showInTerminal
-            puts "\n[ #{Rainbow('Lloyds').foreground('#ff008a')} ]"
-            table(:border => true) do
-                row do
-                    column('Platinum MasterCard', :width => 19, :align => 'right')
-                    column('Available Funds', :width => 19, :align => 'right')
-                    column('Credit Limit', :width => 19, :align => 'right')
-                    column('Minimum Payment', :width => 19, :align => 'right')
-                    column('Payment Date', :width => 19, :align => 'right')
-                    column('Current Account', :width => 19, :align => 'right')
-                    column('Available Funds', :width => 19, :align => 'right')
-                    column('O/D Limit', :width => 19, :align => 'right')
-                end
-                row do
-                    column("#{toCurrency(0 - data['cc_balance'])}", :color => (data['cc_balance'] > 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['cc_available'])}", :color => (data['cc_available'] > 0) ? 'white' : 'red')
-                    column("#{toCurrency(data['cc_limit'])}", :color => 'white')
-                    column("#{toCurrency(data['cc_minimum_payment'])}", :color => 'white')
-                    column("#{data['cc_due_date'].strftime('%B %d %Y')}", :color => 'white')
-                    column("#{toCurrency(data['account_1_balance'])}", :color => (data['account_1_balance'] > 0) ? 'green' : 'red')
-                    column("#{toCurrency(data['account_1_available'])}", :color => (data['account_1_available'] > 0) ? 'white' : 'red')
-                    column("#{toCurrency(data['account_1_overdraft'])}", :color => 'white')
-                end
+            puts "\x1B[90mSuccessfully retrieved balances for Platinum Mastercard\x1B[0m"
+        end
+
+        if browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard').exists?
+            data_credit_card = getTransactionsFromTableCreditCard(browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard'))
+        end
+        if browser.input(:type => 'image', :title => 'Previous month').exists?
+            browser.input(:type => 'image', :title => 'Previous month').click
+            if browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard').exists?
+                data_credit_card.push(*getTransactionsFromTableCreditCard(browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard')))
             end
         end
+        if showInTerminal
+            puts "\x1B[90mSuccessfully retrieved transactions for Platinum Mastercard\x1B[0m"
+        end
+
+        # Add transactions to final array
+        data['account_1_transactions'] = data_current
+        data['cc_transactions'] = data_credit_card
+
         Array[browser, data]
+    end
+
+    def getAllData(showInTerminal = false, browser = self.login)
+        # Get balances first
+        data = getBalances(showInTerminal, browser)
+        data = data[1]
+        Array[browser, data]
+    end
+
+    # Takes table and gets transactions from that.
+    def getTransactionsFromTable(table)
+        rowCount = 0
+        transactions = Array.new
+        table.rows.each do |tableRow|
+            rowCount = rowCount + 1
+            if rowCount <= 1
+                next
+            end
+            rowData = {}
+            cellCount = 0
+            tableRow.cells.each do |tableCell|
+                cellCount = cellCount + 1
+                if cellCount == 1
+                    rowData['date'] = tableCell.text
+                elsif cellCount == 2
+                    rowData['description'] = tableCell.text
+                elsif cellCount == 3
+                    rowData['type'] = tableCell.text
+                elsif cellCount == 4
+                    rowData['paid_in'] = tableCell.text
+                elsif cellCount == 5
+                    rowData['paid_out'] = tableCell.text
+                end
+            end
+            transactions << rowData
+        end
+        sanitizeTransactions(transactions)
+    end
+
+    # Takes transaction data and sanitizes it.
+    def sanitizeTransactions(transactions)
+        sanitizedArray = Array.new
+        transactions.each do |transaction|
+            newData = {}
+            # Date
+            date = Date.parse(transaction['date'])
+            newData['date'] = date.strftime('%Y-%m-%d')
+            # Type
+            newData['type'] = transaction['type']
+            # Description
+            newData['description'] = transaction['description']
+            # Paid In/Out
+            newData['paid_in'] = transaction['paid_in'].to_f
+            newData['paid_out'] = transaction['paid_out'].to_f
+            sanitizedArray << newData
+        end
+        sanitizedArray
+    end
+
+    # Takes table and gets transactions from that.
+    def getTransactionsFromTableCreditCard(table)
+        rowCount = 0
+        transactions = Array.new
+        table.rows.each do |tableRow|
+            rowCount = rowCount + 1
+            if rowCount <= 2
+                next
+            end
+            rowData = {}
+            cellCount = 0
+            tableRow.cells.each do |tableCell|
+                cellCount = cellCount + 1
+                if cellCount == 1
+                    rowData['date'] = tableCell.text
+                elsif cellCount == 2
+                    rowData['description'] = tableCell.text
+                elsif cellCount == 3
+                    rowData['reference'] = tableCell.text
+                elsif cellCount == 5
+                    rowData['paid_out'] = tableCell.text
+                end
+            end
+            transactions << rowData
+        end
+        sanitizeTransactionsCreditCard(transactions)
+    end
+
+    # Takes transaction data and sanitizes it.
+    def sanitizeTransactionsCreditCard(transactions)
+        sanitizedArray = Array.new
+        transactions.each do |transaction|
+            newData = {}
+            # Date
+            date = Date.parse(transaction['date'])
+            newData['date'] = date.strftime('%Y-%m-%d')
+            # Type
+            newData['type'] = 'CC'
+            # Description
+            newData['description'] = "#{transaction['description']} Ref ##{transaction['reference']}"
+            # Paid In/Out
+            if transaction['paid_out'].include? 'CR'
+                paidSplit = transaction['paid_out'].split(' ')
+                newData['paid_in'] = paidSplit[0].to_f
+                newData['paid_out'] = 0.to_f
+            else
+                newData['paid_in'] = 0.to_f
+                newData['paid_out'] = transaction['paid_out'].to_f
+            end
+            sanitizedArray << newData
+        end
+        sanitizedArray
     end
 
 end
