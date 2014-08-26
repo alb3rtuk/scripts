@@ -91,7 +91,7 @@ class BankHalifax
                     insertTransactions(data['account_1_transactions'], 4)
                     insertTransactions(data['account_2_transactions'], 5)
                 else
-                    if attempt >= 1
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the Halifax script.\x1B[0m"
