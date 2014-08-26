@@ -74,14 +74,14 @@ class BankNatWest
                 end
             ensure
                 if succeeded
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}')")
                     insertTransactions(data['select_platinum_transactions'], 1)
                     insertTransactions(data['step_account_transactions'], 2)
                     insertTransactions(data['savings_account_transactions'], 3)
                 else
-                    if attempt >= 5
+                    if attempt >= 1
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the NatWest script.\x1B[0m"
@@ -90,14 +90,13 @@ class BankNatWest
                 end
             end
         end
-
     end
 
     def insertTransactions(data, bank_account_id)
         data.each do |transaction|
             result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
             if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
+                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
             end
         end
     end
@@ -168,7 +167,7 @@ class BankNatWest
                 puts "\x1B[90mSuccessfully retrieved Platinum Account transactions\x1B[0m"
             end
         end
-        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+        browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
 
         # Get STEP transactions
         browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_FAB7EFB59260BED0F1081E761570BF4227C37E6B_AS5ALBAnchor').click
@@ -188,7 +187,7 @@ class BankNatWest
                 puts "\x1B[90mSuccessfully retrieved STEP Account transactions\x1B[0m"
             end
         end
-        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+        browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
 
         # Get Savings transactions
         browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_CE99D6FF6219B59BB28B6A42825D98D60B92326C_AS5ALBAnchor').click
@@ -208,7 +207,7 @@ class BankNatWest
                 puts "\x1B[90mSuccessfully retrieved Savings Account transactions\x1B[0m"
             end
         end
-        browser.frame(:id => f).link(:id => 'ctl00_menu__e7dd6e25132_AS1MNUAnchor').click
+        browser.frame(:id => f).link(:href => 'https://www.nwolb.com/AccountSummary2.aspx').click
 
         # Add transactions to final array
         data['select_platinum_transactions'] = data_platinum

@@ -26,15 +26,15 @@ class ShowBankTransactions
         end
         banksSQL.free
 
-        @colWidth1 = 15
+        @colWidth1 = 20
         @colWidth2 = 20
-        @colWidth_3 = 12
-        @colWidth_4 = 12
-        @colWidth_5 = 12
+        @colWidth_3 = 20
+        @colWidth_4 = 20
+        @colWidth_5 = 20
         @colWidth_6 = 20
         @colWidth_7 = 20
-        @colWidth_8 = 22
-        @colWidth_9 = 10
+        @colWidth_8 = 26
+        @colWidth_9 = 27
         @colWidthTotal = @colWidth1 + @colWidth2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
     end
@@ -58,10 +58,10 @@ class ShowBankTransactions
                 column('Balance', :width => @colWidth_3, :align => 'right')
                 column('Available', :width => @colWidth_4, :align => 'right')
                 column('Overdraft', :width => @colWidth_5, :align => 'right')
-                column('', :width => @colWidth_6, :align => 'right')
-                column('', :width => @colWidth_7, :align => 'right')
+                column('—', :width => @colWidth_6, :align => 'right')
+                column('—', :width => @colWidth_7, :align => 'right')
                 column('Last Fetch', :width => @colWidth_8, :align => 'right')
-                column('Age', :width => @colWidth_9, :align => 'left')
+                column('Age', :width => @colWidth_9, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth1))
@@ -78,18 +78,19 @@ class ShowBankTransactions
             bankAccounts.each_hash do |row|
                 if row['bank_account_type_id'].to_i == 1
                     bankAndColor = getBankAndColor(row['bank_id'])
-                    balances = @databaseConnection.query("SELECT * FROM bank_account_type_bank_account WHERE bank_account_id='#{row['id']}'")
+                    balances = @databaseConnection.query("SELECT * FROM bank_account_type_bank_account WHERE bank_account_id='#{row['id']}' ORDER BY date_fetched DESC LIMIT 1")
                     balances = balances.fetch_hash
+                    balances['date_fetched'] = normalizeTimestamp(balances['date_fetched'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                         column(row['title'], :color => bankAndColor[1])
                         column(getAsCurrency(balances['balance'])[0], :color => getAsCurrency(balances['balance'])[1])
                         column(getAsCurrency(balances['balance_available'])[0])
                         column(getAsCurrency(balances['balance_overdraft'])[0])
-                        column('')
-                        column('')
-                        column("#{balances['date_fetched']}")
-                        column('N/A')
+                        column('—')
+                        column('—')
+                        column("#{formatTimestamp(balances['date_fetched'])}", :color => 'white')
+                        column("#{getTimeAgoInHumanReadable(balances['date_fetched'])}", :color => 'yellow')
                     end
                 end
             end
@@ -110,7 +111,7 @@ class ShowBankTransactions
                 column('Minimum Payment', :width => @colWidth_6, :align => 'right')
                 column('Payment Date', :width => @colWidth_7, :align => 'right')
                 column('Last Fetch', :width => @colWidth_8, :align => 'right')
-                column('Age', :width => @colWidth_9, :align => 'left')
+                column('Age', :width => @colWidth_9, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth1))
@@ -129,6 +130,7 @@ class ShowBankTransactions
                     bankAndColor = getBankAndColor(row['bank_id'])
                     balances = @databaseConnection.query("SELECT * FROM bank_account_type_credit_card WHERE bank_account_id='#{row['id']}'")
                     balances = balances.fetch_hash
+                    balances['date_fetched'] = normalizeTimestamp(balances['date_fetched'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                         column(row['title'], :color => bankAndColor[1])
@@ -137,8 +139,8 @@ class ShowBankTransactions
                         column(getAsCurrency(balances['balance_limit'])[0])
                         column(getAsCurrency(balances['minimum_payment'])[0])
                         column(balances['minimum_payment_date'])
-                        column("#{balances['date_fetched']}")
-                        column('N/A')
+                        column("#{formatTimestamp(balances['date_fetched'])}", :color => 'white')
+                        column("#{getTimeAgoInHumanReadable(balances['date_fetched'])}", :color => 'yellow')
                     end
                 end
             end
@@ -171,7 +173,6 @@ class ShowBankTransactions
     def getRuleString(length)
         ruleString = ''
         for i in 0..length - 1
-
             ruleString = "#{ruleString}━"
         end
         ruleString
@@ -195,6 +196,14 @@ class ShowBankTransactions
         amount = amount.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
         returnHash[0] = "#{minus}#{symbol}#{amount}"
         returnHash
+    end
+
+    # If timestamp is blank, this gives it a normalized timestamp so script doesn't error.
+    def normalizeTimestamp(timestamp)
+        if timestamp == '0000-00-00 00:00:00' || timestamp == '0000-00-00T00:00:00+00:00'
+            timestamp = '1983-10-29T03:16:00+00:00'
+        end
+        timestamp
     end
 
 end

@@ -5,4 +5,4 @@
 
 # clearTerminal
 
-ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb true
+ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb $1

@@ -217,13 +217,13 @@ def getSecondsAgo(timeStamp)
 end
 
 # Returns a formatted of a timestamp. Numerous formats.
-# 1)
+# 1) 26-08-2014 02:53:25
 # @return string
 def formatTimestamp(timeStamp, format = 1)
     dateFormatted = DateTime.strptime(timeStamp, '%Y-%m-%dT%H:%M:%S%z')
     case format
         when 1
-            return dateFormatted.strftime('%e %b %Y - %H:%M:%S')
+            return dateFormatted.strftime('%d-%m-%Y %H:%M:%S')
 
     end
 end
