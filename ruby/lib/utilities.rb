@@ -8,6 +8,7 @@ require 'fileutils'
 require 'date'
 require 'rubygems'
 require 'mysql'
+require 'open-uri'
 require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 
@@ -223,5 +224,16 @@ def formatTimestamp(timeStamp, format = 1)
     case format
         when 1
             return dateFormatted.strftime('%d-%m-%Y %H:%M:%S')
+    end
+end
+
+
+# Checks if internet connection is present
+# @return boolean|void
+def checkMachineIsOnline
+    begin
+        true if open('http://www.google.com')
+    rescue
+        raise(RuntimeError, 'ERROR: No internet.')
     end
 end

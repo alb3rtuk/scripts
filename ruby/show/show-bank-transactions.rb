@@ -37,11 +37,12 @@ class ShowBankTransactions
         # Column widths for transactions
         @transWidth_1 = 20
         @transWidth_2 = 20
+
         @transWidth_3 = 14
         @transWidth_4 = 6
-        @transWidth_5 = 95
-        @transWidth_6 = 20
-        @transWidth_7 = 20
+        @transWidth_5 = 109
+        @transWidth_6 = 13
+        @transWidth_7 = 13
         @transWidthTotal = @transWidth_1 + @transWidth_2 + @transWidth_3 + @transWidth_4 + @transWidth_5 + @transWidth_6 + @transWidth_7 + 8
 
         # Column widths for balances
@@ -80,7 +81,7 @@ class ShowBankTransactions
                 column('Account Name', :width => @transWidth_2, :align => 'left')
                 column('Date', :width => @transWidth_3, :align => 'left')
                 column('Type', :width => @transWidth_4, :align => 'left')
-                column('Description', :width => @transWidth_5, :align => 'left')
+                column('Description', :width => @transWidth_5, :align => 'right')
                 column('Paid In', :width => @transWidth_6, :align => 'right')
                 column('Paid Out', :width => @transWidth_7, :align => 'right')
             end
@@ -94,10 +95,10 @@ class ShowBankTransactions
                 column(getRuleString(@transWidth_7))
             end
             transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions WHERE date > DATE_SUB(CURDATE(), INTERVAL 45 DAY) ORDER BY date ASC, bank_account_id ASC, type ASC')
-            transactions.each_hash do |row|
-                bankAndColor = getBankAndColor(@bankAccounts[row['bank_account_id']]['bank_id'])
+            transactions.each_hash do |transaction|
+                bankAndColor = getBankAndColor(@bankAccounts[transaction['bank_account_id']]['bank_id'])
 
-                timeStamp = DateTime.strptime(row['date'], '%Y-%m-%d')
+                timeStamp = DateTime.strptime(transaction['date'], '%Y-%m-%d')
                 timeNow = DateTime.now
                 timeAgo = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
 
@@ -109,18 +110,107 @@ class ShowBankTransactions
                     displayTransactionsDeployPastMonth
                 end
 
+                if isInternalTransfer(transaction)
+                    next
+                    # transactionColor = 'yellow'
+                    # transactionIsInternal = true
+                else
+                    transactionColor = 'white'
+                    transactionIsInternal = false
+                end
+
+
                 row do
                     column(" #{bankAndColor[0]}", :color => bankAndColor[1])
-                    column(@bankAccounts[row['bank_account_id']]['title'], :color => bankAndColor[1])
-                    column(timeStamp.strftime('%d %b %Y'), :color => 'white')
-                    column(row['type'], :color => 'white')
-                    column(row['description'][0..(@transWidth_5 - 2)])
-                    column((row['paid_in'].to_f == 0) ? '' : getAsCurrency(row['paid_in'])[0], :color => 'white')
-                    column((row['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - row['paid_out'].to_f)[0], :color => 'red')
+                    column(@bankAccounts[transaction['bank_account_id']]['title'], :color => bankAndColor[1])
+                    column(timeStamp.strftime('%d %b %Y'), :color => transactionColor)
+                    column(transaction['type'], :color => transactionColor)
+                    column(transaction['description'][0..(@transWidth_5 - 2)], :color => transactionColor)
+                    column((transaction['paid_in'].to_f == 0) ? '' : getAsCurrency(transaction['paid_in'])[0], :color => (transactionIsInternal) ? 'yellow' : 'cyan')
+                    column((transaction['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - transaction['paid_out'].to_f)[0], :color => (transactionIsInternal) ? 'yellow' : 'red')
                 end
             end
         end
         puts "#{getRuleString(@colWidthTotal)}\n\n"
+    end
+
+    # Returns TRUE if transaction is internal transfer
+    # @boolean
+    def isInternalTransfer(transaction)
+
+        if transaction['bank_account_id'].to_i >= 1 && transaction['bank_account_id'].to_i <= 3
+
+            # IF NATWEST
+            terms1 = Array[
+                'A RANNETSPERGER , LLOYDS ACCOUNT',
+                'HALIFAX ULTIMATE',
+                'AR HALIFAX ACC',
+                'LLOYDS ACCOUNT',
+            ]
+            terms2 = Array[
+                'CALL REF.NO.'
+            ]
+            if (transaction['type'] == 'BAC') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'OTR') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            end
+
+        elsif transaction['bank_account_id'].to_i >= 7 && transaction['bank_account_id'].to_i <= 8
+
+            # IF LLOYDS
+            terms1 = Array[
+                'NATWEST AD GOLD',
+                'NATWEST STEP',
+                'NATWEST SAVINGS',
+                'LLOYDS BANK PLATIN',
+            ]
+            terms2 = Array[
+                'RANNETSPERGER A NATWEST'
+            ]
+            terms3 = Array[
+                'HALIFAX ULTIMATE',
+                'HALIFAX REWARD',
+                'A RANNETSPERGER',
+            ]
+            terms4 = Array[
+                'PAYMENT RECEIVED'
+            ]
+            if (transaction['type'] == 'FPO') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'FPI') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'TFR') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'CC') && terms4.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            end
+
+        elsif transaction['bank_account_id'].to_i >= 4 && transaction['bank_account_id'].to_i <= 5
+
+            # IF HALIFAX
+            terms1 = Array[
+                'NATWEST AD GOLD',
+                'NATWEST STEP',
+                'NATWEST SAVINGS',
+            ]
+            terms2 = Array[
+                'RANNETSPERGER A NATWEST'
+            ]
+            terms3 = Array[
+                'HALIFAX ULTIMATE',
+                'HALIFAX REWARD',
+                'A RANNETSPERGER',
+            ]
+            if (transaction['type'] == 'FPO') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'FPI') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'TFR') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            end
+
+        end
     end
 
     def displayTransactionsDeployPastMonth
@@ -283,13 +373,13 @@ class ShowBankTransactions
                         if minimumPaymentDateIn <= 3
                             minimumPaymentColor = 'red'
                         else
-                            minimumPaymentColor = 'cyan'
+                            minimumPaymentColor = 'white'
                         end
 
                         column(getAsCurrency(creditCardBalance)[0], :color => (getAsCurrency(creditCardBalance)[1] == 'red') ? 'red' : 'white')
                         column(getAsCurrency(balances['balance_available'])[0], :color => 'white')
                         column(getAsCurrency(balances['balance_limit'])[0], :color => 'white')
-                        column(getAsCurrency(balances['minimum_payment'])[0], :color => (balances['minimum_payment'].to_f > 0) ? ((minimumPaymentDateIn <= 3) ? 'red' : 'cyan') : 'white')
+                        column(getAsCurrency(balances['minimum_payment'])[0], :color => (balances['minimum_payment'].to_f > 0) ? ((minimumPaymentDateIn <= 3) ? 'red' : 'white') : 'white')
                         if minimumPaymentDateIn < 0
                             column('—', :color => 'white')
                         else
@@ -363,5 +453,8 @@ class ShowBankTransactions
     end
 
 end
+
+# Make sure we're online before we start
+checkMachineIsOnline
 
 ShowBankTransactions.new.run

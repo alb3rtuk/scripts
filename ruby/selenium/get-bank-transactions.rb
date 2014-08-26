@@ -9,6 +9,9 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-natwest.rb'
 
 include CommandLineReporter
 
+# Make sure we're online before we start
+checkMachineIsOnline
+
 displayProgress = true
 headless = (ARGV.empty?) ? true : false
 
