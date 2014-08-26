@@ -171,3 +171,59 @@ end
 def isAlphaNumeric(string)
     ((string =~ /\A[[:alnum:]]+\z/) == 0) ? true : false
 end
+
+# Returns time ago in human readble format.
+# @string
+def getTimeAgoInHumanReadable(timeStamp)
+    secondsAgo = getSecondsAgo(timeStamp)
+    secondsAgo = secondsAgo.to_f
+    for i in 0..20
+        case secondsAgo
+            when 1..59
+                return 'Less than a minute ago'
+            when 60..119
+                return 'A minute ago'
+            when 120..2999
+                return "#{(secondsAgo / 60).round} minutes ago"
+            when 3000..5399
+                return 'About an hour ago'
+            when 5399..86399
+                return "#{((secondsAgo / 60) / 60).round} hours ago"
+            when 86400..169999
+                return 'A day ago'
+            when 170000..2505599
+                return "#{(((secondsAgo / 24) / 60) / 60).round} days ago"
+            when 2600000..4000000
+                return 'A month ago'
+            when 4000001..31535999
+                return "#{((((secondsAgo / 30.4368) / 24) / 60) / 60).round} months ago"
+            when 31536000..47303999
+                return 'A year ago'
+            when 47304000..9999999999999
+                return "#{((((secondsAgo / 365) / 24) / 60) / 60).round} years ago"
+            else
+                return 'Out of range'
+        end
+    end
+end
+
+# Returns the number of seconds that have elapsed between a timestamp (0000-00-00T00:00:00+00:00) and now
+# @return integer
+def getSecondsAgo(timeStamp)
+    timeStamp = DateTime.strptime(timeStamp, '%Y-%m-%dT%H:%M:%S%z')
+    timeNow = DateTime.now
+    age = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
+    age
+end
+
+# Returns a formatted of a timestamp. Numerous formats.
+# 1)
+# @return string
+def formatTimestamp(timeStamp, format = 1)
+    dateFormatted = DateTime.strptime(timeStamp, '%Y-%m-%dT%H:%M:%S%z')
+    case format
+        when 1
+            return dateFormatted.strftime('%e %b %Y - %H:%M:%S')
+
+    end
+end
