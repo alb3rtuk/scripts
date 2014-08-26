@@ -76,9 +76,9 @@ class BankNatWest
                 end
             ensure
                 if succeeded
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}')")
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}')")
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     insertTransactions(data['select_platinum_transactions'], 1)
                     insertTransactions(data['step_account_transactions'], 2)
                     insertTransactions(data['savings_account_transactions'], 3)
@@ -98,7 +98,7 @@ class BankNatWest
         data.each do |transaction|
             result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
             if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
+                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
             end
         end
     end

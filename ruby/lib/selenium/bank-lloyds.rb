@@ -101,8 +101,8 @@ class BankLloyds
                 end
             ensure
                 if succeeded
-                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
-                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     insertTransactions(data['cc_transactions'], 7)
                     insertTransactions(data['account_1_transactions'], 8)
                 else
@@ -121,7 +121,7 @@ class BankLloyds
         data.each do |transaction|
             result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
             if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
+                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
             end
         end
     end
