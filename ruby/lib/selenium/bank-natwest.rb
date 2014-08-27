@@ -1,4 +1,5 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-common.rb'
 
 class BankNatWest
     include CommandLineReporter
@@ -76,12 +77,22 @@ class BankNatWest
                 end
             ensure
                 if succeeded
+
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     insertTransactions(data['select_platinum_transactions'], 1)
                     insertTransactions(data['step_account_transactions'], 2)
                     insertTransactions(data['savings_account_transactions'], 3)
+
+                    # Check if existing transactions (in last month) still exist
+                    objectData = Array[
+                        {:bank_account_id => 1, :transactions => data['select_platinum_transactions']},
+                        {:bank_account_id => 2, :transactions => data['step_account_transactions']},
+                        {:bank_account_id => 3, :transactions => data['savings_account_transactions']}
+                    ]
+                    checkIfTransactionStillExist(@databaseConnection, objectData)
+
                 else
                     if attempt >= 5
                         succeeded = true

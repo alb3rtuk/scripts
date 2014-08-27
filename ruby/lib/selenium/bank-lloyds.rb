@@ -1,4 +1,5 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-common.rb'
 
 class BankLloyds
     include CommandLineReporter
@@ -101,10 +102,19 @@ class BankLloyds
                 end
             ensure
                 if succeeded
+
                     @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     insertTransactions(data['cc_transactions'], 7)
                     insertTransactions(data['account_1_transactions'], 8)
+
+                    # Check if existing transactions (in last month) still exist
+                    objectData = Array[
+                        {:bank_account_id => 7, :transactions => data['cc_transactions']},
+                        {:bank_account_id => 8, :transactions => data['account_1_transactions']},
+                    ]
+                    checkIfTransactionStillExist(@databaseConnection, objectData)
+
                 else
                     if attempt >= 1
                         succeeded = true

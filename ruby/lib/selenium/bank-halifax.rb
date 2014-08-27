@@ -1,4 +1,5 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-common.rb'
 
 class BankHalifax
     include CommandLineReporter
@@ -84,12 +85,22 @@ class BankHalifax
                 end
             ensure
                 if succeeded
+
                     @databaseConnection.query("INSERT INTO bank_account_type_misc (bank_account_id, balance, balance_remaining, date_fetched, date_fetched_string) VALUES (6, #{data['isa']}, #{data['isa_remaining']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (4, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (5, #{data['account_2_balance']}, #{data['account_2_available']}, #{data['account_2_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     insertTransactions(data['isa_transactions'], 6)
                     insertTransactions(data['account_1_transactions'], 4)
                     insertTransactions(data['account_2_transactions'], 5)
+
+                    # Check if existing transactions (in last month) still exist
+                    objectData = Array[
+                        {:bank_account_id => 6, :transactions => data['isa_transactions']},
+                        {:bank_account_id => 4, :transactions => data['account_1_transactions']},
+                        {:bank_account_id => 5, :transactions => data['account_2_transactions']}
+                    ]
+                    checkIfTransactionStillExist(@databaseConnection, objectData)
+
                 else
                     if attempt >= 5
                         succeeded = true
