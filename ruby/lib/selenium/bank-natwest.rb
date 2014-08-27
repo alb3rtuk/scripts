@@ -72,9 +72,6 @@ class BankNatWest
                 end
             else
                 succeeded = true
-                if showInTerminal
-                    puts "\x1B[32mSuccess (NatWest)\x1B[0m"
-                end
             ensure
                 if succeeded
 
@@ -91,7 +88,11 @@ class BankNatWest
                         {:bank_account_id => 2, :transactions => data['step_account_transactions']},
                         {:bank_account_id => 3, :transactions => data['savings_account_transactions']}
                     ]
-                    checkIfTransactionStillExist(@databaseConnection, objectData)
+                    BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
+
+                    if showInTerminal
+                        puts "\x1B[32mSuccess (NatWest)\x1B[0m"
+                    end
 
                 else
                     if attempt >= 5

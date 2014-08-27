@@ -80,9 +80,6 @@ class BankHalifax
                 end
             else
                 succeeded = true
-                if showInTerminal
-                    puts "\x1B[32mSuccess (Halifax)\x1B[0m"
-                end
             ensure
                 if succeeded
 
@@ -99,7 +96,11 @@ class BankHalifax
                         {:bank_account_id => 4, :transactions => data['account_1_transactions']},
                         {:bank_account_id => 5, :transactions => data['account_2_transactions']}
                     ]
-                    checkIfTransactionStillExist(@databaseConnection, objectData)
+                    BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
+
+                    if showInTerminal
+                        puts "\x1B[32mSuccess (Halifax)\x1B[0m"
+                    end
 
                 else
                     if attempt >= 5

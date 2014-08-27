@@ -97,9 +97,6 @@ class BankLloyds
                 end
             else
                 succeeded = true
-                if showInTerminal
-                    puts "\x1B[32mSuccess (Lloyds)\x1B[0m"
-                end
             ensure
                 if succeeded
 
@@ -113,7 +110,11 @@ class BankLloyds
                         {:bank_account_id => 7, :transactions => data['cc_transactions']},
                         {:bank_account_id => 8, :transactions => data['account_1_transactions']},
                     ]
-                    checkIfTransactionStillExist(@databaseConnection, objectData)
+                    BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
+
+                    if showInTerminal
+                        puts "\x1B[32mSuccess (Lloyds)\x1B[0m"
+                    end
 
                 else
                     if attempt >= 1
