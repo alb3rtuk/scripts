@@ -65,11 +65,7 @@ class ShowBankTransactions
         @colWidth_9 = 27
         @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
-        @pastMonthDeployed = false
-        @pastWeekDeployed = false
-        @past48HoursDeployed = false
-
-        @translations = Array[
+        @recognizedTransactions = Array[
             # NATWEST AD GOLD
             {:bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => 'white', :translation => 'PAYPAL WITHDRAWAL', :recurring => false},
             {:bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007'], :color => 'green', :translation => 'CASH', :recurring => false},
@@ -105,6 +101,19 @@ class ShowBankTransactions
             {:bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => 'cyan', :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring => true, :recurring_direction => 'in', :recurring_amount => 24},
         ]
 
+        @internalTransfers = Array[
+            {:bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT']},
+            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.']},
+            {:bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE']},
+            {:bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN']},
+            {:bank_account_id => Array[8], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
+            {:bank_account_id => Array[8], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
+            {:bank_account_id => Array[7], :type => 'CC', :terms => Array['PAYMENT RECEIVED']},
+            {:bank_account_id => Array[4, 5], :type => 'FPO', :terms => Array['NATWEST']},
+            {:bank_account_id => Array[4, 5], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
+            {:bank_account_id => Array[4, 5], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
+        ]
+
     end
 
     # Main function
@@ -123,10 +132,10 @@ class ShowBankTransactions
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @transWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @transWidth_2, :align => 'left')
+                column('Account Name', :width => @transWidth_2, :align => 'left', :bold => 'true')
                 column('Date', :width => @transWidth_3, :align => 'left')
                 column('Description', :width => @transWidth_4, :align => 'right')
-                column('', :width => @transWidth_5, :align => 'left')
+                column('', :width => @transWidth_5, :align => 'left', :bold => 'true')
                 column('Paid In', :width => @transWidth_6, :align => 'right')
                 column('Paid Out', :width => @transWidth_7, :align => 'right')
             end
@@ -139,24 +148,20 @@ class ShowBankTransactions
                 column(getRuleString(@transWidth_6))
                 column(getRuleString(@transWidth_7))
             end
-            transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions WHERE date > DATE_SUB(CURDATE(), INTERVAL 60 DAY) ORDER BY date ASC, bank_account_id ASC, type ASC')
+
+            # Get first day of last month
+            firstOfLastMonth = Time.new.to_datetime
+            firstOfLastMonth = firstOfLastMonth << 2
+            firstOfLastMonth = firstOfLastMonth.to_time.strftime('%Y-%m-01')
+
+            last_date = nil
+
+            transactions = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE date >= '#{firstOfLastMonth}' ORDER BY date ASC, bank_account_id ASC, type ASC")
             transactions.each_hash do |transaction|
+
                 bankAndColor = getBankAndColor(@bankAccounts[transaction['bank_account_id']]['bank_id'])
 
-                timeStamp = DateTime.strptime(transaction['date'], '%Y-%m-%d')
-                timeNow = DateTime.now
-                timeAgo = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
-
-
-                if timeAgo < 172800
-                    displayTransactionsDeployPast48Hours
-                elsif timeAgo < 604608
-                    displayTransactionsDeployPastWeek
-                elsif timeAgo < 2626560
-                    displayTransactionsDeployPastMonth
-                end
-
-                # Tranlsateion Handling
+                # Translation Handling
                 transactionDetails = getDescriptionAndColor(transaction)
                 transactionColor = transactionDetails[:color]
                 if @untranslated
@@ -178,15 +183,33 @@ class ShowBankTransactions
                     end
                 end
 
+                # Insert MONTH divider
+                if last_date != nil
+                    if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%B') != DateTime.strptime(last_date, '%Y-%m-%d').strftime('%B')
+                        displayTransactionsMonth(DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%B'))
+                    else
+                        # Insert space if new day
+                        if last_date != transaction['date']
+                            displayTransactionsBlankRow
+                        end
+                    end
+
+                end
+
+                # Shorten Description
+                description = transactionDescription[0..(@transWidth_4 - 2)]
+
                 row do
                     column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                     column(@bankAccounts[transaction['bank_account_id']]['title'], :color => bankAndColor[1])
-                    column(timeStamp.strftime('%d %b %Y'), :color => transactionColor)
-                    column(transactionDescription[0..(@transWidth_4 - 2)], :color => transactionColor)
+                    column(DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%d %b %Y'), :color => transactionColor)
+                    column("#{description}", :color => transactionColor)
                     column(transaction['type'], :color => transactionColor)
                     column((transaction['paid_in'].to_f == 0) ? '' : getAsCurrency(transaction['paid_in'])[0], :color => transactionColor)
                     column((transaction['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - transaction['paid_out'].to_f)[0], :color => transactionColor)
                 end
+
+                last_date = transaction['date']
             end
         end
         puts "#{getRuleString(@colWidthTotal)}\n\n"
@@ -195,7 +218,7 @@ class ShowBankTransactions
     # Translates Description
     # @return string
     def getDescriptionAndColor(transaction)
-        @translations.each do |translation|
+        @recognizedTransactions.each do |translation|
             if transaction['bank_account_id'].to_i == translation[:bank_account_id] && transaction['type'] == translation[:type] && translation[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
                 return {:description => translation[:translation].upcase, :color => translation[:color]}
             end
@@ -206,136 +229,36 @@ class ShowBankTransactions
     # Returns TRUE if transaction is internal transfer
     # @return boolean
     def isInternalTransfer(transaction)
-
-        if transaction['bank_account_id'].to_i >= 1 && transaction['bank_account_id'].to_i <= 3
-
-            # IF NATWEST
-            terms1 = Array[
-                'A RANNETSPERGER',
-                'HALIFAX ULTIMATE',
-                'AR HALIFAX ACC',
-                'LLOYDS ACCOUNT',
-            ]
-            terms2 = Array[
-                'CALL REF.NO.'
-            ]
-            terms3 = Array[
-                'BARCLAYCARD',
-                'CAPITAL ONE'
-            ]
-            if (transaction['type'] == 'BAC') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'OTR') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'POS') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            end
-
-        elsif transaction['bank_account_id'].to_i >= 7 && transaction['bank_account_id'].to_i <= 8
-
-            # IF LLOYDS
-            terms1 = Array[
-                'NATWEST AD GOLD',
-                'NATWEST STEP',
-                'NATWEST SAVINGS',
-                'LLOYDS BANK PLATIN',
-            ]
-            terms2 = Array[
-                'RANNETSPERGER A NATWEST'
-            ]
-            terms3 = Array[
-                'HALIFAX ULTIMATE',
-                'HALIFAX REWARD',
-                'A RANNETSPERGER',
-            ]
-            terms4 = Array[
-                'PAYMENT RECEIVED'
-            ]
-            if (transaction['type'] == 'FPO') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'FPI') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'TFR') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'CC') && terms4.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            end
-
-        elsif transaction['bank_account_id'].to_i >= 4 && transaction['bank_account_id'].to_i <= 5
-
-            # IF HALIFAX
-            terms1 = Array[
-                'NATWEST',
-            ]
-            terms2 = Array[
-                'RANNETSPERGER A NATWEST'
-            ]
-            terms3 = Array[
-                'HALIFAX ULTIMATE',
-                'HALIFAX REWARD',
-                'A RANNETSPERGER',
-            ]
-            if (transaction['type'] == 'FPO') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'FPI') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
-                return true
-            elsif (transaction['type'] == 'TFR') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
+        @internalTransfers.each do |match|
+            if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'] =~ /#{w}/ } && match[:type] == transaction['type']
                 return true
             end
 
         end
+        false
+
+
     end
 
-    def displayTransactionsDeployPastMonth
-        unless @pastMonthDeployed
-            displayTransactionsBlankRow
-            row do
-                @pastMonthDeployed = true
-                column("\x1B[46m PAST MONTH \x1B[0")
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-            end
-            displayTransactionsBlankRow
+    # Inserts a divider to display the month
+    # @return void
+    def displayTransactionsMonth(month)
+        displayTransactionsBlankRow
+        row do
+            @pastMonthDeployed = true
+            column(getRuleString(@transWidth_1))
+            column(getRuleString(@transWidth_2))
+            column(getRuleString(@transWidth_3))
+            column("#{getRuleString(@transWidth_4 - (month.length + 6))}  [ #{month.upcase} ]")
+            column(getRuleString(@transWidth_5))
+            column(getRuleString(@transWidth_6))
+            column(getRuleString(@transWidth_7))
         end
+        displayTransactionsBlankRow
     end
 
-    def displayTransactionsDeployPastWeek
-        unless @pastWeekDeployed
-            displayTransactionsBlankRow
-            row do
-                @pastWeekDeployed = true
-                column("\x1B[46m PAST WEEK \x1B[0")
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-            end
-            displayTransactionsBlankRow
-        end
-    end
-
-    def displayTransactionsDeployPast48Hours
-        unless @past48HoursDeployed
-            displayTransactionsBlankRow
-            row do
-                @past48HoursDeployed = true
-                column("\x1B[46m PAST 48 HOURS \x1B[0")
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-            end
-        end
-    end
-
+    # Displays a blank transaction row
+    # @return void
     def displayTransactionsBlankRow
         row do
             column('')
@@ -354,7 +277,7 @@ class ShowBankTransactions
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @colWidth_2, :align => 'left')
+                column('Account Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
                 column('Balance', :width => @colWidth_3, :align => 'right')
                 column('Available', :width => @colWidth_4, :align => 'right')
                 column('Overdraft', :width => @colWidth_5, :align => 'right')
@@ -404,7 +327,7 @@ class ShowBankTransactions
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @colWidth_2, :align => 'left')
+                column('Account Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
                 column('Balance', :width => @colWidth_3, :align => 'right')
                 column('Available', :width => @colWidth_4, :align => 'right')
                 column('Limit', :width => @colWidth_5, :align => 'right')
@@ -489,10 +412,10 @@ class ShowBankTransactions
     end
 
     # Returns '━━━━'
-    def getRuleString(length)
+    def getRuleString(length, delimiter = '━')
         ruleString = ''
         for i in 0..length - 1
-            ruleString = "#{ruleString}━"
+            ruleString = "#{ruleString}#{delimiter}"
         end
         ruleString
     end
