@@ -75,13 +75,14 @@ class BankNatWest
             ensure
                 if succeeded
 
+                    puts data['select_platinum_transactions'].inspect
+
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
-                    insertTransactions(data['select_platinum_transactions'], 1)
-                    insertTransactions(data['step_account_transactions'], 2)
-                    insertTransactions(data['savings_account_transactions'], 3)
-
+                    BankCommon.new.insertTransactions(@databaseConnection, data['select_platinum_transactions'], 1)
+                    BankCommon.new.insertTransactions(@databaseConnection, data['step_account_transactions'], 2)
+                    BankCommon.new.insertTransactions(@databaseConnection, data['savings_account_transactions'], 3)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
                         {:bank_account_id => 1, :transactions => data['select_platinum_transactions']},
@@ -89,7 +90,6 @@ class BankNatWest
                         {:bank_account_id => 3, :transactions => data['savings_account_transactions']}
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
-
                     if showInTerminal
                         puts "\x1B[32mSuccess (NatWest)\x1B[0m"
                     end
@@ -102,15 +102,6 @@ class BankNatWest
                         end
                     end
                 end
-            end
-        end
-    end
-
-    def insertTransactions(data, bank_account_id)
-        data.each do |transaction|
-            result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
-            if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
             end
         end
     end
@@ -236,6 +227,8 @@ class BankNatWest
                     rowData['paid_in'] = tableCell.text
                 elsif cellCount == 5
                     rowData['paid_out'] = tableCell.text
+                elsif cellCount == 6
+                    rowData['balance'] = tableCell.text
                 end
             end
             transactions << rowData
@@ -259,6 +252,7 @@ class BankNatWest
             # Paid In/Out
             newData['paid_in'] = transaction['paid_in'].to_f
             newData['paid_out'] = transaction['paid_out'].to_f
+            newData['balance'] = transaction['balance'].delete('£').delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray
