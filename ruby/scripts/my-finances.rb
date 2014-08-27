@@ -5,7 +5,7 @@ class ShowBankTransactions
     include CommandLineReporter
 
     # Initialize all the DB stuff, etc.
-    def initialize
+    def initialize(argv)
 
         # Get Database Connection
         encrypter = Encrypter.new
@@ -15,6 +15,15 @@ class ShowBankTransactions
             encrypter.decrypt(EC2MySqlAlb3rtukPass),
             encrypter.decrypt(EC2MySqlAlb3rtukSchema)
         )
+
+        @untranslated = false
+        @withInternalTransfers = false
+
+        if argv == 'untranslated'
+            @untranslated = true
+        elsif argv == 'with-internal-transfers'
+            @withInternalTransfers = true
+        end
 
         @rule = getRuleString(202)
 
@@ -37,10 +46,9 @@ class ShowBankTransactions
         # Column widths for transactions
         @transWidth_1 = 20
         @transWidth_2 = 20
-
         @transWidth_3 = 14
-        @transWidth_4 = 6
-        @transWidth_5 = 109
+        @transWidth_4 = 109
+        @transWidth_5 = 6
         @transWidth_6 = 13
         @transWidth_7 = 13
         @transWidthTotal = @transWidth_1 + @transWidth_2 + @transWidth_3 + @transWidth_4 + @transWidth_5 + @transWidth_6 + @transWidth_7 + 8
@@ -61,12 +69,49 @@ class ShowBankTransactions
         @pastWeekDeployed = false
         @past48HoursDeployed = false
 
+        @translations = Array[
+            # NATWEST AD GOLD
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => 'white', :translation => 'PAYPAL WITHDRAWAL', :recurring => false},
+            {:bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007'], :color => 'green', :translation => 'CASH', :recurring => false},
+            {:bank_account_id => 1, :type => 'D/D', :terms => Array['NAMES.CO.UK'], :color => 'red', :translation => 'NAMESCO WEB SERVER', :recurring => true, :recurring_direction => 'out', :recurring_amount => 29.99},
+            {:bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => 'red', :translation => 'HORFIELD SPORTS CENTRE SUBSCRIPTION', :recurring => true, :recurring_direction => 'out', :recurring_amount => 29.99},
+            {:bank_account_id => 1, :type => 'D/D', :terms => Array['UK MAIL'], :color => 'white', :translation => 'UK MAIL', :recurring => false},
+            {:bank_account_id => 1, :type => 'POS', :terms => Array['UK MAIL'], :color => 'white', :translation => 'UK MAIL', :recurring => false},
+            {:bank_account_id => 1, :type => 'OTR', :terms => Array['07519616416'], :color => 'white', :translation => 'ROSS JOY', :recurring => false},
+            {:bank_account_id => 1, :type => 'OTR', :terms => Array['07980286590', 'SCOULDING L A'], :color => 'white', :translation => 'LUKE SCOULDING', :recurring => false},
+            {:bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN', :recurring => false},
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN', :recurring => false},
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN , VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring => true, :recurring_direction => 'in', :recurring_amount => 30},
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN'], :color => 'white', :translation => 'GARY SOLAN', :recurring => false},
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN', :recurring => false},
+            {:bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY', :recurring => false},
+            {:bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => 'red', :translation => 'SPOTIFY SUBSCRIPTION', :recurring => true, :recurring_direction => 'out', :recurring_amount => 19.98},
+            {:bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => 'red', :translation => 'LYNDA.COM SUBSCRIPTION', :recurring => true, :recurring_direction => 'out', :recurring_amount => 16},
+            {:bank_account_id => 1, :type => 'POS', :terms => Array['GITHUB.COM'], :color => 'red', :translation => 'GITHUB.COM SUBSCRIPTION', :recurring => true, :recurring_direction => 'out', :recurring_amount => 8.50},
+            {:bank_account_id => 1, :type => 'POS', :terms => Array['TRANSFERWISE'], :color => 'white', :translation => 'TRANFERWISE (WEDDING FUND)', :recurring => false},
+            # NATWEST SAVINGS
+            {:bank_account_id => 3, :type => 'BAC', :terms => Array['TRANSFERWISE'], :color => 'white', :translation => 'TRANFERWISE (REFUND)', :recurring => false},
+            # HALIFAX ULTIMATE REWARD
+            {:bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACCOUNT FEE', :recurring => true, :recurring_direction => 'out', :recurring_amount => 15},
+            # HALIFAX REWARD
+            {:bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => 'red', :translation => 'CREDITEXPERT SUBSCRIPTION', :recurring => true, :recurring_direction => 'out', :recurring_amount => 9.99},
+            # LLOYDS CURRENT
+            {:bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => 'red', :translation => 'RENT', :recurring => true, :recurring_direction => 'out', :recurring_amount => 250},
+            {:bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE LIMITED'], :color => 'red', :translation => 'VODAFONE LIMITED', :recurring => true, :recurring_direction => 'out', :recurring_amount => 60},
+            {:bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => 'red', :translation => 'VIRGIN MEDIA', :recurring => true, :recurring_direction => 'out', :recurring_amount => 110},
+            {:bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => 'green', :translation => 'CASH', :recurring => false},
+            {:bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => 'red', :translation => 'TESCO CAR INSURANCE', :recurring => true, :recurring_direction => 'out', :recurring_amount => 0},
+            {:bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACCOUNT FEE', :recurring => true, :recurring_direction => 'out', :recurring_amount => 15},
+            {:bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => 'cyan', :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring => true, :recurring_direction => 'in', :recurring_amount => 24},
+        ]
+
     end
 
     # Main function
     def run
         puts "\n"
         displayTransactions
+
         displayCreditCards
         displayBankAccounts
         puts "\n"
@@ -80,8 +125,8 @@ class ShowBankTransactions
                 column(' Bank Name', :width => @transWidth_1, :align => 'left', :bold => 'true')
                 column('Account Name', :width => @transWidth_2, :align => 'left')
                 column('Date', :width => @transWidth_3, :align => 'left')
-                column('Type', :width => @transWidth_4, :align => 'left')
-                column('Description', :width => @transWidth_5, :align => 'right')
+                column('Description', :width => @transWidth_4, :align => 'right')
+                column('', :width => @transWidth_5, :align => 'left')
                 column('Paid In', :width => @transWidth_6, :align => 'right')
                 column('Paid Out', :width => @transWidth_7, :align => 'right')
             end
@@ -94,13 +139,14 @@ class ShowBankTransactions
                 column(getRuleString(@transWidth_6))
                 column(getRuleString(@transWidth_7))
             end
-            transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions WHERE date > DATE_SUB(CURDATE(), INTERVAL 45 DAY) ORDER BY date ASC, bank_account_id ASC, type ASC')
+            transactions = @databaseConnection.query('SELECT * FROM bank_account_transactions WHERE date > DATE_SUB(CURDATE(), INTERVAL 60 DAY) ORDER BY date ASC, bank_account_id ASC, type ASC')
             transactions.each_hash do |transaction|
                 bankAndColor = getBankAndColor(@bankAccounts[transaction['bank_account_id']]['bank_id'])
 
                 timeStamp = DateTime.strptime(transaction['date'], '%Y-%m-%d')
                 timeNow = DateTime.now
                 timeAgo = ((timeNow - timeStamp) * 24 * 60 * 60).to_i
+
 
                 if timeAgo < 172800
                     displayTransactionsDeployPast48Hours
@@ -110,39 +156,62 @@ class ShowBankTransactions
                     displayTransactionsDeployPastMonth
                 end
 
-                if isInternalTransfer(transaction)
-                    next
-                    # transactionColor = 'yellow'
-                    # transactionIsInternal = true
+                # Tranlsateion Handling
+                transactionDetails = getDescriptionAndColor(transaction)
+                transactionColor = transactionDetails[:color]
+                if @untranslated
+                    transactionDescription = transaction['description']
                 else
-                    transactionColor = 'white'
-                    transactionIsInternal = false
+                    transactionDescription = transactionDetails[:description]
                 end
 
+                # Internal Transfer Handling
+                if isInternalTransfer(transaction)
+                    if @withInternalTransfers
+                        transactionColor = 'yellow'
+                    else
+                        next
+                    end
+                else
+                    if @withInternalTransfers
+                        transactionColor = 'white'
+                    end
+                end
 
                 row do
                     column(" #{bankAndColor[0]}", :color => bankAndColor[1])
                     column(@bankAccounts[transaction['bank_account_id']]['title'], :color => bankAndColor[1])
                     column(timeStamp.strftime('%d %b %Y'), :color => transactionColor)
+                    column(transactionDescription[0..(@transWidth_4 - 2)], :color => transactionColor)
                     column(transaction['type'], :color => transactionColor)
-                    column(transaction['description'][0..(@transWidth_5 - 2)], :color => transactionColor)
-                    column((transaction['paid_in'].to_f == 0) ? '' : getAsCurrency(transaction['paid_in'])[0], :color => (transactionIsInternal) ? 'yellow' : 'cyan')
-                    column((transaction['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - transaction['paid_out'].to_f)[0], :color => (transactionIsInternal) ? 'yellow' : 'red')
+                    column((transaction['paid_in'].to_f == 0) ? '' : getAsCurrency(transaction['paid_in'])[0], :color => transactionColor)
+                    column((transaction['paid_out'].to_f == 0) ? '' : getAsCurrency(0 - transaction['paid_out'].to_f)[0], :color => transactionColor)
                 end
             end
         end
         puts "#{getRuleString(@colWidthTotal)}\n\n"
     end
 
+    # Translates Description
+    # @return string
+    def getDescriptionAndColor(transaction)
+        @translations.each do |translation|
+            if transaction['bank_account_id'].to_i == translation[:bank_account_id] && transaction['type'] == translation[:type] && translation[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
+                return {:description => translation[:translation].upcase, :color => translation[:color]}
+            end
+        end
+        {:description => transaction['description'].upcase, :color => 'white'}
+    end
+
     # Returns TRUE if transaction is internal transfer
-    # @boolean
+    # @return boolean
     def isInternalTransfer(transaction)
 
         if transaction['bank_account_id'].to_i >= 1 && transaction['bank_account_id'].to_i <= 3
 
             # IF NATWEST
             terms1 = Array[
-                'A RANNETSPERGER , LLOYDS ACCOUNT',
+                'A RANNETSPERGER',
                 'HALIFAX ULTIMATE',
                 'AR HALIFAX ACC',
                 'LLOYDS ACCOUNT',
@@ -150,9 +219,15 @@ class ShowBankTransactions
             terms2 = Array[
                 'CALL REF.NO.'
             ]
+            terms3 = Array[
+                'BARCLAYCARD',
+                'CAPITAL ONE'
+            ]
             if (transaction['type'] == 'BAC') && terms1.any? { |w| transaction['description'] =~ /#{w}/ }
                 return true
             elsif (transaction['type'] == 'OTR') && terms2.any? { |w| transaction['description'] =~ /#{w}/ }
+                return true
+            elsif (transaction['type'] == 'POS') && terms3.any? { |w| transaction['description'] =~ /#{w}/ }
                 return true
             end
 
@@ -190,9 +265,7 @@ class ShowBankTransactions
 
             # IF HALIFAX
             terms1 = Array[
-                'NATWEST AD GOLD',
-                'NATWEST STEP',
-                'NATWEST SAVINGS',
+                'NATWEST',
             ]
             terms2 = Array[
                 'RANNETSPERGER A NATWEST'
@@ -457,4 +530,4 @@ end
 # Make sure we're online before we start
 checkMachineIsOnline
 
-ShowBankTransactions.new.run
+ShowBankTransactions.new(ARGV[0]).run
