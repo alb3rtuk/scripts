@@ -16,55 +16,6 @@ class ShowBankTransactions
             encrypter.decrypt(EC2MySqlAlb3rtukSchema)
         )
 
-        @untranslated = false
-        @withInternalTransfers = false
-
-        if argv == 'untranslated'
-            @untranslated = true
-        elsif argv == 'with-internal-transfers'
-            @withInternalTransfers = true
-        end
-
-        @rule = getRuleString(202)
-
-        # Get banks into Hash
-        @banks = {}
-        banksSQL = @databaseConnection.query('SELECT * FROM bank ORDER BY id ASC')
-        banksSQL.each_hash do |row|
-            @banks[row['id']] = row['title']
-        end
-        banksSQL.free
-
-        # Get bank account into Hash
-        @bankAccounts = {}
-        bankAccountsSQL = @databaseConnection.query('SELECT * FROM bank_account ORDER BY id ASC')
-        bankAccountsSQL.each_hash do |row|
-            @bankAccounts[row['id']] = row
-        end
-        bankAccountsSQL.free
-
-        # Column widths for transactions
-        @transWidth_1 = 20
-        @transWidth_2 = 20
-        @transWidth_3 = 14
-        @transWidth_4 = 109
-        @transWidth_5 = 6
-        @transWidth_6 = 13
-        @transWidth_7 = 13
-        @transWidthTotal = @transWidth_1 + @transWidth_2 + @transWidth_3 + @transWidth_4 + @transWidth_5 + @transWidth_6 + @transWidth_7 + 8
-
-        # Column widths for balances
-        @colWidth_1 = 20
-        @colWidth_2 = 25
-        @colWidth_3 = 20
-        @colWidth_4 = 20
-        @colWidth_5 = 20
-        @colWidth_6 = 20
-        @colWidth_7 = 20
-        @colWidth_8 = 21
-        @colWidth_9 = 27
-        @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
-
         @recognizedTransactions = Array[
             # NATWEST AD GOLD
             {:bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => 'white', :translation => 'PAYPAL WITHDRAWAL', :recurring => false},
@@ -102,17 +53,71 @@ class ShowBankTransactions
         ]
 
         @internalTransfers = Array[
+            # NATWEST
             {:bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT']},
             {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.']},
             {:bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE']},
+            # LLOYDS
             {:bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN']},
             {:bank_account_id => Array[8], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
             {:bank_account_id => Array[8], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
             {:bank_account_id => Array[7], :type => 'CC', :terms => Array['PAYMENT RECEIVED']},
+            # HALIFAX
             {:bank_account_id => Array[4, 5], :type => 'FPO', :terms => Array['NATWEST']},
             {:bank_account_id => Array[4, 5], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
             {:bank_account_id => Array[4, 5], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
         ]
+
+        @untranslated = false
+        @withInternalTransfers = false
+
+        # Get different modes.
+        if argv == 'untranslated'
+            @untranslated = true
+        elsif argv == 'with-internal-transfers'
+            @withInternalTransfers = true
+        end
+
+        @rule = getRuleString(202)
+
+        # Get banks into Hash
+        @banks = {}
+        banksSQL = @databaseConnection.query('SELECT * FROM bank ORDER BY id ASC')
+        banksSQL.each_hash do |row|
+            @banks[row['id']] = row['title']
+        end
+        banksSQL.free
+
+        # Get bank account into Hash
+        @bankAccounts = {}
+        bankAccountsSQL = @databaseConnection.query('SELECT * FROM bank_account ORDER BY id ASC')
+        bankAccountsSQL.each_hash do |row|
+            @bankAccounts[row['id']] = row
+        end
+        bankAccountsSQL.free
+
+        # Column widths for transactions
+        @transWidth_1 = 20
+        @transWidth_2 = 20
+        @transWidth_3 = 12
+        @transWidth_4 = 114
+        @transWidth_5 = 6
+        @transWidth_6 = 11
+        @transWidth_7 = 12
+
+        @transWidthTotal = @transWidth_1 + @transWidth_2 + @transWidth_3 + @transWidth_4 + @transWidth_5 + @transWidth_6 + @transWidth_7 + 8
+
+        # Column widths for balances
+        @colWidth_1 = 20
+        @colWidth_2 = 25
+        @colWidth_3 = 20
+        @colWidth_4 = 20
+        @colWidth_5 = 20
+        @colWidth_6 = 20
+        @colWidth_7 = 20
+        @colWidth_8 = 21
+        @colWidth_9 = 27
+        @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
     end
 
@@ -120,7 +125,6 @@ class ShowBankTransactions
     def run
         puts "\n"
         displayTransactions
-
         displayCreditCards
         displayBankAccounts
         puts "\n"
@@ -193,7 +197,6 @@ class ShowBankTransactions
                             displayTransactionsBlankRow
                         end
                     end
-
                 end
 
                 # Shorten Description
@@ -236,8 +239,6 @@ class ShowBankTransactions
 
         end
         false
-
-
     end
 
     # Inserts a divider to display the month

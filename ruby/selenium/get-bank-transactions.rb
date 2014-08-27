@@ -80,16 +80,6 @@ capitalOne = BankCapitalOne.new(
     displayProgress
 )
 
-def insertTransactions(data, bank_account_id)
-    data.each do |transaction|
-        result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
-        if result.num_rows == 0
-            @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
-        end
-    end
-end
-
-
 natWest.runExtraction(true)
 halifax.runExtraction(true)
 lloyds.runExtraction(true)
