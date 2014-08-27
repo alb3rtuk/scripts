@@ -136,7 +136,7 @@ class BankNatWest
         # Get PLATINUM transactions
         browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87_AS5ALBAnchor').click
         browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').select
-        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M2').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M1').select
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
@@ -156,7 +156,7 @@ class BankNatWest
         # Get STEP transactions
         browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_FAB7EFB59260BED0F1081E761570BF4227C37E6B_AS5ALBAnchor').click
         browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'FAB7EFB59260BED0F1081E761570BF4227C37E6B').select
-        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M2').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M1').select
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
@@ -176,7 +176,7 @@ class BankNatWest
         # Get Savings transactions
         browser.frame(:id => f).link(:id => 'ctl00_mainContent_Accounts_Accounts_AccountTable_CE99D6FF6219B59BB28B6A42825D98D60B92326C_AS5ALBAnchor').click
         browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2ACCDDA').option(:value => 'CE99D6FF6219B59BB28B6A42825D98D60B92326C').select
-        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M2').select
+        browser.frame(:id => f).select_list(:id => 'ctl00_mainContent_SS2SPDDA').option(:value => 'M1').select
         browser.frame(:id => f).input(:type => 'submit', :id => 'ctl00_mainContent_NextButton_button').click
         if browser.frame(:id => f).div(:class => 'noItemsToDisplay').exists?
             if showInTerminal
