@@ -86,10 +86,9 @@ class BankHalifax
                     @databaseConnection.query("INSERT INTO bank_account_type_misc (bank_account_id, balance, balance_remaining, date_fetched, date_fetched_string) VALUES (6, #{data['isa']}, #{data['isa_remaining']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (4, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (5, #{data['account_2_balance']}, #{data['account_2_available']}, #{data['account_2_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
-                    insertTransactions(data['isa_transactions'], 6)
-                    insertTransactions(data['account_1_transactions'], 4)
-                    insertTransactions(data['account_2_transactions'], 5)
-
+                    BankCommon.new.insertTransactions(@databaseConnection, data['isa_transactions'], 6)
+                    BankCommon.new.insertTransactions(@databaseConnection, data['account_1_transactions'], 4)
+                    BankCommon.new.insertTransactions(@databaseConnection, data['account_2_transactions'], 5)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
                         {:bank_account_id => 6, :transactions => data['isa_transactions']},
@@ -97,7 +96,6 @@ class BankHalifax
                         {:bank_account_id => 5, :transactions => data['account_2_transactions']}
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
-
                     if showInTerminal
                         puts "\x1B[32mSuccess (Halifax)\x1B[0m"
                     end
@@ -114,17 +112,8 @@ class BankHalifax
         end
     end
 
-    def insertTransactions(data, bank_account_id)
-        data.each do |transaction|
-            result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
-            if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
-            end
-        end
-    end
-
     def getBalances(showInTerminal = false, browser = self.login)
-        sleep(1)
+        sleep(3)
         data = {}
 
         # ISA
@@ -230,6 +219,8 @@ class BankHalifax
                     rowData['paid_in'] = tableCell.text
                 elsif cellCount == 5
                     rowData['paid_out'] = tableCell.text
+                elsif cellCount == 6
+                    rowData['balance'] = tableCell.text
                 end
             end
             transactions << rowData
@@ -252,6 +243,7 @@ class BankHalifax
             # Paid In/Out
             newData['paid_in'] = transaction['paid_in'].to_f
             newData['paid_out'] = transaction['paid_out'].to_f
+            newData['balance'] = transaction['balance'].to_f
             sanitizedArray << newData
         end
         sanitizedArray
