@@ -103,7 +103,6 @@ class ShowBankTransactions
         @totalCredit = 0
         @totalCreditUsed = 0
         @totalCash = 0
-
         @moneyInRemaining = 0
         @moneyOutRemaining = 0
 
@@ -122,6 +121,12 @@ class ShowBankTransactions
         @month3 = DateTime.now << 2
         @month4 = DateTime.now << 3
         @month5 = DateTime.now << 4
+
+        @month1 = DateTime.strptime('2014-09-01', '%Y-%m-%d')
+        @month2 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 1
+        @month3 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 2
+        @month4 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 3
+        @month5 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 4
 
         # Get different modes.
         @untranslated = false
@@ -220,8 +225,9 @@ class ShowBankTransactions
     # Main function
     def run
         # DO ALL CALCULATIONS
-        getTotals
-        getSummaryData
+        calculateTotals
+        calculateSummary
+        calculateMoneyRemaining
 
         # START OUTPUT
         displayTransactions
@@ -508,17 +514,19 @@ class ShowBankTransactions
             Array['Current Net Worth', 'white'],
             Array[getAsCurrency(@totalCash)[0], getAsCurrency(@totalCash)[1]],
             Array['Projected (EOM) Balance', 'white'],
-            Array[getAsCurrency(0)[0], getAsCurrency(0)[1]],
+            Array[getAsCurrency(getProjectedOEMBalance)[0], getAsCurrency(getProjectedOEMBalance)[1]],
             Array['NatWest Savings Account', 'white'],
-            Array[getAsCurrency(0)[0], getAsCurrency(0)[1]],
+            Array[getAsCurrency(@bankAccountBalances[3]['balance'])[0], getAsCurrency(@bankAccountBalances[3]['balance'])[1]],
             Array['Total Credit', 'white'],
             Array[getAsCurrency(@totalCredit)[0], 'cyan'],
+            Array['Total Available', 'white'],
+            Array[getAsCurrency(@totalAvailable)[0], getAsCurrency(@totalAvailable)[1]],
             Array['Credit Used', 'white'],
             Array[getAsCurrency(0 - @totalCreditUsed)[0], (@totalCreditUsed > 0) ? 'red' : 'cyan'],
             Array['Fixed Monthly Outgoings', 'white'],
-            Array[getAsCurrency(0)[0], getAsCurrency(0)[1]],
+            Array[getFixedMonthlyOutgoings, 'cyan'],
             Array['Credit Score', 'white'],
-            Array['989', 'cyan'],
+            Array['N/A', 'cyan'],
         ]
 
         table(:border => false) do
@@ -676,11 +684,6 @@ class ShowBankTransactions
                 if amt1[0] == 0
                     amt1 = Array[23, Array["#{(!recognizedTransaction[:estimated].nil?) ? '~' : ''}[#{getAsCurrency(recognizedTransaction[:recurring_amount])[0].delete('£')}]", 'white']]
                     color[0] = 'white'
-                    if intTypeId == 2
-                        @moneyInRemaining = @moneyInRemaining + recognizedTransaction[:recurring_amount].to_f
-                    else
-                        @moneyOutRemaining = @moneyOutRemaining + recognizedTransaction[:recurring_amount].to_f
-                    end
                 end
 
                 row do
@@ -726,25 +729,6 @@ class ShowBankTransactions
     end
 
     # @return array
-    def calculateAmountPaidReceivedForRecognizedTransaction(month, id)
-        case month.strftime('%m')
-            when @month1.strftime('%m')
-                amt = @summaryData[:month1][:"#{id}"].to_f
-            when @month2.strftime('%m')
-                amt = @summaryData[:month2][:"#{id}"].to_f
-            when @month3.strftime('%m')
-                amt = @summaryData[:month3][:"#{id}"].to_f
-            when @month4.strftime('%m')
-                amt = @summaryData[:month4][:"#{id}"].to_f
-            when @month5.strftime('%m')
-                amt = @summaryData[:month5][:"#{id}"].to_f
-            else
-                raise(RunTimeError('Month not found.'))
-        end
-        amt
-    end
-
-    # @return array
     def runCalculationFor(callback, param1 = nil)
         var1 = Array.new
         var2 = Array.new
@@ -769,7 +753,7 @@ class ShowBankTransactions
 
     # Get all the totals
     # @return void
-    def getTotals
+    def calculateTotals
         @totalAvailable =
             (@bankAccountBalances[1]['balance_available'].to_f +
                 @bankAccountBalances[2]['balance_available'].to_f +
@@ -810,7 +794,7 @@ class ShowBankTransactions
 
     # Get summary data for 5 month output
     # @return void
-    def getSummaryData
+    def calculateSummary
 
         month1String = @month1.strftime('%Y-%m')
         month2String = @month2.strftime('%Y-%m')
@@ -909,6 +893,48 @@ class ShowBankTransactions
         end
     end
 
+    # @return array
+    def calculateAmountPaidReceivedForRecognizedTransaction(month, id)
+        case month.strftime('%m')
+            when @month1.strftime('%m')
+                amt = @summaryData[:month1][:"#{id}"].to_f
+            when @month2.strftime('%m')
+                amt = @summaryData[:month2][:"#{id}"].to_f
+            when @month3.strftime('%m')
+                amt = @summaryData[:month3][:"#{id}"].to_f
+            when @month4.strftime('%m')
+                amt = @summaryData[:month4][:"#{id}"].to_f
+            when @month5.strftime('%m')
+                amt = @summaryData[:month5][:"#{id}"].to_f
+            else
+                raise(RunTimeError('Month not found.'))
+        end
+        amt
+    end
+
+    # @return void
+    def calculateMoneyRemaining
+        @recognizedTransactions.each do |rt|
+            if rt[:intTypeID] == 2 || rt[:intTypeID] == 3
+                transactionFound = false
+                @transactions.each do |transaction|
+                    if @month1.strftime('%Y-%m') == DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y-%m')
+                        if transaction['bank_account_id'].to_i == rt[:bank_account_id] && transaction['type'] == rt[:type] && rt[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
+                            transactionFound = true
+                        end
+                    end
+                end
+                if !transactionFound
+                    if rt[:intTypeID] == 2
+                        @moneyInRemaining = @moneyInRemaining + rt[:recurring_amount]
+                    elsif rt[:intTypeID] == 3
+                        @moneyOutRemaining = @moneyOutRemaining + rt[:recurring_amount]
+                    end
+                end
+            end
+        end
+    end
+
     # Returns name of bank account + associated color.
     def getBankAndColor(bankId)
         returnHash = {}
@@ -928,6 +954,59 @@ class ShowBankTransactions
                 returnHash[1] = 'white'
         end
         returnHash
+    end
+
+    # Calculates (depending on the last 4 month trend) how much money I should have by the end of the month.
+    # @return float
+    def getProjectedOEMBalance
+
+        averageCashIn =
+            ((@summaryData[:month2][:cash_in] +
+                @summaryData[:month3][:cash_in] +
+                @summaryData[:month4][:cash_in] +
+                @summaryData[:month5][:cash_in]) / 4).round(2)
+
+        averageMiscIn =
+            ((@summaryData[:month2][:misc_in] +
+                @summaryData[:month3][:misc_in] +
+                @summaryData[:month4][:misc_in] +
+                @summaryData[:month5][:misc_in]) / 4).round(2)
+
+        averageMiscOut =
+            ((@summaryData[:month2][:misc_out] +
+                @summaryData[:month3][:misc_out] +
+                @summaryData[:month4][:misc_out] +
+                @summaryData[:month5][:misc_out]) / 4).round(2)
+
+        # An estimate of how much 'MISC' goes in/out based on last 4 months.
+        inAdjustment = (averageMiscIn - @summaryData[:month1][:misc_in]) + (averageCashIn - @summaryData[:month1][:cash_in])
+        outAdjustment = (averageMiscOut - @summaryData[:month1][:misc_out])
+
+        # Calculate how much % of month is left...
+        totalDaysInCurrentMonth = Date.civil(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, -1).day
+        currentDay = @month1.strftime('%d')
+        percentOfMonthLeft = 100 - (currentDay.to_f / (totalDaysInCurrentMonth.to_f / 100))
+
+        # ...and adjust adjustments accordingly.
+        inAdjustment = inAdjustment * (percentOfMonthLeft / 100)
+        outAdjustment = outAdjustment * (percentOfMonthLeft / 100)
+
+        # Add ajustments to @moneyRemaining variables.
+        moneyInRemaining = @moneyInRemaining + inAdjustment
+        moneyOutRemaining = @moneyOutRemaining + outAdjustment
+
+        (@totalCash - moneyOutRemaining) + moneyInRemaining
+    end
+
+    # @return float
+    def getFixedMonthlyOutgoings
+        totalOutgoings = 0
+        @recognizedTransactions.each do |rt|
+            if rt[:intTypeID] == 3
+                totalOutgoings = totalOutgoings + rt[:recurring_amount]
+            end
+        end
+        totalOutgoings
     end
 
     # Returns '━━━━'
