@@ -87,7 +87,6 @@ alias update-crontab='~/Repos/Scripts/bash/scripts/update-crontab.sh'
 alias update-launchd='~/Repos/Scripts/bash/scripts/update-launchd.sh'
 
 ### SELENIUM #################
-alias get-all-balances='~/Repos/Scripts/bash/selenium/get-all-balances.sh'
 alias get-bank-transactions='~/Repos/Scripts/bash/selenium/get-bank-transactions.sh'
 alias open-barclaycard='~/Repos/Scripts/bash/selenium/open-barclaycard.sh'
 alias open-capitalone='~/Repos/Scripts/bash/selenium/open-capitalone.sh'
