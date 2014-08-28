@@ -6,7 +6,7 @@
 clearTerminal
 
 echo
-message magenta "MY FINANCES" " Generating report (with internal transfers visible)... \033[33m$(date)\033[0m"
+message magenta "MY FINANCES" " Generating report (with transactions IDs visible)... \033[33m$(date)\033[0m"
 echo
 
 ruby ~/Repos/Scripts/ruby/scripts/my-finances.rb 'with-internal-transfers'
