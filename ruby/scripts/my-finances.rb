@@ -87,9 +87,7 @@ class ShowBankTransactions
             {:bank_account_id => Array[6], :type => 'D-T', :terms => Array['']},
         ]
 
-        # Load parameters
-        @untranslated = false
-        @withInternalTransfers = false
+        @ignoredTransactions = Array[2556, 2557, 2558, 2555, 2545, 2546, 2567, 2576, 2566, 2959]
 
         # Misc Globals
         @rightHandSideCount = 0
@@ -123,8 +121,13 @@ class ShowBankTransactions
         @month5 = DateTime.now << 4
 
         # Get different modes.
+        @untranslated = false
+        @withIDs = false
+        @withInternalTransfers = false
         if argv == 'untranslated'
             @untranslated = true
+        elsif argv == 'with-ids'
+            @withIDs = true
         elsif argv == 'with-internal-transfers'
             @withInternalTransfers = true
         end
@@ -295,8 +298,14 @@ class ShowBankTransactions
                     end
                 end
 
-                # Shorten Description
-                description = transactionDescription[0..(@transWidth_4 - 2)]
+                # Format description
+                if @withIDs
+                    descriptionAddedInfo = "##{transaction['id']}"
+                    description = transactionDescription[0..((@transWidth_4 - 2) - descriptionAddedInfo.length)]
+                    description = "#{descriptionAddedInfo}#{getRuleString(@transWidth_4 - (descriptionAddedInfo.length + description.length), ' ')}#{description}"
+                else
+                    description = transactionDescription[0..(@transWidth_4 - 2)]
+                end
 
                 row do
                     column(" #{bankAndColor[0]}", :color => bankAndColor[1])
@@ -329,6 +338,10 @@ class ShowBankTransactions
     # @return boolean
     def isInternalTransfer(transaction)
         @internalTransfers.each do |match|
+            if inArray(@ignoredTransactions, transaction['id'].to_i)
+
+                return true
+            end
             if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'] =~ /#{w}/ } && match[:type] == transaction['type']
                 return true
             end
