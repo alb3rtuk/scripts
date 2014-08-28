@@ -20,7 +20,7 @@ class ShowBankTransactions
         # 1 => CASH IN
         # 2 => RECURRING IN
         # 3 => RECURRING OUT
-        
+
         @recognizedTransactions = Array[
             # NATWEST AD GOLD
             {:intTypeID => 0, :id => 100, :bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => 'white', :translation => 'PAYPAL WITHDRAWAL'},
@@ -34,7 +34,8 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => 'white', :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN , VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30},
+            # "G SOLAN, VIRGIN TV" MUST BE BEFORE "G SOLAN"
+            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN , VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN TV)', :recurring_amount => 30, :start_month => '2014-05'},
             {:intTypeID => 0, :id => 1300, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN'], :color => 'white', :translation => 'GARY SOLAN'},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY'},
@@ -45,7 +46,7 @@ class ShowBankTransactions
             # NATWEST SAVINGS
             {:intTypeID => 0, :id => 2000, :bank_account_id => 3, :type => 'BAC', :terms => Array['TRANSFERWISE'], :color => 'white', :translation => 'TRANFERWISE (REFUND)'},
             # HALIFAX ULTIMATE REWARD
-            {:intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACCOUNT FEE', :recurring_amount => 15},
+            {:intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACC. FEE (HALIFAX U/R)', :recurring_amount => 15},
             {:intTypeID => 1, :id => 2200, :bank_account_id => 4, :type => 'CSH', :terms => Array[''], :color => 'green', :translation => 'CASH'},
             # HALIFAX REWARD
             {:intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => 'red', :translation => 'CREDITEXPERT SUBSCRIPTION', :recurring_amount => 9.99},
@@ -57,9 +58,14 @@ class ShowBankTransactions
             {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => 'red', :translation => 'VIRGIN MEDIA', :recurring_amount => 110},
             {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => 'green', :translation => 'CASH'},
             {:intTypeID => 3, :id => 3000, :bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => 'red', :translation => 'TESCO CAR INSURANCE', :recurring_amount => 0},
-            {:intTypeID => 3, :id => 3100, :bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACCOUNT FEE', :recurring_amount => 15},
-            {:intTypeID => 2, :id => 3200, :bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => 'cyan', :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring_amount => 24},
+            {:intTypeID => 3, :id => 3100, :bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACC. FEE (LLOYDS)', :recurring_amount => 15},
+            {:intTypeID => 2, :id => 3200, :bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => 'cyan', :translation => 'MATT JONES (VIRGIN TV)', :recurring_amount => 24},
         ]
+
+        @recognizedTransactionsIndexedID = {}
+        @recognizedTransactions.each do |recognizedTransaction|
+            @recognizedTransactionsIndexedID["#{recognizedTransaction[:id]}"] = recognizedTransaction
+        end
 
         @internalTransfers = Array[
             # NATWEST
@@ -86,6 +92,20 @@ class ShowBankTransactions
         @totalCredit = 0
         @totalCreditUsed = 0
         @totalCash = 0
+        @summaryData = {
+            :month1 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0},
+            :month2 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0},
+            :month3 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0},
+            :month4 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0},
+            :month5 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0},
+        }
+
+        # Months
+        @month1 = DateTime.now
+        @month2 = DateTime.now << 1
+        @month3 = DateTime.now << 2
+        @month4 = DateTime.now << 3
+        @month5 = DateTime.now << 4
 
         # Get different modes.
         if argv == 'untranslated'
@@ -157,6 +177,7 @@ class ShowBankTransactions
         @colWidth_1 = 20
         @colWidth_2 = 25
         @colWidth_3 = 20
+
         @colWidth_4 = 20
         @colWidth_5 = 20
         @colWidth_6 = 20
@@ -166,15 +187,16 @@ class ShowBankTransactions
         @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
 
         # Column widths for balances
-        @summaryWidth_1 = 45
+        @summaryWidth_1 = 46
+        @summaryWidth_2 = 20
         @summaryWidth_3 = 20
         @summaryWidth_4 = 20
         @summaryWidth_5 = 20
         @summaryWidth_6 = 20
-        @summaryWidth_7 = 20
-        @summaryWidth_8 = 21
-        @summaryWidth_9 = 27
-        @summaryWidthTotal = @summaryWidth_1 + @summaryWidth_3 + @summaryWidth_4 + @summaryWidth_5 + @summaryWidth_6 + @summaryWidth_7 + @summaryWidth_8 + @summaryWidth_9 + 8
+        @summaryWidth_7 = 21
+        @summaryWidth_8 = 2
+        @summaryWidth_9 = 24
+        @summaryWidthTotal = @summaryWidth_1 + @summaryWidth_2 + @summaryWidth_3 + @summaryWidth_4 + @summaryWidth_5 + @summaryWidth_6 + @summaryWidth_7 + @summaryWidth_8 + @summaryWidth_9 + 8
 
     end
 
@@ -182,6 +204,7 @@ class ShowBankTransactions
     def run
         # DO ALL CALCULATIONS
         getTotals
+        getSummaryData
 
         # START OUTPUT
         displayTransactions
@@ -304,8 +327,8 @@ class ShowBankTransactions
         false
     end
 
-    # Inserts a divider to display the month
-    # @return void
+# Inserts a divider to display the month
+# @return void
     def displayTransactionsMonth(month)
         displayTransactionsBlankRow
         row do
@@ -455,24 +478,33 @@ class ShowBankTransactions
     # Display Summary
     def displaySummary
         puts "#{Rainbow(' SUMMARY ').background('#ff008a')}\n\n"
+
+        # Cash Deposited
+        cashDep1, cashDep2, cashDep3, cashDep4, cashDep5, cashDepTotal = runCalculationFor(method(:calculateCashDeposited))
+        # Rec. IN Received
+        inReceived1, inReceived2, inReceived3, inReceived4, inReceived5, inReceivedTotal = runCalculationFor(method(:calculateRecurringInReceived))
+        # Rec. IN Outstanding
+        inOutstanding1, inOutstanding2, inOutstanding3, inOutstanding4, inOutstanding5, inOutstandingTotal = runCalculationFor(method(:calculateRecurringInOutstanding), Array[inReceived1, inReceived2, inReceived3, inReceived4, inReceived5, inReceivedTotal])
+        # Rec. OUT Paid
+        outPaid1, outPaid2, outPaid3, outPaid4, outPaid5, outPaidTotal = runCalculationFor(method(:calculateRecurringOutPaid))
+        # Rec. Out Outstanding
+        outOutstanding1, outOutstanding2, outOutstanding3, outOutstanding4, outOutstanding5, outOutstandingTotal = runCalculationFor(method(:calculateRecurringOutOutstanding), Array[outPaid1, outPaid2, outPaid3, outPaid4, outPaid5, outPaidTotal])
+
         table(:border => false) do
-            monthNow = DateTime.now
-            monthMinus1 = DateTime.now << 1
-            monthMinus2 = DateTime.now << 2
-            monthMinus3 = DateTime.now << 3
-            monthMinus4 = DateTime.now << 4
             row do
                 column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
-                column("#{monthNow.strftime('%B %Y')}", :width => @summaryWidth_3, :align => 'right')
-                column("#{monthMinus1.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
-                column("#{monthMinus2.strftime('%B %Y')}", :width => @summaryWidth_5, :align => 'right')
-                column("#{monthMinus3.strftime('%B %Y')}", :width => @summaryWidth_6, :align => 'right')
-                column("#{monthMinus4.strftime('%B %Y')}", :width => @summaryWidth_7, :align => 'right')
+                column("#{@month1.strftime('%B %Y')}", :width => @summaryWidth_2, :align => 'right')
+                column("#{@month2.strftime('%B %Y')}", :width => @summaryWidth_3, :align => 'right')
+                column("#{@month3.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
+                column("#{@month4.strftime('%B %Y')}", :width => @summaryWidth_5, :align => 'right')
+                column("#{@month5.strftime('%B %Y')}", :width => @summaryWidth_6, :align => 'right')
+                column('Total', :width => @summaryWidth_7, :align => 'right')
                 column('', :width => @summaryWidth_8, :align => 'left')
                 column('', :width => @summaryWidth_9, :align => 'right')
             end
             row do
                 column(getRuleString(@summaryWidth_1))
+                column(getRuleString(@summaryWidth_2))
                 column(getRuleString(@summaryWidth_3))
                 column(getRuleString(@summaryWidth_4))
                 column(getRuleString(@summaryWidth_5))
@@ -488,127 +520,161 @@ class ShowBankTransactions
                 column('')
                 column('')
                 column('')
-                column('  |')
                 column('')
+                column(' |')
+                column('Credit Score', :color => 'white')
             end
             row do
+                column(' Projected (EOM) Balance', :color => 'white')
                 column('')
+                column('—')
+                column('—')
+                column('—')
+                column('—')
                 column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('  |')
-                column('')
-            end
-            cashDepositedNowV = calculateMonthlyCashInFlow(monthNow.strftime('%m'))
-            cashDepositedNowF = getAsCurrency(cashDepositedNowV)
-            cashDepositedMinus1V = calculateMonthlyCashInFlow(monthMinus1.strftime('%m'))
-            cashDepositedMinus1F = getAsCurrency(cashDepositedMinus1V)
-            cashDepositedMinus2V = calculateMonthlyCashInFlow(monthMinus2.strftime('%m'))
-            cashDepositedMinus2F = getAsCurrency(cashDepositedMinus2V)
-            cashDepositedMinus3V = calculateMonthlyCashInFlow(monthMinus3.strftime('%m'))
-            cashDepositedMinus3F = getAsCurrency(cashDepositedMinus3V)
-            cashDepositedMinus4V = calculateMonthlyCashInFlow(monthMinus4.strftime('%m'))
-            cashDepositedMinus4F = getAsCurrency(cashDepositedMinus4V)
-            row do
-                column(' Cash Deposited', :color => 'green')
-                column("#{(cashDepositedNowV <= 0 ? '—' : cashDepositedNowF[0])}", :color => (cashDepositedNowV <= 0 ? 'white' : 'white'))
-                column("#{(cashDepositedMinus1V <= 0 ? '—' : cashDepositedMinus1F[0])}", :color => (cashDepositedMinus1V <= 0 ? 'white' : 'white'))
-                column("#{(cashDepositedMinus2V <= 0 ? '—' : cashDepositedMinus2F[0])}", :color => (cashDepositedMinus2V <= 0 ? 'white' : 'white'))
-                column("#{(cashDepositedMinus3V <= 0 ? '—' : cashDepositedMinus3F[0])}", :color => (cashDepositedMinus3V <= 0 ? 'white' : 'white'))
-                column("#{(cashDepositedMinus4V <= 0 ? '—' : cashDepositedMinus4F[0])}", :color => (cashDepositedMinus4V <= 0 ? 'white' : 'white'))
-                column('  |')
-                column('')
-            end
-            row do
-                column(' Outstanding IN', :color => 'cyan')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('  |')
-                column('')
-            end
-            receivedInNowV = calculateRecurringInReceived(monthNow.strftime('%m'))
-            receivedInNowF = getAsCurrency(receivedInNowV)
-            receivedInMinus1V = calculateRecurringInReceived(monthMinus1.strftime('%m'))
-            receivedInMinus1F = getAsCurrency(receivedInMinus1V)
-            receivedInMinus2V = calculateRecurringInReceived(monthMinus2.strftime('%m'))
-            receivedInMinus2F = getAsCurrency(receivedInMinus2V)
-            receivedInMinus3V = calculateRecurringInReceived(monthMinus3.strftime('%m'))
-            receivedInMinus3F = getAsCurrency(receivedInMinus3V)
-            receivedInMinus4V = calculateRecurringInReceived(monthMinus4.strftime('%m'))
-            receivedInMinus4F = getAsCurrency(receivedInMinus4V)
-            row do
-                column(' Received IN', :color => 'cyan')
-                column("#{(receivedInNowV <= 0 ? '—' : receivedInNowF[0])}", :color => (receivedInNowV <= 0 ? 'white' : 'white'))
-                column("#{(receivedInMinus1V <= 0 ? '—' : receivedInMinus1F[0])}", :color => (receivedInMinus1V <= 0 ? 'white' : 'white'))
-                column("#{(receivedInMinus2V <= 0 ? '—' : receivedInMinus2F[0])}", :color => (receivedInMinus2V <= 0 ? 'white' : 'white'))
-                column("#{(receivedInMinus3V <= 0 ? '—' : receivedInMinus3F[0])}", :color => (receivedInMinus3V <= 0 ? 'white' : 'white'))
-                column("#{(receivedInMinus4V <= 0 ? '—' : receivedInMinus4F[0])}", :color => (receivedInMinus4V <= 0 ? 'white' : 'white'))
-                column('  |')
-                column('')
-            end
-            row do
-                column(' Outstanding OUT', :color => 'red')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('')
-                column('  |')
-                column('')
-            end
-            paidOutNowV = calculateRecurringOutPaid(monthNow.strftime('%m'))
-            paidOutNowF = getAsCurrency(paidOutNowV)
-            paidOutMinus1V = calculateRecurringOutPaid(monthMinus1.strftime('%m'))
-            paidOutMinus1F = getAsCurrency(paidOutMinus1V)
-            paidOutMinus2V = calculateRecurringOutPaid(monthMinus2.strftime('%m'))
-            paidOutMinus2F = getAsCurrency(paidOutMinus2V)
-            paidOutMinus3V = calculateRecurringOutPaid(monthMinus3.strftime('%m'))
-            paidOutMinus3F = getAsCurrency(paidOutMinus3V)
-            paidOutMinus4V = calculateRecurringOutPaid(monthMinus4.strftime('%m'))
-            paidOutMinus4F = getAsCurrency(paidOutMinus4V)
-            row do
-                column(' Paid OUT', :color => 'red')
-                column("#{(paidOutNowV <= 0 ? '—' : paidOutNowF[0])}", :color => (paidOutNowV <= 0 ? 'white' : 'white'))
-                column("#{(paidOutMinus1V <= 0 ? '—' : paidOutMinus1F[0])}", :color => (paidOutMinus1V <= 0 ? 'white' : 'white'))
-                column("#{(paidOutMinus2V <= 0 ? '—' : paidOutMinus2F[0])}", :color => (paidOutMinus2V <= 0 ? 'white' : 'white'))
-                column("#{(paidOutMinus3V <= 0 ? '—' : paidOutMinus3F[0])}", :color => (paidOutMinus3V <= 0 ? 'white' : 'white'))
-                column("#{(paidOutMinus4V <= 0 ? '—' : paidOutMinus4F[0])}", :color => (paidOutMinus4V <= 0 ? 'white' : 'white'))
-                column('  |')
-                column('')
+                column(' |')
+                column('989', :color => 'cyan')
             end
             row do
                 column(getRuleString(@summaryWidth_1))
+                column(getRuleString(@summaryWidth_2))
                 column(getRuleString(@summaryWidth_3))
                 column(getRuleString(@summaryWidth_4))
                 column(getRuleString(@summaryWidth_5))
                 column(getRuleString(@summaryWidth_6))
                 column(getRuleString(@summaryWidth_7))
-                column('——|')
+                column(' |')
                 column('')
             end
             row do
-                column(' Total Incoming', :color => 'white')
                 column('')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column('  |')
+                column('')
+                column('')
+                column('')
+                column('')
+                column('')
+                column('')
+                column(' |')
+                column('Total Credit', :color => 'white')
+            end
+            row do
+                column(' Cash Deposited', :color => 'green')
+                column("#{(cashDep1[0] <= 0 ? '—' : cashDep1[1][0])}", :color => (cashDep1[0] <= 0 ? 'white' : 'green'))
+                column("#{(cashDep2[0] <= 0 ? '—' : cashDep2[1][0])}", :color => (cashDep2[0] <= 0 ? 'white' : 'green'))
+                column("#{(cashDep3[0] <= 0 ? '—' : cashDep3[1][0])}", :color => (cashDep3[0] <= 0 ? 'white' : 'green'))
+                column("#{(cashDep4[0] <= 0 ? '—' : cashDep4[1][0])}", :color => (cashDep4[0] <= 0 ? 'white' : 'green'))
+                column("#{(cashDep5[0] <= 0 ? '—' : cashDep5[1][0])}", :color => (cashDep5[0] <= 0 ? 'white' : 'green'))
+                column("#{(cashDepTotal[0] <= 0 ? '—' : cashDepTotal[1][0])}", :color => (cashDepTotal[0] <= 0 ? 'white' : 'green'))
+                column(' |')
+                column(getAsCurrency(@totalCredit)[0], :color => 'cyan')
+            end
+            row do
+                column(' Rec. IN Outstanding', :color => 'cyan')
+                column("#{(inOutstanding1[0] <= 0 ? '—' : inOutstanding1[1][0])}", :color => (inOutstanding1[0] <= 0 ? 'white' : 'white'))
+                column("#{(inOutstanding2[0] <= 0 ? '—' : inOutstanding2[1][0])}", :color => (inOutstanding2[0] <= 0 ? 'white' : 'white'))
+                column("#{(inOutstanding3[0] <= 0 ? '—' : inOutstanding3[1][0])}", :color => (inOutstanding3[0] <= 0 ? 'white' : 'white'))
+                column("#{(inOutstanding4[0] <= 0 ? '—' : inOutstanding4[1][0])}", :color => (inOutstanding4[0] <= 0 ? 'white' : 'white'))
+                column("#{(inOutstanding5[0] <= 0 ? '—' : inOutstanding5[1][0])}", :color => (inOutstanding5[0] <= 0 ? 'white' : 'white'))
+                column("#{(inOutstandingTotal[0] <= 0 ? '—' : inOutstandingTotal[1][0])}", :color => (inOutstandingTotal[0] <= 0 ? 'white' : 'white'))
+                column(' |')
                 column('')
             end
             row do
-                column(' Total Outgoing', :color => 'white')
+                column(' Rec. IN Received', :color => 'cyan')
+
+                column("#{(inReceived1[0] <= 0 ? '—' : inReceived1[1][0])}", :color => (inReceived1[0] <= 0 ? 'white' : 'white'))
+                column("#{(inReceived2[0] <= 0 ? '—' : inReceived2[1][0])}", :color => (inReceived2[0] <= 0 ? 'white' : 'white'))
+                column("#{(inReceived3[0] <= 0 ? '—' : inReceived3[1][0])}", :color => (inReceived3[0] <= 0 ? 'white' : 'white'))
+                column("#{(inReceived4[0] <= 0 ? '—' : inReceived4[1][0])}", :color => (inReceived4[0] <= 0 ? 'white' : 'white'))
+                column("#{(inReceived5[0] <= 0 ? '—' : inReceived5[1][0])}", :color => (inReceived5[0] <= 0 ? 'white' : 'white'))
+                column("#{(inReceivedTotal[0] <= 0 ? '—' : inReceivedTotal[1][0])}", :color => (inReceivedTotal[0] <= 0 ? 'white' : 'white'))
+                column(' |')
+                column('Credit Used', :color => 'white')
+            end
+            row do
+                column(' Rec. OUT Outstanding', :color => 'red')
+                column("#{(outOutstanding1[0] <= 0 ? '—' : outOutstanding1[1][0])}", :color => (outOutstanding1[0] <= 0 ? 'white' : 'white'))
+                column("#{(outOutstanding2[0] <= 0 ? '—' : outOutstanding2[1][0])}", :color => (outOutstanding2[0] <= 0 ? 'white' : 'white'))
+                column("#{(outOutstanding3[0] <= 0 ? '—' : outOutstanding3[1][0])}", :color => (outOutstanding3[0] <= 0 ? 'white' : 'white'))
+                column("#{(outOutstanding4[0] <= 0 ? '—' : outOutstanding4[1][0])}", :color => (outOutstanding4[0] <= 0 ? 'white' : 'white'))
+                column("#{(outOutstanding5[0] <= 0 ? '—' : outOutstanding5[1][0])}", :color => (outOutstanding5[0] <= 0 ? 'white' : 'white'))
+                column("#{(outOutstandingTotal[0] <= 0 ? '—' : outOutstandingTotal[1][0])}", :color => (outOutstandingTotal[0] <= 0 ? 'white' : 'white'))
+                column(' |')
+                column(getAsCurrency(0 - @totalCreditUsed)[0], :color => (@totalCreditUsed > 0) ? 'red' : 'cyan')
+            end
+            row do
+                column(' Rec. OUT Paid', :color => 'red')
+                column("#{(outPaid1[0] <= 0 ? '—' : outPaid1[1][0])}", :color => (outPaid1[0] <= 0 ? 'white' : 'white'))
+                column("#{(outPaid2[0] <= 0 ? '—' : outPaid2[1][0])}", :color => (outPaid2[0] <= 0 ? 'white' : 'white'))
+                column("#{(outPaid3[0] <= 0 ? '—' : outPaid3[1][0])}", :color => (outPaid3[0] <= 0 ? 'white' : 'white'))
+                column("#{(outPaid4[0] <= 0 ? '—' : outPaid4[1][0])}", :color => (outPaid4[0] <= 0 ? 'white' : 'white'))
+                column("#{(outPaid5[0] <= 0 ? '—' : outPaid5[1][0])}", :color => (outPaid5[0] <= 0 ? 'white' : 'white'))
+                column("#{(outPaidTotal[0] <= 0 ? '—' : outPaidTotal[1][0])}", :color => (outPaidTotal[0] <= 0 ? 'white' : 'white'))
+                column(' |')
+                column('')
+            end
+            row do
+                column(getRuleString(@summaryWidth_1))
+                column(getRuleString(@summaryWidth_2))
+                column(getRuleString(@summaryWidth_3))
+                column(getRuleString(@summaryWidth_4))
+                column(getRuleString(@summaryWidth_5))
+                column(getRuleString(@summaryWidth_6))
+                column(getRuleString(@summaryWidth_7))
+                column(' |')
+            end
+            @recognizedTransactions.each do |recognizedTransaction|
+                if recognizedTransaction[:intTypeID] == 3
+
+                    # Rec. IN Received
+                    amt1, amt2, amt3, amt4, amt5, amtTotal = runCalculationFor(method(:calculateAmountPaidReceivedForRecognizedTransaction), recognizedTransaction[:id])
+
+                    row do
+                        column(" #{recognizedTransaction[:translation][0..23]}", :color => 'white')
+                        column("#{(amt1[0] <= 0 ? '—' : amt1[1][0])}", :color => (amt1[0] <= 0 ? 'white' : 'white'))
+                        column("#{(amt2[0] <= 0 ? '—' : amt2[1][0])}", :color => (amt2[0] <= 0 ? 'white' : 'white'))
+                        column("#{(amt3[0] <= 0 ? '—' : amt3[1][0])}", :color => (amt3[0] <= 0 ? 'white' : 'white'))
+                        column("#{(amt4[0] <= 0 ? '—' : amt4[1][0])}", :color => (amt4[0] <= 0 ? 'white' : 'white'))
+                        column("#{(amt5[0] <= 0 ? '—' : amt5[1][0])}", :color => (amt5[0] <= 0 ? 'white' : 'white'))
+                        column("#{(amtTotal[0] <= 0 ? '—' : amtTotal[1][0])}", :color => (amtTotal[0] <= 0 ? 'white' : 'white'))
+                        column(' |')
+                        column('')
+                    end
+                end
+            end
+
+
+            row do
+                column(getRuleString(@summaryWidth_1))
+                column(getRuleString(@summaryWidth_2))
+                column(getRuleString(@summaryWidth_3))
+                column(getRuleString(@summaryWidth_4))
+                column(getRuleString(@summaryWidth_5))
+                column(getRuleString(@summaryWidth_6))
+                column(getRuleString(@summaryWidth_7))
+                column(' |')
+                column('')
+            end
+            row do
+                column(' Total IN', :color => 'white')
                 column('')
                 column('—')
                 column('—')
                 column('—')
                 column('—')
-                column('  |')
+                column('')
+                column(' |')
+                column('')
+            end
+            row do
+                column(' Total OUT', :color => 'white')
+                column('')
+                column('—')
+                column('—')
+                column('—')
+                column('—')
+                column('')
+                column(' |')
                 column('')
             end
             row do
@@ -618,38 +684,102 @@ class ShowBankTransactions
                 column('—')
                 column('—')
                 column('—')
-                column('  |')
+                column('')
+                column(' |')
                 column('')
             end
             row do
                 column(getRuleString(@summaryWidth_1))
+                column(getRuleString(@summaryWidth_2))
                 column(getRuleString(@summaryWidth_3))
                 column(getRuleString(@summaryWidth_4))
                 column(getRuleString(@summaryWidth_5))
                 column(getRuleString(@summaryWidth_6))
                 column(getRuleString(@summaryWidth_7))
-                column('━━|')
-                column('')
-            end
-            row do
-                column(' Projected (EOM) Balance', :color => 'white')
-                column('')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column('  |')
+                column(' |')
                 column('')
             end
         end
         puts "#{getRuleString(@summaryWidthTotal)}\n\n"
     end
 
+    # @return array
+    def calculateAmountPaidReceivedForRecognizedTransaction(month, id)
+        amt = 0
+        @transactions.each do |transaction|
+            # IF MONTH IS CURRENT
+            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y%-m') == month.strftime('%Y%-m')
+                recognizedTransaction = @recognizedTransactionsIndexedID[id.to_s]
+                # IF TRANSACTION IS MATCHED
+                if transaction['bank_account_id'].to_i == recognizedTransaction[:bank_account_id] && transaction['type'] == recognizedTransaction[:type] && recognizedTransaction[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
+                    if recognizedTransaction[:intTypeID] == 2
+                        amt = amt + transaction['paid_in'].to_f
+                    elsif recognizedTransaction[:intTypeID] == 3
+                        amt = amt + transaction['paid_out'].to_f
+                    else
+                        raise(RunTimeError('ID is not recognized.'))
+                    end
+                end
+            end
+        end
+        amt
+    end
+
+    # @return array
+    def runCalculationFor(callback, param1 = nil)
+        var1 = Array.new
+        var2 = Array.new
+        var3 = Array.new
+        var4 = Array.new
+        var5 = Array.new
+        var1[0] = callback.call(@month1, param1)
+        var1[1] = getAsCurrency(var1[0])
+        var2[0] = callback.call(@month2, param1)
+        var2[1] = getAsCurrency(var2[0])
+        var3[0] = callback.call(@month3, param1)
+        var3[1] = getAsCurrency(var3[0])
+        var4[0] = callback.call(@month4, param1)
+        var4[1] = getAsCurrency(var4[0])
+        var5[0] = callback.call(@month5, param1)
+        var5[1] = getAsCurrency(var5[0])
+        varTotal = Array.new
+        varTotal[0] = var1[0] + var2[0] + var3[0] + var4[0] + var5[0]
+        varTotal[1] = getAsCurrency(varTotal[0])
+        Array[var1, var2, var3, var4, var5, varTotal]
+    end
+
+    # CASH DEPOSITED
     # @return float
-    def calculateRecurringInReceived(monthDoubleDigit)
+    def calculateCashDeposited(month, param1 = nil)
+        param1
         total = 0
         @transactions.each do |transaction|
-            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == monthDoubleDigit
+            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == month.strftime('%m')
+                @recognizedTransactions.each do |recognizedTransaction|
+                    if transaction['bank_account_id'].to_i == recognizedTransaction[:bank_account_id] && transaction['type'] == recognizedTransaction[:type] && recognizedTransaction[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
+                        if recognizedTransaction[:intTypeID] == 1
+                            total = total + transaction['paid_in'].to_f
+                        end
+                    end
+                end
+            end
+        end
+        total
+    end
+
+    # REC. IN OUTSTANDING
+    # @return float
+    def calculateRecurringInOutstanding(month, param1 = nil)
+        calculateRecurringOutstanding(month, param1, 2)
+    end
+
+    # REC. IN RECEIVED
+    # @return float
+    def calculateRecurringInReceived(month, param1 = nil)
+        param1
+        total = 0
+        @transactions.each do |transaction|
+            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == month.strftime('%m')
                 @recognizedTransactions.each do |recognizedTransaction|
                     if transaction['bank_account_id'].to_i == recognizedTransaction[:bank_account_id] && transaction['type'] == recognizedTransaction[:type] && recognizedTransaction[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
                         if recognizedTransaction[:intTypeID] == 2
@@ -662,11 +792,19 @@ class ShowBankTransactions
         total
     end
 
+    # REC. OUT OUTSTANDING
     # @return float
-    def calculateRecurringOutPaid(monthDoubleDigit)
+    def calculateRecurringOutOutstanding(month, param1 = nil)
+        calculateRecurringOutstanding(month, param1, 3)
+    end
+
+    # REC. OUT PAID
+    # @return float
+    def calculateRecurringOutPaid(month, param1 = nil)
+        param1
         total = 0
         @transactions.each do |transaction|
-            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == monthDoubleDigit
+            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == month.strftime('%m')
                 @recognizedTransactions.each do |recognizedTransaction|
                     if transaction['bank_account_id'].to_i == recognizedTransaction[:bank_account_id] && transaction['type'] == recognizedTransaction[:type] && recognizedTransaction[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
                         if recognizedTransaction[:intTypeID] == 3
@@ -679,19 +817,39 @@ class ShowBankTransactions
         total
     end
 
+    # REC. OUTSTANDING (COMMON)
     # @return float
-    def calculateMonthlyCashInFlow(monthDoubleDigit)
+    def calculateRecurringOutstanding(month, alreadyPaid, intTypeId)
         total = 0
-        @transactions.each do |transaction|
-            if DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%m') == monthDoubleDigit
-                @recognizedTransactions.each do |recognizedTransaction|
-                    if transaction['bank_account_id'].to_i == recognizedTransaction[:bank_account_id] && transaction['type'] == recognizedTransaction[:type] && recognizedTransaction[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
-                        if recognizedTransaction[:intTypeID] == 1
-                            total = total + transaction['paid_in'].to_f
-                        end
+        @recognizedTransactions.each do |recognizedTransaction|
+            if recognizedTransaction[:intTypeID] == intTypeId
+
+                # Check Start Month
+                unless recognizedTransaction[:start_month].nil?
+                    currentMonth = DateTime.strptime(month.strftime('%Y-%m'), '%Y-%m')
+                    startMonth = DateTime.strptime(recognizedTransaction[:start_month], '%Y-%m')
+                    if currentMonth < startMonth
+                        next
+
                     end
                 end
+
+                total = total + recognizedTransaction[:recurring_amount]
             end
+        end
+        case month.strftime('%m')
+            when @month1.strftime('%m')
+                total = total - alreadyPaid[0][0].to_f
+            when @month2.strftime('%m')
+                total = total - alreadyPaid[1][0].to_f
+            when @month3.strftime('%m')
+                total = total - alreadyPaid[2][0].to_f
+            when @month4.strftime('%m')
+                total = total - alreadyPaid[3][0].to_f
+            when @month5.strftime('%m')
+                total = total - alreadyPaid[4][0].to_f
+            else
+                raise(RunTimeError('Month not found.'))
         end
         total
     end
@@ -737,6 +895,83 @@ class ShowBankTransactions
         @totalCash = (@totalAvailable - @totalCredit).round(2)
     end
 
+    # Get summary data for 5 month output
+    # @return void
+    def getSummaryData
+        month1String = @month1.strftime('%Y-%m')
+        month2String = @month2.strftime('%Y-%m')
+        month3String = @month3.strftime('%Y-%m')
+        month4String = @month4.strftime('%Y-%m')
+        month5String = @month5.strftime('%Y-%m')
+
+        @transactions.each do |transaction|
+
+            # Find out what month we're in and retrieve relevant location in memory for object.
+            transactionMonth = DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y-%m')
+            case transactionMonth
+                when month1String
+                    monthObject = @summaryData[:month1]
+                when month2String
+                    monthObject = @summaryData[:month2]
+                when month3String
+                    monthObject = @summaryData[:month3]
+                when month4String
+                    monthObject = @summaryData[:month4]
+                when month5String
+                    monthObject = @summaryData[:month5]
+                else
+                    raise(RuntimeError, "Month [#{transactionMonth}] not recognized.")
+            end
+
+            transactionRecognized = false
+            transactionAdded = false
+
+            # Check if transaction is recognized.
+            @recognizedTransactions.each do |rt|
+                if transaction['bank_account_id'].to_i == rt[:bank_account_id] && transaction['type'] == rt[:type] && rt[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
+                    transactionRecognized = rt[:id]
+                    break
+                end
+            end
+
+            # Process recurring transactions
+            if transactionRecognized
+                transactionAdded = true
+                rt = @recognizedTransactionsIndexedID["#{transactionRecognized}"]
+                if rt[:intTypeID] == 1
+                    monthObject[:cash_in] = monthObject[:cash_in] + transaction['paid_in'].to_f
+                elsif rt[:intTypeID] == 2
+                    if monthObject[:"#{rt[:id]}"].nil?
+                        monthObject[:"#{rt[:id]}"] = 0
+                    end
+                    monthObject[:"#{rt[:id]}"] = monthObject[:"#{rt[:id]}"] + transaction['paid_in'].to_f
+                elsif rt[:intTypeID] == 3
+                    if monthObject[:"#{rt[:id]}"].nil?
+                        monthObject[:"#{rt[:id]}"] = 0
+                    end
+                    monthObject[:"#{rt[:id]}"] = monthObject[:"#{rt[:id]}"] + transaction['paid_out'].to_f
+                else
+                    transactionAdded = false
+                end
+            end
+
+            # Process remaining transactions (un-recurring)
+            if transactionAdded
+                if transaction['paid_in'].to_f > 0
+                    monthObject[:misc_in] = monthObject[:misc_in] + transaction['paid_in'].to_f
+                elsif transaction['paid_out'].to_f > 0
+                    monthObject[:misc_out] = monthObject[:misc_out] + transaction['paid_out'].to_f
+                end
+            end
+
+            # Calculate Totals (for all transactions)
+            if transaction['paid_in'].to_f > 0
+                monthObject[:total_in] = monthObject[:total_in] + transaction['paid_in'].to_f
+            elsif transaction['paid_out'].to_f > 0
+                monthObject[:total_out] = monthObject[:total_out] + transaction['paid_out'].to_f
+            end
+        end
+    end
 
     # Returns name of bank account + associated color.
     def getBankAndColor(bankId)
