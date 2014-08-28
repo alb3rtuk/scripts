@@ -87,7 +87,12 @@ class ShowBankTransactions
         @untranslated = false
         @withInternalTransfers = false
 
-        # Balances
+        # Misc Globals
+        @rightHandSideCount = 0
+        @rightHandSideContent = Array.new
+        @rightHandSideContentCount = 0
+
+        # Balance Globals
         @totalAvailable = 0
         @totalCredit = 0
         @totalCreditUsed = 0
@@ -327,8 +332,8 @@ class ShowBankTransactions
         false
     end
 
-# Inserts a divider to display the month
-# @return void
+    # Inserts a divider to display the month
+    # @return void
     def displayTransactionsMonth(month)
         displayTransactionsBlankRow
         row do
@@ -490,6 +495,15 @@ class ShowBankTransactions
         # Rec. Out Outstanding
         outOutstanding1, outOutstanding2, outOutstanding3, outOutstanding4, outOutstanding5, outOutstandingTotal = runCalculationFor(method(:calculateRecurringOutOutstanding), Array[outPaid1, outPaid2, outPaid3, outPaid4, outPaid5, outPaidTotal])
 
+        @rightHandSideContent = Array[
+            Array['Credit Score', 'white'],
+            Array['989', 'cyan'],
+            Array['Total Credit', 'white'],
+            Array[getAsCurrency(@totalCredit)[0], 'cyan'],
+            Array['Credit Used', 'white'],
+            Array[getAsCurrency(0 - @totalCreditUsed)[0], (@totalCreditUsed > 0) ? 'red' : 'cyan'],
+        ]
+
         table(:border => false) do
             row do
                 column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
@@ -522,7 +536,7 @@ class ShowBankTransactions
                 column('')
                 column('')
                 column(' |')
-                column('Credit Score', :color => 'white')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Projected (EOM) Balance', :color => 'white')
@@ -533,7 +547,7 @@ class ShowBankTransactions
                 column('—')
                 column('')
                 column(' |')
-                column('989', :color => 'cyan')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(getRuleString(@summaryWidth_1))
@@ -544,7 +558,7 @@ class ShowBankTransactions
                 column(getRuleString(@summaryWidth_6))
                 column(getRuleString(@summaryWidth_7))
                 column(' |')
-                column('')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column('')
@@ -555,7 +569,7 @@ class ShowBankTransactions
                 column('')
                 column('')
                 column(' |')
-                column('Total Credit', :color => 'white')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Cash Deposited', :color => 'green')
@@ -566,7 +580,7 @@ class ShowBankTransactions
                 column("#{(cashDep5[0] <= 0 ? '—' : cashDep5[1][0])}", :color => (cashDep5[0] <= 0 ? 'white' : 'green'))
                 column("#{(cashDepTotal[0] <= 0 ? '—' : cashDepTotal[1][0])}", :color => (cashDepTotal[0] <= 0 ? 'white' : 'green'))
                 column(' |')
-                column(getAsCurrency(@totalCredit)[0], :color => 'cyan')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Rec. IN Outstanding', :color => 'cyan')
@@ -577,7 +591,7 @@ class ShowBankTransactions
                 column("#{(inOutstanding5[0] <= 0 ? '—' : inOutstanding5[1][0])}", :color => (inOutstanding5[0] <= 0 ? 'white' : 'white'))
                 column("#{(inOutstandingTotal[0] <= 0 ? '—' : inOutstandingTotal[1][0])}", :color => (inOutstandingTotal[0] <= 0 ? 'white' : 'white'))
                 column(' |')
-                column('')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Rec. IN Received', :color => 'cyan')
@@ -589,7 +603,7 @@ class ShowBankTransactions
                 column("#{(inReceived5[0] <= 0 ? '—' : inReceived5[1][0])}", :color => (inReceived5[0] <= 0 ? 'white' : 'white'))
                 column("#{(inReceivedTotal[0] <= 0 ? '—' : inReceivedTotal[1][0])}", :color => (inReceivedTotal[0] <= 0 ? 'white' : 'white'))
                 column(' |')
-                column('Credit Used', :color => 'white')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Rec. OUT Outstanding', :color => 'red')
@@ -600,7 +614,7 @@ class ShowBankTransactions
                 column("#{(outOutstanding5[0] <= 0 ? '—' : outOutstanding5[1][0])}", :color => (outOutstanding5[0] <= 0 ? 'white' : 'white'))
                 column("#{(outOutstandingTotal[0] <= 0 ? '—' : outOutstandingTotal[1][0])}", :color => (outOutstandingTotal[0] <= 0 ? 'white' : 'white'))
                 column(' |')
-                column(getAsCurrency(0 - @totalCreditUsed)[0], :color => (@totalCreditUsed > 0) ? 'red' : 'cyan')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Rec. OUT Paid', :color => 'red')
@@ -611,7 +625,7 @@ class ShowBankTransactions
                 column("#{(outPaid5[0] <= 0 ? '—' : outPaid5[1][0])}", :color => (outPaid5[0] <= 0 ? 'white' : 'white'))
                 column("#{(outPaidTotal[0] <= 0 ? '—' : outPaidTotal[1][0])}", :color => (outPaidTotal[0] <= 0 ? 'white' : 'white'))
                 column(' |')
-                column('')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(getRuleString(@summaryWidth_1))
@@ -622,6 +636,7 @@ class ShowBankTransactions
                 column(getRuleString(@summaryWidth_6))
                 column(getRuleString(@summaryWidth_7))
                 column(' |')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             @recognizedTransactions.each do |recognizedTransaction|
                 if recognizedTransaction[:intTypeID] == 3
@@ -642,8 +657,6 @@ class ShowBankTransactions
                     end
                 end
             end
-
-
             row do
                 column(getRuleString(@summaryWidth_1))
                 column(getRuleString(@summaryWidth_2))
@@ -653,7 +666,7 @@ class ShowBankTransactions
                 column(getRuleString(@summaryWidth_6))
                 column(getRuleString(@summaryWidth_7))
                 column(' |')
-                column('')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
                 column(' Total IN', :color => 'white')
@@ -701,6 +714,26 @@ class ShowBankTransactions
             end
         end
         puts "#{getRuleString(@summaryWidthTotal)}\n\n"
+    end
+
+    # @return array
+    def insertRightHandContent
+        @rightHandSideCount = @rightHandSideCount + 1
+        if @rightHandSideCount == 3
+            @rightHandSideContentCount = @rightHandSideContentCount + 1
+        elsif @rightHandSideCount >= 7
+            @rightHandSideCount = 1
+            @rightHandSideContentCount = @rightHandSideContentCount + 1
+        elsif @rightHandSideCount >= 5
+            return Array['', 'white']
+        end
+        content = ''
+        color = 'white'
+        unless @rightHandSideContent[@rightHandSideContentCount].nil?
+            content = @rightHandSideContent[@rightHandSideContentCount][0]
+            color = @rightHandSideContent[@rightHandSideContentCount][1]
+        end
+        Array[content, color.to_s]
     end
 
     # @return array
