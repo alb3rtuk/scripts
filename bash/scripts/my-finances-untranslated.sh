@@ -5,4 +5,8 @@
 
 clearTerminal
 
+echo
+message magenta "MY FINANCES" " Generating report (with untranslated transactions)... \033[33m$(date)\033[0m"
+echo
+
 ruby ~/Repos/Scripts/ruby/scripts/my-finances.rb 'untranslated'
