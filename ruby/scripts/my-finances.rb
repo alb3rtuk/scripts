@@ -87,7 +87,10 @@ class ShowBankTransactions
             {:bank_account_id => Array[6], :type => 'D-T', :terms => Array['']},
         ]
 
-        @ignoredTransactions = Array[2556, 2557, 2558, 2555, 2545, 2546, 2567, 2576, 2566, 2959]
+        @ignoredTransactions = Array.new
+
+        # HAWAII PAYMENTS
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2546, 2567, 2576, 2566, 2959])
 
         # Misc Globals
         @rightHandSideCount = 0
