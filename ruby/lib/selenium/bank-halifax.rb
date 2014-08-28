@@ -66,7 +66,7 @@ class BankHalifax
     def runExtraction(showInTerminal = false)
         attempt = 0
         succeeded = false
-        while succeeded == false
+        while !succeeded
             begin
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
@@ -241,9 +241,9 @@ class BankHalifax
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].to_f
-            newData['paid_out'] = transaction['paid_out'].to_f
-            newData['balance'] = transaction['balance'].to_f
+            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_out'] = transaction['paid_out'].delete(',').to_f
+            newData['balance'] = transaction['balance'].delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray

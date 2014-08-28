@@ -58,7 +58,7 @@ class BankNatWest
     def runExtraction(showInTerminal = false)
         attempt = 0
         succeeded = false
-        while succeeded == false
+        while !succeeded
             begin
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
@@ -74,9 +74,6 @@ class BankNatWest
                 succeeded = true
             ensure
                 if succeeded
-
-                    puts data['select_platinum_transactions'].inspect
-
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
@@ -250,8 +247,8 @@ class BankNatWest
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].to_f
-            newData['paid_out'] = transaction['paid_out'].to_f
+            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_out'] = transaction['paid_out'].delete(',').to_f
             newData['balance'] = transaction['balance'].delete('£').delete(',').to_f
             sanitizedArray << newData
         end

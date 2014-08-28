@@ -83,7 +83,7 @@ class BankLloyds
     def runExtraction(showInTerminal = false)
         attempt = 0
         succeeded = false
-        while succeeded == false
+        while !succeeded
             begin
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
@@ -102,37 +102,26 @@ class BankLloyds
 
                     @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
-                    insertTransactions(data['cc_transactions'], 7)
-                    insertTransactions(data['account_1_transactions'], 8)
-
+                    BankCommon.new.insertTransactions(@databaseConnection, data['cc_transactions'], 7)
+                    BankCommon.new.insertTransactions(@databaseConnection, data['account_1_transactions'], 8)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
                         {:bank_account_id => 7, :transactions => data['cc_transactions']},
                         {:bank_account_id => 8, :transactions => data['account_1_transactions']},
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
-
                     if showInTerminal
                         puts "\x1B[32mSuccess (Lloyds)\x1B[0m"
                     end
 
                 else
-                    if attempt >= 1
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the Lloyds script.\x1B[0m"
                         end
                     end
                 end
-            end
-        end
-    end
-
-    def insertTransactions(data, bank_account_id)
-        data.each do |transaction|
-            result = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description']}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}'")
-            if result.num_rows == 0
-                @databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description']}', '#{transaction['paid_in']}', '#{transaction['paid_out']}')")
             end
         end
     end
@@ -180,7 +169,6 @@ class BankLloyds
         if showInTerminal
             puts "\x1B[90mSuccessfully retrieved balances for \x1B[36mPlatinum Mastercard\x1B[0m\x1B[0m"
         end
-
         if browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard').exists?
             data_credit_card = getTransactionsFromTableCreditCard(browser.table(:id => 'pnlgrpStatement:conS2:tblTransactionListCreditCard'))
         end
@@ -231,6 +219,8 @@ class BankLloyds
                     rowData['paid_in'] = tableCell.text
                 elsif cellCount == 5
                     rowData['paid_out'] = tableCell.text
+                elsif cellCount == 6
+                    rowData['balance'] = tableCell.text
                 end
             end
             transactions << rowData
@@ -251,8 +241,9 @@ class BankLloyds
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].to_f
-            newData['paid_out'] = transaction['paid_out'].to_f
+            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_out'] = transaction['paid_out'].delete(',').to_f
+            newData['balance'] = transaction['balance'].delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray
@@ -301,12 +292,18 @@ class BankLloyds
             # Paid In/Out
             if transaction['paid_out'].include? 'CR'
                 paidSplit = transaction['paid_out'].split(' ')
-                newData['paid_in'] = paidSplit[0].to_f
+                newData['paid_in'] = paidSplit[0].delete(',').to_f
                 newData['paid_out'] = 0.to_f
             else
                 newData['paid_in'] = 0.to_f
-                newData['paid_out'] = transaction['paid_out'].to_f
+                newData['paid_out'] = transaction['paid_out'].delete(',').to_f
             end
+
+            # As this doesn't display a balance, use the last 6 digits of reference as a pseudo-balance.
+            balance = transaction['reference']
+            balance = balance[-6..-1] || balance
+            newData['balance'] = balance.to_f
+
             sanitizedArray << newData
         end
         sanitizedArray
