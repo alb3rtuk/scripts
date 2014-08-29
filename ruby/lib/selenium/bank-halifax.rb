@@ -83,7 +83,7 @@ class BankHalifax
             ensure
                 if succeeded
 
-                    @databaseConnection.query("INSERT INTO bank_account_type_misc (bank_account_id, balance, balance_remaining, date_fetched, date_fetched_string) VALUES (6, #{data['isa']}, #{data['isa_remaining']}, '#{DateTime.now}', '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_isa (bank_account_id, balance, balance_remaining, date_fetched, date_fetched_string) VALUES (6, #{data['isa']}, #{data['isa_remaining']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (4, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (5, #{data['account_2_balance']}, #{data['account_2_available']}, #{data['account_2_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     BankCommon.new.insertTransactions(@databaseConnection, data['isa_transactions'], 6)
