@@ -18,3 +18,5 @@ backup/cronerror.log
 backup/cronlog.log
 
 .last_run.json
+
+ruby/scripts/rs.rb
