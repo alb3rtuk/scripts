@@ -3,7 +3,7 @@ require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 class BankExperian
     include CommandLineReporter
 
-    def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false)
+    def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
         @username = username
         @password = password
         @security = security
@@ -11,9 +11,9 @@ class BankExperian
         @headless = headless
         @displayProgress = displayProgress
         @login_uri = 'https://www.creditexpert.co.uk/MCCLogin.aspx'
+        @databaseConnection = databaseConnection
     end
 
-    # Gets you as far as Experian account overview screen & then returns the browser for (possible) further manipulation.
     def login(browser = getBrowser(@displays, @headless))
         if @displayProgress
             puts "\x1B[90mAttempting to establish connection with: #{@login_uri}\x1B[0m"
@@ -34,25 +34,73 @@ class BankExperian
         browser
     end
 
-    def getCreditInfo(showInTerminal = false, browser = self.login)
+    def runExtraction(showInTerminal = false)
+        attempt = 0
+        succeeded = false
+        while !succeeded
+            begin
+                attempt = attempt + 1
+                data = getCreditScore(showInTerminal)
+                data = data[1]
+            rescue Exception => e
+                succeeded = false
+                if showInTerminal
+                    puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
+                    # puts e.backtrace
+                end
+            else
+                succeeded = true
+            ensure
+                if succeeded
+                    @databaseConnection.query("INSERT INTO experian_credit_report (score, score_text, date_fetched, date_fetched_string) VALUES ('#{data['credit_score']}', '#{data['credit_score_text']}', '#{DateTime.now}', '#{DateTime.now}')")
+                    if showInTerminal
+                        puts "\x1B[32mSuccess (Experian)\x1B[0m"
+                    end
+
+                else
+                    if attempt >= 2
+                        succeeded = true
+                        if showInTerminal
+                            puts "\x1B[31mSite is either down or there is an error in the Experian script.\x1B[0m"
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    def getCreditScore(showInTerminal = false, browser = self.login)
         data = {}
-        sleep(8)
+        sleep(10)
+
+        #  Get Score
         if browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
             data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_MyScoreV31_pnlMyScore1_lblMyScore').text
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved \x1B[36mCredit Score\x1B[0m"
+            end
         elsif browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScore').exists?
             data['credit_score'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScore').text
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved \x1B[36mCredit Score\x1B[0m"
+            end
         else
-            data['credit_score'] = 'ERROR'
+            if showInTerminal
+                puts "\x1B[31m ERROR \x1B[0m \x1B[90m Failed to retrieve \x1B[36mCredit Score\x1B[90m, element not found\x1B[0m"
+                exit
+            end
         end
-        if showInTerminal
-            puts "\n[ #{Rainbow('Experian').foreground('#ff008a')} ]"
-            table(:border => true) do
-                row do
-                    column('Credit Score', :width => 19, :align => 'right')
-                end
-                row do
-                    column(data['credit_score'], :color => 'magenta')
-                end
+
+        #  Get Score Text
+        if browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScoreDescription').exists?
+            data['credit_score_text'] = browser.span(:id => 'MCC_ScoreIntelligence_ScoreIntelligence_Dial1_idScoreAttribBox1_MyScoreV31_pnlMyScore1_lblMyScoreDescription').text
+            if showInTerminal
+                puts "\x1B[90mSuccessfully retrieved \x1B[36mCredit Score Text\x1B[0m"
+            end
+        else
+            if showInTerminal
+                puts "\x1B[31m ERROR \x1B[0m \x1B[90m Failed to retrieve \x1B[36mCredit Score Text\x1B[90m, element not found\x1B[0m"
+                exit
             end
         end
 
