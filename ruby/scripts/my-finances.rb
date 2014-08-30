@@ -34,9 +34,7 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => 'white', :translation => 'PHIL HACKETT'},
-            # "G SOLAN, VIRGIN MEDIA" MUST BE BEFORE "G SOLAN"
             {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN , VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30, :start_month => '2014-05'},
-            {:intTypeID => 0, :id => 1300, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN'], :color => 'white', :translation => 'GARY SOLAN'},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY'},
             {:intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => 'red', :translation => 'SPOTIFY SUBSCRIPTION', :recurring_amount => 19.98},
@@ -208,8 +206,9 @@ class ShowBankTransactions
         @colWidth_6 = 20
         @colWidth_7 = 20
         @colWidth_8 = 21
-        @colWidth_9 = 27
-        @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + 8
+        @colWidth_9 = 2
+        @colWidth_10 = 24
+        @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + @colWidth_10 + 9
 
         # Column widths for balances
         @summaryWidth_1 = 46
@@ -336,7 +335,7 @@ class ShowBankTransactions
                 last_date = transaction['date']
             end
         end
-        puts "#{getRuleString(@colWidthTotal)}\n\n"
+        puts "\n#{getRuleString(@colWidthTotal)}"
     end
 
     # Translates Description
@@ -384,7 +383,6 @@ class ShowBankTransactions
     # Displays a blank transaction row
     # @return void
     def displayTransactionsBlankRow
-        return
         row do
             column('')
             column('')
@@ -400,15 +398,16 @@ class ShowBankTransactions
     def displayBankAccounts
         table(:border => false) do
             row do
-                column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
+                column(' Bank', :width => @colWidth_1, :align => 'left', :bold => 'true')
+                column('Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
                 column('Balance', :width => @colWidth_3, :align => 'right')
                 column('Available', :width => @colWidth_4, :align => 'right')
                 column('Overdraft', :width => @colWidth_5, :align => 'right')
-                column('—', :width => @colWidth_6, :align => 'right')
-                column('—', :width => @colWidth_7, :align => 'right')
+                column('', :width => @colWidth_6, :align => 'right')
+                column('', :width => @colWidth_7, :align => 'right')
                 column('', :width => @colWidth_8, :align => 'right')
-                column('Last Fetch', :width => @colWidth_9, :align => 'right')
+                column(' |', :width => @colWidth_9, :align => 'right')
+                column('Last Fetch', :width => @colWidth_10, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth_1))
@@ -420,10 +419,11 @@ class ShowBankTransactions
                 column(getRuleString(@colWidth_7))
                 column(getRuleString(@colWidth_8))
                 column(getRuleString(@colWidth_9))
+                column(getRuleString(@colWidth_10))
             end
             @bankAccounts.each do |row|
                 row = row[1]
-                if row['bank_account_type_id'].to_i == 1 # && row['id'].to_i != 3
+                if row['bank_account_type_id'].to_i == 1 && row['id'].to_i != 3
                     bankAndColor = getBankAndColor(row['bank_id'])
                     balances = @bankAccountBalances[row['id'].to_i]
                     balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
@@ -435,7 +435,8 @@ class ShowBankTransactions
                         column(getAsCurrency(balances['balance_overdraft'])[0], :color => 'white')
                         column('—', :color => 'white')
                         column('—', :color => 'white')
-                        column("#{formatTimestamp(balances['date_fetched_string'])}", :color => 'white')
+                        column('—', :color => 'white')
+                        column(' |')
                         column("#{getTimeAgoInHumanReadable(balances['date_fetched_string'])}", :color => 'white')
                     end
                 end
@@ -446,18 +447,21 @@ class ShowBankTransactions
 
     # Display CreditCards
     def displayCreditCards
-        puts "#{Rainbow(" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} ").background('#ff008a')}\n\n"
+        puts '                                                                                                                                                                               |'
+        puts "\x1B[45m#{" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} "}\x1B[0m                                                                                                                                     |"
+        puts '                                                                                                                                                                               |'
         table(:border => false) do
             row do
-                column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
-                column('Account Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
+                column(' Credit Card', :width => @colWidth_1, :align => 'left', :bold => 'true')
+                column('Name', :width => @colWidth_2, :align => 'left', :bold => 'true')
                 column('Balance', :width => @colWidth_3, :align => 'right')
                 column('Available', :width => @colWidth_4, :align => 'right')
                 column('Limit', :width => @colWidth_5, :align => 'right')
-                column('Minimum Payment', :width => @colWidth_6, :align => 'right')
-                column('Payment Date', :width => @colWidth_7, :align => 'right')
-                column('', :width => @colWidth_8, :align => 'right')
-                column('Last Fetch', :width => @colWidth_9, :align => 'right')
+                column('Pending', :width => @colWidth_6, :align => 'right')
+                column('Minimum Payment', :width => @colWidth_7, :align => 'right')
+                column('Payment Date', :width => @colWidth_8, :align => 'right')
+                column(' |', :width => @colWidth_9, :align => 'left')
+                column('Last Fetch', :width => @colWidth_10, :align => 'right')
             end
             row do
                 column(getRuleString(@colWidth_1))
@@ -469,6 +473,7 @@ class ShowBankTransactions
                 column(getRuleString(@colWidth_7))
                 column(getRuleString(@colWidth_8))
                 column(getRuleString(@colWidth_9))
+                column(getRuleString(@colWidth_10))
             end
             @bankAccounts.each do |row|
                 row = row[1]
@@ -497,19 +502,20 @@ class ShowBankTransactions
                         column(getAsCurrency(creditCardBalance)[0], :color => (getAsCurrency(creditCardBalance)[1] == 'red') ? 'red' : 'white')
                         column(getAsCurrency(balances['balance_available'])[0], :color => 'white')
                         column(getAsCurrency(balances['balance_limit'])[0], :color => 'white')
+                        column(balances['pending_transactions'].to_f <= 0 ? '—' : getAsCurrency(0 - balances['pending_transactions'].to_f)[0], :color => balances['pending_transactions'].to_f <= 0 ? 'white' : getAsCurrency(0 - balances['pending_transactions'].to_f)[1])
                         column(getAsCurrency(balances['minimum_payment'])[0], :color => (balances['minimum_payment'].to_f > 0) ? ((minimumPaymentDateIn <= 3) ? 'red' : 'white') : 'white')
                         if minimumPaymentDateIn < 0
                             column('—', :color => 'white')
                         else
                             column("#{DateTime.strptime(minimumPaymentDate, '%Y-%m-%d').strftime('%d %b %Y')}", :color => minimumPaymentColor)
                         end
-                        column("#{formatTimestamp(balances['date_fetched_string'])}", :color => 'white')
+                        column(' |')
                         column("#{getTimeAgoInHumanReadable(balances['date_fetched_string'])}", :color => 'white')
                     end
                 end
             end
         end
-        puts "#{getRuleString(@colWidthTotal)}\n\n"
+        puts "#{getRuleString(@colWidthTotal)}\n"
     end
 
     # Display Summary
@@ -550,6 +556,8 @@ class ShowBankTransactions
             Array['Credit Score', 'white'],
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
+
+        # DIVIDER
         puts '                                                                                                                                                                               |'
         table(:border => false) do
             row do
@@ -559,7 +567,7 @@ class ShowBankTransactions
                 column("#{@month3.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
                 column("#{@month4.strftime('%B %Y')}", :width => @summaryWidth_5, :align => 'right')
                 column("#{@month5.strftime('%B %Y')}", :width => @summaryWidth_6, :align => 'right')
-                column('Total', :width => @summaryWidth_7, :align => 'right')
+                column('5-Month Total', :width => @summaryWidth_7, :align => 'right', :bold => true)
                 column(' |', :width => @summaryWidth_8, :align => 'left')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1], :width => @summaryWidth_9, :align => 'right')
             end
@@ -663,11 +671,16 @@ class ShowBankTransactions
         end
         puts "#{getRuleString(@summaryWidthTotal)}"
 
-        # Calculates (displays) how much % of month is left...
-        percentOfMonthLeft = 100 - ((@month1.strftime('%d').to_f - 1) / (getEndOfMonthDay.to_f / 100))
+        # Calculates (displays) where to put arrow depending on how far through the month we are..
+        currentDay = @month1.strftime('%d').to_f
+        lastDay = getEndOfMonthDay.to_f
+        if currentDay >= 15
+            currentDay = currentDay + 1
+        end
+        percentOfMonthLeft = 100 - (currentDay - 1) / (lastDay / 100)
         pixelsRemaining = (((@summaryWidthTotal - 1) / 100) * percentOfMonthLeft).round
-        pixelsElapsed = ((@summaryWidthTotal - 1) - pixelsRemaining)
-        puts " \x1B[36m#{getRuleString(pixelsElapsed - 1, ' ')}\x1B[32m\xe2\x86\x92\x1B[0m#{getRuleString(pixelsRemaining, ' ')}\x1B[0m\n\n"
+        pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
+        puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[32m\xe2\x86\x92\x1B[0m\n\n"
 
     end
 
@@ -707,12 +720,12 @@ class ShowBankTransactions
 
                 row do
                     column(" #{recognizedTransaction[:translation]}", :color => (intTypeId == 2) ? 'white' : 'white')
-                    column("#{(amt1[0] <= 0 ? '—' : amt1[1][0])}", :color => amt1[0] <= 0 ? 'white' : color[0])
-                    column("#{(amt2[0] <= 0 ? '—' : amt2[1][0])}", :color => amt2[0] <= 0 ? 'white' : color[1])
-                    column("#{(amt3[0] <= 0 ? '—' : amt3[1][0])}", :color => amt3[0] <= 0 ? 'white' : color[2])
-                    column("#{(amt4[0] <= 0 ? '—' : amt4[1][0])}", :color => amt4[0] <= 0 ? 'white' : color[3])
-                    column("#{(amt5[0] <= 0 ? '—' : amt5[1][0])}", :color => amt5[0] <= 0 ? 'white' : color[4])
-                    column("#{(amtTotal[0] <= 0 ? '—' : amtTotal[1][0])}", :color => amtTotal[0] <= 0 ? 'white' : color[5], :bold => true)
+                    column(amt1[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt1[1][0]}", :color => amt1[0] <= 0 ? 'white' : color[0])
+                    column(amt2[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt2[1][0]}", :color => amt2[0] <= 0 ? 'white' : color[1])
+                    column(amt3[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt3[1][0]}", :color => amt3[0] <= 0 ? 'white' : color[2])
+                    column(amt4[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt4[1][0]}", :color => amt4[0] <= 0 ? 'white' : color[3])
+                    column(amt5[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt5[1][0]}", :color => amt5[0] <= 0 ? 'white' : color[4])
+                    column(amtTotal[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amtTotal[1][0]}", :color => amtTotal[0] <= 0 ? 'white' : color[5])
                     column(' |')
                     column(insertRightHandContent[0], :color => insertRightHandContent[1])
                 end
@@ -878,6 +891,11 @@ class ShowBankTransactions
 
             # Find out what month we're in and retrieve relevant location in memory for object.
             monthObject = getMonthObject(DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y-%m'))
+
+            # If it's a month we don't recognize, skip to next transaction.
+            if monthObject.nil?
+                next
+            end
 
             transactionRecognized = false
             transactionAdded = false
@@ -1058,7 +1076,7 @@ class ShowBankTransactions
             when @month5.strftime('%Y-%m')
                 monthObject = @summaryData[:month5]
             else
-                raise(RuntimeError, "Month [#{transactionMonth}] not recognized.")
+                monthObject = nil
         end
         monthObject
     end

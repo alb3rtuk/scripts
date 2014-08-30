@@ -25,10 +25,17 @@ include Appscript
 #     puts "\x1B[41m DELETING \x1B[0m #{transactionsInDB['date']} - [ BANK ACCOUNT ID: #{transactionsInDB['bank_account_id']} ] - #{transactionsInDB['description']} => #{transactionsInDB['paid_in'].to_f > 0 ? transactionsInDB['paid_in'] : "-#{transactionsInDB['paid_out']}"}"
 # end
 
-require 'craig'
+# percentOfMonthLeft = 100 - ((1 - 1).to_f / (31.to_f / 100))
+# percentOfMonthLeft = 100 - ((31 - 1).to_f / (31.to_f / 100))
+#
+#
+# puts percentOfMonthLeft
 
-listings = Craig.query(:birmingham, :personals => :strictly_platonic)
+@summaryWidthTotal = 202
+firstDay = 30
 
-listings.each do |listing|
-    puts listing.inspect
-end
+lastDay = 31
+
+
+puts percentOfMonthLeft
+puts pixelToPutArrow
