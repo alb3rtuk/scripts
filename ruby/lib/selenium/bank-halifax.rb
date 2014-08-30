@@ -74,9 +74,8 @@ class BankHalifax
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
-                    puts "\x1B[31mAttempt #{attempt} failed.\x1B[0m"
-                    puts e.message
-                    puts e.backtrace
+                    puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
+                    # puts e.backtrace
                 end
             else
                 succeeded = true
@@ -122,7 +121,7 @@ class BankHalifax
         data['isa_remaining'] = cleanCurrency(browser.div(:class => 'accountBalance', :index => 2).p(:class => 'accountMsg', :index => 1).text)
         browser.link(:title => 'View the latest transactions on your Variable ISA Saver').when_present(5).click
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances for \x1B[35mVariable ISA Saver\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved balances for \x1B[35mVariable ISA Saver\x1B[0m"
         end
         data_isa = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
         if browser.input(:type => 'image', :title => 'Previous').exists?
@@ -132,7 +131,7 @@ class BankHalifax
             end
         end
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[35mVariable ISA Saver\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[35mVariable ISA Saver\x1B[0m"
         end
 
         # Ultimate Reward Account
@@ -147,7 +146,7 @@ class BankHalifax
         data['account_1_overdraft'] = data['account_1_overdraft'].split
         data['account_1_overdraft'] = cleanCurrency(data['account_1_overdraft'][data['account_1_overdraft'].count - 1])
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mUltimate Reward Account\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mUltimate Reward Account\x1B[0m"
         end
         data_ultimate_reward = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
         if browser.input(:type => 'image', :title => 'Previous').exists?
@@ -155,7 +154,7 @@ class BankHalifax
             data_ultimate_reward.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView')))
         end
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mUltimate Reward Account\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mUltimate Reward Account\x1B[0m"
         end
 
         # Reward Account
@@ -170,7 +169,7 @@ class BankHalifax
         data['account_2_overdraft'] = data['account_2_overdraft'].split
         data['account_2_overdraft'] = cleanCurrency(data['account_2_overdraft'][data['account_2_overdraft'].count - 1])
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mReward Account\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mReward Account\x1B[0m"
         end
         data_reward = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
         if browser.input(:type => 'image', :title => 'Previous').exists?
@@ -178,7 +177,7 @@ class BankHalifax
             data_reward.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView')))
         end
         if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mReward Account\x1B[0m\x1B[0m"
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mReward Account\x1B[0m"
         end
 
         # Add transactions to final array

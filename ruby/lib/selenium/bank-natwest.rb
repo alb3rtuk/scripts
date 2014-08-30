@@ -66,9 +66,8 @@ class BankNatWest
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
-                    puts "\x1B[31mAttempt #{attempt} failed.\x1B[0m"
-                    puts e.message
-                    puts e.backtrace
+                    puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
+                    # puts e.backtrace
                 end
             else
                 succeeded = true

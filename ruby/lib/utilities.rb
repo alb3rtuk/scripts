@@ -228,13 +228,22 @@ def formatTimestamp(timeStamp, format = 1)
     end
 end
 
-
 # Checks if internet connection is present
 # @return boolean|void
 def checkMachineIsOnline
     begin
         true if open('http://www.google.com')
     rescue
-        raise(RuntimeError, 'ERROR: No internet.')
+        puts "\x1B[41m ERROR \x1B[0m No internet connection found."
+        exit
     end
+end
+
+# Removes line-breaks from a string and replaces them with a space ' '.
+# @return string
+def replaceLineBreaks(string, replacementString = ' ')
+    if string.include? "\n"
+        string = string.gsub!(/[\n]+/, replacementString)
+    end
+    string
 end
