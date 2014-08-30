@@ -398,8 +398,6 @@ class ShowBankTransactions
 
     # Display Bank Accounts
     def displayBankAccounts
-        puts "#{Rainbow(' BANK ACCOUNTS ').background('#ff008a')}\n\n"
-        puts "#{getRuleString(@colWidthTotal)}"
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
@@ -448,8 +446,7 @@ class ShowBankTransactions
 
     # Display CreditCards
     def displayCreditCards
-        puts "#{Rainbow(' CREDIT CARDS ').background('#ff008a')}\n\n"
-        puts "#{getRuleString(@colWidthTotal)}"
+        puts "#{Rainbow(" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} ").background('#ff008a')}\n\n"
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
@@ -517,8 +514,6 @@ class ShowBankTransactions
 
     # Display Summary
     def displaySummary
-        # puts "#{Rainbow(' SUMMARY ').background('#ff008a')}  \x1B[33m#{DateTime.now.strftime('%^A - %^B %e, %Y')}\x1B[0m\n\n"
-
         # Get some info for 'Estimated [XX]' column.
         endOfMonthDate = DateTime.new(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, getEndOfMonthDay, 0, 0, 0, 0)
         case endOfMonthDate.strftime('%d').to_i
@@ -555,10 +550,10 @@ class ShowBankTransactions
             Array['Credit Score', 'white'],
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
-
+        puts '                                                                                                                                                                               |'
         table(:border => false) do
             row do
-                column(" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')}", :width => @summaryWidth_1, :align => 'left', :bold => 'true')
+                column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
                 column("#{@month1.strftime('%B %Y')}", :width => @summaryWidth_2, :align => 'right')
                 column("#{@month2.strftime('%B %Y')}", :width => @summaryWidth_3, :align => 'right')
                 column("#{@month3.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
