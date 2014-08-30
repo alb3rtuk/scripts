@@ -67,6 +67,7 @@ class BankNatWest
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
+                    cronLog"NatWest: Attempt #{attempt} failed with message: #{e.message}."
                     # puts e.backtrace
                 end
             else

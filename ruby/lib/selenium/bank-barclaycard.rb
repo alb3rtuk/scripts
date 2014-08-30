@@ -48,8 +48,8 @@ class BankBarclayCard
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
+                    cronLog"BarclayCard: Attempt #{attempt} failed with message: #{e.message}."
                     # puts e.backtrace
-
                 end
             else
                 succeeded = true
@@ -68,7 +68,7 @@ class BankBarclayCard
                     end
 
                 else
-                    if attempt >= 1
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the BarclayCard script.\x1B[0m"

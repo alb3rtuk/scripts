@@ -26,6 +26,7 @@ class BankCommon
     end
 
     # Inserts individal transactions into DB
+    # @return void
     def insertTransactions(databaseConnection, data, bank_account_id)
         data.each do |transaction|
             result = databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description'].gsub(/'/) {|s| "\\'"}}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}' AND balance='#{transaction['balance']}'")
