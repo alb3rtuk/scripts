@@ -10,8 +10,21 @@ require 'rubygems'
 require 'mysql'
 require 'yaml'
 require 'open-uri'
+require 'net/http'
+require 'csv'
 require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
+
+# Returns DB connection to my personal MySQL DB.
+def getDatabaseConnection
+    encrypter = Encrypter.new
+    Mysql.new(
+        encrypter.decrypt(EC2MySqlAlb3rtukHost),
+        encrypter.decrypt(EC2MySqlAlb3rtukUser),
+        encrypter.decrypt(EC2MySqlAlb3rtukPass),
+        encrypter.decrypt(EC2MySqlAlb3rtukSchema)
+    )
+end
 
 # Will exit script if element is not contained in arrayOfValidElements.
 # @return boolean
@@ -75,9 +88,13 @@ end
 # Get a Watir Browser object.
 # @return [Watir::Browser]
 def getBrowser(displays = 'single', headless = false)
+
     verifyInput(Array['single', 'multiple'], displays)
 
-    if headless == false
+    # Set the path to phantomjs executable
+    Selenium::WebDriver::PhantomJS.path = '/usr/local/bin/phantomjs'
+
+    if !headless
         browser = Watir::Browser.new :chrome, :switches => %w(--ignore-certificate-errors --test-type)
     else
         browser = Watir::Browser.new :phantomjs, :switches => %w(--ignore-certificate-errors --test-type)
