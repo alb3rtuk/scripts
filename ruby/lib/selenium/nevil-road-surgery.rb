@@ -1,3 +1,5 @@
+require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+
 class NevilRoadSurgery
 
     def initialize(username, password)
@@ -18,6 +20,11 @@ class NevilRoadSurgery
     def orderAsthma(displays, headless = false)
         browser = self.login(displays, headless)
         browser.link(:id => '__tab_ctl00_ContentPlaceHolder1_TabContainer1_Panel2').click
+
+        # Remove this when I want my inhalers automatically ordered again :)
+        cronLog('Nevil Road Surgery script terminated early until further notice!')
+        exit
+
         foundIt = false
         @cNumbers.each { |x|
             if (browser.text_field(:id => "ctl00_ContentPlaceHolder1_TabContainer1_Panel2_item#{x}").value == "Ventolin (Blue Inhaler) x 2")
