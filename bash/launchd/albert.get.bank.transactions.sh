@@ -2,4 +2,4 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb
+ruby ~/Repos/Scripts/ruby/launchd/albert.get.bank.transactions.rb
