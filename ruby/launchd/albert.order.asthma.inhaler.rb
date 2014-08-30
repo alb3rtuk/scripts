@@ -7,6 +7,8 @@ nrs = NevilRoadSurgery.new(
     Encrypter.new.decrypt(NevilRoadPassword)
 )
 
-nrs.orderAsthma('single', true)
-
-exit
+begin
+    nrs.orderAsthma('single', true)
+rescue Exception => e
+    cronLog"NevilRoad: Attempt to order inhalers failed with message: #{e.message}."
+end
