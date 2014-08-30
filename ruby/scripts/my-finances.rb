@@ -443,7 +443,7 @@ class ShowBankTransactions
                 end
             end
         end
-        puts "#{getRuleString(@colWidthTotal)}\n\n"
+        puts "#{getRuleString(@colWidthTotal)}"
     end
 
     # Display CreditCards
@@ -517,7 +517,7 @@ class ShowBankTransactions
 
     # Display Summary
     def displaySummary
-        puts "#{Rainbow(' SUMMARY ').background('#ff008a')}  \x1B[33m#{DateTime.now.strftime('%^A - %^B %e, %Y')}\x1B[0m\n\n"
+        # puts "#{Rainbow(' SUMMARY ').background('#ff008a')}  \x1B[33m#{DateTime.now.strftime('%^A - %^B %e, %Y')}\x1B[0m\n\n"
 
         # Get some info for 'Estimated [XX]' column.
         endOfMonthDate = DateTime.new(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, getEndOfMonthDay, 0, 0, 0, 0)
@@ -529,6 +529,7 @@ class ShowBankTransactions
             else
                 endOfMonthSuffix = ''
         end
+        projectedOEMBalance = getProjectedOEMBalance
 
         @rightHandSideContent = Array[
             Array['Balance Current', 'white'],
@@ -536,7 +537,7 @@ class ShowBankTransactions
             Array['After Bills/Wages', 'white'],
             Array[getBalanceAfterBills.nil? ? '-' : getAsCurrency(getBalanceAfterBills)[0], getBalanceAfterBills.nil? ? 'white' : getAsCurrency(getBalanceAfterBills)[1]],
             Array["Estimated [#{endOfMonthDate.strftime('%b %d')}#{endOfMonthSuffix}]", 'white'],
-            Array[getProjectedOEMBalance.nil? ? '—' : getAsCurrency(getProjectedOEMBalance)[0], getProjectedOEMBalance.nil? ? 'white' : getAsCurrency(getProjectedOEMBalance)[1]],
+            Array[projectedOEMBalance.nil? ? '—' : getAsCurrency(projectedOEMBalance)[0], projectedOEMBalance.nil? ? 'white' : getAsCurrency(projectedOEMBalance)[1]],
             Array['NatWest Savings Account', 'white'],
             Array[getAsCurrency(@bankAccountBalances[3]['balance'])[0], getAsCurrency(@bankAccountBalances[3]['balance'])[1]],
             Array['Credit Total', 'white'],
@@ -548,17 +549,16 @@ class ShowBankTransactions
             Array['Monthly Outgoings', 'white'],
             Array[getAsCurrency(@fixedMonthlyOutgoings)[0], 'cyan'],
             Array['Remaining Incomings', 'white'],
-            Array[@moneyInRemaining <= 0 ? '—' : "#{getAsCurrency(@moneyInRemaining)[0]}", @moneyInRemaining <= 0 ? 'white' : 'cyan'],
+            Array["#{getAsCurrency(@moneyInRemaining)[0]}", @moneyInRemaining <= 0 ? 'white' : 'cyan'],
             Array['Remaining Outgoings', 'white'],
-            Array[@moneyOutRemaining <= 0 ? '—' : "—#{getAsCurrency(@moneyOutRemaining)[0]}", @moneyOutRemaining <= 0 ? 'white' : 'red'],
+            Array["#{@moneyOutRemaining > 0 ? '—' : ''}#{getAsCurrency(@moneyOutRemaining)[0]}", @moneyOutRemaining <= 0 ? 'white' : 'red'],
             Array['Credit Score', 'white'],
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
 
-        puts "#{getRuleString(@summaryWidthTotal)}"
         table(:border => false) do
             row do
-                column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
+                column(" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')}", :width => @summaryWidth_1, :align => 'left', :bold => 'true')
                 column("#{@month1.strftime('%B %Y')}", :width => @summaryWidth_2, :align => 'right')
                 column("#{@month2.strftime('%B %Y')}", :width => @summaryWidth_3, :align => 'right')
                 column("#{@month3.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
@@ -1072,29 +1072,23 @@ class ShowBankTransactions
     # @return float
     def getProjectedOEMBalance
 
-        averageCashIn =
-            ((@summaryData[:month2][:cash_in] +
-                @summaryData[:month3][:cash_in] +
-                @summaryData[:month4][:cash_in] +
-                @summaryData[:month5][:cash_in]) / 4).round(2)
+        averageIn =
+            ((@summaryData[:month2][:total_in] +
+                @summaryData[:month3][:total_in] +
+                @summaryData[:month4][:total_in] +
+                @summaryData[:month5][:total_in]) / 4).round(2)
 
-        averageMiscIn =
-            ((@summaryData[:month2][:misc_in] +
-                @summaryData[:month3][:misc_in] +
-                @summaryData[:month4][:misc_in] +
-                @summaryData[:month5][:misc_in]) / 4).round(2)
-
-        averageMiscOut =
-            ((@summaryData[:month2][:misc_out] +
-                @summaryData[:month3][:misc_out] +
-                @summaryData[:month4][:misc_out] +
-                @summaryData[:month5][:misc_out]) / 4).round(2)
+        averageOut =
+            ((@summaryData[:month2][:total_out] +
+                @summaryData[:month3][:total_out] +
+                @summaryData[:month4][:total_out] +
+                @summaryData[:month5][:total_out]) / 4).round(2)
 
         if @summaryData[:month1][:starting_balances][:totalCash].nil?
             return nil
         end
 
-        (@summaryData[:month1][:starting_balances][:totalCash] + (averageCashIn + averageMiscIn)) - (averageMiscOut + @fixedMonthlyOutgoings)
+        (@summaryData[:month1][:starting_balances][:totalCash] + averageIn) - averageOut
 
     end
 
