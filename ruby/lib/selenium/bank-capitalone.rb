@@ -67,7 +67,7 @@ class BankCapitalOne
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
-                        puts "\x1B[32mSuccess (Capital One)\x1B[0m"
+                        puts "\x1B[32mSuccess (BarclayCard)\x1B[0m"
                     end
 
                 else
@@ -89,25 +89,11 @@ class BankCapitalOne
         data['credit_limit'] = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.td(:text, /Minimum payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y').strftime('%Y-%m-%d')
+
         if showInTerminal
-            puts "\n[ #{Rainbow('CapitalOne').foreground('#ff008a')} ]"
-            table(:border => true) do
-                row do
-                    column('CapitalOne Visa', :width => 19, :align => 'right')
-                    column('Available Funds', :width => 19, :align => 'right')
-                    column('Credit Limit', :width => 19, :align => 'right')
-                    column('Minimum Payment', :width => 19, :align => 'right')
-                    column('Payment Date', :width => 19, :align => 'right')
-                end
-                row do
-                    column("#{toCurrency(0 - data['balance'])}", :color => (data['balance'] > 0) ? 'red' : 'white')
-                    column("#{toCurrency(data['available_funds'])}", :color => (data['available_funds'] > 0) ? 'white' : 'red')
-                    column("#{toCurrency(data['credit_limit'])}", :color => 'white')
-                    column("#{toCurrency(data['minimum_payment'])}", :color => 'white')
-                    column("#{data['due_date'].strftime('%B %d %Y')}", :color => 'white')
-                end
-            end
+            puts "\x1B[90mSuccessfully retrieved balances\x1B[0m"
         end
+
         Array[browser, data]
     end
 
@@ -117,10 +103,6 @@ class BankCapitalOne
         # Get balances first
         data = getBalances(false, browser)
         data = data[1]
-
-        if showInTerminal
-            puts "\x1B[90mSuccessfully retrieved balances\x1B[0m"
-        end
 
         browser.input(:type => 'submit', :value => 'VIEW ALL TRANSACTIONS').click
 
@@ -132,6 +114,9 @@ class BankCapitalOne
                 data_main_card.push(*getTransactionsFromTable(browser.div(:class => 'chart').table))
             end
             pageIndex = pageIndex + 1
+        end
+        if showInTerminal
+            puts "\x1B[90mSuccessfully retrieved transactions for \x1B[36mCapital One Visa\x1B[0m"
         end
 
         # Add transactions to final array

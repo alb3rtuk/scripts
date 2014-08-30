@@ -54,13 +54,13 @@ lloyds = BankLloyds.new(
     databaseConnection
 )
 
-experian = BankExperian.new(
-    encrypter.decrypt(ExperianUsername),
-    encrypter.decrypt(ExperianPassword),
-    encrypter.decrypt(ExperianSecurity),
+capitalOne = BankCapitalOne.new(
+    encrypter.decrypt(CapitalOneUsername),
+    encrypter.decrypt(CapitalOneSecurity),
     'multiple',
     headless,
-    displayProgress
+    displayProgress,
+    databaseConnection
 )
 
 barclayCard = BankBarclayCard.new(
@@ -69,36 +69,23 @@ barclayCard = BankBarclayCard.new(
     encrypter.decrypt(BarclayCardSecurity),
     'multiple',
     headless,
-    displayProgress
+    displayProgress,
+    databaseConnection
 )
 
-capitalOne = BankCapitalOne.new(
-    encrypter.decrypt(CapitalOneUsername),
-    encrypter.decrypt(CapitalOneSecurity),
+experian = BankExperian.new(
+    encrypter.decrypt(ExperianUsername),
+    encrypter.decrypt(ExperianPassword),
+    encrypter.decrypt(ExperianSecurity),
     'multiple',
     headless,
-    displayProgress
+    displayProgress,
+    databaseConnection
 )
 
 natWest.runExtraction(true)
 halifax.runExtraction(true)
 lloyds.runExtraction(true)
-
-# puts "\n" if notClean
-# experianCreditInfo = experian.getCreditInfo
-# experianCreditInfo = experianCreditInfo[1]
-
-
-# puts "\n" if notClean
-# halifaxBalances = halifax.getBalances(true)
-# halifaxBalances = halifaxBalances[1]
-# puts "\n" if notClean
-# lloydsBalances = lloyds.getBalances(true)
-# lloydsBalances = lloydsBalances[1]
-# puts "\n" if notClean
-# barclayCardBalances = barclayCard.getBalances(true)
-# barclayCardBalances = barclayCardBalances[1]
-# puts "\n" if notClean
-# capitalOneBalances = capitalOne.getBalances(true)
-# capitalOneBalances = capitalOneBalances[1]
-# puts "\n\x1B[90mGenerating Summary\x1B[0m\n" if notClean
+capitalOne.runExtraction(true)
+barclayCard.runExtraction(true)
+experian.runExtraction(true)
