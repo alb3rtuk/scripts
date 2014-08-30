@@ -85,6 +85,8 @@ class ShowBankTransactions
             {:bank_account_id => Array[6], :type => 'P-C', :terms => Array['']},
             {:bank_account_id => Array[6], :type => 'P-T', :terms => Array['']},
             {:bank_account_id => Array[6], :type => 'D-T', :terms => Array['']},
+            # CAPITAL ONE
+            {:bank_account_id => Array[10], :type => 'CR', :terms => Array['PAYMENT RECEIVED', 'DIRECT DEBIT PAYMENT']},
         ]
 
         @ignoredTransactions = Array.new
@@ -106,14 +108,14 @@ class ShowBankTransactions
         @moneyInRemaining = 0
         @moneyOutRemaining = 0
         @fixedMonthlyOutgoings = 0
-        @balanceAtStartOfMonth = 0
+        @creditScore = Array.new
 
         @summaryData = {
-            :month1 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
-            :month2 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
-            :month3 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
-            :month4 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
-            :month5 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
+            :month1 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
+            :month2 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
+            :month3 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
+            :month4 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
+            :month5 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
             :monthTotal => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
         }
 
@@ -124,11 +126,11 @@ class ShowBankTransactions
         @month4 = DateTime.now << 3
         @month5 = DateTime.now << 4
 
-        @month1 = DateTime.strptime('2014-09-01', '%Y-%m-%d')
-        @month2 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 1
-        @month3 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 2
-        @month4 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 3
-        @month5 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 4
+        # @month1 = DateTime.strptime('2014-09-01', '%Y-%m-%d')
+        # @month2 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 1
+        # @month3 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 2
+        # @month4 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 3
+        # @month5 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 4
 
         # Get different modes.
         @untranslated = false
@@ -170,7 +172,7 @@ class ShowBankTransactions
                 when 2
                     bankAccountTable = 'bank_account_type_credit_card'
                 when 3
-                    bankAccountTable = 'bank_account_type_misc'
+                    bankAccountTable = 'bank_account_type_isa'
                 else
                     raise(RuntimeError, "bank_account_type => #{bankAccount['bank_account_type']} doesn't exist.")
             end
@@ -226,11 +228,13 @@ class ShowBankTransactions
     # Main function
     def run
         # DO ALL CALCULATIONS
-        calculateTotals
         calculateSummary
         calculateMoneyRemaining
         calculateFixedMonthlyOutgoings
-        calculateBalanceStartOfMonth
+
+        # DO GETS
+        getCreditScore
+        getTotals
 
         # START OUTPUT
         displayTransactions
@@ -349,11 +353,10 @@ class ShowBankTransactions
     # Returns TRUE if transaction is internal transfer
     # @return boolean
     def isInternalTransfer(transaction)
+        if inArray(@ignoredTransactions, transaction['id'].to_i)
+            return true
+        end
         @internalTransfers.each do |match|
-            if inArray(@ignoredTransactions, transaction['id'].to_i)
-
-                return true
-            end
             if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'] =~ /#{w}/ } && match[:type] == transaction['type']
                 return true
             end
@@ -370,7 +373,7 @@ class ShowBankTransactions
             column(getRuleString(@transWidth_1))
             column(getRuleString(@transWidth_2))
             column(getRuleString(@transWidth_3))
-            column("#{getRuleString(@transWidth_4 - (month.length + 6))}  [ #{month.upcase} ]")
+            column(" [ #{month.upcase} ] #{getRuleString(@transWidth_4 - (month.length + 6))}")
             column(getRuleString(@transWidth_5))
             column(getRuleString(@transWidth_6))
             column(getRuleString(@transWidth_7))
@@ -381,6 +384,7 @@ class ShowBankTransactions
     # Displays a blank transaction row
     # @return void
     def displayTransactionsBlankRow
+        return
         row do
             column('')
             column('')
@@ -395,6 +399,7 @@ class ShowBankTransactions
     # Display Bank Accounts
     def displayBankAccounts
         puts "#{Rainbow(' BANK ACCOUNTS ').background('#ff008a')}\n\n"
+        puts "#{getRuleString(@colWidthTotal)}"
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
@@ -420,7 +425,7 @@ class ShowBankTransactions
             end
             @bankAccounts.each do |row|
                 row = row[1]
-                if row['bank_account_type_id'].to_i == 1 && row['id'].to_i != 3
+                if row['bank_account_type_id'].to_i == 1 # && row['id'].to_i != 3
                     bankAndColor = getBankAndColor(row['bank_id'])
                     balances = @bankAccountBalances[row['id'].to_i]
                     balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
@@ -444,6 +449,7 @@ class ShowBankTransactions
     # Display CreditCards
     def displayCreditCards
         puts "#{Rainbow(' CREDIT CARDS ').background('#ff008a')}\n\n"
+        puts "#{getRuleString(@colWidthTotal)}"
         table(:border => false) do
             row do
                 column(' Bank Name', :width => @colWidth_1, :align => 'left', :bold => 'true')
@@ -511,29 +517,45 @@ class ShowBankTransactions
 
     # Display Summary
     def displaySummary
-        puts "#{Rainbow(' SUMMARY ').background('#ff008a')}\n\n"
+        puts "#{Rainbow(' SUMMARY ').background('#ff008a')}  \x1B[33m#{DateTime.now.strftime('%^A - %^B %e, %Y')}\x1B[0m\n\n"
+
+        # Get some info for 'Estimated [XX]' column.
+        endOfMonthDate = DateTime.new(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, getEndOfMonthDay, 0, 0, 0, 0)
+        case endOfMonthDate.strftime('%d').to_i
+            when 28..30
+                endOfMonthSuffix = 'th'
+            when 31
+                endOfMonthSuffix = 'st'
+            else
+                endOfMonthSuffix = ''
+        end
 
         @rightHandSideContent = Array[
             Array['Balance Current', 'white'],
             Array[getAsCurrency(@totalCash)[0], getAsCurrency(@totalCash)[1]],
-            Array['Balance [Sep 1st]', 'white'],
-            Array[getAsCurrency(@balanceAtStartOfMonth)[0], getAsCurrency(-3807.36)[1]],
-            Array['Estimated [Sep 30th]', 'white'],
-            Array[getAsCurrency(getProjectedOEMBalance)[0], getAsCurrency(getProjectedOEMBalance)[1]],
+            Array['After Bills/Wages', 'white'],
+            Array[getBalanceAfterBills.nil? ? '-' : getAsCurrency(getBalanceAfterBills)[0], getBalanceAfterBills.nil? ? 'white' : getAsCurrency(getBalanceAfterBills)[1]],
+            Array["Estimated [#{endOfMonthDate.strftime('%b %d')}#{endOfMonthSuffix}]", 'white'],
+            Array[getProjectedOEMBalance.nil? ? '—' : getAsCurrency(getProjectedOEMBalance)[0], getProjectedOEMBalance.nil? ? 'white' : getAsCurrency(getProjectedOEMBalance)[1]],
             Array['NatWest Savings Account', 'white'],
             Array[getAsCurrency(@bankAccountBalances[3]['balance'])[0], getAsCurrency(@bankAccountBalances[3]['balance'])[1]],
-            Array['Credit Used', 'white'],
-            Array[getAsCurrency(0 - @totalCreditUsed)[0], (@totalCreditUsed > 0) ? 'red' : 'cyan'],
             Array['Credit Total', 'white'],
             Array[getAsCurrency(@totalCredit)[0], 'cyan'],
-            Array['Maximum Touchable', 'white'],
-            Array[getAsCurrency(@totalAvailable)[0], 'cyan'],
+            # Array['Maximum Available', 'white'],
+            # Array[getAsCurrency(@totalAvailable)[0], 'cyan'],
+            Array['Credit Used', 'white'],
+            Array["#{calculateCreditUsed}%", 'magenta'],
             Array['Monthly Outgoings', 'white'],
             Array[getAsCurrency(@fixedMonthlyOutgoings)[0], 'cyan'],
+            Array['Remaining Incomings', 'white'],
+            Array[@moneyInRemaining <= 0 ? '—' : "#{getAsCurrency(@moneyInRemaining)[0]}", @moneyInRemaining <= 0 ? 'white' : 'cyan'],
+            Array['Remaining Outgoings', 'white'],
+            Array[@moneyOutRemaining <= 0 ? '—' : "—#{getAsCurrency(@moneyOutRemaining)[0]}", @moneyOutRemaining <= 0 ? 'white' : 'red'],
             Array['Credit Score', 'white'],
-            Array['—', 'cyan'],
+            Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
 
+        puts "#{getRuleString(@summaryWidthTotal)}"
         table(:border => false) do
             row do
                 column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
@@ -543,20 +565,22 @@ class ShowBankTransactions
                 column("#{@month4.strftime('%B %Y')}", :width => @summaryWidth_5, :align => 'right')
                 column("#{@month5.strftime('%B %Y')}", :width => @summaryWidth_6, :align => 'right')
                 column('Total', :width => @summaryWidth_7, :align => 'right')
-                column('', :width => @summaryWidth_8, :align => 'left')
-                column('', :width => @summaryWidth_9, :align => 'right')
+                column(' |', :width => @summaryWidth_8, :align => 'left')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1], :width => @summaryWidth_9, :align => 'right')
             end
+            displaySummaryDivider
             row do
-                column(getRuleString(@summaryWidth_1))
-                column(getRuleString(@summaryWidth_2))
-                column(getRuleString(@summaryWidth_3))
-                column(getRuleString(@summaryWidth_4))
-                column(getRuleString(@summaryWidth_5))
-                column(getRuleString(@summaryWidth_6))
-                column(getRuleString(@summaryWidth_7))
-                column(getRuleString(@summaryWidth_8))
-                column(getRuleString(@summaryWidth_9))
+                column(' STARTING BALANCE', :color => 'white')
+                column("#{@summaryData[:month1][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month1][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month2][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month2][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month3][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month3][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month4][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month4][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month5][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month5][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column('—', :color => 'white')
+                column(' |')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
+            displaySummaryDivider
             row do
                 column(' CASH DEPOSITED', :color => 'green')
                 column("#{@summaryData[:month1][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:cash_in])[0]}", :color => (@summaryData[:month1][:cash_in].to_f <= 0 ? 'white' : 'green'))
@@ -582,45 +606,21 @@ class ShowBankTransactions
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             displaySummaryDivider
-            row do
-                column(' INCOMINGS REMAINING', :color => 'white')
-                column(@moneyInRemaining <= 0 ? '—' : getAsCurrency(@moneyInRemaining)[0], :color => @moneyInRemaining <= 0 ? 'white' : 'cyan')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column(' |')
-                column(insertRightHandContent[0], :color => insertRightHandContent[1])
-            end
-            displaySummaryDivider
             recognizedTransactionLoop(3)
             row do
                 column(' MISC (OUT)', :color => 'white')
-                column(@summaryData[:month1][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:misc_out])[0], :color => @summaryData[:month1][:misc_out] <= 0 ? 'white' : 'yellow')
-                column(@summaryData[:month2][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month2][:misc_out])[0], :color => @summaryData[:month2][:misc_out] <= 0 ? 'white' : 'yellow')
-                column(@summaryData[:month3][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:misc_out])[0], :color => @summaryData[:month3][:misc_out] <= 0 ? 'white' : 'yellow')
-                column(@summaryData[:month4][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month4][:misc_out])[0], :color => @summaryData[:month4][:misc_out] <= 0 ? 'white' : 'yellow')
-                column(@summaryData[:month5][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month5][:misc_out])[0], :color => @summaryData[:month5][:misc_out] <= 0 ? 'white' : 'yellow')
-                column(@summaryData[:monthTotal][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_out])[0], :color => @summaryData[:monthTotal][:misc_out] <= 0 ? 'white' : 'yellow')
+                column(@summaryData[:month1][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:misc_out])[0], :color => @summaryData[:month1][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:month2][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month2][:misc_out])[0], :color => @summaryData[:month2][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:month3][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:misc_out])[0], :color => @summaryData[:month3][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:month4][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month4][:misc_out])[0], :color => @summaryData[:month4][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:month5][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month5][:misc_out])[0], :color => @summaryData[:month5][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:monthTotal][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_out])[0], :color => @summaryData[:monthTotal][:misc_out] <= 0 ? 'white' : 'red')
                 column(' |')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             displaySummaryDivider
             row do
-                column(' OUTGOINGS REMAINING', :color => 'white')
-                column(@moneyOutRemaining <= 0 ? '—' : getAsCurrency(@moneyOutRemaining)[0], :color => @moneyOutRemaining <= 0 ? 'white' : 'yellow')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column('—')
-                column(' |')
-                column(insertRightHandContent[0], :color => insertRightHandContent[1])
-            end
-            displaySummaryDivider
-            row do
-                column(' Total Money In', :color => 'white')
+                column(' TOTAL MONEY IN', :color => 'white')
                 column(@summaryData[:month1][:total_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:total_in])[0], :color => 'white')
                 column(@summaryData[:month2][:total_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month2][:total_in])[0], :color => 'white')
                 column(@summaryData[:month3][:total_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:total_in])[0], :color => 'white')
@@ -631,7 +631,7 @@ class ShowBankTransactions
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             row do
-                column(' Total Money Out', :color => 'white')
+                column(' TOTAL MONEY OUT', :color => 'white')
                 column(@summaryData[:month1][:total_out] <= 0 ? '—' : getAsCurrency(0 - @summaryData[:month1][:total_out])[0], :color => 'white')
                 column(@summaryData[:month2][:total_out] <= 0 ? '—' : getAsCurrency(0 - @summaryData[:month2][:total_out])[0], :color => 'white')
                 column(@summaryData[:month3][:total_out] <= 0 ? '—' : getAsCurrency(0 - @summaryData[:month3][:total_out])[0], :color => 'white')
@@ -643,18 +643,37 @@ class ShowBankTransactions
             end
             displaySummaryDivider
             row do
-                column(' Profit/Loss', :color => 'white')
-                column(@summaryData[:month1][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:month1][:profit_loss])[0], :color => @summaryData[:month1][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month1][:profit_loss])[1])
-                column(@summaryData[:month2][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:month2][:profit_loss])[0], :color => @summaryData[:month2][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month2][:profit_loss])[1])
-                column(@summaryData[:month3][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:month3][:profit_loss])[0], :color => @summaryData[:month3][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month3][:profit_loss])[1])
-                column(@summaryData[:month4][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:month4][:profit_loss])[0], :color => @summaryData[:month4][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month4][:profit_loss])[1])
-                column(@summaryData[:month5][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:month5][:profit_loss])[0], :color => @summaryData[:month5][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month5][:profit_loss])[1])
-                column(@summaryData[:monthTotal][:profit_loss] == 0 ? '—' : getAsCurrency(0 - @summaryData[:monthTotal][:profit_loss])[0], :color => @summaryData[:monthTotal][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:monthTotal][:profit_loss])[1])
+                column(' ENDING BALANCE', :color => 'white')
+                column('—', :color => 'white')
+                column("#{@summaryData[:month1][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month1][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month2][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month2][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month3][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month3][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column("#{@summaryData[:month4][:starting_balances][:totalCash].nil? ? '—' : getAsCurrency(@summaryData[:month4][:starting_balances][:totalCash])[0]}", :color => 'white')
+                column('—', :color => 'white')
+                column(' |')
+                column(insertRightHandContent[0], :color => insertRightHandContent[1])
+            end
+            displaySummaryDivider
+            row do
+                column(' PROFIT/LOSS', :color => 'white')
+                column(@summaryData[:month1][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:month1][:profit_loss])[0], :color => @summaryData[:month1][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month1][:profit_loss])[1])
+                column(@summaryData[:month2][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:month2][:profit_loss])[0], :color => @summaryData[:month2][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month2][:profit_loss])[1])
+                column(@summaryData[:month3][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:month3][:profit_loss])[0], :color => @summaryData[:month3][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month3][:profit_loss])[1])
+                column(@summaryData[:month4][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:month4][:profit_loss])[0], :color => @summaryData[:month4][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month4][:profit_loss])[1])
+                column(@summaryData[:month5][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:month5][:profit_loss])[0], :color => @summaryData[:month5][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:month5][:profit_loss])[1])
+                column(@summaryData[:monthTotal][:profit_loss] == 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:profit_loss])[0], :color => @summaryData[:monthTotal][:profit_loss] == 0 ? 'white' : getAsCurrency(@summaryData[:monthTotal][:profit_loss])[1])
                 column(' |')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
         end
-        puts "#{getRuleString(@summaryWidthTotal)}\n\n"
+        puts "#{getRuleString(@summaryWidthTotal)}"
+
+        # Calculates (displays) how much % of month is left...
+        percentOfMonthLeft = 100 - ((@month1.strftime('%d').to_f - 1) / (getEndOfMonthDay.to_f / 100))
+        pixelsRemaining = (((@summaryWidthTotal - 1) / 100) * percentOfMonthLeft).round
+        pixelsElapsed = ((@summaryWidthTotal - 1) - pixelsRemaining)
+        puts " \x1B[36m#{getRuleString(pixelsElapsed - 1, ' ')}\x1B[32m\xe2\x86\x92\x1B[0m#{getRuleString(pixelsRemaining, ' ')}\x1B[0m\n\n"
+
     end
 
     # @return void
@@ -682,7 +701,7 @@ class ShowBankTransactions
                 if intTypeId == 2
                     color = Array['cyan', 'cyan', 'cyan', 'cyan', 'cyan', 'cyan']
                 else
-                    color = Array['yellow', 'yellow', 'yellow', 'yellow', 'yellow', 'yellow']
+                    color = Array['red', 'red', 'red', 'red', 'red', 'red']
                 end
 
                 # Only do estimations for 1st column (current month)
@@ -756,54 +775,104 @@ class ShowBankTransactions
         Array[var1, var2, var3, var4, var5, varTotal]
     end
 
-    # Get all the totals
+    # Get all the totals (for current month)
     # @return void
-    def calculateTotals
-        @totalAvailable =
-            (@bankAccountBalances[1]['balance_available'].to_f +
-                @bankAccountBalances[2]['balance_available'].to_f +
-                @bankAccountBalances[4]['balance_available'].to_f +
-                @bankAccountBalances[5]['balance_available'].to_f +
-                @bankAccountBalances[7]['balance_available'].to_f +
-                @bankAccountBalances[8]['balance_available'].to_f +
-                @bankAccountBalances[9]['balance_available'].to_f +
-                @bankAccountBalances[10]['balance_available'].to_f).round(2)
+    def getTotals
+        totals = calculateTotals(@bankAccountBalances)
+        @totalAvailable = totals[:totalAvailable]
+        @totalCreditUsed = totals[:totalCreditUsed]
+        @totalCredit = totals[:totalCredit]
+        @totalCash = totals[:totalCash]
+    end
 
-        @totalCreditUsed =
-            (@bankAccountBalances[7]['balance'].to_f +
-                @bankAccountBalances[7]['pending_transactions'].to_f +
-                @bankAccountBalances[10]['balance'].to_f +
-                @bankAccountBalances[10]['pending_transactions'].to_f +
-                @bankAccountBalances[9]['balance'].to_f +
-                @bankAccountBalances[9]['pending_transactions'].to_f +
-                (@bankAccountBalances[1]['balance'].to_f < 0 ? -@bankAccountBalances[1]['balance'].to_f : 0) +
-                (@bankAccountBalances[2]['balance'].to_f < 0 ? -@bankAccountBalances[2]['balance'].to_f : 0) +
-                (@bankAccountBalances[4]['balance'].to_f < 0 ? -@bankAccountBalances[4]['balance'].to_f : 0) +
-                (@bankAccountBalances[5]['balance'].to_f < 0 ? -@bankAccountBalances[5]['balance'].to_f : 0) +
-                (@bankAccountBalances[8]['balance'].to_f < 0 ? -@bankAccountBalances[8]['balance'].to_f : 0)).round(2)
+    # @return object
+    def calculateTotals(data)
 
-        @totalCredit =
-            (@bankAccountBalances[1]['balance_overdraft'].to_f +
-                @bankAccountBalances[2]['balance_overdraft'].to_f +
-                @bankAccountBalances[4]['balance_overdraft'].to_f +
-                @bankAccountBalances[5]['balance_overdraft'].to_f +
-                @bankAccountBalances[8]['balance_overdraft'].to_f +
-                @bankAccountBalances[7]['balance_limit'].to_f +
-                @bankAccountBalances[9]['balance_limit'].to_f +
-                @bankAccountBalances[10]['balance_limit'].to_f).round(2)
+        # If any of the balances are nil, abort mission
+        data.each do |object|
+            object.each do |value|
+                if value.nil?
+                    return {
+                        :totalAvailable => nil,
+                        :totalCreditUsed => nil,
+                        :totalCredit => nil,
+                        :totalCash => nil
+                    }
+                end
+            end
+        end
 
-        @totalCash = (@totalAvailable - @totalCredit).round(2)
+        totalAvailable =
+            (data[1]['balance_available'].to_f +
+                data[2]['balance_available'].to_f +
+                data[4]['balance_available'].to_f +
+                data[5]['balance_available'].to_f +
+                data[7]['balance_available'].to_f +
+                data[8]['balance_available'].to_f +
+                data[9]['balance_available'].to_f +
+                data[10]['balance_available'].to_f).round(2)
+
+        totalCreditUsed =
+            (data[7]['balance'].to_f +
+                data[7]['pending_transactions'].to_f +
+                data[10]['balance'].to_f +
+                data[10]['pending_transactions'].to_f +
+                data[9]['balance'].to_f +
+                data[9]['pending_transactions'].to_f +
+                (data[1]['balance'].to_f < 0 ? -data[1]['balance'].to_f : 0) +
+                (data[2]['balance'].to_f < 0 ? -data[2]['balance'].to_f : 0) +
+                (data[4]['balance'].to_f < 0 ? -data[4]['balance'].to_f : 0) +
+                (data[5]['balance'].to_f < 0 ? -data[5]['balance'].to_f : 0) +
+                (data[8]['balance'].to_f < 0 ? -data[8]['balance'].to_f : 0)).round(2)
+
+        totalCredit =
+            (data[1]['balance_overdraft'].to_f +
+                data[2]['balance_overdraft'].to_f +
+                data[4]['balance_overdraft'].to_f +
+                data[5]['balance_overdraft'].to_f +
+                data[8]['balance_overdraft'].to_f +
+                data[7]['balance_limit'].to_f +
+                data[9]['balance_limit'].to_f +
+                data[10]['balance_limit'].to_f).round(2)
+
+        totalCash = (totalAvailable - totalCredit).round(2)
+
+        {
+            :totalAvailable => totalAvailable,
+            :totalCreditUsed => totalCreditUsed,
+            :totalCredit => totalCredit,
+            :totalCash => totalCash,
+        }
+
     end
 
     # Get summary data for 5 month output
     # @return void
     def calculateSummary
 
-        month1String = @month1.strftime('%Y-%m')
-        month2String = @month2.strftime('%Y-%m')
-        month3String = @month3.strftime('%Y-%m')
-        month4String = @month4.strftime('%Y-%m')
-        month5String = @month5.strftime('%Y-%m')
+        # Get start of month balances
+        Array[@month1, @month2, @month3, @month4, @month5].each do |month|
+            # Get start of month balances.
+            thisMonthBalances = {}
+            @bankAccounts.each do |bankAccount|
+                bankAccount = bankAccount[1]
+                case bankAccount['bank_account_type_id'].to_i
+                    when 1
+                        bankAccountTable = 'bank_account_type_bank_account'
+                    when 2
+                        bankAccountTable = 'bank_account_type_credit_card'
+                    when 3
+                        bankAccountTable = 'bank_account_type_isa'
+                    else
+                        raise(RuntimeError, "bank_account_type => #{bankAccount['bank_account_type']} doesn't exist.")
+                end
+                balance = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' AND (date_fetched>='#{month.strftime('%Y-%m-01')}' AND date_fetched<='#{month.strftime('%Y-%m-28')}') ORDER BY date_fetched ASC LIMIT 1")
+                thisMonthBalances[bankAccount['id'].to_i] = balance.fetch_hash
+                balance.free
+            end
+            monthObject = getMonthObject(month.strftime('%Y-%m'))
+            monthObject[:starting_balances] = calculateTotals(thisMonthBalances)
+        end
 
         @transactions.each do |transaction|
 
@@ -813,21 +882,7 @@ class ShowBankTransactions
             end
 
             # Find out what month we're in and retrieve relevant location in memory for object.
-            transactionMonth = DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y-%m')
-            case transactionMonth
-                when month1String
-                    monthObject = @summaryData[:month1]
-                when month2String
-                    monthObject = @summaryData[:month2]
-                when month3String
-                    monthObject = @summaryData[:month3]
-                when month4String
-                    monthObject = @summaryData[:month4]
-                when month5String
-                    monthObject = @summaryData[:month5]
-                else
-                    raise(RuntimeError, "Month [#{transactionMonth}] not recognized.")
-            end
+            monthObject = getMonthObject(DateTime.strptime(transaction['date'], '%Y-%m-%d').strftime('%Y-%m'))
 
             transactionRecognized = false
             transactionAdded = false
@@ -882,10 +937,12 @@ class ShowBankTransactions
         @summaryData.each do |monthObject|
             if monthObject[0].to_s != 'monthTotal'
                 monthObject[1].each do |key, value|
-                    if @summaryData[:monthTotal][:"#{key}"].nil?
-                        @summaryData[:monthTotal][:"#{key}"] = 0
+                    unless key.to_s == 'starting_balances'
+                        if @summaryData[:monthTotal][:"#{key}"].nil?
+                            @summaryData[:monthTotal][:"#{key}"] = 0
+                        end
+                        @summaryData[:monthTotal][:"#{key}"] = @summaryData[:monthTotal][:"#{key}"] + value
                     end
-                    @summaryData[:monthTotal][:"#{key}"] = @summaryData[:monthTotal][:"#{key}"] + value
                 end
             end
         end
@@ -947,29 +1004,26 @@ class ShowBankTransactions
         end
     end
 
-    # @return void
-    def calculateBalanceStartOfMonth
+    # @return float
+    def calculateCreditUsed
+        creditUsed = @totalCredit - @totalAvailable
+        if creditUsed > 0
+            (100 - (@totalAvailable / (@totalCredit * 0.01))).round(1)
+        else
+            0
+        end
+    end
 
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-
-        @balanceAtStartOfMonth = -3807.36
-
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-        # TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-
+    # @return array
+    def getCreditScore
+        creditScore = @databaseConnection.query('SELECT * FROM experian_credit_report ORDER BY date_fetched DESC LIMIT 1')
+        creditScore = creditScore.fetch_hash
+        @creditScore = Array[creditScore['score'], creditScore['score_text']]
     end
 
     # Returns name of bank account + associated color.
     def getBankAndColor(bankId)
+
         returnHash = {}
         returnHash[0] = @banks[bankId.to_s]
         case bankId.to_i
@@ -980,13 +1034,38 @@ class ShowBankTransactions
             when 3
                 returnHash[1] = 'green'
             when 4
-                returnHash[1] = 'yellow'
-            when 4
                 returnHash[1] = 'cyan'
+            when 5
+                returnHash[1] = 'yellow'
             else
                 returnHash[1] = 'white'
         end
         returnHash
+    end
+
+    # @return float
+    def getBalanceAfterBills
+        (@totalCash + @moneyInRemaining) - @moneyOutRemaining
+    end
+
+    # Parameter passed in must be in string form as '%Y-%m'
+    # @return object
+    def getMonthObject(transactionMonth)
+        case transactionMonth
+            when @month1.strftime('%Y-%m')
+                monthObject = @summaryData[:month1]
+            when @month2.strftime('%Y-%m')
+                monthObject = @summaryData[:month2]
+            when @month3.strftime('%Y-%m')
+                monthObject = @summaryData[:month3]
+            when @month4.strftime('%Y-%m')
+                monthObject = @summaryData[:month4]
+            when @month5.strftime('%Y-%m')
+                monthObject = @summaryData[:month5]
+            else
+                raise(RuntimeError, "Month [#{transactionMonth}] not recognized.")
+        end
+        monthObject
     end
 
     # Calculates (depending on the last 4 month trend) how much money I should have by the end of the month.
@@ -1011,7 +1090,11 @@ class ShowBankTransactions
                 @summaryData[:month4][:misc_out] +
                 @summaryData[:month5][:misc_out]) / 4).round(2)
 
-        (@balanceAtStartOfMonth + (averageCashIn + averageMiscIn)) - (averageMiscOut + @fixedMonthlyOutgoings)
+        if @summaryData[:month1][:starting_balances][:totalCash].nil?
+            return nil
+        end
+
+        (@summaryData[:month1][:starting_balances][:totalCash] + (averageCashIn + averageMiscIn)) - (averageMiscOut + @fixedMonthlyOutgoings)
 
     end
 
@@ -1057,7 +1140,14 @@ class ShowBankTransactions
         (@totalCash - moneyOutRemaining) + moneyInRemaining
     end
 
+    # Gets end of month day (for current month)
+    # @return int
+    def getEndOfMonthDay
+        Date.civil(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, -1).day.to_i
+    end
+
     # Returns '━━━━'
+    # @retrun string
     def getRuleString(length, delimiter = '━')
         ruleString = ''
         for i in 0..length - 1
@@ -1067,6 +1157,7 @@ class ShowBankTransactions
     end
 
     # Returns the amount as currency formatted string with color (as hash)
+    # return object
     def getAsCurrency(amount, symbol = '£', delimiter = ',')
         amount = amount.to_f
         returnHash = {}
@@ -1087,6 +1178,7 @@ class ShowBankTransactions
     end
 
     # If timestamp is blank, this gives it a normalized timestamp so script doesn't error.
+    # @return string
     def normalizeTimestamp(timestamp)
         if timestamp == '0000-00-00 00:00:00' || timestamp == '0000-00-00T00:00:00+00:00'
             timestamp = '1983-10-29T03:16:00+00:00'
