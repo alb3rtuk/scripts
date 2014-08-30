@@ -124,12 +124,6 @@ class ShowBankTransactions
         @month4 = DateTime.now << 3
         @month5 = DateTime.now << 4
 
-        # @month1 = DateTime.strptime('2014-09-01', '%Y-%m-%d')
-        # @month2 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 1
-        # @month3 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 2
-        # @month4 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 3
-        # @month5 = DateTime.strptime('2014-09-01', '%Y-%m-%d') << 4
-
         # Get different modes.
         @untranslated = false
         @withIDs = false
@@ -543,8 +537,6 @@ class ShowBankTransactions
             Array[getAsCurrency(@bankAccountBalances[3]['balance'])[0], getAsCurrency(@bankAccountBalances[3]['balance'])[1]],
             Array['Credit Total', 'white'],
             Array[getAsCurrency(@totalCredit)[0], 'cyan'],
-            # Array['Maximum Available', 'white'],
-            # Array[getAsCurrency(@totalAvailable)[0], 'cyan'],
             Array['Credit Used', 'white'],
             Array["#{calculateCreditUsed}%", 'magenta'],
             Array['Monthly Outgoings', 'white'],
@@ -680,7 +672,7 @@ class ShowBankTransactions
         percentOfMonthLeft = 100 - (currentDay - 1) / (lastDay / 100)
         pixelsRemaining = (((@summaryWidthTotal - 1) / 100) * percentOfMonthLeft).round
         pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
-        puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[32m\xe2\x86\x92\x1B[0m\n\n"
+        puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[33m\xe2\x98\x85\x1B[0m\n\n"
 
     end
 
@@ -874,7 +866,7 @@ class ShowBankTransactions
                     else
                         raise(RuntimeError, "bank_account_type => #{bankAccount['bank_account_type']} doesn't exist.")
                 end
-                balance = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' AND (date_fetched>='#{month.strftime('%Y-%m-01')}' AND date_fetched<='#{month.strftime('%Y-%m-28')}') ORDER BY date_fetched ASC LIMIT 1")
+                balance = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' AND (date_fetched>='#{month.strftime('%Y-%m-01')}' AND date_fetched<='#{month.strftime('%Y-%m-07')}') ORDER BY date_fetched ASC LIMIT 1")
                 thisMonthBalances[bankAccount['id'].to_i] = balance.fetch_hash
                 balance.free
             end
