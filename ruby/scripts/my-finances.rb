@@ -89,7 +89,7 @@ class ShowBankTransactions
 
         @ignoredTransactions = Array.new
 
-        # HAWAII PAYMENTS
+        # Hawaii Payments
         @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959])
 
         # Misc Globals
@@ -177,6 +177,12 @@ class ShowBankTransactions
         @transactions = Array.new
         transactionsSQL = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE date >= '#{@month5.strftime('%Y-%m-01')}' ORDER BY date ASC, bank_account_id ASC, type ASC")
         transactionsSQL.each_hash do |transaction|
+
+            # Skip ISA.
+            if transaction['bank_account_id'].to_i == 6
+                next
+            end
+
             @transactions << transaction
         end
         transactionsSQL.free
