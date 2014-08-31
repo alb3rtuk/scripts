@@ -1187,7 +1187,4 @@ class ShowBankTransactions
 
 end
 
-# Make sure we're online before we start
-checkMachineIsOnline
-
 ShowBankTransactions.new(ARGV[0]).run
