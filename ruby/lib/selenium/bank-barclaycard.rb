@@ -56,7 +56,7 @@ class BankBarclayCard
             ensure
                 if succeeded
 
-                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (9, #{data['balance']}, #{data['available_funds']}, #{data['credit_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['minimum_payment']}, '#{data['due_date']}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, pending_transactions, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (9, #{data['balance']}, #{data['available_funds']}, #{data['pending_transactions']}, #{data['credit_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['minimum_payment']}, '#{data['due_date']}')")
                     BankCommon.new.insertTransactions(@databaseConnection, data['main_card'], 9)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
