@@ -185,6 +185,12 @@ def fileExists?(file)
     File.file?(file)
 end
 
+# Writes whatever string you pass it, to file you specify.
+# @return void
+def writeDataToFile(string = '', file = '/tmp/tmpfile.txt')
+    File.open(file, 'w') { |fileResource| fileResource.write(string) }
+end
+
 # Returns TRUE if a string is alpha-numeric, FALSE if not.
 # @return boolean
 def isAlphaNumeric(string)
