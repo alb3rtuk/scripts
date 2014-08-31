@@ -253,7 +253,7 @@ class ShowBankTransactions
                 column('Account Name')
                 column('Date')
                 column('Description')
-                column('TYP')
+                column('Type')
                 column('Paid In')
                 column('Paid Out')
             end
@@ -550,8 +550,7 @@ class ShowBankTransactions
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
 
-        # DIVIDER
-        puts '                                                                                                                                                                               |'
+        puts '|'.rjust(176, ' ')
         table(:border => false) do
             row do
                 column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
@@ -560,7 +559,7 @@ class ShowBankTransactions
                 column("#{@month3.strftime('%B %Y')}", :width => @summaryWidth_4, :align => 'right')
                 column("#{@month4.strftime('%B %Y')}", :width => @summaryWidth_5, :align => 'right')
                 column("#{@month5.strftime('%B %Y')}", :width => @summaryWidth_6, :align => 'right')
-                column('5-Month Total', :width => @summaryWidth_7, :align => 'right', :bold => true)
+                column('5-Month Total', :width => @summaryWidth_7, :align => 'right')
                 column(' |', :width => @summaryWidth_8, :align => 'left')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1], :width => @summaryWidth_9, :align => 'right')
             end
@@ -584,33 +583,33 @@ class ShowBankTransactions
                 column("#{@summaryData[:month3][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:cash_in])[0]}", :color => (@summaryData[:month3][:cash_in].to_f <= 0 ? 'white' : 'green'))
                 column("#{@summaryData[:month4][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:month4][:cash_in])[0]}", :color => (@summaryData[:month4][:cash_in].to_f <= 0 ? 'white' : 'green'))
                 column("#{@summaryData[:month5][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:month5][:cash_in])[0]}", :color => (@summaryData[:month5][:cash_in].to_f <= 0 ? 'white' : 'green'))
-                column("#{@summaryData[:monthTotal][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:cash_in])[0]}", :color => (@summaryData[:monthTotal][:cash_in].to_f <= 0 ? 'white' : 'green'))
+                column("#{@summaryData[:monthTotal][:cash_in].to_f <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:cash_in])[0]}", :color => (@summaryData[:monthTotal][:cash_in].to_f <= 0 ? 'white' : 'white'))
                 column(' |')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             displaySummaryDivider
             recognizedTransactionLoop(2)
             row do
-                column(' MISC (IN)', :color => 'white')
+                column(' MISC (IN)', :color => 'cyan')
                 column(@summaryData[:month1][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:misc_in])[0], :color => @summaryData[:month1][:misc_in] <= 0 ? 'white' : 'cyan')
                 column(@summaryData[:month2][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month2][:misc_in])[0], :color => @summaryData[:month2][:misc_in] <= 0 ? 'white' : 'cyan')
                 column(@summaryData[:month3][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:misc_in])[0], :color => @summaryData[:month3][:misc_in] <= 0 ? 'white' : 'cyan')
                 column(@summaryData[:month4][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month4][:misc_in])[0], :color => @summaryData[:month4][:misc_in] <= 0 ? 'white' : 'cyan')
                 column(@summaryData[:month5][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:month5][:misc_in])[0], :color => @summaryData[:month5][:misc_in] <= 0 ? 'white' : 'cyan')
-                column(@summaryData[:monthTotal][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_in])[0], :color => @summaryData[:monthTotal][:misc_in] <= 0 ? 'white' : 'cyan')
+                column(@summaryData[:monthTotal][:misc_in] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_in])[0], :color => @summaryData[:monthTotal][:misc_in] <= 0 ? 'white' : 'white')
                 column(' |')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
             displaySummaryDivider
             recognizedTransactionLoop(3)
             row do
-                column(' MISC (OUT)', :color => 'white')
+                column(' MISC (OUT)', :color => 'red')
                 column(@summaryData[:month1][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month1][:misc_out])[0], :color => @summaryData[:month1][:misc_out] <= 0 ? 'white' : 'red')
                 column(@summaryData[:month2][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month2][:misc_out])[0], :color => @summaryData[:month2][:misc_out] <= 0 ? 'white' : 'red')
                 column(@summaryData[:month3][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month3][:misc_out])[0], :color => @summaryData[:month3][:misc_out] <= 0 ? 'white' : 'red')
                 column(@summaryData[:month4][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month4][:misc_out])[0], :color => @summaryData[:month4][:misc_out] <= 0 ? 'white' : 'red')
                 column(@summaryData[:month5][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:month5][:misc_out])[0], :color => @summaryData[:month5][:misc_out] <= 0 ? 'white' : 'red')
-                column(@summaryData[:monthTotal][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_out])[0], :color => @summaryData[:monthTotal][:misc_out] <= 0 ? 'white' : 'red')
+                column(@summaryData[:monthTotal][:misc_out] <= 0 ? '—' : getAsCurrency(@summaryData[:monthTotal][:misc_out])[0], :color => @summaryData[:monthTotal][:misc_out] <= 0 ? 'white' : 'white')
                 column(' |')
                 column(insertRightHandContent[0], :color => insertRightHandContent[1])
             end
@@ -700,9 +699,9 @@ class ShowBankTransactions
                 amt1, amt2, amt3, amt4, amt5, amtTotal = runCalculationFor(method(:calculateAmountPaidReceivedForRecognizedTransaction), recognizedTransaction[:id])
 
                 if intTypeId == 2
-                    color = Array['cyan', 'cyan', 'cyan', 'cyan', 'cyan', 'cyan']
+                    color = Array['cyan', 'cyan', 'cyan', 'cyan', 'cyan', 'white']
                 else
-                    color = Array['red', 'red', 'red', 'red', 'red', 'red']
+                    color = Array['red', 'red', 'red', 'red', 'red', 'white']
                 end
 
                 # Only do estimations for 1st column (current month)
@@ -712,7 +711,7 @@ class ShowBankTransactions
                 end
 
                 row do
-                    column(" #{recognizedTransaction[:translation]}", :color => (intTypeId == 2) ? 'white' : 'white')
+                    column(" #{recognizedTransaction[:translation]}", :color => (intTypeId == 2) ? 'cyan' : 'red')
                     column(amt1[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt1[1][0]}", :color => amt1[0] <= 0 ? 'white' : color[0])
                     column(amt2[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt2[1][0]}", :color => amt2[0] <= 0 ? 'white' : color[1])
                     column(amt3[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt3[1][0]}", :color => amt3[0] <= 0 ? 'white' : color[2])
