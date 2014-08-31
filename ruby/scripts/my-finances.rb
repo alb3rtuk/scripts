@@ -441,9 +441,10 @@ class ShowBankTransactions
 
     # Display CreditCards
     def displayCreditCards
-        puts '                                                                                                                                                                               |'
-        puts "\x1B[45m#{" SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} "}\x1B[0m                                                                                                                                     |"
-        puts '                                                                                                                                                                               |'
+        summaryTitle = "\x1B[45m SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} \x1B[0m"
+        puts '|'.rjust(176, ' ')
+        puts "#{summaryTitle.ljust(184, ' ')}|"
+        puts '|'.rjust(176, ' ')
         table(:border => false) do
             row do
                 column(' Credit Card', :width => @colWidth_1, :align => 'left', :bold => 'true')
