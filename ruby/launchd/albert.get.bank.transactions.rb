@@ -12,7 +12,7 @@ include CommandLineReporter
 # Make sure we're online before we start
 checkMachineIsOnline
 
-displayProgress = true
+displayProgress = false
 headless = true
 
 encrypter = Encrypter.new
