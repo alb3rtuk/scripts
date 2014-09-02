@@ -34,7 +34,7 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => 'white', :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['G SOLAN , VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30, :start_month => '2014-05'},
+            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30, :start_month => '2014-05'},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY'},
             {:intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => 'red', :translation => 'SPOTIFY SUBSCRIPTION', :recurring_amount => 19.98},
@@ -548,10 +548,10 @@ class ShowBankTransactions
             Array["#{calculateCreditUsed}%", 'magenta'],
             Array['Monthly Outgoings', 'white'],
             Array[getAsCurrency(@fixedMonthlyOutgoings)[0], 'cyan'],
-            Array['Remaining Incomings', 'white'],
-            Array["#{getAsCurrency(@moneyInRemaining)[0]}", @moneyInRemaining <= 0 ? 'white' : 'cyan'],
             Array['Remaining Outgoings', 'white'],
             Array["#{@moneyOutRemaining > 0 ? '—' : ''}#{getAsCurrency(@moneyOutRemaining)[0]}", @moneyOutRemaining <= 0 ? 'white' : 'red'],
+            Array['Remaining Incomings', 'white'],
+            Array["#{getAsCurrency(@moneyInRemaining)[0]}", @moneyInRemaining <= 0 ? 'white' : 'cyan'],
             Array['Credit Score', 'white'],
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
@@ -671,10 +671,7 @@ class ShowBankTransactions
 
         # Calculates (displays) where to put arrow depending on how far through the month we are..
         currentDay = @month1.strftime('%d').to_f
-        lastDay = getEndOfMonthDay.to_f
-        if currentDay >= 15
-            currentDay = currentDay + 1
-        end
+        lastDay = (getEndOfMonthDay.to_f) - 1
         percentOfMonthLeft = 100 - (currentDay - 1) / (lastDay / 100)
         pixelsRemaining = (((@summaryWidthTotal - 1) / 100) * percentOfMonthLeft).round
         pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
@@ -718,7 +715,7 @@ class ShowBankTransactions
 
                 row do
                     column(" #{recognizedTransaction[:translation]}", :color => (intTypeId == 2) ? 'cyan' : 'red')
-                    column(amt1[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt1[1][0]}", :color => amt1[0] <= 0 ? 'white' : color[0])
+                    column(amt1[0] <= 0 ? '—' : "#{intTypeId == 3 && recognizedTransaction[:estimated].nil? ? '—' : ''}#{amt1[1][0]}", :color => amt1[0] <= 0 ? 'white' : color[0])
                     column(amt2[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt2[1][0]}", :color => amt2[0] <= 0 ? 'white' : color[1])
                     column(amt3[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt3[1][0]}", :color => amt3[0] <= 0 ? 'white' : color[2])
                     column(amt4[0] <= 0 ? '—' : "#{intTypeId == 3 ? '—' : ''}#{amt4[1][0]}", :color => amt4[0] <= 0 ? 'white' : color[3])
