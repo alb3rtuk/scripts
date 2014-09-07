@@ -7,10 +7,6 @@ echo
 message magenta " GIT " "Getting status of all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-echo "\033[35m~/Repos/chef/\033[0m"
-cd ~/Repos/Chef/
-git status
-
 echo "\033[35m~/Repos/scripts/\033[0m"
 cd ~/Repos/Scripts/
 git status
