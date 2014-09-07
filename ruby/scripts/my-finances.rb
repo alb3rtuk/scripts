@@ -35,6 +35,7 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => 'white', :translation => 'PHIL HACKETT'},
+            {:intTypeID => 2, :id => 1900, :bank_account_id => 1, :type => '???', :terms => Array['BRIGHTPEARL'], :color => 'cyan', :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1200, :start_month => '2014-09'},
             {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30, :start_month => '2014-05'},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY'},
@@ -557,7 +558,6 @@ class ShowBankTransactions
             Array["#{@creditScore[0]} (#{@creditScore[1]})", 'green'],
         ]
 
-        puts '|'.rjust(176, ' ')
         table(:border => false) do
             row do
                 column('', :width => @summaryWidth_1, :align => 'left', :bold => 'true')
