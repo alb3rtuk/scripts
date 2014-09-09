@@ -81,6 +81,7 @@ alias my-finances-with-ids='~/Repos/Scripts/bash/scripts/my-finances-with-ids.sh
 alias my-finances-with-internal-transfers='~/Repos/Scripts/bash/scripts/my-finances-with-internal-transfers.sh'
 alias my-finances-untranslated='~/Repos/Scripts/bash/scripts/my-finances-untranslated.sh'
 alias my-scripts='~/Repos/Scripts/bash/scripts/my-scripts.sh'
+alias rename-files='~/Repos/Scripts/bash/scripts/rename-files.sh'
 alias rs='~/Repos/Scripts/bash/scripts/rs.sh'
 alias tail-cron-mail='~/Repos/Scripts/bash/scripts/tail-cron-mail.sh'
 alias update-apache='~/Repos/Scripts/bash/scripts/update-apache.sh'
