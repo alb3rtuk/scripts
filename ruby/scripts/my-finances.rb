@@ -502,12 +502,17 @@ class ShowBankTransactions
                             minimumPaymentColor = 'white'
                         end
 
+                        # Calculate Pending Transacions for LLoyds & Capital One.
+                        if row['id'].to_i == 7 || row['id'].to_i == 10
+                            balances['pending_transactions'] = balances['balance_limit'].to_f - balances['balance_available'].to_f - balances['balance'].to_f
+                        end
+
                         column(getAsCurrency(creditCardBalance)[0], :color => (getAsCurrency(creditCardBalance)[1] == 'red') ? 'red' : 'white')
                         column(getAsCurrency(balances['balance_available'])[0], :color => 'white')
                         column(getAsCurrency(balances['balance_limit'])[0], :color => 'white')
                         column(balances['pending_transactions'].to_f <= 0 ? '—' : getAsCurrency(0 - balances['pending_transactions'].to_f)[0], :color => balances['pending_transactions'].to_f <= 0 ? 'white' : getAsCurrency(0 - balances['pending_transactions'].to_f)[1])
                         column(getAsCurrency(balances['minimum_payment'])[0], :color => (balances['minimum_payment'].to_f > 0) ? ((minimumPaymentDateIn <= 3) ? 'red' : 'white') : 'white')
-                        if minimumPaymentDateIn < 0
+                        if minimumPaymentDateIn < 0 || balances['minimum_payment'].to_f == 0
                             column('—', :color => 'white')
                         else
                             column("#{DateTime.strptime(minimumPaymentDate, '%Y-%m-%d').strftime('%d %b %Y')}", :color => minimumPaymentColor)
