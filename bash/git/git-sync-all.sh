@@ -3,6 +3,11 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
+ABSPATH=$(cd "$(dirname "$0")"; pwd)
+
+echo $ABSPATH
+exit
+
 echo
 message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
@@ -34,6 +39,11 @@ git push
 
 echo "\033[35m~/Repos/scripts/\033[0m"
 cd ~/Repos/scripts/
+git pull
+git push
+
+echo "\033[35m~/Repos/sql-backups/\033[0m"
+cd ~/Repos/sql-backups/
 git pull
 git push
 
