@@ -68,7 +68,7 @@ class BankCapitalOne
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
-                        puts "\x1B[32mSuccess (BarclayCard)\x1B[0m"
+                        puts "\x1B[32mSuccess (Capital One)\x1B[0m"
                     end
 
                 else
