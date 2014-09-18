@@ -133,7 +133,7 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\u@\h\[\033[00m\]:\[\033[0
 
 #####################################################################################################
 
-# Brightpearl Alias
-alias brightpearl='~/Repos/brightpearl-scripts/brightpearl.sh'
+# Brightpearl Aliases
+alias brightpearl='~/Repos/brightpearl-scripts/brightpearl'
 alias thunder='~/Repos/brightpearl-scripts/tmp/thunder.sh'
 alias thunder-fix='~/Repos/brightpearl-scripts/tmp/thunder-fix.sh'
