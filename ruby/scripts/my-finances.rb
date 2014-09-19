@@ -35,8 +35,8 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => 'white', :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => 'white', :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => 'white', :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1900, :bank_account_id => 1, :type => '???', :terms => Array['BRIGHTPEARL'], :color => 'cyan', :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1200, :start_month => '2014-09'},
-            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30, :start_month => '2014-05'},
+            {:intTypeID => 2, :id => 1900, :bank_account_id => 1, :type => '???', :terms => Array['BRIGHTPEARL'], :color => 'cyan', :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1200},
+            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => 'cyan', :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => 'white', :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => 'white', :translation => 'JOE HARTRY'},
             {:intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => 'red', :translation => 'SPOTIFY SUBSCRIPTION', :recurring_amount => 19.98},
@@ -58,6 +58,7 @@ class ShowBankTransactions
             {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE LIMITED'], :color => 'red', :translation => 'VODAFONE LIMITED', :recurring_amount => 60, :estimated => true},
             {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => 'red', :translation => 'VIRGIN MEDIA', :recurring_amount => 120, :estimated => true},
             {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => 'green', :translation => 'CASH'},
+            {:intTypeID => 1, :id => 2950, :bank_account_id => 8, :type => 'DEP', :terms => Array[''], :color => 'green', :translation => 'CASH'},
             {:intTypeID => 3, :id => 3000, :bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => 'red', :translation => 'TESCO CAR INSURANCE', :recurring_amount => 62.73},
             {:intTypeID => 3, :id => 3100, :bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => 'red', :translation => 'ACCOUNT FEE (LLOYDS CURRENT)', :recurring_amount => 15},
             {:intTypeID => 2, :id => 3200, :bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => 'cyan', :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring_amount => 24},
@@ -71,7 +72,7 @@ class ShowBankTransactions
         @internalTransfers = Array[
             # NATWEST
             {:bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT']},
-            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.']},
+            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.'], :terms_not => ['UK MAIL LIMITED', 'DEAN LINDEN']},
             {:bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE']},
             # LLOYDS
             {:bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN']},
@@ -92,12 +93,12 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349])
 
         # Misc Globals
-        @rightHandSideCount = 0
+        @rightHandSideCount = 4
         @rightHandSideContent = Array.new
-        @rightHandSideContentCount = 0
+        @rightHandSideContentCount = -1
         @rightHandSideContentExists = true
 
         # Balance Globals
@@ -228,6 +229,9 @@ class ShowBankTransactions
 
     # Main function
     def run
+        # MAKE SURE WE'RE ONLINE
+        checkMachineIsOnline
+
         # DO ALL CALCULATIONS
         calculateSummary
         calculateMoneyRemaining
@@ -359,6 +363,11 @@ class ShowBankTransactions
         end
         @internalTransfers.each do |match|
             if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'] =~ /#{w}/ } && match[:type] == transaction['type']
+                if match.has_key?(:terms_not)
+                    if match[:terms_not].any? { |w| transaction['description'] =~ /#{w}/ }
+                        return false
+                    end
+                end
                 return true
             end
         end
@@ -504,7 +513,7 @@ class ShowBankTransactions
 
                         # Calculate Pending Transacions for LLoyds & Capital One.
                         if row['id'].to_i == 7 || row['id'].to_i == 10
-                            balances['pending_transactions'] = balances['balance_limit'].to_f - balances['balance_available'].to_f - balances['balance'].to_f
+                            balances['pending_transactions'] = '%.2f' % (balances['balance_limit'].to_f - balances['balance_available'].to_f - balances['balance'].to_f)
                         end
 
                         column(getAsCurrency(creditCardBalance)[0], :color => (getAsCurrency(creditCardBalance)[1] == 'red') ? 'red' : 'white')
@@ -745,7 +754,12 @@ class ShowBankTransactions
         elsif @rightHandSideCount >= 5
             if @rightHandSideContentExists
                 return Array['', 'white']
+
+                # DO NOT DELETE!
+                # The following line of code would insert '----' between the outputs.
+                #
                 # return Array[" #{getRuleString(@summaryWidth_9 - 1)}", 'white']
+
             else
                 return Array['', 'white']
             end
