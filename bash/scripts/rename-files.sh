@@ -6,6 +6,15 @@
 prefix=$1
 cnt=0
 
+if [[ ${prefix} == "" ]]; then
+    echo
+    message red "ERROR" "Script expects first parameter to be the prefix. For example:\n"
+    echo "        \033[33mAmerican.Dad.Se08.E\033[0m"
+    echo "        \033[33mFamily.Guy.Se12.E\033[0m"
+    echo
+    exit
+fi
+
 echo
 for fname in *; do
     cnt=$((${cnt} + 1))
