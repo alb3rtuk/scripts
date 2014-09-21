@@ -142,6 +142,8 @@ class BankCapitalOne
                 # If no transactions, break out of loop immediately.
                 if tableCell.text.include? 'There were no transactions for the selected period.'
                     break;
+                elsif tableCell.text.include? 'No current transactions have been posted to your account.'
+                    break;
                 end
 
                 cellCount = cellCount + 1
