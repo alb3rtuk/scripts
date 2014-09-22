@@ -133,7 +133,11 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\u@\h\[\033[00m\]:\[\033[0
 
 #####################################################################################################
 
-# Brightpearl Aliases
+### BRIGHTPEARL ALIASES ######
 alias brightpearl='~/Repos/brightpearl-scripts/brightpearl'
 alias thunder='~/Repos/brightpearl-scripts/tmp/thunder.sh'
 alias thunder-fix='~/Repos/brightpearl-scripts/tmp/thunder-fix.sh'
+
+### BRIGHTPEARL EXPORTS ######
+export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
+export APP_ACCOUNT=automation
