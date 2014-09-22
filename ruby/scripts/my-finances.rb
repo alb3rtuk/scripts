@@ -24,6 +24,7 @@ class ShowBankTransactions
         @recognizedTransactions = Array[
             # NATWEST AD GOLD
             {:intTypeID => 0, :id => 100, :bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => 'white', :translation => 'PAYPAL WITHDRAWAL'},
+            {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'CDM', :terms => Array['521005', '521007', '560005'], :color => 'green', :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007', '560005'], :color => 'green', :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'TLR', :terms => Array[''], :color => 'green', :translation => 'CASH'},
             {:intTypeID => 3, :id => 300, :bank_account_id => 1, :type => 'D/D', :terms => Array['NAMES.CO.UK'], :color => 'red', :translation => 'NAMESCO WEB SERVER', :recurring_amount => 29.99},
