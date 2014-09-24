@@ -135,8 +135,8 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[01;36m\]\u@\h\[\033[00m\]:\[\033[0
 
 ### BRIGHTPEARL ALIASES ######
 alias brightpearl='~/Repos/brightpearl-scripts/brightpearl'
-alias dev='sshpass -palbert ssh albert@dev-vm'
-alias dev-root='sshpass -palbert ssh albert@172.27.6.253 -t 'su root''
+alias vm='sshpass -palbert ssh albert@dev-vm'
+alias vm-root='sshpass -palbert ssh albert@dev-vm -t su root'
 
 alias bp-new-branch='~/Repos/brightpearl-scripts/tmp/bp-new-branch.sh'
 alias bp-thunder='~/Repos/brightpearl-scripts/tmp/bp-thunder.sh'
