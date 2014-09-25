@@ -138,9 +138,14 @@ alias brightpearl='~/Repos/brightpearl-scripts/brightpearl'
 alias vm='sshpass -palbert ssh albert@dev-vm'
 alias vm-root='sshpass -palbert ssh albert@dev-vm -t su root'
 
+### TMP ######################
+alias bp-merge-to-master='~/Repos/brightpearl-scripts/tmp/bp-merge-to-master.sh'
 alias bp-new-branch='~/Repos/brightpearl-scripts/tmp/bp-new-branch.sh'
-alias bp-thunder='~/Repos/brightpearl-scripts/tmp/bp-thunder.sh'
-alias bp-thunder-fix='~/Repos/brightpearl-scripts/tmp/bp-thunder-fix.sh'
+alias bp-setup-ebay='~/Repos/brightpearl-scripts/tmp/bp-setup-ebay.sh'
+
+### TMP-PRIVATE ##############
+alias bp-thunder='~/Repos/brightpearl-scripts/tmp-private/bp-thunder.sh'
+alias bp-thunder-fix='~/Repos/brightpearl-scripts/tmp-private/bp-thunder-fix.sh'
 
 ### BRIGHTPEARL EXPORTS ######
 export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
