@@ -139,6 +139,9 @@ alias vm='sshpass -palbert ssh albert@dev-vm'
 alias vm-root='sshpass -palbert ssh albert@dev-vm -t su root'
 
 ### TMP ######################
+alias bp-build='~/Repos/brightpearl-scripts/tmp/bp-build.sh'
+alias bp-cleanup='~/Repos/brightpearl-scripts/tmp/bp-cleanup.sh'
+alias bp-create-branch='~/Repos/brightpearl-scripts/tmp/bp-create-branch.sh'
 alias bp-merge-to-master='~/Repos/brightpearl-scripts/tmp/bp-merge-to-master.sh'
 alias bp-new-branch='~/Repos/brightpearl-scripts/tmp/bp-new-branch.sh'
 alias bp-setup-ebay='~/Repos/brightpearl-scripts/tmp/bp-setup-ebay.sh'
