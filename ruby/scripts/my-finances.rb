@@ -94,7 +94,7 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3419])
 
         # Misc Globals
         @rightHandSideCount = 4
@@ -195,7 +195,7 @@ class ShowBankTransactions
         @transWidth_1 = 20
         @transWidth_2 = 20
         @transWidth_3 = 12
-        @transWidth_4 = 114
+        @transWidth_4 = 111
         @transWidth_5 = 6
         @transWidth_6 = 11
         @transWidth_7 = 12
@@ -203,7 +203,7 @@ class ShowBankTransactions
 
         # Column widths for balances
         @colWidth_1 = 20
-        @colWidth_2 = 25
+        @colWidth_2 = 22
         @colWidth_3 = 20
         @colWidth_4 = 20
         @colWidth_5 = 20
@@ -215,7 +215,7 @@ class ShowBankTransactions
         @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + @colWidth_10 + 9
 
         # Column widths for balances
-        @summaryWidth_1 = 46
+        @summaryWidth_1 = 43
         @summaryWidth_2 = 20
         @summaryWidth_3 = 20
         @summaryWidth_4 = 20
@@ -460,9 +460,9 @@ class ShowBankTransactions
     # Display CreditCards
     def displayCreditCards
         summaryTitle = "\x1B[45m SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} \x1B[0m"
-        puts '|'.rjust(176, ' ')
-        puts "#{summaryTitle.ljust(184, ' ')}|"
-        puts '|'.rjust(176, ' ')
+        puts '|'.rjust(173, ' ')
+        puts "#{summaryTitle.ljust(181, ' ')}|"
+        puts '|'.rjust(173, ' ')
         table(:border => false) do
             row do
                 column(' Credit Card', :width => @colWidth_1, :align => 'left', :bold => 'true')
