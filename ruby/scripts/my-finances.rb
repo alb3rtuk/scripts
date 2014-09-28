@@ -551,7 +551,7 @@ class ShowBankTransactions
         projectedOEMBalance = getProjectedOEMBalance
 
         @rightHandSideContent = Array[
-            Array['Balance Current', 'white'],
+            Array['Current Balance', 'white'],
             Array[getAsCurrency(@totalCash)[0], getAsCurrency(@totalCash)[1]],
             Array['After Bills/Wages', 'white'],
             Array[getBalanceAfterBills.nil? ? '-' : getAsCurrency(getBalanceAfterBills)[0], getBalanceAfterBills.nil? ? 'white' : getAsCurrency(getBalanceAfterBills)[1]],
