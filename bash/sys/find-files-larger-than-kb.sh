@@ -2,4 +2,4 @@
 
 size=$1
 
-find find . -type f -size +${size}000c -exec ls -la {} \;
+find . -type f -size +${size}000c -exec ls -lah {} \;
