@@ -689,7 +689,7 @@ class ShowBankTransactions
         currentDay = @month1.strftime('%d').to_f
         lastDay = (getEndOfMonthDay.to_f) - 1
         percentOfMonthLeft = 100 - (currentDay - 1) / (lastDay / 100)
-        pixelsRemaining = (((@summaryWidthTotal - 1) / 100) * percentOfMonthLeft).round
+        pixelsRemaining = ((@summaryWidthTotal - 1).to_f / 100) * percentOfMonthLeft
         pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
         puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[33m\xe2\x98\x85\x1B[0m\n\n"
 
