@@ -261,6 +261,14 @@ class BankLloyds
             rowData = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
+
+                # If no transactions, break out of loop immediately.
+                if tableCell.text.include? "we can't display your statement transactions"
+                    break;
+                elsif tableCell.text.include? 'Please try again later'
+                    break;
+                end
+
                 cellCount = cellCount + 1
                 if cellCount == 1
                     rowData['date'] = tableCell.text
