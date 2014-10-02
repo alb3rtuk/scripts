@@ -1037,7 +1037,7 @@ class ShowBankTransactions
     def calculateCreditUsed
         creditUsed = @totalCredit - @totalAvailable
         if creditUsed > 0
-            (100 - (@totalAvailable / (@totalCredit * 0.01))).round(1)
+            (100 - (@totalAvailable.to_f / (@totalCredit * 0.01))).round(1)
         else
             0
         end
