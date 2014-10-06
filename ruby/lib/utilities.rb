@@ -201,33 +201,31 @@ end
 def getTimeAgoInHumanReadable(timeStamp)
     secondsAgo = getSecondsAgo(timeStamp)
     secondsAgo = secondsAgo.to_f
-    for i in 0..20
-        case secondsAgo
-            when 1..59
-                return 'Less than a minute ago'
-            when 60..119
-                return 'A minute ago'
-            when 120..2999
-                return "#{(secondsAgo / 60).round} minutes ago"
-            when 3000..5399
-                return 'About an hour ago'
-            when 5399..86399
-                return "#{((secondsAgo / 60) / 60).round} hours ago"
-            when 86400..169999
-                return 'A day ago'
-            when 170000..2505599
-                return "#{(((secondsAgo / 24) / 60) / 60).round} days ago"
-            when 2600000..4000000
-                return 'A month ago'
-            when 4000001..31535999
-                return "#{((((secondsAgo / 30.4368) / 24) / 60) / 60).round} months ago"
-            when 31536000..47303999
-                return 'A year ago'
-            when 47304000..9999999999999
-                return "#{((((secondsAgo / 365) / 24) / 60) / 60).round} years ago"
-            else
-                return 'Out of range'
-        end
+    case secondsAgo
+        when 1..59
+            return 'Less than a minute ago'
+        when 60..119
+            return 'A minute ago'
+        when 120..2999
+            return "#{(secondsAgo / 60).round} minutes ago"
+        when 3000..5399
+            return 'About an hour ago'
+        when 5399..86399
+            return "#{((secondsAgo / 60) / 60).round} hours ago"
+        when 86400..169999
+            return 'A day ago'
+        when 170000..2505599
+            return "#{(((secondsAgo / 24) / 60) / 60).round} days ago"
+        when 2600000..4000000
+            return 'A month ago'
+        when 4000001..31535999
+            return "#{((((secondsAgo / 30.4368) / 24) / 60) / 60).round} months ago"
+        when 31536000..47303999
+            return 'A year ago'
+        when 47304000..9999999999999
+            return "#{((((secondsAgo / 365) / 24) / 60) / 60).round} years ago"
+        else
+            return 'Out of range'
     end
 end
 
