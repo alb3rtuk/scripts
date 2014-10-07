@@ -996,7 +996,7 @@ class ShowBankTransactions
             when @month5.strftime('%m')
                 amt = @summaryData[:month5][:"#{id}"].to_f
             else
-                raise(RunTimeError('Month not found.'))
+                raise(RuntimeError('Month not found.'))
         end
         amt
     end
