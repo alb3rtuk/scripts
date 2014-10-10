@@ -87,6 +87,8 @@ class ShowBankTransactions
             {:bank_account_id => Array[6], :type => 'P-C', :terms => Array['']},
             {:bank_account_id => Array[6], :type => 'P-T', :terms => Array['']},
             {:bank_account_id => Array[6], :type => 'D-T', :terms => Array['']},
+            # BARCLAYCARD
+            {:bank_account_id => Array[9], :type => 'OTHER', :terms => Array['PAYMENT, THANK YOU']},
             # CAPITAL ONE
             {:bank_account_id => Array[10], :type => 'CR', :terms => Array['PAYMENT RECEIVED', 'DIRECT DEBIT PAYMENT']},
         ]
@@ -94,7 +96,7 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483])
 
         # Misc Globals
         @rightHandSideCount = 4
@@ -363,7 +365,7 @@ class ShowBankTransactions
             return true
         end
         @internalTransfers.each do |match|
-            if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'] =~ /#{w}/ } && match[:type] == transaction['type']
+            if match[:bank_account_id].any? { |w| transaction['bank_account_id'] =~ /#{w}/ } && match[:terms].any? { |w| transaction['description'].upcase =~ /#{w}/ } && match[:type] == transaction['type']
                 if match.has_key?(:terms_not)
                     if match[:terms_not].any? { |w| transaction['description'] =~ /#{w}/ }
                         return false
