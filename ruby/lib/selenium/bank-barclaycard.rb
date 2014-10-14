@@ -1,6 +1,7 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 
 class BankBarclayCard
+
     include CommandLineReporter
 
     def initialize(username, pin, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
@@ -30,6 +31,12 @@ class BankBarclayCard
         browser.select_list(:name => 'firstAnswer').option(:value => getCharAt(browser.label(:for => 'lettera').text.gsub(/[^0-9]/, ''), @security)).select
         browser.select_list(:name => 'secondAnswer').option(:value => getCharAt(browser.label(:for => 'letterb').text.gsub(/[^0-9]/, ''), @security)).select
         browser.input(:type => 'submit', :value => 'Log in').click
+        if browser.link(:id => 'confirmpd').exists?
+            browser.link(:id => 'confirmpd').click
+            if @displayProgress
+                puts "\x1B[90mSuccessfully bypassed occasional confirmation page\x1B[0m\n"
+            end
+        end
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to BarclayCard\x1B[0m\n"
         end
@@ -68,7 +75,7 @@ class BankBarclayCard
                     end
 
                 else
-                    if attempt >= 5
+                    if attempt >= 1
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the BarclayCard script.\x1B[0m"
