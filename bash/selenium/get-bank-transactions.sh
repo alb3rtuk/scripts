@@ -3,6 +3,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-# clearTerminal
+detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb $1
+ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb ${displays} $1

@@ -13,7 +13,9 @@ include CommandLineReporter
 checkMachineIsOnline
 
 displayProgress = true
-headless = (ARGV.empty?) ? true : false
+
+headless = (ARGV[1].nil?) ? true : false
+displays = ARGV[0]
 
 encrypter = Encrypter.new
 
@@ -28,7 +30,7 @@ natWest = BankNatWest.new(
     encrypter.decrypt(NatWestUsername),
     encrypter.decrypt(NatWestSecurityTop),
     encrypter.decrypt(NatWestSecurityBottom),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
@@ -38,7 +40,7 @@ halifax = BankHalifax.new(
     encrypter.decrypt(HalifaxUsername),
     encrypter.decrypt(HalifaxPassword),
     encrypter.decrypt(HalifaxSecurity),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
@@ -48,7 +50,7 @@ lloyds = BankLloyds.new(
     encrypter.decrypt(LloydsUsername),
     encrypter.decrypt(LloydsPassword),
     encrypter.decrypt(LloydsSecurity),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
@@ -57,7 +59,7 @@ lloyds = BankLloyds.new(
 capitalOne = BankCapitalOne.new(
     encrypter.decrypt(CapitalOneUsername),
     encrypter.decrypt(CapitalOneSecurity),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
@@ -67,7 +69,7 @@ barclayCard = BankBarclayCard.new(
     encrypter.decrypt(BarclayCardUsername),
     encrypter.decrypt(BarclayCardPin),
     encrypter.decrypt(BarclayCardSecurity),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
@@ -77,7 +79,7 @@ experian = BankExperian.new(
     encrypter.decrypt(ExperianUsername),
     encrypter.decrypt(ExperianPassword),
     encrypter.decrypt(ExperianSecurity),
-    'multiple',
+    displays,
     headless,
     displayProgress,
     databaseConnection
