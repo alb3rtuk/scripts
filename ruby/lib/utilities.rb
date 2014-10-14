@@ -102,7 +102,7 @@ def getBrowser(displays = 'single', headless = false)
     x = y = width = height = 0
 
     if displays == 'single'
-        width = 1680
+        width = 1440
         height = 2000
         x = 0
         y = -0
