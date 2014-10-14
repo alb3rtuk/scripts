@@ -7,16 +7,12 @@ echo
 message magenta " GIT " "Getting status of all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-echo "\033[35m~/Repos/brightpearl-scripts/\033[0m"
-cd ~/Repos/brightpearl-scripts/
+echo "\033[35m~/Repos/brightpearl-cli/\033[0m"
+cd ~/Repos/brightpearl-cli/
 git status
 
 echo "\033[35m~/Repos/nimzo-java/\033[0m"
 cd ~/Repos/nimzo-java/
-git status
-
-echo "\033[35m~/Repos/nimzo-legacy/\033[0m"
-cd ~/Repos/nimzo-legacy/
 git status
 
 echo "\033[35m~/Repos/nimzo-php/\033[0m"
