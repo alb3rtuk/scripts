@@ -58,7 +58,7 @@ class BankExperian
                     end
 
                 else
-                    if attempt >= 2
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the Experian script.\x1B[0m"
