@@ -75,7 +75,7 @@ class BankBarclayCard
                     end
 
                 else
-                    if attempt >= 1
+                    if attempt >= 5
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the BarclayCard script.\x1B[0m"
