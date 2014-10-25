@@ -96,7 +96,7 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493, 3543])
 
         # Misc Globals
         @rightHandSideCount = 4
@@ -300,7 +300,11 @@ class ShowBankTransactions
                 # Internal Transfer Handling
                 if isInternalTransfer(transaction)
                     if @withInternalTransfers
-                        transactionColor = 'yellow'
+                        if @ignoredTransactions.include?(transaction['id'].to_i)
+                            transactionColor = 'green'
+                        else
+                            transactionColor = 'yellow'
+                        end
                     else
                         next
                     end
