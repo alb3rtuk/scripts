@@ -62,13 +62,13 @@ class BankNatWest
             begin
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
+                data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
                     cronLog"NatWest: Attempt #{attempt} failed with message: #{e.message}."
-                    # puts e.backtrace
                 end
             else
                 succeeded = true

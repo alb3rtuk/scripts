@@ -19,6 +19,8 @@ class BankCapitalOne
             puts "\x1B[90mAttempting to establish connection with: #{@login_uri}\x1B[0m"
         end
         browser.goto(@login_uri)
+
+
         browser.text_field(:name => 'username').set @username
         browser.checkbox(:name => 'rememberMeFlag').set
         browser.text_field(:name => 'password.randomCharacter0').set getCharAt(browser.div(:class => 'pass-char').p(:index => 0).text.gsub(/[^0-9]/, ''), @security)
@@ -47,13 +49,13 @@ class BankCapitalOne
             begin
                 attempt = attempt + 1
                 data = getAllData(showInTerminal)
+                data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
                     cronLog"Capital One: Attempt #{attempt} failed with message: #{e.message}."
-                    # puts e.backtrace
                 end
             else
                 succeeded = true
