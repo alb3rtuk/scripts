@@ -60,7 +60,7 @@ capitalOne = BankCapitalOne.new(
     encrypter.decrypt(CapitalOneUsername),
     encrypter.decrypt(CapitalOneSecurity),
     displays,
-    headless,
+    false,
     displayProgress,
     databaseConnection
 )
@@ -80,7 +80,7 @@ experian = BankExperian.new(
     encrypter.decrypt(ExperianPassword),
     encrypter.decrypt(ExperianSecurity),
     displays,
-    headless,
+    false,
     displayProgress,
     databaseConnection
 )
@@ -88,6 +88,6 @@ experian = BankExperian.new(
 natWest.runExtraction(true)
 halifax.runExtraction(true)
 lloyds.runExtraction(true)
-capitalOne.runExtraction(false)
+capitalOne.runExtraction(true)
 barclayCard.runExtraction(true)
-experian.runExtraction(false)
+experian.runExtraction(true)
