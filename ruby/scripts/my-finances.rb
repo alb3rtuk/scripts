@@ -699,6 +699,7 @@ class ShowBankTransactions
         pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
         puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[33m\xe2\x98\x85\x1B[0m\n\n"
 
+        enter_to_clear
     end
 
     # @return void
@@ -1213,6 +1214,21 @@ class ShowBankTransactions
             timestamp = '1983-10-29T03:16:00+00:00'
         end
         timestamp
+    end
+
+    # Gives a prompt where ONLY 'Enter' will clear the screen, any other key will not.
+    # @return void
+    def enter_to_clear
+        begin
+            system('stty raw -echo')
+            response = STDIN.getc
+        ensure
+            system('stty -raw echo')
+        end
+        if response.chr == "\r"
+            system('clear')
+        end
+        exit
     end
 
 end
