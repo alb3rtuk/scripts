@@ -699,7 +699,10 @@ class ShowBankTransactions
         pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
         puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[33m\xe2\x98\x85\x1B[0m\n\n"
 
-        enter_to_clear
+        # Uncomment for 'Enter to clear' functionality after script run.
+        # 31-10-2014 - Removing this because it's annoying.
+
+        # enter_to_clear
     end
 
     # @return void
@@ -1042,9 +1045,8 @@ class ShowBankTransactions
 
     # @return float
     def calculateCreditUsed
-        creditUsed = @totalCredit - @totalAvailable
-        if creditUsed > 0
-            (100 - (@totalAvailable.to_f / (@totalCredit * 0.01))).round(1)
+        if (@totalCredit.to_f - @totalCreditUsed.to_f) < @totalAvailable
+            -(100 - (@totalAvailable.to_f / (@totalCredit.to_f * 0.01))).round(1)
         else
             0
         end
