@@ -76,6 +76,8 @@ alias git-status-all='~/Repos/scripts/bash/git/git-status-all.sh'
 
 ### SCRIPTS ##################
 alias choc='~/Repos/scripts/bash/scripts/choc.sh'
+alias color='~/Repos/scripts/bash/scripts/colors.sh'
+alias colors='~/Repos/scripts/bash/scripts/colors.sh'
 alias create-launchd='~/Repos/scripts/bash/scripts/create-launchd.sh'
 alias decrypt='~/Repos/scripts/bash/scripts/decrypt.sh'
 alias encrypt='~/Repos/scripts/bash/scripts/encrypt.sh'
