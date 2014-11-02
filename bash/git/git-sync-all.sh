@@ -12,6 +12,11 @@ cd ~/Repos/brightpearl-cli/
 git pull
 git push
 
+echo "\033[35m~/Repos/convoy/\033[0m"
+cd ~/Repos/convoy/
+git pull
+git push
+
 echo "\033[35m~/Repos/nimzo-java/\033[0m"
 cd ~/Repos/nimzo-java/
 git pull
