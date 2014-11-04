@@ -97,7 +97,7 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493, 3543, 3564, 3556, 3585])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493, 3543, 3564, 3556, 3585, 3593])
 
         # Misc Globals
         @rightHandSideCount = 4
@@ -1046,8 +1046,8 @@ class ShowBankTransactions
 
     # @return float
     def calculateCreditUsed
-        if (@totalCredit.to_f - @totalCreditUsed.to_f) < @totalAvailable
-            -(100 - (@totalAvailable.to_f / (@totalCredit.to_f * 0.01))).round(1)
+        if @totalCreditUsed.to_f > 0
+            ((@totalCreditUsed.to_f / @totalCredit.to_f) * 100).round(2)
         else
             0
         end
