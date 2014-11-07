@@ -2,6 +2,9 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
+cd ~/Repos/anchorman/
+git push > /dev/null 2>&1
+
 cd ~/Repos/brightpearl-cli/
 git push > /dev/null 2>&1
 

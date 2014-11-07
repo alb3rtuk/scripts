@@ -7,6 +7,11 @@ echo
 message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
+echo "\033[35m~/Repos/anchorman/\033[0m"
+cd ~/Repos/anchorman/
+git pull
+git push
+
 echo "\033[35m~/Repos/brightpearl-cli/\033[0m"
 cd ~/Repos/brightpearl-cli/
 git pull
