@@ -7,8 +7,8 @@ echo
 message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-echo "\033[35m~/Repos/anchorman/\033[0m"
-cd ~/Repos/anchorman/
+echo "\033[35m~/Repos/columnist/\033[0m"
+cd ~/Repos/columnist/
 git pull
 git push
 

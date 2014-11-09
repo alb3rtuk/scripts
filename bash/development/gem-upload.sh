@@ -1,8 +1,34 @@
 #!/bin/sh
 
-# Upload the 'brightpearl-cli' ruby gem to the ruby server.
+# Upload my ruby gems to ruby server. Specify gem name as argument (or 'brightpearl-cli' by default).
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-cd ~/Repos/brightpearl-cli/
-gem push brightpearl-cli-1.0.0.gem
+ARG=$1
+
+if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
+
+    cd ~/Repos/brightpearl-cli/
+    sudo gem push brightpearl-cli-1.0.0.gem
+
+elif [[ ${ARG} == 'columnist' ]]; then
+
+    cd ~/Repos/columnist/
+    sudo gem push columnist-1.0.0.gem
+
+elif [[ ${ARG} == 'convoy' ]]; then
+
+    cd ~/Repos/convoy/
+    sudo gem push convoy-1.0.0.gem
+
+else
+
+    echo
+    message red "ERROR" "${ARG} is not a gem configured to upload."
+    echo
+
+fi
+
+exit
+
+

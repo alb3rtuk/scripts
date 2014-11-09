@@ -2,7 +2,7 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-cd ~/Repos/anchorman/
+cd ~/Repos/columnist/
 git push > /dev/null 2>&1
 
 cd ~/Repos/brightpearl-cli/

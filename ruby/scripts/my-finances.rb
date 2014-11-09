@@ -1,11 +1,11 @@
 require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
 require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
 
-require 'anchorman'
+require 'columnist'
 
 class ShowBankTransactions
 
-    include Anchorman
+    include columnist
 
     # Initialize all the DB stuff, etc.
     def initialize(argv)

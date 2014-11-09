@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Build the 'brightpearl-cli' ruby gem (or 'convoy' gem when called with ANY argument).
+# Build my ruby gems. Specify gem name as argument (or 'brightpearl-cli' by default).
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
@@ -12,11 +12,11 @@ if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
     sudo gem build brightpearl-cli.gemspec
     sudo gem install brightpearl-cli-1.0.0.gem
 
-elif [[ ${ARG} == 'anchorman' ]]; then
+elif [[ ${ARG} == 'columnist' ]]; then
 
-    cd ~/Repos/anchorman/
-    sudo gem build anchorman.gemspec
-    sudo gem install anchorman-1.0.0.gem
+    cd ~/Repos/columnist/
+    sudo gem build columnist.gemspec
+    sudo gem install columnist-1.0.0.gem
 
 elif [[ ${ARG} == 'convoy' ]]; then
 
