@@ -5,7 +5,7 @@ require 'columnist'
 
 class ShowBankTransactions
 
-    include columnist
+    include Columnist
 
     # Initialize all the DB stuff, etc.
     def initialize(argv)
