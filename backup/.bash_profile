@@ -37,6 +37,9 @@ alias mysql='mysql app -uroot'
 alias composer='/usr/local/bin/composer/./composer.phar'
 alias apigen='php $HOME/Repos/nimzo-php-docs/lib/apigen.php'
 
+alias show-hidden-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias hide-hidden-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+
 #####################################################################################################
 
 ### CHEF #####################
