@@ -75,7 +75,7 @@ alias git-status-all='~/Repos/scripts/bash/git/git-status-all.sh'
 >>> NIMZO ALIASES <<<
 
 ### SCRIPTS ##################
-alias choc='~/Repos/scripts/bash/scripts/choc.sh'
+alias mate='~/Repos/scripts/bash/scripts/mate.sh'
 alias color='~/Repos/scripts/bash/scripts/colors.sh'
 alias colors='~/Repos/scripts/bash/scripts/colors.sh'
 alias create-launchd='~/Repos/scripts/bash/scripts/create-launchd.sh'

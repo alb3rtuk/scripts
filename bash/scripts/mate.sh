@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Open a file in Textmate (IE: $ textmate <filename>)
+# Open a file in TextMate (IE: $ mate <filename>)
 
 file=$1
 
