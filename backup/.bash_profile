@@ -2,6 +2,7 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts/:$HOME/Bin/phpmd/src/bin
 export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
 
 export CLICOLOR=1
