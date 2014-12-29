@@ -89,7 +89,7 @@ class ShowBankTransactions
         @internalTransfers = Array[
             # NATWEST
             {:bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT']},
-            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.'], :terms_not => ['UK MAIL LIMITED', 'DEAN LINDEN']},
+            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.'], :terms_not => ['UK MAIL LIMITED', 'DEAN LINDEN', 'TRANSFERWISE']},
             {:bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE']},
             # LLOYDS
             {:bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN']},
