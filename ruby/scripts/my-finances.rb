@@ -64,6 +64,7 @@ class ShowBankTransactions
             # HALIFAX ULTIMATE REWARD
             {:intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (HALIFAX ULTIAMTE REWARD)', :recurring_amount => 15},
             {:intTypeID => 1, :id => 2200, :bank_account_id => 4, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
+            {:intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'Car Tax (DVLA-EU51GVC)', :recurring_amount => 19.68},
             # HALIFAX REWARD
             {:intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => @red, :translation => 'CREDITEXPERT', :recurring_amount => 9.99},
             {:intTypeID => 3, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO', :recurring_amount => 5},
@@ -585,8 +586,8 @@ class ShowBankTransactions
             Array[getAsCurrency(@totalCredit)[0], @cyan],
             Array['Credit Used', @white],
             Array["#{calculateCreditUsed}%", @magenta],
-            # Array['Monthly Outgoings', @white],
-            # Array[getAsCurrency(@fixedMonthlyOutgoings)[0], @cyan],
+            Array['Monthly Outgoings', @white],
+            Array[getAsCurrency(@fixedMonthlyOutgoings)[0], @cyan],
             Array['Remaining Outgoings', @white],
             Array["#{@moneyOutRemaining > 0 ? '—' : ''}#{getAsCurrency(@moneyOutRemaining)[0]}", @moneyOutRemaining <= 0 ? @white : @red],
             Array['Remaining Incomings', @white],
