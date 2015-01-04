@@ -64,7 +64,7 @@ class ShowBankTransactions
             # HALIFAX ULTIMATE REWARD
             {:intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (HALIFAX ULTIAMTE REWARD)', :recurring_amount => 15},
             {:intTypeID => 1, :id => 2200, :bank_account_id => 4, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'Car Tax (DVLA-EU51GVC)', :recurring_amount => 19.68},
+            {:intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'CAR TAX (DVLA-EU51GVC)', :recurring_amount => 19.68},
             # HALIFAX REWARD
             {:intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => @red, :translation => 'CREDITEXPERT', :recurring_amount => 9.99},
             {:intTypeID => 3, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO', :recurring_amount => 5},
@@ -74,7 +74,7 @@ class ShowBankTransactions
             # LLOYDS CURRENT
             {:intTypeID => 3, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT', :recurring_amount => 250},
             {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE LIMITED'], :color => @red, :translation => 'VODAFONE LIMITED', :recurring_amount => 60, :estimated => true},
-            {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 120, :estimated => true},
+            {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 112.99, :estimated => true},
             {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 2950, :bank_account_id => 8, :type => 'DEP', :terms => Array[''], :color => @green, :translation => 'CASH'},
             {:intTypeID => 3, :id => 3000, :bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => @red, :translation => 'TESCO CAR INSURANCE', :recurring_amount => 62.73},
