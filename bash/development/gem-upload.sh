@@ -9,17 +9,17 @@ ARG=$1
 if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
 
     cd ~/Repos/brightpearl-cli/
-    sudo gem push brightpearl-cli-1.0.0.gem
+    sudo gem push brightpearl-cli-1.1.0.gem
 
 elif [[ ${ARG} == 'columnist' ]]; then
 
     cd ~/Repos/columnist/
-    sudo gem push columnist-1.0.0.gem
+    sudo gem push columnist-1.1.0.gem
 
 elif [[ ${ARG} == 'convoy' ]]; then
 
     cd ~/Repos/convoy/
-    sudo gem push convoy-1.0.0.gem
+    sudo gem push convoy-1.1.0.gem
 
 else
 
