@@ -6,7 +6,6 @@ class Encrypter
 
         @key = $cryptoKey
         @hex = $cryptoHex
-        self
 
     end
 
