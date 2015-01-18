@@ -1,5 +1,7 @@
 #!/bin/sh
 
+exit
+
 . ~/Repos/Scripts/bash/common/utilities.sh
 . ~/Repos/Scripts/.secrets/secrets.sh
 

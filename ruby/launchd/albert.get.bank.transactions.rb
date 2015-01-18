@@ -86,6 +86,6 @@ experian = BankExperian.new(
 natWest.runExtraction(displayProgress)
 halifax.runExtraction(displayProgress)
 lloyds.runExtraction(displayProgress)
-capitalOne.runExtraction(displayProgress)
+# capitalOne.runExtraction(displayProgress)
 barclayCard.runExtraction(displayProgress)
-experian.runExtraction(displayProgress)
+# experian.runExtraction(displayProgress)
