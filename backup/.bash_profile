@@ -1,5 +1,6 @@
-[[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+[[ -s "$HOME/.profile" ]] && source "$HOME/.profile"                  # Load the default .profile
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
+[[ -s "$HOME/.nvm/nvm.sh" ]] && source ~/.nvm/nvm.sh                  # Load NVM
 
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts/:$HOME/Bin/phpmd/src/bin
