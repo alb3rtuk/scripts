@@ -42,7 +42,7 @@ class ShowBankTransactions
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'CDM', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'TLR', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 3, :id => 300, :bank_account_id => 1, :type => 'D/D', :terms => Array['NAMES.CO.UK'], :color => @red, :translation => 'NAMESCO WEB SERVER', :recurring_amount => 29.99},
+            {:intTypeID => 3, :id => 300, :bank_account_id => 1, :type => 'POS', :terms => Array['NAMESCO'], :color => @red, :translation => 'NAMESCO WEB SERVER', :recurring_amount => 29.99},
             {:intTypeID => 3, :id => 400, :bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => @red, :translation => 'HORFIELD SPORTS CENTRE', :recurring_amount => 33.60},
             {:intTypeID => 0, :id => 500, :bank_account_id => 1, :type => 'D/D', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
             {:intTypeID => 0, :id => 600, :bank_account_id => 1, :type => 'POS', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
@@ -113,7 +113,7 @@ class ShowBankTransactions
         @ignoredTransactions = Array.new
 
         # Hawaii Payments
-        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493, 3543, 3564, 3556, 3585, 3593, 3599, 3600, 3615, 3619, 3635, 3672, 3723, 3789])
+        @ignoredTransactions.push(*Array[2556, 2557, 2558, 2555, 2545, 2567, 2576, 2566, 2959, 3328, 3364, 3310, 3349, 3405, 3413, 3424, 3482, 3483, 3492, 3493, 3543, 3564, 3556, 3585, 3593, 3599, 3600, 3615, 3619, 3635, 3672, 3723, 3789, 3954])
 
         # Misc Globals
         @rightHandSideCount = 4
