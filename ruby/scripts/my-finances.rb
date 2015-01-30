@@ -98,6 +98,7 @@ class ShowBankTransactions
             {:bank_account_id => Array[8], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
             {:bank_account_id => Array[7], :type => 'CC', :terms => Array['PAYMENT RECEIVED']},
             # HALIFAX
+            {:bank_account_id => Array[4, 5], :type => 'DEB', :terms => Array['BARCLAYCARD']},
             {:bank_account_id => Array[4, 5], :type => 'FPO', :terms => Array['NATWEST']},
             {:bank_account_id => Array[4, 5], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
             {:bank_account_id => Array[4, 5], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
