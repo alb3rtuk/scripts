@@ -21,20 +21,26 @@ if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
 
     cd ~/Repos/brightpearl-cli/
     sudo gem build brightpearl-cli.gemspec
-    sudo gem install brightpearl-cli-1.1.0.gem --backtrace -V # -p -l -N -f
+    sudo gem install brightpearl-cli-1.1.0.gem --backtrace -V --backtrace
 
 
 elif [[ ${ARG} == 'columnist' ]]; then
 
     cd ~/Repos/columnist/
     sudo gem build columnist.gemspec
-    sudo gem install columnist-1.1.0.gem --backtrace -V # -p -l -N -f
+    sudo gem install columnist-1.1.0.gem --backtrace -V --backtrace
 
 elif [[ ${ARG} == 'convoy' ]]; then
 
     cd ~/Repos/convoy/
     sudo gem build convoy.gemspec
-    sudo gem install convoy-1.1.0.gem --backtrace -V # -p -l -N -f
+    sudo gem install convoy-1.1.0.gem --backtrace -V --backtrace
+
+elif [[ ${ARG} == 'nimzo' ]]; then
+
+    cd ~/Repos/nimzo-ruby/nimzo-cli/
+    sudo gem build nimzo-cli.gemspec
+    sudo gem install nimzo-cli-1.0.0.gem --backtrace -V --backtrace
 
 else
 

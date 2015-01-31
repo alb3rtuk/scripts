@@ -21,11 +21,6 @@ elif [[ ${ARG} == 'convoy' ]]; then
     cd ~/Repos/convoy/
     sudo gem push convoy-1.1.0.gem
 
-elif [[ ${ARG} == 'nimzo' ]]; then
-
-    cd ~/Repos/nimzo-ruby/nimzo-cli/
-    sudo gem push nimzo-cli-1.0.0.gem
-
 else
 
     echo
@@ -35,5 +30,3 @@ else
 fi
 
 exit
-
-
