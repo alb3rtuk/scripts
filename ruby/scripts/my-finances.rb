@@ -870,7 +870,8 @@ class ShowBankTransactions
                 data[7]['balance_available'].to_f +
                 data[8]['balance_available'].to_f +
                 data[9]['balance_available'].to_f +
-                data[10]['balance_available'].to_f).round(2)
+                data[10]['balance_available'].to_f +
+                data[11]['balance_available'].to_f).round(2)
 
         totalCreditUsed =
             (data[7]['balance'].to_f +
@@ -879,6 +880,8 @@ class ShowBankTransactions
                 data[10]['pending_transactions'].to_f +
                 data[9]['balance'].to_f +
                 data[9]['pending_transactions'].to_f +
+                data[11]['balance'].to_f +
+                data[11]['pending_transactions'].to_f +
                 (data[1]['balance'].to_f < 0 ? -data[1]['balance'].to_f : 0) +
                 (data[2]['balance'].to_f < 0 ? -data[2]['balance'].to_f : 0) +
                 (data[4]['balance'].to_f < 0 ? -data[4]['balance'].to_f : 0) +
@@ -893,7 +896,8 @@ class ShowBankTransactions
                 data[8]['balance_overdraft'].to_f +
                 data[7]['balance_limit'].to_f +
                 data[9]['balance_limit'].to_f +
-                data[10]['balance_limit'].to_f).round(2)
+                data[10]['balance_limit'].to_f +
+                data[11]['balance_limit'].to_f).round(2)
 
         totalCash = (totalAvailable - totalCredit).round(2)
 

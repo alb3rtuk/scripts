@@ -77,6 +77,7 @@ class BankNatWest
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (1, #{data['select_platinum_balance']}, #{data['select_platinum_available']}, #{data['select_platinum_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (2, #{data['step_account']}, #{data['step_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (3, #{data['savings_account']}, #{data['savings_account']}, 0, '#{DateTime.now}', '#{DateTime.now}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (11, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', 0, '0000-00-00')")
                     BankCommon.new.insertTransactions(@databaseConnection, data['select_platinum_transactions'], 1)
                     BankCommon.new.insertTransactions(@databaseConnection, data['step_account_transactions'], 2)
                     BankCommon.new.insertTransactions(@databaseConnection, data['savings_account_transactions'], 3)
@@ -112,7 +113,9 @@ class BankNatWest
         data['select_platinum_overdraft'] = 7500 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
-
+        data['cc_balance'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
+        data['cc_available'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['cc_limit'] = 10200 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
         Array[browser, data]
     end
 
