@@ -17,7 +17,7 @@ fe80::1%lo0     localhost
 ##
 # BRIGHTPEARL
 ##
-172.27.6.253    dev-vm
+172.27.2.253    dev-vm
 
 ##
 # Adobe Activation Blocker                                                              
