@@ -14,6 +14,9 @@ git push > /dev/null 2>&1
 cd ~/Repos/nimzo-java/
 git push > /dev/null 2>&1
 
+cd ~/Repos/nimzo-node/
+git push > /dev/null 2>&1
+
 cd ~/Repos/nimzo-php/
 git push > /dev/null 2>&1
 

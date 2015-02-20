@@ -27,6 +27,11 @@ cd ~/Repos/nimzo-java/
 git pull
 git push
 
+echo "\033[35m~/Repos/nimzo-node/\033[0m"
+cd ~/Repos/nimzo-node/
+git pull
+git push
+
 echo "\033[35m~/Repos/nimzo-php/\033[0m"
 cd ~/Repos/nimzo-php/
 git pull

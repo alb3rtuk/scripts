@@ -23,6 +23,10 @@ echo "\033[35m~/Repos/nimzo-java/\033[0m"
 cd ~/Repos/nimzo-java/
 git status
 
+echo "\033[35m~/Repos/nimzo-node/\033[0m"
+cd ~/Repos/nimzo-node/
+git status
+
 echo "\033[35m~/Repos/nimzo-php/\033[0m"
 cd ~/Repos/nimzo-php/
 git status
