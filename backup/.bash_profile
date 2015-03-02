@@ -150,6 +150,7 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[38;5;45m\]\u@\h\[\033[00m\]:\[\033
 ### BRIGHTPEARL ALIASES ######
 alias vm='sshpass -palbert ssh albert@dev-vm'
 alias vm-root='sshpass -palbert ssh albert@dev-vm -t su root'
+alias lakshmi='ssh lakshmi@172.27.6.56'
 
 ### TMP ######################
 alias bp-build='~/Repos/brightpearl-scripts/tmp/bp-build.sh'
