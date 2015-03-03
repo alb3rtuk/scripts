@@ -156,6 +156,7 @@ alias jenkins-1='sshpass -pvmuser ssh vmuser@euw1-buildslave-0001.brightpearl.co
 alias jenkins-2='sshpass -pvmuser ssh vmuser@euw1-buildslave-0002.brightpearl.com'
 alias jenkins-3='sshpass -pvmuser ssh vmuser@euw1-buildslave-0003.brightpearl.com'
 alias raptorkins='sshpass -pjenkins ssh jenkins@raptorkins'
+alias raptorslave='sshpass -praptor ssh raptor@raptorslave.gbbr.brightpearl.com'
 alias skybutler='ssh -i ~/.ssh/Brightpearl-DevInf.pem jenkins@skybutler.brightpearl.com'
 
 ### TMP ######################
