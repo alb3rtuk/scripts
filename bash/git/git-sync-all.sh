@@ -12,11 +12,6 @@ cd ~/Repos/columnist/
 git pull
 git push
 
-echo "\033[35m~/Repos/brightpearl-cli/\033[0m"
-cd ~/Repos/brightpearl-cli/
-git pull
-git push
-
 echo "\033[35m~/Repos/convoy/\033[0m"
 cd ~/Repos/convoy/
 git pull

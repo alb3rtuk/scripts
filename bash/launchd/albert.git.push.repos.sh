@@ -5,9 +5,6 @@
 cd ~/Repos/columnist/
 git push > /dev/null 2>&1
 
-cd ~/Repos/brightpearl-cli/
-git push > /dev/null 2>&1
-
 cd ~/Repos/convoy/
 git push > /dev/null 2>&1
 
