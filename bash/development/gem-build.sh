@@ -21,7 +21,7 @@ if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
 
     cd ~/Repos/brightpearl-cli/
     sudo gem build brightpearl-cli.gemspec
-    sudo gem install brightpearl-cli-1.1.0.gem --backtrace -V --backtrace
+    sudo gem install brightpearl-cli-1.3.0.gem --backtrace -V --backtrace
 
 
 elif [[ ${ARG} == 'columnist' ]]; then
