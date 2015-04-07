@@ -114,6 +114,7 @@ class BankNatWest
         data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['cc_balance'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
+        data['cc_balance'] = -(data['cc_balance'])
         data['cc_available'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['cc_limit'] = 10200 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
         Array[browser, data]
