@@ -25,8 +25,20 @@ class BankExperian
         if @displayProgress
             puts "\x1B[90mSuccessfully bypassed first page\x1B[0m"
         end
-        browser.text_field(:name => 'Character1').set getCharAt(browser.div(:class => 'form-label', :index => 0).when_present(15).text.gsub(/[^0-9]/, ''), @security)
-        browser.text_field(:name => 'Character2').set getCharAt(browser.div(:class => 'form-label', :index => 1).when_present(15).text.gsub(/[^0-9]/, ''), @security)
+
+        charOneLabel = browser.div(:class => 'form-label', :index => 0).when_present(15).text
+        charTwoLabel = browser.div(:class => 'form-label', :index => 1).when_present(15).text
+
+        # First letter
+        browser.text_field(:name => 'Character1').set getCharAt(charOneLabel.gsub(/[^0-9]/, ''), @security)
+
+        # Second letter (accounts for "last letter" case)
+        if charTwoLabel.downcase.strip == 'last letter'
+            browser.text_field(:name => 'Character2').set getCharAt(@security.length, @security)
+        else
+            browser.text_field(:name => 'Character2').set getCharAt(charTwoLabel.gsub(/[^0-9]/, ''), @security)
+        end
+
         browser.input(:type => 'submit', :id => 'SubmitButton').click
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Experian\x1B[0m\n"
