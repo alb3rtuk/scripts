@@ -42,9 +42,4 @@ cd ~/Repos/scripts/
 git pull
 git push
 
-echo "\033[35m~/Repos/sql-backups/\033[0m"
-cd ~/Repos/sql-backups/
-git pull
-git push
-
 echo

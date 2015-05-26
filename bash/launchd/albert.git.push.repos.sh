@@ -26,7 +26,4 @@ git push > /dev/null 2>&1
 cd ~/Repos/scripts/
 git push > /dev/null 2>&1
 
-cd ~/Repos/sql-backups/
-git push > /dev/null 2>&1
-
 exit
