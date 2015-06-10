@@ -10,7 +10,7 @@ class BankExperian
         @displays = displays
         @headless = headless
         @displayProgress = displayProgress
-        @login_uri = 'https://www.creditexpert.co.uk/MCCLogin.aspx'
+        @login_uri = 'https://www.creditexpert.co.uk/login/login'
         @databaseConnection = databaseConnection
     end
 
