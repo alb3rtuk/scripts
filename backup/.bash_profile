@@ -55,7 +55,7 @@ alias chef-cookbook-upload='~/Repos/scripts/bash/chef/chef-cookbook-upload.sh'
 
 ### DEVELOPMENT ##############
 alias gem-build='~/Repos/scripts/bash/development/gem-build.sh'
-alias gem-bump='~/Repos/scripts/bash/development/gem-bump.sh'
+# alias gem-bump='~/Repos/scripts/bash/development/gem-bump.sh'
 alias gem-upload='~/Repos/scripts/bash/development/gem-upload.sh'
 alias tail-catalina-out='~/Repos/scripts/bash/development/tail-catalina-out.sh'
 alias tail-php-logs='~/Repos/scripts/bash/development/tail-php-logs.sh'

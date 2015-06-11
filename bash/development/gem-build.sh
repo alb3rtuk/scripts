@@ -6,23 +6,11 @@
 
 ARG=$1
 
-if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
+if [[ ${ARG} == 'nimzo' || ${ARG} == 'nimzo-cli' || ${ARG} == '' ]]; then
 
-    # RubyGem Documentation:
-    #
-    # http://guides.rubygems.org/command-reference/#gem-install
-    #
-    # -p - Use HTTP proxy for remote operations
-    # -l - Restrict operations to the LOCAL domain
-    # -N - Disable documentation generation
-    # -V - Verbose
-    # -f - Force gem to install, bypassing dependency checks
-    # --backtrace -- Show stack backtrace on errors
-
-    cd ~/Repos/brightpearl-cli/
-    sudo gem build brightpearl-cli.gemspec
-    sudo gem install brightpearl-cli-1.3.0.gem --backtrace -V -l
-
+    cd ~/Repos/nimzo-ruby/nimzo-cli/
+    sudo gem build nimzo-cli.gemspec
+    sudo gem install nimzo-cli-1.0.0.gem --backtrace -V -l
 
 elif [[ ${ARG} == 'columnist' ]]; then
 
@@ -36,11 +24,22 @@ elif [[ ${ARG} == 'convoy' ]]; then
     sudo gem build convoy.gemspec
     sudo gem install convoy-1.1.0.gem --backtrace -V -l
 
-elif [[ ${ARG} == 'nimzo' ]]; then
+elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'bp' ]]; then
 
-    cd ~/Repos/nimzo-ruby/nimzo-cli/
-    sudo gem build nimzo-cli.gemspec
-    sudo gem install nimzo-cli-1.0.0.gem --backtrace -V -l
+      # RubyGem Documentation:
+      #
+      # http://guides.rubygems.org/command-reference/#gem-install
+      #
+      # -p - Use HTTP proxy for remote operations
+      # -l - Restrict operations to the LOCAL domain
+      # -N - Disable documentation generation
+      # -V - Verbose
+      # -f - Force gem to install, bypassing dependency checks
+      # --backtrace -- Show stack backtrace on errors
+
+      cd ~/Repos/brightpearl-cli/
+      sudo gem build brightpearl-cli.gemspec
+      sudo gem install brightpearl-cli-1.3.0.gem --backtrace -V -l
 
 else
 
