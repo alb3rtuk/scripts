@@ -3,7 +3,7 @@
 [[ -s "$HOME/.nvm/nvm.sh" ]] && source ~/.nvm/nvm.sh                  # Load NVM
 
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts/
+export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts
 export PATH=$PATH:$HOME/Bin/phpmd/src/bin
 export PATH=$PATH:$HOME/Bin/exec
 
