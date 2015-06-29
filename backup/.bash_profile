@@ -151,8 +151,8 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[38;5;45m\]\u@\h\[\033[00m\]:\[\033
 #####################################################################################################
 
 ### BRIGHTPEARL ALIASES ######
-alias vm='sshpass -palbert ssh albert@172.27.2.253'
-alias vm-root='sshpass -palbert ssh albert@172.27.2.253 -t su root'
+alias vm='sshpass -palbert ssh albert@172.27.6.143'
+alias vm-root='sshpass -palbert ssh albert@172.27.6.143 -t "sudo su -"'
 alias lakshmi='sshpass -plakshmi ssh lakshmi@172.27.6.56'
 alias jenkins-0='sshpass -pvmuser ssh vmuser@euw1-buildslave-0000.brightpearl.com'
 alias jenkins-1='sshpass -pvmuser ssh vmuser@euw1-buildslave-0001.brightpearl.com'
