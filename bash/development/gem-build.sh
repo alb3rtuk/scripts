@@ -6,7 +6,7 @@
 
 ARG=$1
 
-if [[ ${ARG} == 'nimzo' || ${ARG} == 'nimzo-cli' || ${ARG} == '' ]]; then
+if [[ ${ARG} == 'nimzo' || ${ARG} == 'nimzo-cli' || ${ARG} == 'nim' ]]; then
 
     cd ~/Repos/nimzo-ruby/nimzo-cli/
     sudo gem build nimzo-cli.gemspec
@@ -24,7 +24,7 @@ elif [[ ${ARG} == 'convoy' ]]; then
     sudo gem build convoy.gemspec
     sudo gem install convoy-1.1.0.gem --backtrace -V -l
 
-elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'bp' ]]; then
+elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'bp' || ${ARG} == '' ]]; then
 
       # RubyGem Documentation:
       #
