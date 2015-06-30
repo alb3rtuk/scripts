@@ -7,39 +7,15 @@ echo
 message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-echo "\033[35m~/Repos/columnist/\033[0m"
-cd ~/Repos/columnist/
-git pull
-git push
+repos=(brightpearl-cli columnist convoy nimzo-java nimzo-node nimzo-php nimzo-php-docs nimzo-ruby scripts)
 
-echo "\033[35m~/Repos/convoy/\033[0m"
-cd ~/Repos/convoy/
-git pull
-git push
-
-echo "\033[35m~/Repos/nimzo-java/\033[0m"
-cd ~/Repos/nimzo-java/
-git pull
-git push
-
-echo "\033[35m~/Repos/nimzo-node/\033[0m"
-cd ~/Repos/nimzo-node/
-git pull
-git push
-
-echo "\033[35m~/Repos/nimzo-php/\033[0m"
-cd ~/Repos/nimzo-php/
-git pull
-git push
-
-echo "\033[35m~/Repos/nimzo-ruby/\033[0m"
-cd ~/Repos/nimzo-ruby/
-git pull
-git push
-
-echo "\033[35m~/Repos/scripts/\033[0m"
-cd ~/Repos/scripts/
-git pull
-git push
+for i in "${repos[@]}"
+do :
+    echo
+    echo "\033[35m~/Repos/${i}/\033[0m"
+    cd ~/Repos/${i}/
+    git pull
+    git push
+done
 
 echo
