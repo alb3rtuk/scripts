@@ -16,6 +16,7 @@ for input in $(ls -lR ${launchdDirectory} | grep ^l); do
         inputLength=${#input}
         inputLength=`expr ${inputLength} - 6`
         launchctl remove ${input:0:${inputLength}}
+        message red   "  REMOVING LAUNCHD" "`tput setaf 3`${input:0:${inputLength}}"
     fi
 done
 
