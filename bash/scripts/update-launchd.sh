@@ -19,8 +19,6 @@ for input in $(ls -lR ${launchdDirectory} | grep ^l); do
     fi
 done
 
-exit
-
 # Second, recreate all launchd jobs from the files in the git repo.
 cd ${plistDirectory}
 for input in $(find . -type f -name "albert.*.plist"); do
