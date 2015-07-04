@@ -68,6 +68,6 @@ function verifyFileExists()
 # Used for logging when a cron was kicked off.
 function logCron()
 {
-    logfile=/Users/Albert/Repos/Scripts/backup/cronlog.log
+    logfile=/Users/Natalee/Repos/Scripts/backup/cronlog.log
     echo "$(date) - $1" >> ${logfile}
 }

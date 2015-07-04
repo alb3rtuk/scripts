@@ -1,5 +1,5 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-common.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/selenium/bank-common.rb'
 
 class BankNatWest
     include CommandLineReporter

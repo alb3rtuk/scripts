@@ -7,7 +7,7 @@ echo
 
 for file in ~/.Trash/*
 do
-    if [ "$file" != "/Users/Albert/.Trash/*" ]; then
+    if [ "$file" != "/Users/Natalee/.Trash/*" ]; then
         files=`expr ${files} + 1`
         echo "`tput setaf 1`$file`tput setaf 7`"
     fi

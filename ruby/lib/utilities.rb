@@ -11,8 +11,8 @@ require 'yaml'
 require 'open-uri'
 require 'net/http'
 require 'csv'
-require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
+require '/Users/Natalee/Repos/Scripts/.secrets/secrets.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/encrypter.rb'
 
 # Returns DB connection to my personal MySQL DB.
 def getDatabaseConnection
@@ -123,7 +123,7 @@ end
 # @return void
 def cronLog(message = '')
     timestamp = Time.now.strftime('%a %b %e %H:%M:%S %Z %Y')
-    File.open('/Users/Albert/Repos/Scripts/backup/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
+    File.open('/Users/Natalee/Repos/Scripts/backup/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
 end
 
 # Converts a number to 2 decimal points and adds thousands delimiter + currency symbol.
@@ -172,13 +172,13 @@ def exitScript(msg = 'Something went wrong and the script died. Please check you
     raise(RuntimeError, msg)
 end
 
-# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Natalee/Repos/...)
 # @return boolean
 def directoryExists?(directory)
     File.directory?(directory)
 end
 
-# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Natalee/Repos/...)
 # @return boolean
 def fileExists?(file)
     File.file?(file)

@@ -7,23 +7,12 @@ export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts
 export PATH=$PATH:$HOME/Bin/phpmd/src/bin
 export PATH=$PATH:$HOME/Bin/exec
 
-export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
-
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export JAVA_HOME=$(/usr/libexec/java_home)
 export MAVEN_HOME="/usr/local/Cellar/maven/3.2.1/libexec"
 export TOMCAT_HOME="/Library/Tomcat-7"
 export CATALINA_HOME="/Library/Tomcat-7"
-
-#####################################################################################################
-#
-# http://hackerslab.eu/blog/2013/04/a-little-better-ls-for-mac-osx/
-#
-# Must install GNU coreutils in order to work. More info at:
-# http://apple.stackexchange.com/questions/69223/how-to-replace-mac-os-x-utilities-with-gnu-core-utilities
-#
-# Enable color support of ls and also add handy aliases..
 
 alias ls='gls -F --color=auto'
 alias la='ls -a'
@@ -37,10 +26,6 @@ alias egrep='egrep --color=auto'
 
 # More (Misc) aliases..
 alias sb='source ~/.bash_profile'
-alias tig='/Users/Albert/bin/exec/tig'
-alias mysql='mysql app -uroot'
-alias composer='/usr/local/bin/composer/./composer.phar'
-alias apigen='php $HOME/Repos/nimzo-php-docs/lib/apigen.php'
 
 alias show-hidden-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide-hidden-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
@@ -81,8 +66,6 @@ alias ec2-server-update-php='~/Repos/scripts/bash/ec2/ec2-server-update-php.sh'
 ### GIT ######################
 alias git-sync-all='~/Repos/scripts/bash/git/git-sync-all.sh'
 alias git-status-all='~/Repos/scripts/bash/git/git-status-all.sh'
-
->>> NIMZO ALIASES <<<
 
 ### SCRIPTS ##################
 alias mate='~/Repos/scripts/bash/scripts/mate.sh'
@@ -149,32 +132,3 @@ parse_git_branch() {
 PS1="${debian_chroot:+($debian_chroot)}\[\033[38;5;45m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\]\[\033[38;5;118m\]\$(parse_git_branch)\[\033[00m\]$ "
 
 #####################################################################################################
-
-### BRIGHTPEARL ALIASES ######
-alias vm='sshpass -palbert ssh albert@172.27.6.199'
-alias vm-root='sshpass -palbert ssh albert@172.27.6.199 -t "sudo su -"'
-alias lakshmi='sshpass -plakshmi ssh lakshmi@172.27.6.56'
-alias jenkins-0='sshpass -pvmuser ssh vmuser@euw1-buildslave-0000.brightpearl.com'
-alias jenkins-1='sshpass -pvmuser ssh vmuser@euw1-buildslave-0001.brightpearl.com'
-alias jenkins-2='sshpass -pvmuser ssh vmuser@euw1-buildslave-0002.brightpearl.com'
-alias jenkins-3='sshpass -pvmuser ssh vmuser@euw1-buildslave-0003.brightpearl.com'
-alias raptorkins='sshpass -pjenkins ssh jenkins@raptorkins'
-alias raptorslave='sshpass -praptor ssh raptor@raptorslave.gbbr.brightpearl.com'
-alias skybutler='ssh -i ~/.ssh/Brightpearl-DevInf.pem jenkins@skybutler.brightpearl.com'
-
-### TMP ######################
-alias bp-build='~/Repos/brightpearl-scripts/tmp/bp-build.sh'
-alias bp-cleanup='~/Repos/brightpearl-scripts/tmp/bp-cleanup.sh'
-alias bp-compile-less='~/Repos/brightpearl-scripts/tmp/bp-compile-less.sh'
-alias bp-create-branch='~/Repos/brightpearl-scripts/tmp/bp-create-branch.sh'
-alias bp-merge-to-master='~/Repos/brightpearl-scripts/tmp/bp-merge-to-master.sh'
-alias bp-new-branch='~/Repos/brightpearl-scripts/tmp/bp-new-branch.sh'
-alias bp-setup-ebay='~/Repos/brightpearl-scripts/tmp/bp-setup-ebay.sh'
-
-### TMP-PRIVATE ##############
-alias bp-thunder='~/Repos/brightpearl-scripts/tmp-private/bp-thunder.sh'
-alias bp-thunder-fix='~/Repos/brightpearl-scripts/tmp-private/bp-thunder-fix.sh'
-
-### BRIGHTPEARL EXPORTS ######
-export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
-export APP_ACCOUNT=automation

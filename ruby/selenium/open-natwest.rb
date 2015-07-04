@@ -1,6 +1,6 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-natwest.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/encrypter.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/selenium/bank-natwest.rb'
 
 displays = ARGV[0]
 

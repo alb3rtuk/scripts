@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
 
 file = ARGV[0]
 version = newVersion = false

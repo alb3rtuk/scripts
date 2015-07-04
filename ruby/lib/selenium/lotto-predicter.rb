@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
 
 class LottoPredicter
 
@@ -47,7 +47,7 @@ class LottoPredicter
         # lottoData = Net::HTTP.get(URI.parse('https://www.national-lottery.co.uk/player/lotto/results/downloadResultsCSV.ftl'))
         # writeDataToFile(lottoData, 'tmp/lottoData.csv')
 
-        CSV.foreach('/Users/Albert/Downloads/us-500.csv') do |row|
+        CSV.foreach('/Users/Natalee/Downloads/us-500.csv') do |row|
             puts row.inspect
         end
 

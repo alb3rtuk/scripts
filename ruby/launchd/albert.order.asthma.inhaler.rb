@@ -1,6 +1,6 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/nevil-road-surgery.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/encrypter.rb'
+require '/Users/Natalee/Repos/Scripts/ruby/lib/selenium/nevil-road-surgery.rb'
 
 nrs = NevilRoadSurgery.new(
     Encrypter.new.decrypt(NevilRoadUsername),
