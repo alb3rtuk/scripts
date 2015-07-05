@@ -33,7 +33,7 @@ class GumTree
     end
     query.free
 
-    page = Nokogiri::HTML(open(GUMTREE_URL))
+    page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(GUMTREE_URL)))
     links = page.css('a[class=listing-link]')
 
     links.each do |link|

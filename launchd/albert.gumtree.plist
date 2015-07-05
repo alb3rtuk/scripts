@@ -4,21 +4,21 @@
     <dict>
 
         <key>Label</key>
-        <string>albert.git.push.repos</string>
+        <string>albert.gumtree</string>
 
         <key>Program</key>
-        <string>/Users/Natalee/Repos/Scripts/bash/launchd/albert.git.push.repos.sh</string>
+        <string>/Users/Natalee/Repos/scripts/gumtree.sh</string>
 
         <key>StartInterval</key>
-        <integer>600</integer>
+        <integer>180</integer>
 
         <key>StandardOutPath</key>
-        <string>/Users/Natalee/Repos/Scripts/backup/cronerror.log</string>
+        <string>/tmp/testlog.log</string>
         <key>StandardErrorPath</key>
-        <string>/Users/Natalee/Repos/Scripts/backup/cronerror.log</string>
+        <string>/tmp/testlog.log</string>
 
         <key>KeepAlive</key>
-        <false/>
+        <true/>
 
         <key>RunAtLoad</key>
         <true/>
