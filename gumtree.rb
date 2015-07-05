@@ -12,10 +12,6 @@ class GumTree
 
   def initialize
 
-    time = Time.now.getutc
-    system("echo '#{time} - SCRIPT RAN' >> /tmp/gumtree.log")
-
-    @blacklist = %w(filton hartcliffe southmead horfield)
     @whitelist = %w(clifton redland whiteladies westbury bishopston andrews)
 
     @encrypter = Encrypter.new
@@ -42,10 +38,23 @@ class GumTree
       create_new_entry(url) unless existing_links.include? url
     end
 
+    time = Time.now.getutc
+    system("echo '#{time} - SCRIPT RAN' >> /tmp/gumtree.log")
+
   end
 
 
   def create_new_entry(url)
+
+    count = 0
+
+    rows = @database.query("SELECT COUNT(link) FROM gumtree WHERE link = '#{url}'")
+    rows.each_hash do |row|
+      count = row['COUNT(link)'].to_i
+      break
+    end
+
+    return if count > 0
 
     page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(url)))
 
@@ -70,7 +79,7 @@ class GumTree
           text = "#{title}\n#{price}\n#{url}"
           nexmo = Nexmo::Client.new(key: @encrypter.decrypt(NEXMO_KEY), secret: @encrypter.decrypt(NEXMO_SECRET))
 
-          puts text
+          system("echo '#{text}' >> /tmp/gumtree.log")
 
           [NATALEE, ALBERT].each do |number|
             nexmo.send_message(from: 'Meelo', to: number, text: text)
@@ -87,20 +96,11 @@ class GumTree
     title_split = title.split(' ')
     description_split = description.split(' ')
 
-    # CHECK BLACKLIST FIRST
     title_split.each do |word|
-      return false if @blacklist.include? word.downcase
+      return true if @whitelist.include?(word.downcase.gsub(/[^a-zA-Z]/, ''))
     end
     description_split.each do |word|
-      return false if @blacklist.include? word.downcase
-    end
-
-    # WHITELIST SECOND
-    title_split.each do |word|
-      return true if @whitelist.include? word.downcase
-    end
-    description_split.each do |word|
-      return true if @whitelist.include? word.downcase
+      return true if @whitelist.include?(word.downcase.gsub(/[^a-zA-Z]/, ''))
     end
 
     false

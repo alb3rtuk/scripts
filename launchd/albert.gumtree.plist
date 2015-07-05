@@ -18,7 +18,7 @@
         <string>/tmp/testlog.log</string>
 
         <key>KeepAlive</key>
-        <true/>
+        <false/>
 
         <key>RunAtLoad</key>
         <true/>
