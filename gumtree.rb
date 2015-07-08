@@ -6,13 +6,14 @@ require 'webrick/httputils'
 class GumTree
 
   GUMTREE_PREFIX = 'http://www.gumtree.com'
-  GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=holiday-rentals&q=&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=private&property_type=&min_price=&max_price=&min_property_number_beds=1&max_property_number_beds=2'
+# GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=holiday-rentals&q=&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=private&property_type=&min_price=&max_price=&min_property_number_beds=1&max_property_number_beds=2'
+  GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=&property_type=&min_price=&max_price=&min_property_number_beds=1&max_property_number_beds=2'
   NATALEE = '+447470472611'
   ALBERT = '+447749441611'
 
   def initialize
 
-    @whitelist = %w(clifton redland whiteladies westbury bishopston andrews downs)
+    @whitelist = %w(clifton redland whiteladies westbury bishopston andrews downs sneyd)
 
     @encrypter = Encrypter.new
     @database = Mysql.new(
@@ -56,6 +57,8 @@ class GumTree
 
     return if count > 0
 
+    system("echo 'Found something new: #{url}' >> /tmp/gumtree.log")
+
     page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(url)))
 
     title = page.css('h1[itemprop=name]')
@@ -74,7 +77,7 @@ class GumTree
 
     if title != '' && price != '' && url !=''
       if title_description_matches_whitelist(title, description)
-        if price_short > 699 && price_short < 1101
+        if price_short > 599 && price_short < 1201
 
           text = "#{title}\n#{price}\n#{url}"
           nexmo = Nexmo::Client.new(key: @encrypter.decrypt(NEXMO_KEY), secret: @encrypter.decrypt(NEXMO_SECRET))
