@@ -42,8 +42,8 @@ class ShowBankTransactions
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'CDM', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'TLR', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 3, :id => 300, :bank_account_id => 1, :type => 'POS', :terms => Array['NAMESCO'], :color => @red, :translation => 'NAMESCO WEB SERVER', :recurring_amount => 29.99},
-            {:intTypeID => 3, :id => 400, :bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => @red, :translation => 'HORFIELD SPORTS CENTRE', :recurring_amount => 33.60},
+            {:intTypeID => 0, :id => 300, :bank_account_id => 1, :type => 'POS', :terms => Array['NAMESCO'], :color => @red, :translation => 'NAMESCO WEB SERVER'},
+            {:intTypeID => 3, :id => 400, :bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => @red, :translation => 'HORFIELD SPORTS CENTRE', :recurring_amount => 35.19},
             {:intTypeID => 0, :id => 500, :bank_account_id => 1, :type => 'D/D', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
             {:intTypeID => 0, :id => 600, :bank_account_id => 1, :type => 'POS', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
             {:intTypeID => 0, :id => 700, :bank_account_id => 1, :type => 'OTR', :terms => Array['07519616416'], :color => @white, :translation => 'ROSS JOY'},
@@ -51,12 +51,12 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => @white, :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => @white, :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => @white, :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY','T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1200.00}, # 1946.23
+            {:intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY','T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1946.23}, # 1946.23
             {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => @cyan, :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => @white, :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => @white, :translation => 'JOE HARTRY'},
             {:intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => @red, :translation => 'SPOTIFY', :recurring_amount => 19.98},
-            {:intTypeID => 3, :id => 1700, :bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => @red, :translation => 'LYNDA.COM', :recurring_amount => 16, :estimated => true},
+            {:intTypeID => 0, :id => 1700, :bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => @red, :translation => 'LYNDA.COM'},
             {:intTypeID => 3, :id => 1800, :bank_account_id => 1, :type => 'POS', :terms => Array['GITHUB.COM'], :color => @red, :translation => 'GITHUB.COM', :recurring_amount => 8.50, :estimated => true},
             {:intTypeID => 0, :id => 1900, :bank_account_id => 1, :type => 'POS', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (WEDDING FUND)'},
             # NATWEST SAVINGS
@@ -67,13 +67,13 @@ class ShowBankTransactions
             {:intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'CAR TAX (DVLA-EU51GVC)', :recurring_amount => 19.68},
             # HALIFAX REWARD
             {:intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => @red, :translation => 'CREDITEXPERT', :recurring_amount => 9.99},
-            {:intTypeID => 3, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO', :recurring_amount => 5},
+            {:intTypeID => 0, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO'},
             {:intTypeID => 0, :id => 2400, :bank_account_id => 5, :type => 'FPI', :terms => Array['PAYPAL WITHDRAWAL'], :color => @white, :translation => 'PAYPAL WITHDRAWAL'},
             {:intTypeID => 1, :id => 2500, :bank_account_id => 5, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
             {:intTypeID => 0, :id => 2550, :bank_account_id => 6, :type => 'D-C', :terms => Array[''], :color => @white, :translation => 'ISA INTEREST'},
             # LLOYDS CURRENT
             {:intTypeID => 3, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT', :recurring_amount => 250},
-            {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE LIMITED'], :color => @red, :translation => 'VODAFONE LIMITED', :recurring_amount => 60, :estimated => true},
+            {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE'], :color => @red, :translation => 'VODAFONE', :recurring_amount => 50, :estimated => true},
             {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 112.99, :estimated => true},
             {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
             {:intTypeID => 1, :id => 2950, :bank_account_id => 8, :type => 'DEP', :terms => Array[''], :color => @green, :translation => 'CASH'},
