@@ -12,7 +12,7 @@ class GumTree
 
   def initialize
 
-    @whitelist = %w(clifton redland whiteladies westbury bishopston andrews)
+    @whitelist = %w(clifton redland whiteladies westbury bishopston andrews downs)
 
     @encrypter = Encrypter.new
     @database = Mysql.new(
