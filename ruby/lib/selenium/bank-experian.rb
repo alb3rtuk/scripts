@@ -21,13 +21,13 @@ class BankExperian
         browser.goto(@login_uri)
         browser.text_field(:name => 'Username', :id => 'Username').set @username
         browser.text_field(:name => 'Password', :id => 'Password').set @password
-        browser.input(:type => 'submit', :id => 'SubmitButton').click
+        browser.button(:class => 'btn btn--a').click
         if @displayProgress
             puts "\x1B[90mSuccessfully bypassed first page\x1B[0m"
         end
 
-        charOneLabel = browser.div(:class => 'form-label', :index => 0).when_present(15).text
-        charTwoLabel = browser.div(:class => 'form-label', :index => 1).when_present(15).text
+        charOneLabel = browser.label(:class => 'label-small', :index => 0).when_present(15).text
+        charTwoLabel = browser.label(:class => 'label-small', :index => 1).when_present(15).text
 
         # First letter
         browser.text_field(:name => 'Character1').set getCharAt(charOneLabel.gsub(/[^0-9]/, ''), @security)
@@ -39,7 +39,7 @@ class BankExperian
             browser.text_field(:name => 'Character2').set getCharAt(charTwoLabel.gsub(/[^0-9]/, ''), @security)
         end
 
-        browser.input(:type => 'submit', :id => 'SubmitButton').click
+        browser.button(:class => 'btn btn--a').click
         if @displayProgress
             puts "\x1B[90mSuccessfully logged in to Experian\x1B[0m\n"
         end
@@ -68,9 +68,8 @@ class BankExperian
                     if showInTerminal
                         puts "\x1B[32mSuccess (Experian)\x1B[0m"
                     end
-
                 else
-                    if attempt >= 5
+                    if attempt >= 1
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the Experian script.\x1B[0m"
