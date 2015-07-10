@@ -37,9 +37,28 @@ elif [[ ${ARG} == 'convoy' ]]; then
 
 elif [[ ${ARG} == 'my' || ${ARG} == 'my-cli' || ${ARG} == 'm' ]]; then
 
+    sudo cd ~/Repos/my-cli/
+
+    core=(~/Repos/shared/ruby-core/*)
+    shared=(~/Repos/shared/ruby-core/*)
+
+    for ((i=0; i<${#core[@]}; i++)); do
+        cp ${core[$i]} ~/Repos/my-cli/lib/core/
+        echo "cp ${core[$i]} ~/Repos/my-cli/lib/core/"
+    done
+
     cd ~/Repos/my-cli/
     sudo gem build my-cli.gemspec
-    sudo gem install my-cli-1.1.0.gem --backtrace -V -l
+    sudo gem install my-cli-1.0.0.gem --backtrace -V -l
+
+    for ((i=0; i<${#core[@]}; i++)); do
+        o=${core[$i]}
+        f=~/Repos/shared/ruby-core/
+        r=~/Repos/my-cli/lib/core/
+        result="${o/$f/$r}"
+        rm ${result}
+        echo "rm ${result}"
+    done
 
 elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'b' || ${ARG} == '' ]]; then
 
