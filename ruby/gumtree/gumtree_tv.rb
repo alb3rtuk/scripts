@@ -7,8 +7,8 @@ class GumtreeTV
 
   GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=for-sale&q=led+tv&search_category=all&search_location=bristol&min_price=&max_price='
   SEARCH_TITLE = '40-50" LED TV'
-  MIN_PRICE = 0
-  MAX_PRICE = 200
+  MIN_PRICE = 80
+  MAX_PRICE = 250
 
   # Must contain ATLEAST 1 word from BOTH whitelists.
   WHITELIST_1 = %w(40 41 42 43 44 45 46 47 48 50 40in 41in 42in 43in 44in 45in 46in 47in 48in 50in 40inch 41inch 42inch 43inch 44inch 45inch 46inch 47inch 48inch 50inch 40" 41" 42" 43" 44" 45" 46" 47" 48" 50")
