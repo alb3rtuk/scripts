@@ -15,7 +15,7 @@ class GumtreeTV
   WHITELIST_2 = %w(led)
 
   # The phone numbers to text
-  NUMBERS_TO_TEXT = %w(+447470472611 +447749441611)
+  NUMBERS_TO_TEXT = %w(+447749441611)
   SENDER = 'Meelo - TV'
 
   # --------------------------------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ class GumtreeTV
     description = page.css('p[itemprop=description]')
     description = description[0].text.strip
 
-    # @database.query("INSERT INTO gumtree (link) values ('#{url}')")
+    @database.query("INSERT INTO gumtree (link) values ('#{url}')")
 
     if title != '' && price != '' && url !=''
       if title_description_matches_whitelist(title, description)
@@ -91,9 +91,9 @@ class GumtreeTV
 
           system("echo '#{TIME_PREFIX}Sent TXT alert: \033[1;32m#{title} - #{price}\033[0m' >> /tmp/gumtree.log")
 
-          # NUMBERS_TO_TEXT.each do |number|
-          #   nexmo.send_message(from: SENDER, to: number, text: text)
-          # end
+          NUMBERS_TO_TEXT.each do |number|
+            nexmo.send_message(from: SENDER, to: number, text: text)
+          end
 
         end
       end
