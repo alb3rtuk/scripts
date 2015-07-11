@@ -7,7 +7,7 @@
         <string>albert.gumtree</string>
 
         <key>Program</key>
-        <string>/Users/Natalee/Repos/scripts/gumtree.sh</string>
+        <string>/Users/Natalee/Repos/scripts/bash/gumtree/gumtree.sh</string>
 
         <key>StartInterval</key>
         <integer>180</integer>

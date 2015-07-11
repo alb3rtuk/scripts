@@ -3,17 +3,28 @@ require 'nokogiri'
 require 'nexmo'
 require 'webrick/httputils'
 
-class GumTree
+class GumtreeTV
 
+  GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=for-sale&q=led+tv&search_category=all&search_location=bristol&min_price=&max_price='
+  SEARCH_TITLE = '40-50" LED TV'
+  MIN_PRICE = 0
+  MAX_PRICE = 200
+
+  # Must contain ATLEAST 1 word from BOTH whitelists.
+  WHITELIST_1 = %w(40 41 42 43 44 45 46 47 48 50 40in 41in 42in 43in 44in 45in 46in 47in 48in 50in 40inch 41inch 42inch 43inch 44inch 45inch 46inch 47inch 48inch 50inch 40" 41" 42" 43" 44" 45" 46" 47" 48" 50")
+  WHITELIST_2 = %w(led)
+
+  # The phone numbers to text
+  NUMBERS_TO_TEXT = %w(+447470472611 +447749441611)
+  SENDER = 'Meelo - TV'
+
+  # --------------------------------------------------------------------------------------------------------------------
+
+  # DO NOT CHANGE
   GUMTREE_PREFIX = 'http://www.gumtree.com'
-# GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=holiday-rentals&q=&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=private&property_type=&min_price=&max_price=&min_property_number_beds=1&max_property_number_beds=2'
-  GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=&property_type=&min_price=&max_price=&min_property_number_beds=1&max_property_number_beds=2'
-  NATALEE = '+447470472611'
-  ALBERT = '+447749441611'
+  TIME_PREFIX = "\033[1;37m[#{Time.now.getlocal}]\033[0m - "
 
   def initialize
-
-    @whitelist = %w(clifton redland whiteladies westbury bishopston andrews downs sneyd)
 
     @encrypter = Encrypter.new
     @database = Mysql.new(
@@ -39,11 +50,9 @@ class GumTree
       create_new_entry(url) unless existing_links.include? url
     end
 
-    time = Time.now.getutc
-    system("echo '#{time} - SCRIPT RAN' >> /tmp/gumtree.log")
+    system("echo '#{TIME_PREFIX}Searched GumTree for: \033[1;31m#{SEARCH_TITLE}\033[0m' >> /tmp/gumtree.log")
 
   end
-
 
   def create_new_entry(url)
 
@@ -57,7 +66,7 @@ class GumTree
 
     return if count > 0
 
-    system("echo 'Found something new: #{url}' >> /tmp/gumtree.log")
+    system("echo '#{TIME_PREFIX}New Listing: \033[1;36m#{url}\033[0m' >> /tmp/gumtree.log")
 
     page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(url)))
 
@@ -71,22 +80,20 @@ class GumTree
     description = page.css('p[itemprop=description]')
     description = description[0].text.strip
 
-    description_short = "#{description[0..80]}.."
-
-    @database.query("INSERT INTO gumtree (link) values ('#{url}')")
+    # @database.query("INSERT INTO gumtree (link) values ('#{url}')")
 
     if title != '' && price != '' && url !=''
       if title_description_matches_whitelist(title, description)
-        if price_short > 599 && price_short < 1201
+        if price_short > (MIN_PRICE - 1) && price_short < (MAX_PRICE + 1)
 
           text = "#{title}\n#{price}\n#{url}"
           nexmo = Nexmo::Client.new(key: @encrypter.decrypt(NEXMO_KEY), secret: @encrypter.decrypt(NEXMO_SECRET))
 
-          system("echo '#{text}' >> /tmp/gumtree.log")
+          system("echo '#{TIME_PREFIX}Sent TXT alert: \033[1;32m#{title} - #{price}\033[0m' >> /tmp/gumtree.log")
 
-          [NATALEE, ALBERT].each do |number|
-            nexmo.send_message(from: 'Meelo', to: number, text: text)
-          end
+          # NUMBERS_TO_TEXT.each do |number|
+          #   nexmo.send_message(from: SENDER, to: number, text: text)
+          # end
 
         end
       end
@@ -99,17 +106,23 @@ class GumTree
     title_split = title.split(' ')
     description_split = description.split(' ')
 
+    whitelist_1 = false
+    whitelist_2 = false
+
     title_split.each do |word|
-      return true if @whitelist.include?(word.downcase.gsub(/[^a-zA-Z]/, ''))
-    end
-    description_split.each do |word|
-      return true if @whitelist.include?(word.downcase.gsub(/[^a-zA-Z]/, ''))
+      whitelist_1 = true if WHITELIST_1.include?(word.downcase.gsub(/[^a-zA-Z0-9"]/, ''))
+      whitelist_2 = true if WHITELIST_2.include?(word.downcase.gsub(/[^a-zA-Z0-9"]/, ''))
     end
 
-    false
+    description_split.each do |word|
+      whitelist_1 = true if WHITELIST_1.include?(word.downcase.gsub(/[^a-zA-Z0-9"]/, ''))
+      whitelist_2 = true if WHITELIST_2.include?(word.downcase.gsub(/[^a-zA-Z0-9"]/, ''))
+    end
+
+    whitelist_1 && whitelist_2 ? true : false
 
   end
 
 end
 
-GumTree.new
+GumtreeTV.new
