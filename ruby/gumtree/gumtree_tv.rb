@@ -15,7 +15,7 @@ class GumtreeTV
   WHITELIST_2 = %w(led)
 
   # The phone numbers to text
-  NUMBERS_TO_TEXT = %w(+447749441611)
+  NUMBERS_TO_TEXT = %w(+447749441611 +447470472611)
   SENDER = 'Meelo - TV'
 
   # --------------------------------------------------------------------------------------------------------------------

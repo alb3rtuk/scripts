@@ -10,7 +10,7 @@
         <string>/Users/Natalee/Repos/scripts/bash/gumtree/gumtree.sh</string>
 
         <key>StartInterval</key>
-        <integer>180</integer>
+        <integer>100</integer>
 
         <key>StandardOutPath</key>
         <string>/tmp/testlog.log</string>
