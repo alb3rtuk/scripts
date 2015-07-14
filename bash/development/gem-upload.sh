@@ -9,7 +9,7 @@ ARG=$1
 if [[ ${ARG} == 'brightpearl-cli' || ${ARG} == '' ]]; then
 
     cd ~/Repos/brightpearl-cli/
-    sudo gem push brightpearl-cli-1.3.0.gem
+    sudo gem push brightpearl-cli-1.4.0.gem
 
 elif [[ ${ARG} == 'columnist' ]]; then
 

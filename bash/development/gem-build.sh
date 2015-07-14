@@ -74,7 +74,7 @@ elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'b' 
 
     cd ~/Repos/brightpearl-cli/
     sudo gem build brightpearl-cli.gemspec
-    sudo gem install brightpearl-cli-1.3.0.gem --backtrace -V -l
+    sudo gem install brightpearl-cli-1.4.0.gem --backtrace -V -l
 
     for ((i=0; i<${#core[@]}; i++)); do
         o=${core[$i]}
