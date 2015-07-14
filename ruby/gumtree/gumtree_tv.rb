@@ -26,6 +26,8 @@ class GumtreeTV
 
   def initialize
 
+    exit
+
     @encrypter = Encrypter.new
     @database = Mysql.new(
         @encrypter.decrypt(EC2MySqlAlb3rtukHost),
