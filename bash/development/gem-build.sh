@@ -17,6 +17,40 @@
 
 ARG=$1
 
+copy_shared_files() {
+    core=(~/Repos/shared/ruby-core/*)
+    routes=(~/Repos/shared/ruby-routes/*)
+    for ((i=0; i<${#core[@]}; i++)); do
+        cp ${core[$i]} $1
+        echo "cp ${core[$i]} $1"
+    done
+    for ((i=0; i<${#routes[@]}; i++)); do
+        cp ${routes[$i]} $2
+        echo "cp ${routes[$i]} $2"
+    done
+}
+
+remove_shared_files() {
+    core=(~/Repos/shared/ruby-core/*)
+    routes=(~/Repos/shared/ruby-routes/*)
+    for ((i=0; i<${#core[@]}; i++)); do
+        o=${core[$i]}
+        f=~/Repos/shared/ruby-core/
+        r=$1
+        result="${o/$f/$r}"
+        rm ${result}
+        echo "rm ${result}"
+    done
+    for ((i=0; i<${#routes[@]}; i++)); do
+        o=${routes[$i]}
+        f=~/Repos/shared/ruby-routes/
+        r=$2
+        result="${o/$f/$r}"
+        rm ${result}
+        echo "rm ${result}"
+    done
+}
+
 if [[ ${ARG} == 'nimzo' || ${ARG} == 'nimzo-cli' || ${ARG} == 'n' ]]; then
 
     cd ~/Repos/nimzo-ruby/nimzo-cli/
@@ -39,51 +73,25 @@ elif [[ ${ARG} == 'my' || ${ARG} == 'my-cli' || ${ARG} == 'm' ]]; then
 
     sudo cd ~/Repos/my-cli/
 
-    core=(~/Repos/shared/ruby-core/*)
-    shared=(~/Repos/shared/ruby-core/*)
-
-    for ((i=0; i<${#core[@]}; i++)); do
-        cp ${core[$i]} ~/Repos/my-cli/lib/core/
-        echo "cp ${core[$i]} ~/Repos/my-cli/lib/core/"
-    done
+    copy_shared_files ~/Repos/my-cli/lib/core/ ~/Repos/my-cli/lib/routes/
 
     cd ~/Repos/my-cli/
     sudo gem build my-cli.gemspec
     sudo gem install my-cli-1.0.0.gem --backtrace -V -l
 
-    for ((i=0; i<${#core[@]}; i++)); do
-        o=${core[$i]}
-        f=~/Repos/shared/ruby-core/
-        r=~/Repos/my-cli/lib/core/
-        result="${o/$f/$r}"
-        rm ${result}
-        echo "rm ${result}"
-    done
+    remove_shared_files ~/Repos/my-cli/lib/core/ ~/Repos/my-cli/lib/routes/
 
 elif [[ ${ARG} == 'brightpearl' || ${ARG} == 'brightpearl-cli' || ${ARG} == 'b' || ${ARG} == '' ]]; then
 
     sudo cd ~/Repos/brightpearl-cli/
 
-    core=(~/Repos/shared/ruby-core/*)
-    shared=(~/Repos/shared/ruby-core/*)
-
-    for ((i=0; i<${#core[@]}; i++)); do
-        cp ${core[$i]} ~/Repos/brightpearl-cli/lib/core/
-        echo "cp ${core[$i]} ~/Repos/brightpearl-cli/lib/core/"
-    done
+    copy_shared_files ~/Repos/brightpearl-cli/lib/core/ ~/Repos/brightpearl-cli/lib/routes/
 
     cd ~/Repos/brightpearl-cli/
     sudo gem build brightpearl-cli.gemspec
     sudo gem install brightpearl-cli-1.4.0.gem --backtrace -V -l
 
-    for ((i=0; i<${#core[@]}; i++)); do
-        o=${core[$i]}
-        f=~/Repos/shared/ruby-core/
-        r=~/Repos/brightpearl-cli/lib/core/
-        result="${o/$f/$r}"
-        rm ${result}
-        echo "rm ${result}"
-    done
+    remove_shared_files ~/Repos/brightpearl-cli/lib/core/ ~/Repos/brightpearl-cli/lib/routes/
 
 else
 
