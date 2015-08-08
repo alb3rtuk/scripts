@@ -16,7 +16,7 @@ class Gumtree
 
     # The phone numbers to text
     NUMBERS_TO_TEXT = %w(+447479161169)
-    SENDER = 'Albert (Brightpearl)'
+    SENDER = "Albert's Script"
 
     # --------------------------------------------------------------------------------------------------------------------
 
@@ -25,6 +25,8 @@ class Gumtree
     TIME_PREFIX = "\033[1;37m[#{Time.now.getlocal}]\033[0m - "
 
     def initialize
+
+        exit
 
         @encrypter = Encrypter.new
         @database = Mysql.new(
