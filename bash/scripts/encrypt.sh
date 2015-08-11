@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 clearTerminal
 
-ruby ~/Repos/Scripts/ruby/scripts/encrypt.rb $1
+ruby ~/Repos/scripts/ruby/scripts/encrypt.rb $1

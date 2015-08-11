@@ -1,8 +1,8 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
-cd ~/Repos/Scripts/
+cd ~/Repos/scripts/
 
 job_name=$1
 
@@ -17,9 +17,9 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit
 fi
 
-shell_script="/Users/Albert/Repos/Scripts/bash/launchd/albert.${job_name}.sh"
-ruby_script="/Users/Albert/Repos/Scripts/ruby/launchd/albert.${job_name}.rb"
-launchd_script="/Users/Albert/Repos/Scripts/launchd/albert.${job_name}.plist"
+shell_script="/Users/Albert/Repos/scripts/bash/launchd/albert.${job_name}.sh"
+ruby_script="/Users/Albert/Repos/scripts/ruby/launchd/albert.${job_name}.rb"
+launchd_script="/Users/Albert/Repos/scripts/launchd/albert.${job_name}.plist"
 
 touch ${shell_script}
 touch ${ruby_script}
@@ -30,14 +30,14 @@ git add .
 # SETUP SHELL SCRIPT
 chmod 0755 ${shell_script}
 echo "#!/bin/sh\n" > ${shell_script}
-echo ". ~/Repos/Scripts/bash/common/utilities.sh\n" >> ${shell_script}
+echo ". ~/Repos/scripts/bash/common/utilities.sh\n" >> ${shell_script}
 echo "logCron \"Launchd job: 'albert.${job_name}' started.\"\n" >> ${shell_script}
-echo "ruby ~/Repos/Scripts/ruby/launchd/albert.${job_name}.rb" >> ${shell_script}
+echo "ruby ~/Repos/scripts/ruby/launchd/albert.${job_name}.rb" >> ${shell_script}
 echo "exit" >> ${shell_script}
 
 # SETUP RUBY SCRIPT
-echo "require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'" > ${ruby_script}
-echo "require '/Users/Albert/Repos/Scripts/ruby/lib/encrypter.rb'" >> ${ruby_script}
+echo "require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'" > ${ruby_script}
+echo "require '/Users/Albert/Repos/scripts/ruby/lib/encrypter.rb'" >> ${ruby_script}
 
 # SETUP LAUNCHD.PLIST FILE
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ${launchd_script}
@@ -47,7 +47,7 @@ echo "    <dict>\n" >> ${launchd_script}
 echo "        <key>Label</key>" >> ${launchd_script}
 echo "        <string>albert.${job_name}</string>\n" >> ${launchd_script}
 echo "        <key>Program</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.${job_name}.sh</string>\n" >> ${launchd_script}
+echo "        <string>/Users/Albert/Repos/scripts/bash/launchd/albert.${job_name}.sh</string>\n" >> ${launchd_script}
 echo "        <key>StartCalendarInterval</key>" >> ${launchd_script}
 echo "        <dict>" >> ${launchd_script}
 echo "            <key>Minute</key>" >> ${launchd_script}
@@ -60,9 +60,9 @@ echo "        </dict>\n" >> ${launchd_script}
 echo "        <key>StartInterval</key>" >> ${launchd_script}
 echo "        <integer>300</integer>\n" >> ${launchd_script}
 echo "        <key>StandardOutPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>" >> ${launchd_script}
+echo "        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>" >> ${launchd_script}
 echo "        <key>StandardErrorPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>\n" >> ${launchd_script}
+echo "        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>\n" >> ${launchd_script}
 echo "        <key>KeepAlive</key>" >> ${launchd_script}
 echo "        <false/>\n" >> ${launchd_script}
 echo "        <key>RunAtLoad</key>" >> ${launchd_script}

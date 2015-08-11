@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 # Gets the octal value of a file (IE: 0755)
 

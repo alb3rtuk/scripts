@@ -1,7 +1,7 @@
 #!/bin/sh
 # Convert a symbol (IE: →) to hex-code for use in ruby.#!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 if [[ $1 == "" ]]; then
     echo

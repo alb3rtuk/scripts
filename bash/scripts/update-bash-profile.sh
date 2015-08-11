@@ -1,7 +1,7 @@
 #!/bin/sh
-# Updates ~/.bash_profile with the the content of ~/Repos/Scripts/backup/.bash_profile & pulls in 'nimzo' aliases as well.
+# Updates ~/.bash_profile with the the content of ~/Repos/scripts/backup/.bash_profile & pulls in 'nimzo' aliases as well.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 if [[ ! -f ~/Repos/nimzo-ruby/config/.bashrc_shared ]]; then
     echo
@@ -10,10 +10,10 @@ if [[ ! -f ~/Repos/nimzo-ruby/config/.bashrc_shared ]]; then
     exit
 fi
 
-. ~/Repos/Scripts/bash/sys/chmod-shell-scripts.sh
+. ~/Repos/scripts/bash/sys/chmod-shell-scripts.sh
 
 # Include the NIMZO aliases.
-bash_profile=`cat ~/Repos/Scripts/backup/.bash_profile`
+bash_profile=`cat ~/Repos/scripts/backup/.bash_profile`
 bashrc_aliases=`cat ~/Repos/nimzo-ruby/config/.bashrc_shared`
 find=">>> NIMZO ALIASES <<<"
 bash_final=${bash_profile//${find}/${bashrc_aliases}}

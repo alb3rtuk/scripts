@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 fromDirectory=$1
 toDirectory=$2

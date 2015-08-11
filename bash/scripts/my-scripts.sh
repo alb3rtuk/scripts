@@ -1,11 +1,11 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 clearTerminal
 
 # Use Ruby to compose a temp text file which lists all my bash scripts + their info.
-ruby ~/Repos/Scripts/ruby/scripts/my-scripts.rb
+ruby ~/Repos/scripts/ruby/scripts/my-scripts.rb
 
 # Display the temp file in terminal.
 cat /tmp/my-scripts-output.txt

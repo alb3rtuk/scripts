@@ -1,8 +1,8 @@
 #!/bin/sh
 # Updates all bank transactions/balances in DB.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/get-bank-transactions.rb ${displays} $1
+ruby ~/Repos/scripts/ruby/selenium/get-bank-transactions.rb ${displays} $1

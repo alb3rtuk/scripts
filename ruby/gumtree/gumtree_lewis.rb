@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'
 require 'nokogiri'
 require 'nexmo'
 require 'webrick/httputils'

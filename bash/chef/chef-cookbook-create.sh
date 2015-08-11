@@ -1,7 +1,7 @@
 #!/bin/sh
 # Creates a cookbook.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 cookbook=$1
 

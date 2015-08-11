@@ -1,7 +1,7 @@
 #!/bin/sh
 # Renames all files in current directory sequentially.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 prefix=$1
 cnt=0

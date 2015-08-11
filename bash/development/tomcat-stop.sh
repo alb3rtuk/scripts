@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 echo
 message red "APACHE TOMCAT" "Shutting down Tomcat server.."

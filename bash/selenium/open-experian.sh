@@ -1,8 +1,8 @@
 #!/bin/sh
 # Opens my Experian account.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/open-experian.rb $displays
+ruby ~/Repos/scripts/ruby/selenium/open-experian.rb $displays

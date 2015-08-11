@@ -7,15 +7,15 @@
         <string>albert.get.bank.transactions</string>
 
         <key>Program</key>
-        <string>/Users/Albert/Repos/Scripts/bash/launchd/albert.get.bank.transactions.sh</string>
+        <string>/Users/Albert/Repos/scripts/bash/launchd/albert.get.bank.transactions.sh</string>
 
         <key>StartInterval</key>
         <integer>10800</integer>
 
         <key>StandardOutPath</key>
-        <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>
+        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>
         <key>StandardErrorPath</key>
-        <string>/Users/Albert/Repos/Scripts/backup/cronerror.log</string>
+        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>
 
         <key>KeepAlive</key>
         <false/>

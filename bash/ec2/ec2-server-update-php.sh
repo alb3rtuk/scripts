@@ -1,8 +1,8 @@
 #!/bin/sh
 # Updates all PHP (nimzo-php) on my EC2 instance.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
-. ~/Repos/Scripts/.secrets/secrets.sh
+. ~/Repos/scripts/bash/common/utilities.sh
+. ~/.secrets/secrets.sh
 
 echo
 message green "EC2/PHP" "Updating PHP on EC2 instance.. \033[33m${EC2_SERVER_NIMZO_HOST}\033[0m"

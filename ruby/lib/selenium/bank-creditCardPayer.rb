@@ -1,9 +1,9 @@
-require '/Users/Albert/Repos/Scripts/ruby/lib/utilities.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-barclaycard.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-capitalone.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-halifax.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-lloyds.rb'
-require '/Users/Albert/Repos/Scripts/ruby/lib/selenium/bank-natwest.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/selenium/bank-barclaycard.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/selenium/bank-capitalone.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/selenium/bank-halifax.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/selenium/bank-lloyds.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/selenium/bank-natwest.rb'
 
 # Ruby script helper to pay credit cards from the command line.
 class BankCreditCardPayer

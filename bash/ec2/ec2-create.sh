@@ -1,7 +1,7 @@
 #!/bin/sh
 # Creates a new 'micro' instance on EC2 as a Chef node.
 
-. ~/Repos/Scripts/bash/common/ec2.sh
+. ~/Repos/scripts/bash/common/ec2.sh
 
 cd ~/Repos/Chef/
 

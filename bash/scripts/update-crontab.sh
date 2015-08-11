@@ -1,18 +1,18 @@
 #!/bin/sh
 
 # Updates the crons using the cron definition file in this Repo.
-# Fount at: ~/Repos/Scripts/bash/cron/crontab.txt
+# Fount at: ~/Repos/scripts/bash/cron/crontab.txt
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
-file="/Users/Albert/Repos/Scripts/backup/crontab.txt"
+file="/Users/Albert/Repos/scripts/backup/crontab.txt"
 
 verifyFileExists $file
 
 cd ~
 crontab $file
 
-file_size=$(du ~/Repos/Scripts/backup/crontab.txt | awk '{print $1}');
+file_size=$(du ~/Repos/scripts/backup/crontab.txt | awk '{print $1}');
 
 # If no crons, exit with message.
 if [ "$file_size" == "0" ]; then

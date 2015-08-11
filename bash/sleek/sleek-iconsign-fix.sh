@@ -1,10 +1,10 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/sleek/sleek-iconsign-fix.rb $displays
+ruby ~/Repos/scripts/ruby/sleek/sleek-iconsign-fix.rb $displays
 
 clear
 #cat /tmp/iconsign-fix.txt

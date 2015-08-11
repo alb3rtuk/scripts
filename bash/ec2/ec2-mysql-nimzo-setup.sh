@@ -1,8 +1,8 @@
 #!/bin/sh
 # Sets up the 'nimzo-app' user on the EC2 MySQL instance (nimzo).
 
-. ~/Repos/Scripts/bash/common/utilities.sh
-. ~/Repos/Scripts/.secrets/secrets.sh
+. ~/Repos/scripts/bash/common/utilities.sh
+. ~/.secrets/secrets.sh
 
 echo
 message green "EC2" "Setting up user 'nimzo-app' on MySQL instance.. \033[33m${EC2_MYSQL_NIMZO_HOST}\033[0m"

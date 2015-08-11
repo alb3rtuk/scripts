@@ -1,8 +1,8 @@
 # Require private config file
 if(File.exists?('/Users/Albert/bin/config/privateff.rb'))
-    require '/Users/Albert/Repos/Scripts/.secrets/secrets.rb'
+    require '/Users/Albert/.secrets/secrets.rb'
 else
-    abort "/Users/Albert/Repos/Scripts/.secrets/secrets.rb doesn't exist. Can't log in without this file."
+    abort "/Users/Albert/.secrets/secrets.rb doesn't exist. Can't log in without this file."
 end
 
 def openLloyds(displays, headless = false)

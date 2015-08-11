@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/sleek/sleek-process-orders.rb $displays
+ruby ~/Repos/scripts/ruby/sleek/sleek-process-orders.rb $displays

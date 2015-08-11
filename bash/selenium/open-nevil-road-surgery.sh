@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/open-nevil-road-surgery.rb $displays
+ruby ~/Repos/scripts/ruby/selenium/open-nevil-road-surgery.rb $displays

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Uploads a cookbook.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 cookbook=$1
 
@@ -21,7 +21,7 @@ metadata_file="cookbooks/${cookbook}/metadata.rb"
 
 cd ~/Repos/Chef/
 
-ruby ~/Repos/Scripts/ruby/chef/cookbook-version-incrementer.rb ${metadata_file}
+ruby ~/Repos/scripts/ruby/chef/cookbook-version-incrementer.rb ${metadata_file}
 
 knife cookbook delete ${cookbook} -y
 knife cookbook upload ${cookbook}

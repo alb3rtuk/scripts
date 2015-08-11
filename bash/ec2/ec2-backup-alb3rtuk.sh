@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
-. ~/Repos/Scripts/.secrets/secrets.sh
+. ~/Repos/scripts/bash/common/utilities.sh
+. ~/.secrets/secrets.sh
 
 logCron "Attempting to backup/dump 'alb3rtuk' EC2 MySQL DB to local repo."
 

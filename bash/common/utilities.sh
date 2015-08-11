@@ -3,7 +3,7 @@
 # Clears Terminal output using AppleScript.
 function clearTerminal()
 {
-    osascript ~/Repos/Scripts/osa/clear-terminal.scpt
+    osascript ~/Repos/scripts/osa/clear-terminal.scpt
 }
 
 # Detects displays and returns either 'single' or 'multiple' in a global variable named: displays
@@ -64,10 +64,10 @@ function verifyFileExists()
     fi
 }
 
-# Logs an entry in the file: ~Repos/Scripts/backup/cronlog.log
+# Logs an entry in the file: ~Repos/scripts/backup/cronlog.log
 # Used for logging when a cron was kicked off.
 function logCron()
 {
-    logfile=/Users/Albert/Repos/Scripts/backup/cronlog.log
+    logfile=/Users/Albert/Repos/scripts/backup/cronlog.log
     echo "$(date) - $1" >> ${logfile}
 }

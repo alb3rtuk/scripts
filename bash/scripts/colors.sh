@@ -3,7 +3,7 @@
 # Displays a list of ALL terminal colors.
 # Additional scripts can be found at: http://misc.flogisoft.com/bash/tip_colors_and_formatting
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 for fgbg in 38 48 ; do
     echo

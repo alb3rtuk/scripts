@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 logCron "Attempting to order asthma inhalers from Nevil Road Surgery website."
 
-ruby ~/Repos/Scripts/ruby/launchd/albert.order.asthma.inhaler.rb
+ruby ~/Repos/scripts/ruby/launchd/albert.order.asthma.inhaler.rb

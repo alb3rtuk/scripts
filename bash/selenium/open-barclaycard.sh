@@ -1,8 +1,8 @@
 #!/bin/sh
 # Opens my BarclayCard account.
 
-. ~/Repos/Scripts/bash/common/utilities.sh
+. ~/Repos/scripts/bash/common/utilities.sh
 
 detectDisplays
 
-ruby ~/Repos/Scripts/ruby/selenium/open-barclaycard.rb $displays
+ruby ~/Repos/scripts/ruby/selenium/open-barclaycard.rb $displays
