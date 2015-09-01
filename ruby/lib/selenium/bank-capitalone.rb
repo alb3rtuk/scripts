@@ -107,7 +107,7 @@ class BankCapitalOne
         data = getBalances(false, browser)
         data = data[1]
 
-        browser.input(:type => 'submit', :value => 'VIEW ALL TRANSACTIONS').click
+        browser.input(:type => 'submit', :value => 'VIEW ALL TRANSACTIONS').when_present(5).click
 
         pageIndex = 0
         while pageIndex <= 5

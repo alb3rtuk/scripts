@@ -51,7 +51,7 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => @white, :translation => 'LUKE CHAMBERLAIN'},
             {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => @white, :translation => 'DEAN LINDEN'},
             {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => @white, :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY','T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 1946.23}, # 1946.23
+            {:intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY','T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 2004.80}, # 1946.23
             {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => @cyan, :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30},
             {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => @white, :translation => 'ALEX CARLIN'},
             {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => @white, :translation => 'JOE HARTRY'},
@@ -72,7 +72,7 @@ class ShowBankTransactions
             {:intTypeID => 1, :id => 2500, :bank_account_id => 5, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
             {:intTypeID => 0, :id => 2550, :bank_account_id => 6, :type => 'D-C', :terms => Array[''], :color => @white, :translation => 'ISA INTEREST'},
             # LLOYDS CURRENT
-            {:intTypeID => 3, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT', :recurring_amount => 250},
+            {:intTypeID => 0, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT'},
             {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE'], :color => @red, :translation => 'VODAFONE', :recurring_amount => 50, :estimated => true},
             {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 112.99, :estimated => true},
             {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
