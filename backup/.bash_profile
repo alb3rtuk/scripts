@@ -76,8 +76,9 @@ alias ec2-server-update='~/Repos/scripts/bash/ec2/ec2-server-update.sh'
 alias ec2-server-update-php='~/Repos/scripts/bash/ec2/ec2-server-update-php.sh'
 
 ### GIT ######################
-alias git-sync-all='~/Repos/scripts/bash/git/git-sync-all.sh'
+alias git-commit-all='~/Repos/scripts/bash/git/git-commit-all.sh'
 alias git-status-all='~/Repos/scripts/bash/git/git-status-all.sh'
+alias git-sync-all='~/Repos/scripts/bash/git/git-sync-all.sh'
 
 >>> NIMZO ALIASES <<<
 
@@ -175,3 +176,5 @@ alias bp-thunder-fix='~/Repos/brightpearl-scripts/tmp-private/bp-thunder-fix.sh'
 ### BRIGHTPEARL EXPORTS ######
 export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
 export APP_ACCOUNT=automation
+
+export HOMEBREW_GITHUB_API_TOKEN=432efe041b6aa1682dfd4136d4687507f2b83799
