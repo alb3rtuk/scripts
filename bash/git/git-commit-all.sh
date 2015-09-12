@@ -16,7 +16,7 @@ do :
     cd ~/Repos/${i}/
     git add .
     git commit -m "Autoscript Commit."
-    git git status
+    git status
 done
 
 echo
