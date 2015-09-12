@@ -7,7 +7,7 @@ echo
 message magenta " GIT " "Committing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-repos=(brightpearl-cli columnist convoy nimzo-java nimzo-node nimzo-php nimzo-php-docs nimzo-ruby scripts)
+repos=(brightpearl-cli columnist convoy nimzo-java nimzo-node nimzo-php nimzo-php-docs nimzo-ruby scripts shared)
 
 for i in "${repos[@]}"
 do :
@@ -16,7 +16,7 @@ do :
     cd ~/Repos/${i}/
     git add .
     git commit -m "Autoscript Commit."
-    git status
+    git push
 done
 
 echo
