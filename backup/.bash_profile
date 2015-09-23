@@ -149,9 +149,7 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[38;5;45m\]\u@\h\[\033[00m\]:\[\033
 #####################################################################################################
 
 ### BRIGHTPEARL ALIASES ######
-alias vm='sshpass -palbert ssh albert@172.27.6.199'
-alias vm-root='sshpass -palbert ssh albert@172.27.6.199 -t "sudo su -"'
-alias lakshmi='sshpass -plakshmi ssh lakshmi@172.27.6.56'
+alias vm='ssh albert@172.27.6.162'
 alias jenkins-0='sshpass -pvmuser ssh vmuser@euw1-buildslave-0000.brightpearl.com'
 alias jenkins-1='sshpass -pvmuser ssh vmuser@euw1-buildslave-0001.brightpearl.com'
 alias jenkins-2='sshpass -pvmuser ssh vmuser@euw1-buildslave-0002.brightpearl.com'
@@ -159,19 +157,6 @@ alias jenkins-3='sshpass -pvmuser ssh vmuser@euw1-buildslave-0003.brightpearl.co
 alias raptorkins='sshpass -pjenkins ssh jenkins@raptorkins'
 alias raptorslave='sshpass -praptor ssh raptor@172.27.2.125'
 alias skybutler='ssh -i ~/.ssh/Brightpearl/Brightpearl-DevInf.pem jenkins@skybutler.brightpearl.com'
-
-### TMP ######################
-alias bp-build='~/Repos/brightpearl-scripts/tmp/bp-build.sh'
-alias bp-cleanup='~/Repos/brightpearl-scripts/tmp/bp-cleanup.sh'
-alias bp-compile-less='~/Repos/brightpearl-scripts/tmp/bp-compile-less.sh'
-alias bp-create-branch='~/Repos/brightpearl-scripts/tmp/bp-create-branch.sh'
-alias bp-merge-to-master='~/Repos/brightpearl-scripts/tmp/bp-merge-to-master.sh'
-alias bp-new-branch='~/Repos/brightpearl-scripts/tmp/bp-new-branch.sh'
-alias bp-setup-ebay='~/Repos/brightpearl-scripts/tmp/bp-setup-ebay.sh'
-
-### TMP-PRIVATE ##############
-alias bp-thunder='~/Repos/brightpearl-scripts/tmp-private/bp-thunder.sh'
-alias bp-thunder-fix='~/Repos/brightpearl-scripts/tmp-private/bp-thunder-fix.sh'
 
 ### BRIGHTPEARL EXPORTS ######
 export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com

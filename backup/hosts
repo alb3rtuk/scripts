@@ -15,7 +15,7 @@ fe80::1%lo0     localhost
 ##
 # BRIGHTPEARL (OLD VM - 172.27.2.253)
 ##
-172.27.6.199    albert-dev-vm.brightpearl.com brightpearl.albert-dev-vm.brightpearl.com fitnesse.albert-dev-vm.brightpearl.com api.albert-dev-vm.brightpearl.com services.albert-dev-vm.brightpearl.com apidoc.albert-dev-vm.brightpearl.com sysadmin.albert-dev-vm.brightpearl.com developer.albert-dev-vm.brightpearl.com locator.albert-dev-vm.brightpearl.com portal.albert-dev-vm.brightpearl.com boxora.albert-dev-vm.brightpearl.com apps.albert-dev-vm.brightpearl.combrightpearl.dsk-web-gbbr-xxx.gbbr.brightpearl.com dev-vm
+172.27.6.162    albert-dev-vm.brightpearl.com brightpearl.albert-dev-vm.brightpearl.com fitnesse.albert-dev-vm.brightpearl.com api.albert-dev-vm.brightpearl.com services.albert-dev-vm.brightpearl.com apidoc.albert-dev-vm.brightpearl.com sysadmin.albert-dev-vm.brightpearl.com developer.albert-dev-vm.brightpearl.com locator.albert-dev-vm.brightpearl.com portal.albert-dev-vm.brightpearl.com boxora.albert-dev-vm.brightpearl.com apps.albert-dev-vm.brightpearl.combrightpearl.dsk-web-gbbr-xxx.gbbr.brightpearl.com dev-vm
 
 ##
 # Adobe Activation Blocker                                                              
