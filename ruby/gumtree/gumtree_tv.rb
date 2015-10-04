@@ -1,4 +1,4 @@
-require '/Users/Natalee/Repos/Scripts/ruby/lib/utilities.rb'
+require File.expand_path('~/Repos/Scripts/ruby/lib/utilities.rb')
 require 'nokogiri'
 require 'nexmo'
 require 'webrick/httputils'
@@ -6,17 +6,17 @@ require 'webrick/httputils'
 class GumtreeTV
 
   GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=for-sale&q=led+tv&search_category=all&search_location=bristol&min_price=&max_price='
-  SEARCH_TITLE = '40-50" LED TV'
-  MIN_PRICE = 80
+  SEARCH_TITLE = '47-50" LED TV'
+  MIN_PRICE = 200
   MAX_PRICE = 250
 
   # Must contain ATLEAST 1 word from BOTH whitelists.
-  WHITELIST_1 = %w(40 41 42 43 44 45 46 47 48 50 40in 41in 42in 43in 44in 45in 46in 47in 48in 50in 40inch 41inch 42inch 43inch 44inch 45inch 46inch 47inch 48inch 50inch 40" 41" 42" 43" 44" 45" 46" 47" 48" 50")
+  WHITELIST_1 = %w(47 48 50 47in 48in 50in 47inch 48inch 50inch 47" 48" 50")
   WHITELIST_2 = %w(led)
 
   # The phone numbers to text
-  NUMBERS_TO_TEXT = %w(+447749441611 +447470472611)
-  SENDER = 'Meelo - TV'
+  NUMBERS_TO_TEXT = %w(+447506368532)
+  SENDER = 'albert-script'
 
   # --------------------------------------------------------------------------------------------------------------------
 
