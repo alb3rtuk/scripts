@@ -11,8 +11,8 @@ require 'yaml'
 require 'open-uri'
 require 'net/http'
 require 'csv'
-require '/Users/Albert/.secrets/secrets.rb'
-require '/Users/Albert/Repos/scripts/ruby/lib/encrypter.rb'
+require File.expand_path('~/.secrets/secrets.rb')
+require File.expand_path('~/Repos/scripts/ruby/lib/encrypter.rb')
 
 # Returns DB connection to my personal MySQL DB.
 def getDatabaseConnection

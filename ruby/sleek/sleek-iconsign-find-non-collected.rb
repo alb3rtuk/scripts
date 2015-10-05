@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'
+require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
 
 currentConsignment = 40795470000771
 endConsignment = 40795470001145

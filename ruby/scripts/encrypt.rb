@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'
+require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
 
 if ARGV.empty?
     puts "\x1B[31mNothing to encrypt\x1B[0m"

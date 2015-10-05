@@ -1,4 +1,4 @@
-require '/Users/Albert/Repos/scripts/ruby/lib/utilities.rb'
+require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
 
 # Read contents of ~/.bash_profile into variable.
 bashProfile = File.read('/Users/Albert/.bash_profile')
