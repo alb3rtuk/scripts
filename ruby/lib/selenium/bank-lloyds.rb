@@ -28,9 +28,9 @@ class BankLloyds
         if @displayProgress
             puts "\x1B[90mSuccessfully bypassed first page\x1B[0m"
         end
-        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo1').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo1').text.gsub(/[^0-9]/, ''), @security)}").select
-        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').text.gsub(/[^0-9]/, ''), @security)}").select
-        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').text.gsub(/[^0-9]/, ''), @security)}").select
+        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo1').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo1').when_present(5).text.gsub(/[^0-9]/, ''), @security)}").select
+        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo2').when_present(5).text.gsub(/[^0-9]/, ''), @security)}").select
+        browser.select_list(:name => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').option(:value => "&nbsp;#{getCharAt(browser.label(:for => 'frmentermemorableinformation1:strEnterMemorableInformation_memInfo3').when_present(5).text.gsub(/[^0-9]/, ''), @security)}").select
         browser.input(:id => 'frmentermemorableinformation1:btnContinue').click
         until browser.link(:title => 'View the latest transactions on your Lloyds Account').exists? do
             # Email Confirmation Page
@@ -100,7 +100,7 @@ class BankLloyds
             ensure
                 if succeeded
 
-                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date']}')")
+                    @databaseConnection.query("INSERT INTO bank_account_type_credit_card (bank_account_id, balance, balance_available, balance_limit, date_fetched, date_fetched_string, minimum_payment, minimum_payment_date) VALUES (7, #{data['cc_balance']}, #{data['cc_available']}, #{data['cc_limit']}, '#{DateTime.now}', '#{DateTime.now}', #{data['cc_minimum_payment']}, '#{data['cc_due_date'].nil? ? '0000-00-00' : data['cc_due_date']}')")
                     @databaseConnection.query("INSERT INTO bank_account_type_bank_account (bank_account_id, balance, balance_available, balance_overdraft, date_fetched, date_fetched_string) VALUES (8, #{data['account_1_balance']}, #{data['account_1_available']}, #{data['account_1_overdraft']}, '#{DateTime.now}', '#{DateTime.now}')")
                     BankCommon.new.insertTransactions(@databaseConnection, data['cc_transactions'], 7)
                     BankCommon.new.insertTransactions(@databaseConnection, data['account_1_transactions'], 8)
@@ -115,7 +115,7 @@ class BankLloyds
                     end
 
                 else
-                    if attempt >= 5
+                    if attempt >= 1
                         succeeded = true
                         if showInTerminal
                             puts "\x1B[31mSite is either down or there is an error in the Lloyds script.\x1B[0m"
@@ -132,7 +132,7 @@ class BankLloyds
 
         # Get Current Account Data
         browser.link(:id => 'lstAccLst:0:lkImageRetail1').when_present(5).click
-        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).when_present(5).text)
         data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
         data['account_1_available'] = data['account_1_available'][1].split('[')
         data['account_1_available'] = cleanCurrency(data['account_1_available'][0].strip)
@@ -142,10 +142,10 @@ class BankLloyds
         if showInTerminal
             puts "\x1B[90mSuccessfully retrieved balances for \x1B[33mCurrent Account\x1B[0m"
         end
-        data_current = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView'))
+        data_current = getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView').when_present(5))
         if browser.input(:type => 'image', :title => 'Previous').exists?
             browser.input(:type => 'image', :title => 'Previous').click
-            data_current.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView')))
+            data_current.push(*getTransactionsFromTable(browser.table(:id => 'pnlgrpStatement:conS1:tblTransactionListView').when_present(5)))
         end
         if showInTerminal
             puts "\x1B[90mSuccessfully retrieved transactions for \x1B[33mCurrent Account\x1B[0m"
@@ -154,10 +154,10 @@ class BankLloyds
         # Get Credit Card Data
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-        data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).text
+        data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).when_present(5).text
         data['cc_available'] = data['cc_available'].split(':')
         data['cc_available'] = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
-        data['cc_limit'] = browser.p(:class => 'accountMsg', :index => 1).text
+        data['cc_limit'] = browser.p(:class => 'accountMsg', :index => 1).when_present(5).text
         data['cc_limit'] = data['cc_limit'].split(':')
         data['cc_limit'] = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
         data['cc_balance'] = cleanCurrency((data['cc_limit'] - data['cc_available']).to_s)
@@ -165,7 +165,13 @@ class BankLloyds
         data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
-        data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y').strftime('%Y-%m-%d')
+
+        begin
+            data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y').strftime('%Y-%m-%d')
+        rescue Exception => e
+            data['cc_due_date'] = nil
+        end
+
         if showInTerminal
             puts "\x1B[90mSuccessfully retrieved balances for \x1B[36mPlatinum Mastercard\x1B[0m"
         end
