@@ -90,7 +90,7 @@ class BankCapitalOne
         data['balance'] = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['available_funds'] = browser.td(:text, /Available to spend/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['credit_limit'] = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
-        data['minimum_payment'] = browser.td(:text, /Minimum payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
+        data['minimum_payment'] = browser.td(:text, /This Month’s Minimum Payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y').strftime('%Y-%m-%d')
 
         if showInTerminal
@@ -107,7 +107,7 @@ class BankCapitalOne
         data = getBalances(false, browser)
         data = data[1]
 
-        browser.input(:type => 'submit', :value => 'VIEW ALL TRANSACTIONS').when_present(5).click
+        browser.goto('https://www.capitaloneonline.co.uk/CapitalOne_Consumer/Transactions.do')
 
         pageIndex = 0
         while pageIndex <= 5
