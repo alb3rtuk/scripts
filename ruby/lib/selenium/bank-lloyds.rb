@@ -161,7 +161,7 @@ class BankLloyds
         data['cc_limit'] = data['cc_limit'].split(':')
         data['cc_limit'] = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
         data['cc_balance'] = cleanCurrency((data['cc_limit'] - data['cc_available']).to_s)
-        data['cc_minimum_payment'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'numbers').p(:index => 1).text.split
+        data['cc_minimum_payment'] = browser.div(:class => 'creditCardStatementDetails clearfix').when_present(5).div(:class => 'numbers').p(:index => 1).text.split
         data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
         data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
         data['cc_due_date'] = data['cc_due_date'].split(':')
