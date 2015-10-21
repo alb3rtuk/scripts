@@ -138,24 +138,11 @@ alias run-ruby-tests='~/Repos/scripts/bash/tests/run-ruby-tests.sh'
 #####################################################################################################
 
 parse_git_branch() {
-        if ! git rev-parse --git-dir > /dev/null 2>&1; then
-                return 0
-        fi
-        git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-        diff_origin=`git diff origin/$git_branch`
-        if [ -n "$diff_origin" ]; then
-                RED='\033[0;31m'
-                NC='\033[0m'
-
-                diff_head=`git diff HEAD`
-                if [ -n "$diff_head"  ]; then
-                        printf "${RED}[${git_branch}]*${NC}"
-                else
-                        printf "[${git_branch}]${RED}*${NC}"
-                fi
-        else
-                echo "[${git_branch}]"
-        fi
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    return 0
+  fi
+  git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
+    echo "[$git_branch]"
 }
 PS1="${debian_chroot:+($debian_chroot)}\[\033[38;5;45m\]\u@\h\[\033[00m\]:\[\033[01;37m\]\w\[\033[00m\]\[\033[38;5;118m\]\$(parse_git_branch)\[\033[00m\]$ "
 
