@@ -7,6 +7,7 @@ export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts
 export PATH=$PATH:$HOME/Bin/phpmd/src/bin
 export PATH=$PATH:$HOME/Bin/exec
 export PATH=$PATH:/usr/local/sbin
+export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
 
 export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
 
