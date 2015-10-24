@@ -6,6 +6,7 @@ export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 export PATH=$PATH:$HOME/Bin/php_codesniffer/scripts
 export PATH=$PATH:$HOME/Bin/phpmd/src/bin
 export PATH=$PATH:$HOME/Bin/exec
+export PATH=$PATH:/usr/local/sbin
 
 export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
 
