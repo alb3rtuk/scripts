@@ -163,5 +163,3 @@ alias skybutler='ssh -i ~/.ssh/Brightpearl/Brightpearl-DevInf.pem jenkins@skybut
 ### BRIGHTPEARL EXPORTS ######
 export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
 export APP_ACCOUNT=automation
-
-export HOMEBREW_GITHUB_API_TOKEN=432efe041b6aa1682dfd4136d4687507f2b83799
