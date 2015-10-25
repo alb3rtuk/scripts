@@ -15,7 +15,7 @@ class ShowBankTransactions
         @magenta = 201
         @yellow = 226
         @cyan = 87
-        @red = 9
+        @red = 196
         @blue = 32
         @white = 255
 
@@ -59,6 +59,9 @@ class ShowBankTransactions
             {:intTypeID => 0, :id => 1700, :bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => @red, :translation => 'LYNDA.COM'},
             {:intTypeID => 3, :id => 1800, :bank_account_id => 1, :type => 'POS', :terms => Array['GITHUB.COM'], :color => @red, :translation => 'GITHUB.COM', :recurring_amount => 8.50, :estimated => true},
             {:intTypeID => 0, :id => 1900, :bank_account_id => 1, :type => 'POS', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (WEDDING FUND)'},
+            {:intTypeID => 3, :id => 1901, :bank_account_id => 1, :type => 'S/O', :terms => Array['EXECUTORS OF MA'], :color => @red, :translation => 'RENT (SARAH KENNY)', :recurring_amount => 1100.00},
+            {:intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'D/D', :terms => Array['NWI HOME INSURANCE'], :color => @red, :translation => 'NATWEST HOME INSURANCE', :recurring_amount => 14.22},
+            {:intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'POS', :terms => Array['AMAZON WEB , SERVICES'], :color => @red, :translation => 'AMAZON WEB SERVICES', :recurring_amount => 25.00, :estimated => true},
             # NATWEST SAVINGS
             {:intTypeID => 0, :id => 2000, :bank_account_id => 3, :type => 'BAC', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (REFUND)'},
             # HALIFAX ULTIMATE REWARD
@@ -487,9 +490,9 @@ class ShowBankTransactions
     # Display CreditCards
     def displayCreditCards
         summaryTitle = "\x1B[48;5;92m SUMMARY FOR \xe2\x86\x92 #{DateTime.now.strftime('%^B %e, %Y (%^A)')} \x1B[0m"
-        puts '|'.rjust(173, ' ')
+        puts "\x1B[38;5;256m|\x1B[0m".rjust(188, ' ')
         puts "#{summaryTitle.ljust(186, ' ')}|"
-        puts '|'.rjust(173, ' ')
+        puts "\x1B[38;5;256m|\x1B[0m".rjust(188, ' ')
         table(:border => false) do
             row do
                 column(' Credit Card', :width => @colWidth_1, :align => 'left', :bold => 'true')
