@@ -2,6 +2,7 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.nvm/nvm.sh" ]] && source ~/.nvm/nvm.sh                  # Load NVM
 
+export PATH=$PATH:/usr/local/lib/ruby/gems/2.2.0/gems/cocoapods-0.39.0/bin # CocoaPods
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 export PATH=$PATH:$HOME/Bin/php-codesniffer/scripts
 export PATH=$PATH:$HOME/Bin/phpmd/src/bin
