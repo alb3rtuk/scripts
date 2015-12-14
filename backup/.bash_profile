@@ -11,6 +11,7 @@ export PATH=$PATH:/usr/local/sbin
 export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
 
 export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
+export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
