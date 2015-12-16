@@ -12,6 +12,9 @@
 ::1             localhost
 fe80::1%lo0     localhost
 127.0.0.1       app.nimzo
+127.0.0.1       api.nimzo
+127.0.0.1       gateway.nimzo
+127.0.0.1       worker.nimzo
 
 ##
 # BRIGHTPEARL (OLD VM - 172.27.2.253)
