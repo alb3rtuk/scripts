@@ -165,3 +165,16 @@ alias skybutler='ssh -i ~/.ssh/Brightpearl/Brightpearl-DevInf.pem jenkins@skybut
 ### BRIGHTPEARL EXPORTS ######
 export APP_HOSTNAME=brightpearl.dsk-web-gbbr-253.gbbr.brightpearl.com
 export APP_ACCOUNT=automation
+
+alias nginx.start='sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
+alias nginx.stop='sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
+alias nginx.restart='nginx.stop && nginx.start'
+alias nginx.reload='sudo /usr/local/opt/nginx/bin/nginx -s reload'
+alias php-fpm.start="launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist"
+alias php-fpm.stop="launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist"
+alias php-fpm.restart='php-fpm.stop && php-fpm.start'
+alias mysql.start="launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist"
+alias mysql.stop="launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist"
+alias mysql.restart='mysql.stop && mysql.start'
+alias nginx.logs.error='tail -250f /var/log/nginx/error.log'
+alias nginx.logs.access='tail -250f /var/log/nginx/access.log'
