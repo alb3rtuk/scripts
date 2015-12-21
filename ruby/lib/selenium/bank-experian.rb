@@ -26,15 +26,15 @@ class BankExperian
             puts "\x1B[90mSuccessfully bypassed first page\x1B[0m"
         end
 
-        charOneLabel = browser.label(:class => 'label-small', :index => 0).when_present(15).text
-        charTwoLabel = browser.label(:class => 'label-small', :index => 1).when_present(15).text
+        charOneLabel = browser.label(:for => 'Character1').when_present(15).text
+        charTwoLabel = browser.label(:for => 'Character2').when_present(15).text
 
         # First letter
         browser.text_field(:name => 'Character1').set getCharAt(charOneLabel.gsub(/[^0-9]/, ''), @security)
 
         # Second letter (accounts for "last letter" case)
         if charTwoLabel.downcase.strip == 'last letter'
-            browser.text_field(:name => 'Character2').set getCharAt(@security.length, @security)
+            browser.text_field(:name => 'Character1').set getCharAt(@security.length, @security)
         else
             browser.text_field(:name => 'Character2').set getCharAt(charTwoLabel.gsub(/[^0-9]/, ''), @security)
         end

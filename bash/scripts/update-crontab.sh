@@ -5,14 +5,14 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
-file="/Users/Albert/Repos/scripts/backup/crontab.txt"
+file="/Users/Albert/Repos/scripts/config/crontab.txt"
 
 verifyFileExists $file
 
 cd ~
 crontab $file
 
-file_size=$(du ~/Repos/scripts/backup/crontab.txt | awk '{print $1}');
+file_size=$(du ~/Repos/scripts/config/crontab.txt | awk '{print $1}');
 
 # If no crons, exit with message.
 if [ "$file_size" == "0" ]; then

@@ -60,9 +60,9 @@ echo "        </dict>\n" >> ${launchd_script}
 echo "        <key>StartInterval</key>" >> ${launchd_script}
 echo "        <integer>300</integer>\n" >> ${launchd_script}
 echo "        <key>StandardOutPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>" >> ${launchd_script}
+echo "        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>" >> ${launchd_script}
 echo "        <key>StandardErrorPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>\n" >> ${launchd_script}
+echo "        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>\n" >> ${launchd_script}
 echo "        <key>KeepAlive</key>" >> ${launchd_script}
 echo "        <false/>\n" >> ${launchd_script}
 echo "        <key>RunAtLoad</key>" >> ${launchd_script}

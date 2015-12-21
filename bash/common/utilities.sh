@@ -64,10 +64,10 @@ function verifyFileExists()
     fi
 }
 
-# Logs an entry in the file: ~Repos/scripts/backup/cronlog.log
+# Logs an entry in the file: ~Repos/scripts/config/cronlog.log
 # Used for logging when a cron was kicked off.
 function logCron()
 {
-    logfile=/Users/Albert/Repos/scripts/backup/cronlog.log
+    logfile=/Users/Albert/Repos/scripts/config/cronlog.log
     echo "$(date) - $1" >> ${logfile}
 }

@@ -13,9 +13,9 @@
         <integer>300</integer>
 
         <key>StandardOutPath</key>
-        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>
+        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
         <key>StandardErrorPath</key>
-        <string>/Users/Albert/Repos/scripts/backup/cronerror.log</string>
+        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
 
         <key>KeepAlive</key>
         <false/>

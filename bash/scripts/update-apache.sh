@@ -2,22 +2,22 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
-sudo cp ~/Repos/scripts/backup/hosts /private/etc/hosts
+sudo cp ~/Repos/scripts/config/hosts /private/etc/hosts
 message green "SUCCESS" "Updated: \033[33m/private/etc/hosts\033[0m"
 
-sudo cp ~/Repos/scripts/backup/exports /private/etc/exports
+sudo cp ~/Repos/scripts/config/exports /private/etc/exports
 message green "SUCCESS" "Updated: \033[33m/private/etc/exports\033[0m"
 
-sudo cp ~/Repos/scripts/backup/httpd.conf /private/etc/apache2/httpd.conf
+sudo cp ~/Repos/scripts/config/httpd.conf /private/etc/apache2/httpd.conf
 message green "SUCCESS" "Updated: \033[33m/private/etc/apache2/httpd.conf\033[0m"
 
-sudo cp ~/Repos/scripts/backup/httpd-vhosts.conf /private/etc/apache2/extra/httpd-vhosts.conf
+sudo cp ~/Repos/scripts/config/httpd-vhosts.conf /private/etc/apache2/extra/httpd-vhosts.conf
 message green "SUCCESS" "Updated: \033[33m/private/etc/apache2/extra/httpd-vhosts.conf\033[0m"
 
-sudo cp ~/Repos/scripts/backup/php.ini /private/etc/php.ini
+sudo cp ~/Repos/scripts/config/php.ini /private/etc/php.ini
 message green "SUCCESS" "Updated: \033[33m/private/etc/php.ini\033[0m"
 
-sudo cp ~/Repos/scripts/backup/hosts /etc/hosts
+sudo cp ~/Repos/scripts/config/hosts /etc/hosts
 message green "SUCCESS" "Updated: \033[33m/etc/hosts\033[0m"
 
 sudo nfsd restart

@@ -14,8 +14,8 @@ Thumbs.db
 .idea/*
 .secrets/*
 
-backup/cronerror.log
-backup/cronlog.log
+config/cronerror.log
+config/cronlog.log
 
 .last_run.json
 
