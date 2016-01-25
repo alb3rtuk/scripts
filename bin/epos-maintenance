@@ -63,6 +63,7 @@ repos = [
     ['~/Repos/brightpearl/epos/eposintegrationapi', false, true],
     ['~/Repos/brightpearl/epos/eposintegrationservice', true, false],
     ['~/Repos/brightpearl/epos/ios-epos', false, false],
+    ['~/Repos/brightpearl/epos/locator-client', true, false],
     ['~/Repos/brightpearl/epos/locator-registrar', true, false],
     ['~/Repos/brightpearl/epos/parent-pom-minimal', true, false],
     ['~/Repos/brightpearl/epos/spring-boot-parent', true, false]

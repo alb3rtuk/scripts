@@ -17,6 +17,9 @@ message green "SUCCESS" "Updated: \033[33m/private/etc/apache2/extra/httpd-vhost
 sudo cp ~/Repos/scripts/config/php.ini /private/etc/php.ini
 message green "SUCCESS" "Updated: \033[33m/private/etc/php.ini\033[0m"
 
+sudo cp ~/Repos/scripts/config/php.ini /usr/local/etc/php/5.6/php.ini
+message green "SUCCESS" "Updated: \033[33m/usr/local/etc/php/5.6/php.ini\033[0m"
+
 sudo cp ~/Repos/scripts/config/hosts /etc/hosts
 message green "SUCCESS" "Updated: \033[33m/etc/hosts\033[0m"
 

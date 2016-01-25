@@ -9,6 +9,7 @@ export PATH=$PATH:$HOME/Bin/phpmd/src/bin
 export PATH=$PATH:$HOME/Bin/exec
 export PATH=$PATH:/usr/local/sbin
 export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
+export PATH=$PATH:$HOME/Repos/scripts/bin
 
 export PYTHONPATH=`brew --prefix`/lib/python2.7/site-packages:$PYTHONPATH
 export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
@@ -103,10 +104,6 @@ alias my-scripts='~/Repos/scripts/bash/scripts/my-scripts.sh'
 alias rename-files='~/Repos/scripts/bash/scripts/rename-files.sh'
 alias rs='~/Repos/scripts/bash/scripts/rs.sh'
 alias tail-cron-mail='~/Repos/scripts/bash/scripts/tail-cron-mail.sh'
-alias update-apache='~/Repos/scripts/bash/scripts/update-apache.sh'
-alias update-bash-profile='~/Repos/scripts/bash/scripts/update-bash-profile.sh'
-alias update-crontab='~/Repos/scripts/bash/scripts/update-crontab.sh'
-alias update-launchd='~/Repos/scripts/bash/scripts/update-launchd.sh'
 
 ### SELENIUM #################
 alias get-bank-transactions='~/Repos/scripts/bash/selenium/get-bank-transactions.sh'
