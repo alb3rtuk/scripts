@@ -7,7 +7,7 @@ echo
 message magenta " GIT " "Committing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
 
-repos=(brightpearl-cli columnist convoy nimzo-java nimzo-node nimzo-php nimzo-php-docs nimzo-ruby scripts shared)
+repos=(brightpearl-cli columnist convoy factory-mall finance-report my-cli nimzo-java nimzo-node nimzo-php nimzo-ruby scripts shared)
 
 for i in "${repos[@]}"
 do :

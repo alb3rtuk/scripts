@@ -2,7 +2,7 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
-repos=(brightpearl-cli columnist convoy nimzo-java nimzo-node nimzo-php nimzo-php-docs nimzo-ruby scripts shared)
+repos=(brightpearl-cli columnist convoy factory-mall finance-report my-cli nimzo-java nimzo-node nimzo-php nimzo-ruby scripts shared)
 
 for i in "${repos[@]}"
 do :
