@@ -37,16 +37,16 @@ def update(repo, mvn = false, gradle = false)
     # Do a git pull.
     result = App::Terminal::command_capture('git pull', repo)
 
-    # # If changes come in, do a build.
-    # unless result[0] =~ /Already up-to-date./ &&  !@args.include?(FORCE)
-    #
-    #     # Maven Build
-    #     App::Terminal::command('mvn clean install', repo) if mvn
-    #
-    #     # Gradle Build
-    #     App::Terminal::command('gradle', repo) if gradle
-    #
-    # end
+    # If changes come in, do a build.
+    unless result[0] =~ /Already up-to-date./ && !@args.include?(FORCE)
+
+        # Maven Build
+        App::Terminal::command('mvn clean install', repo) if mvn
+
+        # Gradle Build
+        App::Terminal::command('gradle', repo) if gradle
+
+    end
 
     # Un-stash un-commited files.
     if uncommited_files
@@ -59,13 +59,19 @@ end
 
 repos = [
     ['~/Repos/brightpearl/epos/bp-java-sdk', true, false],
+    ['~/Repos/brightpearl/epos/bp-mq-client', true, false],
+    ['~/Repos/brightpearl/epos/bp-rest-error', true, false],
+    ['~/Repos/brightpearl/epos/bp-rest-error-spring', true, false],
+    ['~/Repos/brightpearl/epos/bp-rest-handling', true, false],
+    ['~/Repos/brightpearl/epos/bp-rest-handling-spring', true, false],
     ['~/Repos/brightpearl/epos/bp-service-client', true, false],
-    ['~/Repos/brightpearl/epos/eposintegrationapi', false, true],
-    ['~/Repos/brightpearl/epos/eposintegrationservice', true, false],
     ['~/Repos/brightpearl/epos/ios-epos', false, false],
     ['~/Repos/brightpearl/epos/locator-client', true, false],
     ['~/Repos/brightpearl/epos/locator-registrar', true, false],
     ['~/Repos/brightpearl/epos/parent-pom-minimal', true, false],
+    ['~/Repos/brightpearl/epos/posintegrationservice', true, false],
+    ['~/Repos/brightpearl/epos/posmanagementapi', false, true],
+    ['~/Repos/brightpearl/epos/posmanagementservice', true, false],
     ['~/Repos/brightpearl/epos/spring-boot-parent', true, false]
 ]
 

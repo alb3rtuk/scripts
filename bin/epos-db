@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-mongod --dbpath ~/Brightpearl/mongodb-data/
+mongod --dbpath ~/Brightpearl/mongodb-data/ --port 27017
