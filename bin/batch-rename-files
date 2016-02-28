@@ -1,10 +1,23 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-cd ~/Repos/nimzo-ruby/assets/ebay/
+path = ARGV[0]
 
-# http://stackoverflow.com/questions/1224766/how-do-i-rename-the-extension-for-a-batch-of-files
+if path == '' || ARGV.empty?
+    raise RuntimeError, 'No path specified!'
+end
 
-for file in *.txt; do
-    echo ${file}
-    mv "$file" "`basename ${file} .txt`.xml"
-done
+puts
+puts "Path: \x1B[38;5;162m#{path}\x1B[0m"
+puts
+
+counter = 0
+
+Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+    counter += 1
+    new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '')}"
+    command = "mv \"#{file}\" \"#{new_file}\""
+    puts command
+    # system(command)
+end
+
+puts
