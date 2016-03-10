@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+array = []
+count = 0
+sum = 0
+
+loop do
+    array << Random.rand(0..256)
+    count += 1
+    break if count > 100000
+end
+
+array.sort!
+
+t1 = Time.now
+
+count = 0
+
+loop do
+    array.each do |number|
+        sum += number if number > 128
+    end
+    count += 1
+    break if count > 1000
+end
+
+
+t2 = Time.now
+
+puts "Elapsed time: #{t2 - t1} ms"
