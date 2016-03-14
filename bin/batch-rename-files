@@ -10,14 +10,22 @@ puts
 puts "Path: \x1B[38;5;162m#{path}\x1B[0m"
 puts
 
-counter = 0
+# counter = 0
+#
+# Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+#     counter += 1
+#     new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '')}"
+#     command = "mv \"#{file}\" \"#{new_file}\""
+#     puts command
+# end
 
 Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
-    counter += 1
-    new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '')}"
-    command = "mv \"#{file}\" \"#{new_file}\""
-    puts command
-    # system(command)
+
+    if file =~ /WareWolf/
+        command = "mv \"#{file}\" \"#{file.gsub('WareWolf', 'Warewolf')}\""
+        puts command
+    end
+
 end
 
 puts
