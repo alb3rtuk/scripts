@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+# Trying to figure out this shit: http://mathoverflow.net/questions/17960/google-question-in-a-country-in-which-people-only-want-boys
+
+boys = 0
+girls = 0
+
+i = 0
+
+while i < 1000000
+
+    baby = nil
+
+    while baby != 'boy'
+
+        baby = Random.rand(0..1) == 1 ? 'boy' : 'girl'
+
+        boys += 1 if baby == 'boy'
+        girls += 1 if baby == 'girl'
+
+        i += 1
+
+    end
+
+end
+
+puts "BOYS: \x1B[38;5;160m#{boys}\x1B[0m \xe2\x80\x94 GIRLS: \x1B[38;5;122m#{girls}\x1B[0m"
