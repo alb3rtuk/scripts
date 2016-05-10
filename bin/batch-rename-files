@@ -9,20 +9,45 @@ end
 puts
 puts "Path: \x1B[38;5;162m#{path}\x1B[0m"
 puts
-
-# counter = 0
 #
-# Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
-#     counter += 1
-#     new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '')}"
-#     command = "mv \"#{file}\" \"#{new_file}\""
-#     puts command
+# def index_the_bank(path)
+#
+#     max_index = []
+#     Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+#         fileName = File.basename(file)
+#         if fileName =~ /\AX-\d{3}-/
+#             max_index << fileName[2...5].to_i
+#         end
+#     end
+#
+#     counter = max_index.max
+#
+#     Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+#         fileName = File.basename(file)
+#         if fileName =~/\AX-\d{3}-/
+#
+#             #  DO NOTHING
+#
+#         else
+#             if File.extname(file) == '.mp4'
+#                 counter += 1
+#                 new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '')}"
+#                 command = "mv \"#{file}\" \"#{new_file}\""
+#                 system(command)
+#             else
+#                 puts File.extname(file)
+#             end
+#         end
+#     end
 # end
+#
+# index_the_bank(path)
+
 
 Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
 
-    if file =~ /WareWolf/
-        command = "mv \"#{file}\" \"#{file.gsub('WareWolf', 'Warewolf')}\""
+    if file =~ /WarewolfFix/
+        command = "mv \"#{file}\" \"#{file.gsub('WarewolfFix', 'Warewolf')}\""
         puts command
     end
 
