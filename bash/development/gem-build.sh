@@ -15,7 +15,7 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-sudo cd ~/Repos/my-cli/
+sudo cd ~/Repos/my-cli/ && cd ~/Repos/my-cli/
 sudo gem build my-cli.gemspec
 sudo gem install ./my-cli-1.0.0.gem --backtrace -V -l
 
