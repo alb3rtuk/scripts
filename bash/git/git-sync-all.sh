@@ -3,6 +3,9 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
+message red " DEPRECATED " "This script is deprecated."
+exit
+
 echo
 message magenta " GIT " "Syncing all repos... \033[33m$(date +"%a %e %b %Y %H:%M:%S")\033[0m"
 echo
