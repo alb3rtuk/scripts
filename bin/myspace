@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'nimzo-lib'
+
+count = 0
+
+lines = Nimzo::Files::read_file(File.expand_path('~/myspace.txt'))
+lines.each do |line|
+    line = line.gsub("\n", '')
+    if line =~ /data-full-image-url/
+        count += 1
+        match = line.match(/data-full-image-url="(.*)full.jpg/)
+        match = match[0].gsub(/data-full-image-url="/, '').to_s
+        match = match.gsub("\n", '').strip
+        system("curl -o ~/Pictures/MySpace/myspace-image-#{count}.jpg #{match}")
+    end
+end
+
+#
+# <a href="/albert_bristol/mixes/classic-my-photos-193364/photo/49391490" itemprop="url" content="/albert_bristol/mixes/classic-my-photos-193364/photo/49391490" style="background-image: url(https://a1-images.myspacecdn.com/images02/137/9ea56f80dc3743949ccb87ba69cc36d0/300x300.jpg)">
+# <img src="https://a1-images.myspacecdn.com/images02/137/9ea56f80dc3743949ccb87ba69cc36d0/300x300.jpg" alt="" itemprop="image">
+# <div class="connectButton connected tooltips" data-id="49391490" data-playlist-id="193364" data-entity-key="image_profile_254089503_49391490" data-is-connected="true" data-is-owner="true" data-mix-entity-key="playlist_profile_254089503_193364" data-image-url="https://a1-images.myspacecdn.com/images02/137/9ea56f80dc3743949ccb87ba69cc36d0/300x300.jpg" data-title="my #1 lady.. my mom" data-owner="Albert Rannetsperger" data-owner-entity-key="profile_254089503" data-is-private="true" data-is-liked="false" data-album-id="9213406" data-full-image-url="https://a1-images.myspacecdn.com/images02/137/9ea56f80dc3743949ccb87ba69cc36d0/full.jpg" data-full-image-width="1" data-full-image-height="1" data-profile-eligible="false" data-cover-eligible="false" data-type="photo" data-popover-initialized="true">
+# <span></span>
+# 	<span></span>
+# </div>
+#
+#
+#             <i class="privatePhoto">private</i>
+#
+# </a>
