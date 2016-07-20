@@ -1,0 +1,23 @@
+#!/usr/local/bin/ruby
+
+require 'whois'
+require 'nimzo-lib'
+
+client = Whois::Client.new
+
+# Does the actual lookup.
+def lookup(client, domain)
+    result = client.lookup(domain)
+    owner = nil
+    result.to_s.split("\n").each do |line|
+        break if line =~ /No match for/i
+        owner = line.gsub('Registrant Name: ', '') if line =~ /Registrant Name:/i
+    end
+
+    Nimzo::Terminal::output(Nimzo::Terminal::format_highlight(domain), Nimzo::Terminal::MSG_CUSTOM_AUTO_PAD, 'Available', 22) if owner.nil?
+    Nimzo::Terminal::output("#{Nimzo::Terminal::format_invalid(domain)} \xe2\x86\x92 #{owner}", Nimzo::Terminal::MSG_CUSTOM_AUTO_PAD, 'Taken', 124) unless owner.nil?
+end
+
+words = ['blaze', 'blade']
+
+words.each { |word| lookup(client, "#{word}.com"); lookup(client, "#{word}.io") }
