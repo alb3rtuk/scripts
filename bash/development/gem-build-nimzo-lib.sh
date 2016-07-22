@@ -17,4 +17,4 @@
 
 sudo cd ~/Repos/nimzo/nimzo-lib/ && cd ~/Repos/nimzo/nimzo-lib/
 sudo gem build nimzo-lib.gemspec
-sudo gem install ./nimzo-lib-1.0.0.gem --backtrace -V -l
+sudo gem install ./nimzo-lib-1.2.0.gem --backtrace -V -l
