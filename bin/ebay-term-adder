@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'nimzo-lib'
+require 'mysql'
+
+@connection = Mysql.new('127.0.0.1', 'root', '', 'app')
+
+while true
+
+    term = gets.chomp
+    results = 0
+    result = @connection.query("SELECT COUNT(id) FROM crawler_ebay_terms WHERE term = '#{term.downcase}'")
+    result.each_hash do |row|
+        results = row['COUNT(id)']
+    end
+
+    @connection.query("INSERT INTO crawler_ebay_terms (term) VALUES ('#{term.downcase}')") if results.to_i == 0
+    puts "\x1B[38;5;190mAdded\x1B[0m \xe2\x86\x92 #{term.downcase}" if results.to_i == 0
+
+end
