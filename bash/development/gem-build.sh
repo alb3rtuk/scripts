@@ -13,8 +13,6 @@
 # -f - Force gem to install, bypassing dependency checks
 # --backtrace -- Show stack backtrace on errors
 
-. ~/Repos/Scripts/bash/common/utilities.sh
-
-sudo cd ~/Repos/my/ && cd ~/Repos/my/
-sudo gem build my.gemspec
-sudo gem install ./my-1.0.0.gem --backtrace -V -l
+cd ~/Repos/my/ && cd ~/Repos/my/
+gem build my.gemspec
+gem install ./my-1.0.0.gem --backtrace -V -l

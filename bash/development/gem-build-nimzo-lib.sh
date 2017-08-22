@@ -15,6 +15,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-sudo cd ~/Repos/nimzo/nimzo-lib/ && cd ~/Repos/nimzo/nimzo-lib/
-sudo gem build nimzo-lib.gemspec
-sudo gem install ./nimzo-lib-1.2.0.gem --backtrace -V -l
+cd ~/Repos/nimzo/nimzo-lib/ && cd ~/Repos/nimzo/nimzo-lib/
+gem build nimzo-lib.gemspec
+gem install ./nimzo-lib-1.2.0.gem --backtrace -V -l
