@@ -1,6 +1,6 @@
 require 'base64'
 
-class Encrypter
+class Encryptor
 
     def initialize
 

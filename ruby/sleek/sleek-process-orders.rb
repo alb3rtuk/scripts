@@ -1,5 +1,5 @@
 require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
-require '/Users/Albert/Repos/scripts/ruby/lib/encrypter.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/encryptor.rb'
 require '/Users/Albert/Repos/scripts/ruby/lib/selenium/iconsign.rb'
 require '/Users/Albert/Repos/scripts/ruby/lib/selenium/ebay.rb'
 require 'rest_client'
@@ -130,14 +130,14 @@ end
 puts
 
 iConsign = IConsign.new(
-    Encrypter.new.decrypt(IConsignUsername),
-    Encrypter.new.decrypt(IConsignPassword)
+    Encryptor.new.decrypt(IConsignUsername),
+    Encryptor.new.decrypt(IConsignPassword)
 )
 iConsignBrowser = iConsign.login(ARGV[0])
 
 ebay = Ebay.new(
-    Encrypter.new.decrypt(EbayUsernameSleek),
-    Encrypter.new.decrypt(EbayPasswordSleek)
+    Encryptor.new.decrypt(EbayUsernameSleek),
+    Encryptor.new.decrypt(EbayPasswordSleek)
 )
 ebayBrowser = ebay.login(ARGV[0])
 

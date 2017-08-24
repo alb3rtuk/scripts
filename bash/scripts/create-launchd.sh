@@ -37,7 +37,7 @@ echo "exit" >> ${shell_script}
 
 # SETUP RUBY SCRIPT
 echo "require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')" > ${ruby_script}
-echo "require File.expand_path('~/Repos/scripts/ruby/lib/encrypter.rb')" >> ${ruby_script}
+echo "require File.expand_path('~/Repos/scripts/ruby/lib/encryptor.rb')" >> ${ruby_script}
 
 # SETUP LAUNCHD.PLIST FILE
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ${launchd_script}

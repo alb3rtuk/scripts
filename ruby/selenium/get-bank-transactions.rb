@@ -1,5 +1,5 @@
 require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
-require File.expand_path('~/Repos/scripts/ruby/lib/encrypter.rb')
+require File.expand_path('~/Repos/scripts/ruby/lib/encryptor.rb')
 require File.expand_path('~/Repos/scripts/ruby/lib/selenium/bank-barclaycard.rb')
 require File.expand_path('~/Repos/scripts/ruby/lib/selenium/bank-capitalone.rb')
 require File.expand_path('~/Repos/scripts/ruby/lib/selenium/bank-experian.rb')
@@ -17,19 +17,19 @@ displayProgress = true
 headless = (ARGV[1].nil?) ? true : false
 displays = ARGV[0]
 
-encrypter = Encrypter.new
+encryptor = Encryptor.new
 
 databaseConnection = Mysql.new(
-    encrypter.decrypt(EC2MySqlAlb3rtukHost),
-    encrypter.decrypt(EC2MySqlAlb3rtukUser),
-    encrypter.decrypt(EC2MySqlAlb3rtukPass),
-    encrypter.decrypt(EC2MySqlAlb3rtukSchema)
+    encryptor.decrypt(EC2MySqlAlb3rtukHost),
+    encryptor.decrypt(EC2MySqlAlb3rtukUser),
+    encryptor.decrypt(EC2MySqlAlb3rtukPass),
+    encryptor.decrypt(EC2MySqlAlb3rtukSchema)
 )
 
 natWest = BankNatWest.new(
-    encrypter.decrypt(NatWestUsername),
-    encrypter.decrypt(NatWestSecurityTop),
-    encrypter.decrypt(NatWestSecurityBottom),
+    encryptor.decrypt(NatWestUsername),
+    encryptor.decrypt(NatWestSecurityTop),
+    encryptor.decrypt(NatWestSecurityBottom),
     displays,
     headless,
     displayProgress,
@@ -37,9 +37,9 @@ natWest = BankNatWest.new(
 )
 
 halifax = BankHalifax.new(
-    encrypter.decrypt(HalifaxUsername),
-    encrypter.decrypt(HalifaxPassword),
-    encrypter.decrypt(HalifaxSecurity),
+    encryptor.decrypt(HalifaxUsername),
+    encryptor.decrypt(HalifaxPassword),
+    encryptor.decrypt(HalifaxSecurity),
     displays,
     headless,
     displayProgress,
@@ -47,9 +47,9 @@ halifax = BankHalifax.new(
 )
 
 lloyds = BankLloyds.new(
-    encrypter.decrypt(LloydsUsername),
-    encrypter.decrypt(LloydsPassword),
-    encrypter.decrypt(LloydsSecurity),
+    encryptor.decrypt(LloydsUsername),
+    encryptor.decrypt(LloydsPassword),
+    encryptor.decrypt(LloydsSecurity),
     displays,
     headless,
     displayProgress,
@@ -57,8 +57,8 @@ lloyds = BankLloyds.new(
 )
 
 capitalOne = BankCapitalOne.new(
-    encrypter.decrypt(CapitalOneUsername),
-    encrypter.decrypt(CapitalOneSecurity),
+    encryptor.decrypt(CapitalOneUsername),
+    encryptor.decrypt(CapitalOneSecurity),
     displays,
     headless,
     displayProgress,
@@ -66,9 +66,9 @@ capitalOne = BankCapitalOne.new(
 )
 
 barclayCard = BankBarclayCard.new(
-    encrypter.decrypt(BarclayCardUsername),
-    encrypter.decrypt(BarclayCardPin),
-    encrypter.decrypt(BarclayCardSecurity),
+    encryptor.decrypt(BarclayCardUsername),
+    encryptor.decrypt(BarclayCardPin),
+    encryptor.decrypt(BarclayCardSecurity),
     displays,
     headless,
     displayProgress,
@@ -76,9 +76,9 @@ barclayCard = BankBarclayCard.new(
 )
 
 experian = BankExperian.new(
-    encrypter.decrypt(ExperianUsername),
-    encrypter.decrypt(ExperianPassword),
-    encrypter.decrypt(ExperianSecurity),
+    encryptor.decrypt(ExperianUsername),
+    encryptor.decrypt(ExperianPassword),
+    encryptor.decrypt(ExperianSecurity),
     displays,
     false,
     displayProgress,

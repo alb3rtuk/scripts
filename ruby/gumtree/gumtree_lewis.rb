@@ -28,12 +28,12 @@ class Gumtree
 
         exit
 
-        @encrypter = Encrypter.new
+        @encryptor = Encryptor.new
         @database = Mysql.new(
-            @encrypter.decrypt(EC2MySqlAlb3rtukHost),
-            @encrypter.decrypt(EC2MySqlAlb3rtukUser),
-            @encrypter.decrypt(EC2MySqlAlb3rtukPass),
-            @encrypter.decrypt(EC2MySqlAlb3rtukSchema)
+            @encryptor.decrypt(EC2MySqlAlb3rtukHost),
+            @encryptor.decrypt(EC2MySqlAlb3rtukUser),
+            @encryptor.decrypt(EC2MySqlAlb3rtukPass),
+            @encryptor.decrypt(EC2MySqlAlb3rtukSchema)
         )
 
         existing_links = []
@@ -89,7 +89,7 @@ class Gumtree
                 if price_short > (MIN_PRICE - 1) && price_short < (MAX_PRICE + 1)
 
                     text = "#{title}\n#{price}\n#{url}"
-                    nexmo = Nexmo::Client.new(key: @encrypter.decrypt(NEXMO_KEY), secret: @encrypter.decrypt(NEXMO_SECRET))
+                    nexmo = Nexmo::Client.new(key: @encryptor.decrypt(NEXMO_KEY), secret: @encryptor.decrypt(NEXMO_SECRET))
 
                     system("echo '#{TIME_PREFIX}Sent TXT alert: \033[1;32m#{title} - #{price}\033[0m' >> /tmp/gumtree.log")
 

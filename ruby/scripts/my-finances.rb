@@ -1,5 +1,5 @@
 require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
-require '/Users/Albert/Repos/scripts/ruby/lib/encrypter.rb'
+require '/Users/Albert/Repos/scripts/ruby/lib/encryptor.rb'
 
 require 'columnist'
 
@@ -23,12 +23,12 @@ class ShowBankTransactions
         @minus_color = 196
 
         # Get Database Connection
-        encrypter = Encrypter.new
+        encryptor = Encryptor.new
         @databaseConnection = Mysql.new(
-            encrypter.decrypt(EC2MySqlAlb3rtukHost),
-            encrypter.decrypt(EC2MySqlAlb3rtukUser),
-            encrypter.decrypt(EC2MySqlAlb3rtukPass),
-            encrypter.decrypt(EC2MySqlAlb3rtukSchema)
+            encryptor.decrypt(EC2MySqlAlb3rtukHost),
+            encryptor.decrypt(EC2MySqlAlb3rtukUser),
+            encryptor.decrypt(EC2MySqlAlb3rtukPass),
+            encryptor.decrypt(EC2MySqlAlb3rtukSchema)
         )
 
         # INTERNAL TYPE ID LEGEND

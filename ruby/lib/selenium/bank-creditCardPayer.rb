@@ -28,9 +28,9 @@ class BankCreditCardPayer
         #Get Credit Cards
         if creditCard == 'barclaycard'
             @barclayCard = BankBarclayCard.new(
-                Encrypter.new.decrypt(BarclayCardUsername),
-                Encrypter.new.decrypt(BarclayCardPin),
-                Encrypter.new.decrypt(BarclayCardSecurity),
+                Encryptor.new.decrypt(BarclayCardUsername),
+                Encryptor.new.decrypt(BarclayCardPin),
+                Encryptor.new.decrypt(BarclayCardSecurity),
                 displays,
                 headless,
                 displayProgress
@@ -41,8 +41,8 @@ class BankCreditCardPayer
             @due_date = @barclayCardResponse[1]['due_date']
         elsif creditCard == 'capitalone'
             @capitalOne = BankCapitalOne.new(
-                Encrypter.new.decrypt(CapitalOneUsername),
-                Encrypter.new.decrypt(CapitalOneSecurity),
+                Encryptor.new.decrypt(CapitalOneUsername),
+                Encryptor.new.decrypt(CapitalOneSecurity),
                 displays,
                 headless,
                 displayProgress
@@ -53,9 +53,9 @@ class BankCreditCardPayer
             @due_date = @capitalOneResponse[1]['due_date']
         elsif creditCard == 'lloyds'
             @lloyds = BankLloyds.new(
-                Encrypter.new.decrypt(LloydsUsername),
-                Encrypter.new.decrypt(LloydsPassword),
-                Encrypter.new.decrypt(LloydsSecurity),
+                Encryptor.new.decrypt(LloydsUsername),
+                Encryptor.new.decrypt(LloydsPassword),
+                Encryptor.new.decrypt(LloydsSecurity),
                 displays,
                 headless,
                 displayProgress
@@ -74,9 +74,9 @@ class BankCreditCardPayer
             if bankAccount == 'lloyds'
                 if !defined? @lloyds
                     @lloyds = BankLloyds.new(
-                        Encrypter.new.decrypt(LloydsUsername),
-                        Encrypter.new.decrypt(LloydsPassword),
-                        Encrypter.new.decrypt(LloydsSecurity),
+                        Encryptor.new.decrypt(LloydsUsername),
+                        Encryptor.new.decrypt(LloydsPassword),
+                        Encryptor.new.decrypt(LloydsSecurity),
                         displays,
                         headless,
                         displayProgress
@@ -89,9 +89,9 @@ class BankCreditCardPayer
                 payment_account['available'] = @lloydsResponse[1]['account_1_available']
             elsif bankAccount == 'halifax'
                 @halifax = BankHalifax.new(
-                    Encrypter.new.decrypt(HalifaxUsername),
-                    Encrypter.new.decrypt(HalifaxPassword),
-                    Encrypter.new.decrypt(HalifaxSecurity),
+                    Encryptor.new.decrypt(HalifaxUsername),
+                    Encryptor.new.decrypt(HalifaxPassword),
+                    Encryptor.new.decrypt(HalifaxSecurity),
                     displays,
                     headless,
                     displayProgress
@@ -103,9 +103,9 @@ class BankCreditCardPayer
                 payment_account['available'] = @halifax[1]['account_2_available']
             elsif bankAccount == 'natwest'
                 @natwest = BankNatWest.new(
-                    Encrypter.new.decrypt(NatWestUsername),
-                    Encrypter.new.decrypt(NatWestSecurityTop),
-                    Encrypter.new.decrypt(NatWestSecurityBottom),
+                    Encryptor.new.decrypt(NatWestUsername),
+                    Encryptor.new.decrypt(NatWestSecurityTop),
+                    Encryptor.new.decrypt(NatWestSecurityBottom),
                     displays,
                     headless,
                     displayProgress

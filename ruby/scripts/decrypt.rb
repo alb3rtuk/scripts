@@ -5,5 +5,5 @@ if ARGV.empty?
     exit
 end
 
-puts "\x1B[90m#{Encrypter.new.decrypt(ARGV[0])}"
+puts "\x1B[90m#{Encryptor.new.decrypt(ARGV[0])}"
 exit

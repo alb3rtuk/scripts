@@ -12,16 +12,16 @@ require 'open-uri'
 require 'net/http'
 require 'csv'
 require File.expand_path('~/.secrets/secrets.rb')
-require File.expand_path('~/Repos/scripts/ruby/lib/encrypter.rb')
+require File.expand_path('~/Repos/scripts/ruby/lib/encryptor.rb')
 
 # Returns DB connection to my personal MySQL DB.
 def getDatabaseConnection
-    encrypter = Encrypter.new
+    encryptor = Encryptor.new
     Mysql.new(
-        encrypter.decrypt(EC2MySqlAlb3rtukHost),
-        encrypter.decrypt(EC2MySqlAlb3rtukUser),
-        encrypter.decrypt(EC2MySqlAlb3rtukPass),
-        encrypter.decrypt(EC2MySqlAlb3rtukSchema)
+        encryptor.decrypt(EC2MySqlAlb3rtukHost),
+        encryptor.decrypt(EC2MySqlAlb3rtukUser),
+        encryptor.decrypt(EC2MySqlAlb3rtukPass),
+        encryptor.decrypt(EC2MySqlAlb3rtukSchema)
     )
 end
 
