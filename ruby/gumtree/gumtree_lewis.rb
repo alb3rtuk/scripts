@@ -10,7 +10,7 @@ class Gumtree
     MIN_PRICE = 350
     MAX_PRICE = 500
 
-    # Must contain ATLEAST 1 word from BOTH whitelists.
+    # Must contain AT LEAST 1 word from BOTH whitelists.
     WHITELIST_1 = %w(horfield andrews redland bedminster barton george downs clifton werburghs cotham montpelier redfield philips judes hotwells brislington southville filton patchway stoke fishponds downend frenchay kingswood speedwell lawrence whitehall city centre center whiteladies johns marks bri bishopston ashley arches)
     # WHITELIST_2 = %w()
 
