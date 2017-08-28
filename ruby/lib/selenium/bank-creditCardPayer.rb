@@ -16,18 +16,18 @@ class BankCreditCardPayer
         end
 
         @outstanding_balance = 0
-        @minimum_payment = 0
-        @due_date = 0
-        @payment_accounts = Array.new
-        @payment_map = {}
-        @chosenAccount = 0
-        @chosenAmount = 0
+        @minimum_payment     = 0
+        @due_date            = 0
+        @payment_accounts    = Array.new
+        @payment_map         = {}
+        @chosenAccount       = 0
+        @chosenAmount        = 0
 
         puts "\n"
 
         #Get Credit Cards
         if creditCard == 'barclaycard'
-            @barclayCard = BankBarclayCard.new(
+            @barclayCard         = BankBarclayCard.new(
                 Encryptor.new.decrypt(BarclayCardUsername),
                 Encryptor.new.decrypt(BarclayCardPin),
                 Encryptor.new.decrypt(BarclayCardSecurity),
@@ -37,22 +37,22 @@ class BankCreditCardPayer
             )
             @barclayCardResponse = @barclayCard.getBalances(false)
             @outstanding_balance = @barclayCardResponse[1]['balance']
-            @minimum_payment = @barclayCardResponse[1]['minimum_payment']
-            @due_date = @barclayCardResponse[1]['due_date']
+            @minimum_payment     = @barclayCardResponse[1]['minimum_payment']
+            @due_date            = @barclayCardResponse[1]['due_date']
         elsif creditCard == 'capitalone'
-            @capitalOne = BankCapitalOne.new(
+            @capitalOne          = BankCapitalOne.new(
                 Encryptor.new.decrypt(CapitalOneUsername),
                 Encryptor.new.decrypt(CapitalOneSecurity),
                 displays,
                 headless,
                 displayProgress
             )
-            @capitalOneResponse = @capitalOne.getBalances(false)
+            @capitalOneResponse  = @capitalOne.getBalances(false)
             @outstanding_balance = @capitalOneResponse[1]['balance']
-            @minimum_payment = @capitalOneResponse[1]['minimum_payment']
-            @due_date = @capitalOneResponse[1]['due_date']
+            @minimum_payment     = @capitalOneResponse[1]['minimum_payment']
+            @due_date            = @capitalOneResponse[1]['due_date']
         elsif creditCard == 'lloyds'
-            @lloyds = BankLloyds.new(
+            @lloyds              = BankLloyds.new(
                 Encryptor.new.decrypt(LloydsUsername),
                 Encryptor.new.decrypt(LloydsPassword),
                 Encryptor.new.decrypt(LloydsSecurity),
@@ -60,10 +60,10 @@ class BankCreditCardPayer
                 headless,
                 displayProgress
             )
-            @lloydsResponse = @lloyds.getBalances(false)
+            @lloydsResponse      = @lloyds.getBalances(false)
             @outstanding_balance = @lloydsResponse[1]['cc_balance']
-            @minimum_payment = @lloydsResponse[1]['cc_minimum_payment']
-            @due_date = @lloydsResponse[1]['cc_due_date']
+            @minimum_payment     = @lloydsResponse[1]['cc_minimum_payment']
+            @due_date            = @lloydsResponse[1]['cc_due_date']
         end
 
         self.displayOutstandingBalance
@@ -73,7 +73,7 @@ class BankCreditCardPayer
             payment_account = {}
             if bankAccount == 'lloyds'
                 if !defined? @lloyds
-                    @lloyds = BankLloyds.new(
+                    @lloyds         = BankLloyds.new(
                         Encryptor.new.decrypt(LloydsUsername),
                         Encryptor.new.decrypt(LloydsPassword),
                         Encryptor.new.decrypt(LloydsSecurity),
@@ -83,12 +83,12 @@ class BankCreditCardPayer
                     )
                     @lloydsResponse = @lloyds.getBalances(false)
                 end
-                payment_account['account_id'] = 'lloyds'
+                payment_account['account_id']   = 'lloyds'
                 payment_account['account_name'] = 'Lloyds Current Account'
-                payment_account['balance'] = @lloydsResponse[1]['account_1_balance']
-                payment_account['available'] = @lloydsResponse[1]['account_1_available']
+                payment_account['balance']      = @lloydsResponse[1]['account_1_balance']
+                payment_account['available']    = @lloydsResponse[1]['account_1_available']
             elsif bankAccount == 'halifax'
-                @halifax = BankHalifax.new(
+                @halifax                        = BankHalifax.new(
                     Encryptor.new.decrypt(HalifaxUsername),
                     Encryptor.new.decrypt(HalifaxPassword),
                     Encryptor.new.decrypt(HalifaxSecurity),
@@ -96,13 +96,13 @@ class BankCreditCardPayer
                     headless,
                     displayProgress
                 )
-                @halifax = @halifax.getBalances(false)
-                payment_account['account_id'] = 'halifax'
+                @halifax                        = @halifax.getBalances(false)
+                payment_account['account_id']   = 'halifax'
                 payment_account['account_name'] = 'Halifax Reward Account'
-                payment_account['balance'] = @halifax[1]['account_2_balance']
-                payment_account['available'] = @halifax[1]['account_2_available']
+                payment_account['balance']      = @halifax[1]['account_2_balance']
+                payment_account['available']    = @halifax[1]['account_2_available']
             elsif bankAccount == 'natwest'
-                @natwest = BankNatWest.new(
+                @natwest                        = BankNatWest.new(
                     Encryptor.new.decrypt(NatWestUsername),
                     Encryptor.new.decrypt(NatWestSecurityTop),
                     Encryptor.new.decrypt(NatWestSecurityBottom),
@@ -110,11 +110,11 @@ class BankCreditCardPayer
                     headless,
                     displayProgress
                 )
-                @natwest = @natwest.getBalances(false)
-                payment_account['account_id'] = 'natwest'
+                @natwest                        = @natwest.getBalances(false)
+                payment_account['account_id']   = 'natwest'
                 payment_account['account_name'] = 'NatWest Advantage Gold'
-                payment_account['balance'] = @natwest[1]['advantage_gold']
-                payment_account['available'] = @natwest[1]['advantage_gold']
+                payment_account['balance']      = @natwest[1]['advantage_gold']
+                payment_account['available']    = @natwest[1]['advantage_gold']
             end
             puts "\n"
             @payment_accounts.push(payment_account)
@@ -161,9 +161,9 @@ class BankCreditCardPayer
     def displayPaymentAccountBalances
         count = 0
         @payment_accounts.each do |payment_account|
-            count = count + 1
-            @payment_map[count] = {}
-            @payment_map[count]['account_id'] = payment_account['account_id']
+            count                               = count + 1
+            @payment_map[count]                 = {}
+            @payment_map[count]['account_id']   = payment_account['account_id']
             @payment_map[count]['account_name'] = payment_account['account_name']
             if payment_account['balance'] > 0
                 puts "#{count}) #{payment_account['account_name'].ljust(24)}: \x1B[32m#{toCurrency(payment_account['balance']).to_s.rjust(11)} \x1B[90m(#{toCurrency(payment_account['available'])} Available)\x1B[0m"
@@ -199,7 +199,7 @@ class BankCreditCardPayer
         puts "\n\x1B[44m PAY \x1B[0m \x1B[33m#{toCurrency(@chosenAmount)}\x1B[0m\n\n"
         puts "\x1B[90mYou are about to make a payment of \x1B[32m#{toCurrency(@chosenAmount)}\x1B[90m. Once started, the process cannot be aborted.\x1B[0m\n\n"
         @chosenAmount = toCurrency(@chosenAmount, '', '')
-        proceed = false
+        proceed       = false
         until proceed
             STDOUT.flush
             print "\x1B[42m Confirm \x1B[0m \x1B[32mAre you absolutely sure you want to continue? \x1B[90m[y/n]\x1B[0m => "

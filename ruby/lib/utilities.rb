@@ -102,15 +102,15 @@ def getBrowser(displays = 'single', headless = false)
     x = y = width = height = 0
 
     if displays == 'single'
-        width = 1440
+        width  = 1440
         height = 2000
-        x = 0
-        y = -0
+        x      = 0
+        y      = -0
     elsif displays == 'multiple'
-        width = 1920
+        width  = 1920
         height = 2000
-        x = 3360
-        y = -2000
+        x      = 3360
+        y      = -2000
     end
 
     browser.window.move_to(x, y)
@@ -130,7 +130,7 @@ end
 # @return string
 def toCurrency(number, symbol = '£', delimiter = ',')
     number = number.to_f
-    minus = (number < 0) ? '-' : ''
+    minus  = (number < 0) ? '-' : ''
     number = '%.2f' % number.abs
     number = number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
     "#{minus}#{symbol}#{number}"
@@ -157,12 +157,12 @@ def diffBetweenDatesInDays(laterDate = nil, earlierDate = nil)
             today.strftime('%y-%m-%d')
         else
             explodedDate = date.split('-')
-            date = DateTime.new(explodedDate[0].to_i, explodedDate[1].to_i, explodedDate[2].to_i)
+            date         = DateTime.new(explodedDate[0].to_i, explodedDate[1].to_i, explodedDate[2].to_i)
             date.strftime('%y-%m-%d')
         end
     }
     earlierDate = Date.parse(dates[0])
-    laterDate = Date.parse(dates[1])
+    laterDate   = Date.parse(dates[1])
     laterDate.mjd - earlierDate.mjd
 end
 
@@ -233,7 +233,7 @@ end
 # @return integer
 def getSecondsAgo(timeStamp)
     timeStamp = DateTime.strptime(timeStamp, '%Y-%m-%dT%H:%M:%S%z')
-    timeNow = DateTime.now
+    timeNow   = DateTime.now
     ((timeNow - timeStamp) * 24 * 60 * 60).to_i
 end
 

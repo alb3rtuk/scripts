@@ -11,19 +11,19 @@ class ShowBankTransactions
     def initialize(argv)
 
         # COLORS
-        @green = 10
+        @green   = 10
         @magenta = 201
-        @yellow = 226
-        @cyan = 87
-        @red = 196
-        @blue = 32
-        @white = 255
+        @yellow  = 226
+        @cyan    = 87
+        @red     = 196
+        @blue    = 32
+        @white   = 255
 
-        @plus_color = 47
+        @plus_color  = 47
         @minus_color = 196
 
         # Get Database Connection
-        encryptor = Encryptor.new
+        encryptor           = Encryptor.new
         @databaseConnection = Mysql.new(
             encryptor.decrypt(EC2MySqlAlb3rtukHost),
             encryptor.decrypt(EC2MySqlAlb3rtukUser),
@@ -38,51 +38,51 @@ class ShowBankTransactions
 
         @recognizedTransactions = Array[
             # NATWEST AD GOLD
-            {:intTypeID => 0, :id => 100, :bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => @white, :translation => 'PAYPAL WITHDRAWAL'},
-            {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'CDM', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'TLR', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 0, :id => 300, :bank_account_id => 1, :type => 'POS', :terms => Array['NAMESCO'], :color => @red, :translation => 'NAMESCO WEB SERVER'},
-            {:intTypeID => 3, :id => 400, :bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => @red, :translation => 'HORFIELD SPORTS CENTRE', :recurring_amount => 35.19},
-            {:intTypeID => 0, :id => 500, :bank_account_id => 1, :type => 'D/D', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
-            {:intTypeID => 0, :id => 600, :bank_account_id => 1, :type => 'POS', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL'},
-            {:intTypeID => 0, :id => 700, :bank_account_id => 1, :type => 'OTR', :terms => Array['07519616416'], :color => @white, :translation => 'ROSS JOY'},
-            {:intTypeID => 0, :id => 800, :bank_account_id => 1, :type => 'OTR', :terms => Array['07980286590', 'SCOULDING L A'], :color => @white, :translation => 'LUKE SCOULDING'},
-            {:intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => @white, :translation => 'LUKE CHAMBERLAIN'},
-            {:intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => @white, :translation => 'DEAN LINDEN'},
-            {:intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => @white, :translation => 'PHIL HACKETT'},
-            {:intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY','T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 2004.80}, # 1946.23
-            {:intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => @cyan, :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30},
-            {:intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => @white, :translation => 'ALEX CARLIN'},
-            {:intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => @white, :translation => 'JOE HARTRY'},
-            {:intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => @red, :translation => 'SPOTIFY', :recurring_amount => 19.98},
-            {:intTypeID => 0, :id => 1700, :bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => @red, :translation => 'LYNDA.COM'},
-            {:intTypeID => 3, :id => 1800, :bank_account_id => 1, :type => 'POS', :terms => Array['GITHUB.COM'], :color => @red, :translation => 'GITHUB.COM', :recurring_amount => 8.50, :estimated => true},
-            {:intTypeID => 0, :id => 1900, :bank_account_id => 1, :type => 'POS', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (WEDDING FUND)'},
-            {:intTypeID => 3, :id => 1901, :bank_account_id => 1, :type => 'S/O', :terms => Array['EXECUTORS OF MA'], :color => @red, :translation => 'RENT (SARAH KENNY)', :recurring_amount => 1100.00},
-            {:intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'D/D', :terms => Array['NWI HOME INSURANCE'], :color => @red, :translation => 'NATWEST HOME INSURANCE', :recurring_amount => 14.22},
-            {:intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'POS', :terms => Array['AMAZON WEB , SERVICES'], :color => @red, :translation => 'AMAZON WEB SERVICES', :recurring_amount => 25.00, :estimated => true},
+            { :intTypeID => 0, :id => 100, :bank_account_id => 1, :type => 'BAC', :terms => Array['PAYPAL', 'PPWD'], :color => @white, :translation => 'PAYPAL WITHDRAWAL' },
+            { :intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'CDM', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 1, :id => 200, :bank_account_id => 1, :type => '-  ', :terms => Array['521005', '521007', '560005'], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 1, :id => 200, :bank_account_id => 1, :type => 'TLR', :terms => Array[''], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 0, :id => 300, :bank_account_id => 1, :type => 'POS', :terms => Array['NAMESCO'], :color => @red, :translation => 'NAMESCO WEB SERVER' },
+            { :intTypeID => 3, :id => 400, :bank_account_id => 1, :type => 'D/D', :terms => Array['SLMLTD INCOME AC'], :color => @red, :translation => 'HORFIELD SPORTS CENTRE', :recurring_amount => 35.19 },
+            { :intTypeID => 0, :id => 500, :bank_account_id => 1, :type => 'D/D', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL' },
+            { :intTypeID => 0, :id => 600, :bank_account_id => 1, :type => 'POS', :terms => Array['UK MAIL'], :color => @white, :translation => 'UK MAIL' },
+            { :intTypeID => 0, :id => 700, :bank_account_id => 1, :type => 'OTR', :terms => Array['07519616416'], :color => @white, :translation => 'ROSS JOY' },
+            { :intTypeID => 0, :id => 800, :bank_account_id => 1, :type => 'OTR', :terms => Array['07980286590', 'SCOULDING L A'], :color => @white, :translation => 'LUKE SCOULDING' },
+            { :intTypeID => 0, :id => 900, :bank_account_id => 1, :type => 'OTR', :terms => Array['07825126363'], :color => @white, :translation => 'LUKE CHAMBERLAIN' },
+            { :intTypeID => 0, :id => 1000, :bank_account_id => 1, :type => 'BAC', :terms => Array['D LINDEN'], :color => @white, :translation => 'DEAN LINDEN' },
+            { :intTypeID => 0, :id => 1100, :bank_account_id => 1, :type => 'BAC', :terms => Array['P HACKETT'], :color => @white, :translation => 'PHIL HACKETT' },
+            { :intTypeID => 2, :id => 1150, :bank_account_id => 1, :type => 'BAC', :terms => Array['SALARY', 'T27 SYSTEMS'], :color => @cyan, :translation => 'BRIGHTPEARL WAGE', :recurring_amount => 2004.80 }, # 1946.23
+            { :intTypeID => 2, :id => 1200, :bank_account_id => 1, :type => 'BAC', :terms => Array['VIRGIN TV'], :color => @cyan, :translation => 'GARY SOLAN (VIRGIN MEDIA)', :recurring_amount => 30 },
+            { :intTypeID => 0, :id => 1400, :bank_account_id => 1, :type => 'BAC', :terms => Array['ALEX CARLIN'], :color => @white, :translation => 'ALEX CARLIN' },
+            { :intTypeID => 0, :id => 1500, :bank_account_id => 1, :type => 'BAC', :terms => Array['J HARTRY '], :color => @white, :translation => 'JOE HARTRY' },
+            { :intTypeID => 3, :id => 1600, :bank_account_id => 1, :type => 'POS', :terms => Array['SPOTIFY'], :color => @red, :translation => 'SPOTIFY', :recurring_amount => 19.98 },
+            { :intTypeID => 0, :id => 1700, :bank_account_id => 1, :type => 'POS', :terms => Array['LYNDA.COM'], :color => @red, :translation => 'LYNDA.COM' },
+            { :intTypeID => 3, :id => 1800, :bank_account_id => 1, :type => 'POS', :terms => Array['GITHUB.COM'], :color => @red, :translation => 'GITHUB.COM', :recurring_amount => 8.50, :estimated => true },
+            { :intTypeID => 0, :id => 1900, :bank_account_id => 1, :type => 'POS', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (WEDDING FUND)' },
+            { :intTypeID => 3, :id => 1901, :bank_account_id => 1, :type => 'S/O', :terms => Array['EXECUTORS OF MA'], :color => @red, :translation => 'RENT (SARAH KENNY)', :recurring_amount => 1100.00 },
+            { :intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'D/D', :terms => Array['NWI HOME INSURANCE'], :color => @red, :translation => 'NATWEST HOME INSURANCE', :recurring_amount => 14.22 },
+            { :intTypeID => 3, :id => 1902, :bank_account_id => 1, :type => 'POS', :terms => Array['AMAZON WEB , SERVICES'], :color => @red, :translation => 'AMAZON WEB SERVICES', :recurring_amount => 25.00, :estimated => true },
             # NATWEST SAVINGS
-            {:intTypeID => 0, :id => 2000, :bank_account_id => 3, :type => 'BAC', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (REFUND)'},
+            { :intTypeID => 0, :id => 2000, :bank_account_id => 3, :type => 'BAC', :terms => Array['TRANSFERWISE'], :color => @white, :translation => 'TRANFERWISE (REFUND)' },
             # HALIFAX ULTIMATE REWARD
-            {:intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (HALIFAX ULTIAMTE REWARD)', :recurring_amount => 15},
-            {:intTypeID => 1, :id => 2200, :bank_account_id => 4, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'CAR TAX (DVLA-EU51GVC)', :recurring_amount => 19.68},
+            { :intTypeID => 3, :id => 2100, :bank_account_id => 4, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (HALIFAX ULTIAMTE REWARD)', :recurring_amount => 15 },
+            { :intTypeID => 1, :id => 2200, :bank_account_id => 4, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 3, :id => 2250, :bank_account_id => 4, :type => 'DD', :terms => Array['DVLA-EU51GVC'], :color => @red, :translation => 'CAR TAX (DVLA-EU51GVC)', :recurring_amount => 19.68 },
             # HALIFAX REWARD
-            {:intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => @red, :translation => 'CREDITEXPERT', :recurring_amount => 9.99},
-            {:intTypeID => 0, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO'},
-            {:intTypeID => 0, :id => 2400, :bank_account_id => 5, :type => 'FPI', :terms => Array['PAYPAL WITHDRAWAL'], :color => @white, :translation => 'PAYPAL WITHDRAWAL'},
-            {:intTypeID => 1, :id => 2500, :bank_account_id => 5, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 0, :id => 2550, :bank_account_id => 6, :type => 'D-C', :terms => Array[''], :color => @white, :translation => 'ISA INTEREST'},
+            { :intTypeID => 3, :id => 2300, :bank_account_id => 5, :type => 'DEB', :terms => Array['CREDITEXPERT.CO.UK'], :color => @red, :translation => 'CREDITEXPERT', :recurring_amount => 9.99 },
+            { :intTypeID => 0, :id => 2350, :bank_account_id => 5, :type => 'DEB', :terms => Array['ANIMOTO'], :color => @red, :translation => 'ANIMOTO' },
+            { :intTypeID => 0, :id => 2400, :bank_account_id => 5, :type => 'FPI', :terms => Array['PAYPAL WITHDRAWAL'], :color => @white, :translation => 'PAYPAL WITHDRAWAL' },
+            { :intTypeID => 1, :id => 2500, :bank_account_id => 5, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 0, :id => 2550, :bank_account_id => 6, :type => 'D-C', :terms => Array[''], :color => @white, :translation => 'ISA INTEREST' },
             # LLOYDS CURRENT
-            {:intTypeID => 0, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT'},
-            {:intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE'], :color => @red, :translation => 'VODAFONE', :recurring_amount => 50, :estimated => true},
-            {:intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 112.99, :estimated => true},
-            {:intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 1, :id => 2950, :bank_account_id => 8, :type => 'DEP', :terms => Array[''], :color => @green, :translation => 'CASH'},
-            {:intTypeID => 3, :id => 3000, :bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => @red, :translation => 'TESCO CAR INSURANCE', :recurring_amount => 62.73},
-            {:intTypeID => 3, :id => 3100, :bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (LLOYDS CURRENT)', :recurring_amount => 15},
-            {:intTypeID => 2, :id => 3200, :bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => @cyan, :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring_amount => 24},
+            { :intTypeID => 0, :id => 2600, :bank_account_id => 8, :type => 'FPO', :terms => Array['STELLA TALIOTIS'], :color => @red, :translation => 'RENT' },
+            { :intTypeID => 3, :id => 2700, :bank_account_id => 8, :type => 'DD', :terms => Array['VODAFONE'], :color => @red, :translation => 'VODAFONE', :recurring_amount => 50, :estimated => true },
+            { :intTypeID => 3, :id => 2800, :bank_account_id => 8, :type => 'DD', :terms => Array['VIRGIN MEDIA'], :color => @red, :translation => 'VIRGIN MEDIA', :recurring_amount => 112.99, :estimated => true },
+            { :intTypeID => 1, :id => 2900, :bank_account_id => 8, :type => 'CSH', :terms => Array[''], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 1, :id => 2950, :bank_account_id => 8, :type => 'DEP', :terms => Array[''], :color => @green, :translation => 'CASH' },
+            { :intTypeID => 3, :id => 3000, :bank_account_id => 8, :type => 'DD', :terms => Array['TESCO BANK'], :color => @red, :translation => 'TESCO CAR INSURANCE', :recurring_amount => 62.73 },
+            { :intTypeID => 3, :id => 3100, :bank_account_id => 8, :type => 'FEE', :terms => Array['ACCOUNT FEE'], :color => @red, :translation => 'ACCOUNT FEE (LLOYDS CURRENT)', :recurring_amount => 15 },
+            { :intTypeID => 2, :id => 3200, :bank_account_id => 8, :type => 'FPI', :terms => Array['MATTHEW JONES'], :color => @cyan, :translation => 'MATT JONES (VIRGIN MEDIA)', :recurring_amount => 24 },
         ]
 
         @recognizedTransactionsIndexedID = {}
@@ -92,26 +92,26 @@ class ShowBankTransactions
 
         @internalTransfers = Array[
             # NATWEST
-            {:bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'HALIFAX REWARD', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT']},
-            {:bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.'], :terms_not => ['UK MAIL LIMITED', 'DEAN LINDEN', 'TRANSFERWISE']},
-            {:bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE']},
+            { :bank_account_id => Array[1, 2, 3], :type => 'BAC', :terms => Array['A RANNETSPERGER', 'HALIFAX ULTIMATE', 'HALIFAX REWARD', 'AR HALIFAX ACC', 'LLOYDS ACCOUNT'] },
+            { :bank_account_id => Array[1, 2, 3], :type => 'OTR', :terms => Array['CALL REF.NO.'], :terms_not => ['UK MAIL LIMITED', 'DEAN LINDEN', 'TRANSFERWISE'] },
+            { :bank_account_id => Array[1, 2, 3], :type => 'POS', :terms => Array['BARCLAYCARD', 'CAPITAL ONE'] },
             # LLOYDS
-            {:bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN']},
-            {:bank_account_id => Array[8], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
-            {:bank_account_id => Array[8], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
-            {:bank_account_id => Array[7], :type => 'CC', :terms => Array['PAYMENT RECEIVED']},
+            { :bank_account_id => Array[8], :type => 'FPO', :terms => Array['NATWEST AD GOLD', 'NATWEST STEP', 'NATWEST SAVINGS', 'LLOYDS BANK PLATIN'] },
+            { :bank_account_id => Array[8], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST'] },
+            { :bank_account_id => Array[8], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER'] },
+            { :bank_account_id => Array[7], :type => 'CC', :terms => Array['PAYMENT RECEIVED'] },
             # HALIFAX
-            {:bank_account_id => Array[4, 5], :type => 'DEB', :terms => Array['BARCLAYCARD']},
-            {:bank_account_id => Array[4, 5], :type => 'FPO', :terms => Array['NATWEST']},
-            {:bank_account_id => Array[4, 5], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST']},
-            {:bank_account_id => Array[4, 5], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER']},
-            {:bank_account_id => Array[6], :type => 'P-C', :terms => Array['']},
-            {:bank_account_id => Array[6], :type => 'P-T', :terms => Array['']},
-            {:bank_account_id => Array[6], :type => 'D-T', :terms => Array['']},
+            { :bank_account_id => Array[4, 5], :type => 'DEB', :terms => Array['BARCLAYCARD'] },
+            { :bank_account_id => Array[4, 5], :type => 'FPO', :terms => Array['NATWEST'] },
+            { :bank_account_id => Array[4, 5], :type => 'FPI', :terms => Array['RANNETSPERGER A NATWEST'] },
+            { :bank_account_id => Array[4, 5], :type => 'TFR', :terms => Array['HALIFAX ULTIMATE', 'HALIFAX REWARD', 'A RANNETSPERGER'] },
+            { :bank_account_id => Array[6], :type => 'P-C', :terms => Array[''] },
+            { :bank_account_id => Array[6], :type => 'P-T', :terms => Array[''] },
+            { :bank_account_id => Array[6], :type => 'D-T', :terms => Array[''] },
             # BARCLAYCARD
-            {:bank_account_id => Array[9], :type => 'OTHER', :terms => Array['PAYMENT, THANK YOU']},
+            { :bank_account_id => Array[9], :type => 'OTHER', :terms => Array['PAYMENT, THANK YOU'] },
             # CAPITAL ONE
-            {:bank_account_id => Array[10], :type => 'CR', :terms => Array['PAYMENT RECEIVED', 'DIRECT DEBIT PAYMENT']},
+            { :bank_account_id => Array[10], :type => 'CR', :terms => Array['PAYMENT RECEIVED', 'DIRECT DEBIT PAYMENT'] },
         ]
 
         @ignoredTransactions = Array.new
@@ -123,28 +123,28 @@ class ShowBankTransactions
                                          4207, 4213, 4227, 4295, 4294, 4276, 4266, 4258, 4211, 4267])
 
         # Misc Globals
-        @rightHandSideCount = 4
-        @rightHandSideContent = Array.new
-        @rightHandSideContentCount = -1
+        @rightHandSideCount         = 4
+        @rightHandSideContent       = Array.new
+        @rightHandSideContentCount  = -1
         @rightHandSideContentExists = true
 
         # Balance Globals
-        @totalAvailable = 0
-        @totalCredit = 0
-        @totalCreditUsed = 0
-        @totalCash = 0
-        @moneyInRemaining = 0
-        @moneyOutRemaining = 0
+        @totalAvailable        = 0
+        @totalCredit           = 0
+        @totalCreditUsed       = 0
+        @totalCash             = 0
+        @moneyInRemaining      = 0
+        @moneyOutRemaining     = 0
         @fixedMonthlyOutgoings = 0
-        @creditScore = Array.new
+        @creditScore           = Array.new
 
         @summaryData = {
-            :month1 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
-            :month2 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
-            :month3 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
-            :month4 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
-            :month5 => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0},
-            :monthTotal => {:misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0},
+            :month1     => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0 },
+            :month2     => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0 },
+            :month3     => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0 },
+            :month4     => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0 },
+            :month5     => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0, :starting_balances => 0 },
+            :monthTotal => { :misc_in => 0, :misc_out => 0, :cash_in => 0, :total_in => 0, :total_out => 0, :profit_loss => 0 },
         }
 
         # Months
@@ -155,8 +155,8 @@ class ShowBankTransactions
         @month5 = DateTime.now << 4
 
         # Get different modes.
-        @untranslated = false
-        @withIDs = false
+        @untranslated          = false
+        @withIDs               = false
         @withInternalTransfers = false
         if argv == 'untranslated'
             @untranslated = true
@@ -169,7 +169,7 @@ class ShowBankTransactions
         @rule = getRuleString(202)
 
         # Get banks into Hash
-        @banks = {}
+        @banks   = {}
         banksSQL = @databaseConnection.query('SELECT * FROM bank ORDER BY id ASC')
         banksSQL.each_hash do |row|
             @banks[row['id']] = row['title']
@@ -177,7 +177,7 @@ class ShowBankTransactions
         banksSQL.free
 
         # Get bank accounts into Hash
-        @bankAccounts = {}
+        @bankAccounts   = {}
         bankAccountsSQL = @databaseConnection.query('SELECT * FROM bank_account ORDER BY id ASC')
         bankAccountsSQL.each_hash do |row|
             @bankAccounts[row['id']] = row
@@ -198,13 +198,13 @@ class ShowBankTransactions
                 else
                     raise(RuntimeError, "bank_account_type => #{bankAccount['bank_account_type']} doesn't exist.")
             end
-            balance = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' ORDER BY date_fetched DESC LIMIT 1")
+            balance                                      = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' ORDER BY date_fetched DESC LIMIT 1")
             @bankAccountBalances[bankAccount['id'].to_i] = balance.fetch_hash
             balance.free
         end
 
         # Get transactions into Hash
-        @transactions = Array.new
+        @transactions   = Array.new
         transactionsSQL = @databaseConnection.query("SELECT * FROM bank_account_transactions WHERE date >= '#{@month5.strftime('%Y-%m-01')}' ORDER BY date ASC, bank_account_id ASC, type ASC")
         transactionsSQL.each_hash do |transaction|
 
@@ -218,38 +218,38 @@ class ShowBankTransactions
         transactionsSQL.free
 
         # Column widths for transactions
-        @transWidth_1 = 20
-        @transWidth_2 = 20
-        @transWidth_3 = 12
-        @transWidth_4 = 111
-        @transWidth_5 = 6
-        @transWidth_6 = 11
-        @transWidth_7 = 12
+        @transWidth_1    = 20
+        @transWidth_2    = 20
+        @transWidth_3    = 12
+        @transWidth_4    = 111
+        @transWidth_5    = 6
+        @transWidth_6    = 11
+        @transWidth_7    = 12
         @transWidthTotal = @transWidth_1 + @transWidth_2 + @transWidth_3 + @transWidth_4 + @transWidth_5 + @transWidth_6 + @transWidth_7 + 8
 
         # Column widths for balances
-        @colWidth_1 = 20
-        @colWidth_2 = 22
-        @colWidth_3 = 20
-        @colWidth_4 = 20
-        @colWidth_5 = 20
-        @colWidth_6 = 20
-        @colWidth_7 = 20
-        @colWidth_8 = 21
-        @colWidth_9 = 2
-        @colWidth_10 = 24
+        @colWidth_1    = 20
+        @colWidth_2    = 22
+        @colWidth_3    = 20
+        @colWidth_4    = 20
+        @colWidth_5    = 20
+        @colWidth_6    = 20
+        @colWidth_7    = 20
+        @colWidth_8    = 21
+        @colWidth_9    = 2
+        @colWidth_10   = 24
         @colWidthTotal = @colWidth_1 + @colWidth_2 + @colWidth_3 + @colWidth_4 + @colWidth_5 + @colWidth_6 + @colWidth_7 + @colWidth_8 + @colWidth_9 + @colWidth_10 + 9
 
         # Column widths for balances
-        @summaryWidth_1 = 43
-        @summaryWidth_2 = 20
-        @summaryWidth_3 = 20
-        @summaryWidth_4 = 20
-        @summaryWidth_5 = 20
-        @summaryWidth_6 = 20
-        @summaryWidth_7 = 21
-        @summaryWidth_8 = 2
-        @summaryWidth_9 = 24
+        @summaryWidth_1    = 43
+        @summaryWidth_2    = 20
+        @summaryWidth_3    = 20
+        @summaryWidth_4    = 20
+        @summaryWidth_5    = 20
+        @summaryWidth_6    = 20
+        @summaryWidth_7    = 21
+        @summaryWidth_8    = 2
+        @summaryWidth_9    = 24
         @summaryWidthTotal = @summaryWidth_1 + @summaryWidth_2 + @summaryWidth_3 + @summaryWidth_4 + @summaryWidth_5 + @summaryWidth_6 + @summaryWidth_7 + @summaryWidth_8 + @summaryWidth_9 + 8
 
     end
@@ -314,7 +314,7 @@ class ShowBankTransactions
 
                 # Translation Handling
                 transactionDetails = getDescriptionAndColor(transaction)
-                transactionColor = transactionDetails[:color]
+                transactionColor   = transactionDetails[:color]
                 if @untranslated
                     transactionDescription = transaction['description']
                 else
@@ -353,8 +353,8 @@ class ShowBankTransactions
                 # Format description
                 if @withIDs
                     descriptionAddedInfo = "##{transaction['id']}"
-                    description = transactionDescription[0..((@transWidth_4 - 2) - descriptionAddedInfo.length)]
-                    description = "#{descriptionAddedInfo}#{getRuleString(@transWidth_4 - (descriptionAddedInfo.length + description.length), ' ')}#{description}"
+                    description          = transactionDescription[0..((@transWidth_4 - 2) - descriptionAddedInfo.length)]
+                    description          = "#{descriptionAddedInfo}#{getRuleString(@transWidth_4 - (descriptionAddedInfo.length + description.length), ' ')}#{description}"
                 else
                     description = transactionDescription[0..(@transWidth_4 - 2)]
                 end
@@ -380,10 +380,10 @@ class ShowBankTransactions
     def getDescriptionAndColor(transaction)
         @recognizedTransactions.each do |translation|
             if transaction['bank_account_id'].to_i == translation[:bank_account_id] && transaction['type'] == translation[:type] && translation[:terms].any? { |w| transaction['description'] =~ /#{w}/ }
-                return {:description => translation[:translation].upcase, :color => translation[:color]}
+                return { :description => translation[:translation].upcase, :color => translation[:color] }
             end
         end
-        {:description => transaction['description'].upcase, :color => @white}
+        { :description => transaction['description'].upcase, :color => @white }
     end
 
     # Returns TRUE if transaction is internal transfer
@@ -466,8 +466,8 @@ class ShowBankTransactions
             @bankAccounts.each do |row|
                 row = row[1]
                 if row['bank_account_type_id'].to_i == 1 && row['id'].to_i != 3
-                    bankAndColor = getBankAndColor(row['bank_id'])
-                    balances = @bankAccountBalances[row['id'].to_i]
+                    bankAndColor                    = getBankAndColor(row['bank_id'])
+                    balances                        = @bankAccountBalances[row['id'].to_i]
                     balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
@@ -521,8 +521,8 @@ class ShowBankTransactions
             @bankAccounts.each do |row|
                 row = row[1]
                 if row['bank_account_type_id'].to_i == 2
-                    bankAndColor = getBankAndColor(row['bank_id'])
-                    balances = @bankAccountBalances[row['id'].to_i]
+                    bankAndColor                    = getBankAndColor(row['bank_id'])
+                    balances                        = @bankAccountBalances[row['id'].to_i]
                     balances['date_fetched_string'] = normalizeTimestamp(balances['date_fetched_string'])
                     row do
                         column(" #{bankAndColor[0]}", :color => bankAndColor[1])
@@ -533,8 +533,8 @@ class ShowBankTransactions
                         if minimumPaymentDate == '0000-00-00'
                             minimumPaymentDate = '1983-10-29'
                         end
-                        timeStamp = DateTime.strptime(minimumPaymentDate, '%Y-%m-%d')
-                        timeNow = DateTime.now
+                        timeStamp            = DateTime.strptime(minimumPaymentDate, '%Y-%m-%d')
+                        timeNow              = DateTime.now
                         minimumPaymentDateIn = (timeStamp - timeNow).to_i
                         if minimumPaymentDateIn <= 3
                             minimumPaymentColor = @red
@@ -716,11 +716,11 @@ class ShowBankTransactions
         puts "#{getRuleString(@summaryWidthTotal)}"
 
         # Calculates (displays) where to put arrow depending on how far through the month we are..
-        currentDay = @month1.strftime('%d').to_f
-        lastDay = (getEndOfMonthDay.to_f) - 1
+        currentDay         = @month1.strftime('%d').to_f
+        lastDay            = (getEndOfMonthDay.to_f) - 1
         percentOfMonthLeft = 100 - (currentDay - 1) / (lastDay / 100)
-        pixelsRemaining = ((@summaryWidthTotal - 1).to_f / 100) * percentOfMonthLeft
-        pixelToPutArrow = ((@summaryWidthTotal - 1) - pixelsRemaining)
+        pixelsRemaining    = ((@summaryWidthTotal - 1).to_f / 100) * percentOfMonthLeft
+        pixelToPutArrow    = ((@summaryWidthTotal - 1) - pixelsRemaining)
         puts " \x1B[36m#{getRuleString(pixelToPutArrow - 1, ' ')}\x1B[33m\xe2\x98\x85\x1B[0m\n\n"
 
         # Uncomment for 'Enter to clear' functionality after script run.
@@ -752,7 +752,7 @@ class ShowBankTransactions
 
                 amt1, amt2, amt3, amt4, amt5, amtTotal = runCalculationFor(method(:calculateAmountPaidReceivedForRecognizedTransaction), recognizedTransaction[:id])
 
-                plus_color = 235
+                plus_color  = 235
                 minus_color = 235
 
                 if intTypeId == 2
@@ -792,7 +792,7 @@ class ShowBankTransactions
         if @rightHandSideCount == 3
             @rightHandSideContentCount = @rightHandSideContentCount + 1
         elsif @rightHandSideCount >= 7
-            @rightHandSideCount = 1
+            @rightHandSideCount        = 1
             @rightHandSideContentCount = @rightHandSideContentCount + 1
         elsif @rightHandSideCount >= 5
             if @rightHandSideContentExists
@@ -808,10 +808,10 @@ class ShowBankTransactions
             end
         end
         content = ''
-        color = 208
+        color   = 208
         if !@rightHandSideContent[@rightHandSideContentCount].nil?
             content = @rightHandSideContent[@rightHandSideContentCount][0]
-            color = @rightHandSideContent[@rightHandSideContentCount][1]
+            color   = @rightHandSideContent[@rightHandSideContentCount][1]
         else
             @rightHandSideContentExists = false
         end
@@ -820,22 +820,22 @@ class ShowBankTransactions
 
     # @return array
     def runCalculationFor(callback, param1 = nil)
-        var1 = Array.new
-        var2 = Array.new
-        var3 = Array.new
-        var4 = Array.new
-        var5 = Array.new
-        var1[0] = callback.call(@month1, param1)
-        var1[1] = getAsCurrency(var1[0])
-        var2[0] = callback.call(@month2, param1)
-        var2[1] = getAsCurrency(var2[0])
-        var3[0] = callback.call(@month3, param1)
-        var3[1] = getAsCurrency(var3[0])
-        var4[0] = callback.call(@month4, param1)
-        var4[1] = getAsCurrency(var4[0])
-        var5[0] = callback.call(@month5, param1)
-        var5[1] = getAsCurrency(var5[0])
-        varTotal = Array.new
+        var1        = Array.new
+        var2        = Array.new
+        var3        = Array.new
+        var4        = Array.new
+        var5        = Array.new
+        var1[0]     = callback.call(@month1, param1)
+        var1[1]     = getAsCurrency(var1[0])
+        var2[0]     = callback.call(@month2, param1)
+        var2[1]     = getAsCurrency(var2[0])
+        var3[0]     = callback.call(@month3, param1)
+        var3[1]     = getAsCurrency(var3[0])
+        var4[0]     = callback.call(@month4, param1)
+        var4[1]     = getAsCurrency(var4[0])
+        var5[0]     = callback.call(@month5, param1)
+        var5[1]     = getAsCurrency(var5[0])
+        varTotal    = Array.new
         varTotal[0] = var1[0] + var2[0] + var3[0] + var4[0] + var5[0]
         varTotal[1] = getAsCurrency(varTotal[0])
         Array[var1, var2, var3, var4, var5, varTotal]
@@ -844,11 +844,11 @@ class ShowBankTransactions
     # Get all the totals (for current month)
     # @return void
     def getTotals
-        totals = calculateTotals(@bankAccountBalances)
-        @totalAvailable = totals[:totalAvailable]
+        totals           = calculateTotals(@bankAccountBalances)
+        @totalAvailable  = totals[:totalAvailable]
         @totalCreditUsed = totals[:totalCreditUsed]
-        @totalCredit = totals[:totalCredit]
-        @totalCash = totals[:totalCash]
+        @totalCredit     = totals[:totalCredit]
+        @totalCash       = totals[:totalCash]
     end
 
     # @return object
@@ -859,10 +859,10 @@ class ShowBankTransactions
             object.each do |value|
                 if value.nil?
                     return {
-                        :totalAvailable => nil,
+                        :totalAvailable  => nil,
                         :totalCreditUsed => nil,
-                        :totalCredit => nil,
-                        :totalCash => nil
+                        :totalCredit     => nil,
+                        :totalCash       => nil
                     }
                 end
             end
@@ -908,10 +908,10 @@ class ShowBankTransactions
         totalCash = (totalAvailable - totalCredit).round(2)
 
         {
-            :totalAvailable => totalAvailable,
+            :totalAvailable  => totalAvailable,
             :totalCreditUsed => totalCreditUsed,
-            :totalCredit => totalCredit,
-            :totalCash => totalCash,
+            :totalCredit     => totalCredit,
+            :totalCash       => totalCash,
         }
 
     end
@@ -936,11 +936,11 @@ class ShowBankTransactions
                     else
                         raise(RuntimeError, "bank_account_type => #{bankAccount['bank_account_type']} doesn't exist.")
                 end
-                balance = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' AND (date_fetched>='#{month.strftime('%Y-%m-01')}' AND date_fetched<='#{month.strftime('%Y-%m-07')}') ORDER BY date_fetched ASC LIMIT 1")
+                balance                                   = @databaseConnection.query("SELECT * FROM #{bankAccountTable} WHERE bank_account_id='#{bankAccount['id']}' AND (date_fetched>='#{month.strftime('%Y-%m-01')}' AND date_fetched<='#{month.strftime('%Y-%m-07')}') ORDER BY date_fetched ASC LIMIT 1")
                 thisMonthBalances[bankAccount['id'].to_i] = balance.fetch_hash
                 balance.free
             end
-            monthObject = getMonthObject(month.strftime('%Y-%m'))
+            monthObject                     = getMonthObject(month.strftime('%Y-%m'))
             monthObject[:starting_balances] = calculateTotals(thisMonthBalances)
         end
 
@@ -960,7 +960,7 @@ class ShowBankTransactions
             end
 
             transactionRecognized = false
-            transactionAdded = false
+            transactionAdded      = false
 
             # Check if transaction is recognized.
             @recognizedTransactions.each do |rt|
@@ -973,7 +973,7 @@ class ShowBankTransactions
             # Process recurring transactions
             if transactionRecognized
                 transactionAdded = true
-                rt = @recognizedTransactionsIndexedID["#{transactionRecognized}"]
+                rt               = @recognizedTransactionsIndexedID["#{transactionRecognized}"]
                 if rt[:intTypeID] == 1
                     monthObject[:cash_in] = monthObject[:cash_in] + transaction['paid_in'].to_f
                 elsif rt[:intTypeID] == 2
@@ -1090,15 +1090,15 @@ class ShowBankTransactions
 
     # @return array
     def getCreditScore
-        creditScore = @databaseConnection.query('SELECT * FROM experian_credit_report ORDER BY date_fetched DESC LIMIT 1')
-        creditScore = creditScore.fetch_hash
+        creditScore  = @databaseConnection.query('SELECT * FROM experian_credit_report ORDER BY date_fetched DESC LIMIT 1')
+        creditScore  = creditScore.fetch_hash
         @creditScore = Array[creditScore['score'], creditScore['score_text']]
     end
 
     # Returns name of bank account + associated color.
     def getBankAndColor(bankId)
 
-        returnHash = {}
+        returnHash    = {}
         returnHash[0] = @banks[bankId.to_s]
         case bankId.to_i
             when 1
@@ -1189,20 +1189,20 @@ class ShowBankTransactions
                 @summaryData[:month5][:misc_out]) / 4).round(2)
 
         # An estimate of how much 'MISC' goes in/out based on last 4 months.
-        inAdjustment = (averageMiscIn - @summaryData[:month1][:misc_in]) + (averageCashIn - @summaryData[:month1][:cash_in])
+        inAdjustment  = (averageMiscIn - @summaryData[:month1][:misc_in]) + (averageCashIn - @summaryData[:month1][:cash_in])
         outAdjustment = (averageMiscOut - @summaryData[:month1][:misc_out])
 
         # Calculate how much % of month is left...
         totalDaysInCurrentMonth = Date.civil(@month1.strftime('%Y').to_i, @month1.strftime('%m').to_i, -1).day
-        currentDay = @month1.strftime('%d')
-        percentOfMonthLeft = 100 - (currentDay.to_f / (totalDaysInCurrentMonth.to_f / 100))
+        currentDay              = @month1.strftime('%d')
+        percentOfMonthLeft      = 100 - (currentDay.to_f / (totalDaysInCurrentMonth.to_f / 100))
 
         # ...and adjust adjustments accordingly.
-        inAdjustment = inAdjustment * (percentOfMonthLeft / 100)
+        inAdjustment  = inAdjustment * (percentOfMonthLeft / 100)
         outAdjustment = outAdjustment * (percentOfMonthLeft / 100)
 
         # Add ajustments to @moneyRemaining variables.
-        moneyInRemaining = @moneyInRemaining + inAdjustment
+        moneyInRemaining  = @moneyInRemaining + inAdjustment
         moneyOutRemaining = @moneyOutRemaining + outAdjustment
 
         (@totalCash - moneyOutRemaining) + moneyInRemaining
@@ -1227,7 +1227,7 @@ class ShowBankTransactions
     # Returns the amount as currency formatted string with color (as hash)
     # return object
     def getAsCurrency(amount, symbol = '£', delimiter = ',')
-        amount = amount.to_f
+        amount     = amount.to_f
         returnHash = {}
 
         # Set index '1' to color
@@ -1238,9 +1238,9 @@ class ShowBankTransactions
         end
 
         # Set index '0' to formatted amount
-        minus = (amount < 0) ? '-' : ''
-        amount = '%.2f' % amount.abs
-        amount = amount.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
+        minus         = (amount < 0) ? '-' : ''
+        amount        = '%.2f' % amount.abs
+        amount        = amount.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
         returnHash[0] = "#{minus}#{symbol}#{amount}"
         returnHash
     end

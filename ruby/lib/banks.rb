@@ -1,5 +1,5 @@
 # Require private config file
-if(File.exists?('/Users/Albert/bin/config/privateff.rb'))
+if (File.exists?('/Users/Albert/bin/config/privateff.rb'))
     require '/Users/Albert/.secrets/secrets.rb'
 else
     abort "/Users/Albert/.secrets/secrets.rb doesn't exist. Can't log in without this file."

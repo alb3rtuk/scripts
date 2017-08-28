@@ -5,13 +5,13 @@ class BankNatWest
     include CommandLineReporter
 
     def initialize(username, security_top, security_bottom, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @security_top = security_top
-        @security_bottom = security_bottom
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://www.nwolb.com/default.aspx'
+        @username           = username
+        @security_top       = security_top
+        @security_bottom    = security_bottom
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://www.nwolb.com/default.aspx'
         @databaseConnection = databaseConnection
     end
 
@@ -56,19 +56,19 @@ class BankNatWest
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getAllData(showInTerminal)
+                data    = getAllData(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
-                    cronLog"NatWest: Attempt #{attempt} failed with message: #{e.message}."
+                    cronLog "NatWest: Attempt #{attempt} failed with message: #{e.message}."
                 end
             else
                 succeeded = true
@@ -83,9 +83,9 @@ class BankNatWest
                     BankCommon.new.insertTransactions(@databaseConnection, data['savings_account_transactions'], 3)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
-                        {:bank_account_id => 1, :transactions => data['select_platinum_transactions']},
-                        {:bank_account_id => 2, :transactions => data['step_account_transactions']},
-                        {:bank_account_id => 3, :transactions => data['savings_account_transactions']}
+                        { :bank_account_id => 1, :transactions => data['select_platinum_transactions'] },
+                        { :bank_account_id => 2, :transactions => data['step_account_transactions'] },
+                        { :bank_account_id => 3, :transactions => data['savings_account_transactions'] }
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
@@ -106,25 +106,25 @@ class BankNatWest
 
     def getBalances(showInTerminal = false, browser = self.login)
         showInTerminal
-        f = 'ctl00_secframe'
-        data = {}
-        data['select_platinum_balance'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
+        f                                 = 'ctl00_secframe'
+        data                              = {}
+        data['select_platinum_balance']   = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
         data['select_platinum_available'] = browser.frame(:id => f).tr(:id => 'Account_A412AD6062AE989A9FCDAEB7D9ED8A594808AC87').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
         data['select_platinum_overdraft'] = 7500 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
-        data['savings_account'] = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
-        data['step_account'] = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
-        data['cc_balance'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
-        data['cc_balance'] = -(data['cc_balance'])
-        data['cc_available'] = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
-        data['cc_limit'] = 10200 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
+        data['savings_account']           = browser.frame(:id => f).tr(:id => 'Account_CE99D6FF6219B59BB28B6A42825D98D60B92326C').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['step_account']              = browser.frame(:id => f).tr(:id => 'Account_FAB7EFB59260BED0F1081E761570BF4227C37E6B').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['cc_balance']                = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 0).text.delete('£').delete(',').to_f
+        data['cc_balance']                = -(data['cc_balance'])
+        data['cc_available']              = browser.frame(:id => f).tr(:id => 'Account_CDD4170EF4F973DF1FF69BAF3643C21FC1592D68').td(:class => 'currency', :index => 1).text.delete('£').delete(',').to_f
+        data['cc_limit']                  = 10200 # This is hard-coded because there is no way to determine what the O/D Limit is from the website.
         Array[browser, data]
     end
 
     def getAllData(showInTerminal = false, browser = self.login)
-        f = 'ctl00_secframe'
+        f             = 'ctl00_secframe'
         data_platinum = Array.new
-        data_step = Array.new
-        data_savings = Array.new
+        data_step     = Array.new
+        data_savings  = Array.new
 
         # Get balances first
         data = getBalances(false, browser)
@@ -196,7 +196,7 @@ class BankNatWest
 
         # Add transactions to final array
         data['select_platinum_transactions'] = data_platinum
-        data['step_account_transactions'] = data_step
+        data['step_account_transactions']    = data_step
         data['savings_account_transactions'] = data_savings
 
         Array[browser, data]
@@ -204,14 +204,14 @@ class BankNatWest
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTable(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 2
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
                 cellCount = cellCount + 1
@@ -241,16 +241,16 @@ class BankNatWest
         transactions.each do |transaction|
             newData = {}
             # Date
-            date = Date.parse(transaction['date'])
+            date            = Date.parse(transaction['date'])
             newData['date'] = date.strftime('%Y-%m-%d')
             # Type
             newData['type'] = transaction['type']
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_in']  = transaction['paid_in'].delete(',').to_f
             newData['paid_out'] = transaction['paid_out'].delete(',').to_f
-            newData['balance'] = transaction['balance'].delete('£').delete(',').to_f
+            newData['balance']  = transaction['balance'].delete('£').delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray

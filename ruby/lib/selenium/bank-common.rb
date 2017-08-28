@@ -29,9 +29,9 @@ class BankCommon
     # @return void
     def insertTransactions(databaseConnection, data, bank_account_id)
         data.each do |transaction|
-            result = databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description'].gsub(/'/) {|s| "\\'"}}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}' AND balance='#{transaction['balance']}'")
+            result = databaseConnection.query("SELECT * FROM bank_account_transactions WHERE bank_account_id='#{bank_account_id}' AND date='#{transaction['date']}' AND type='#{transaction['type']}' AND description='#{transaction['description'].gsub(/'/) { |s| "\\'" }}' AND paid_in='#{transaction['paid_in']}' AND paid_out='#{transaction['paid_out']}' AND balance='#{transaction['balance']}'")
             if result.num_rows == 0
-                databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out, balance) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description'].gsub(/'/) {|s| "\\'"}}', '#{transaction['paid_in']}', '#{transaction['paid_out']}', '#{transaction['balance']}')")
+                databaseConnection.query("INSERT INTO bank_account_transactions (bank_account_id, date_fetched, date_fetched_string, date, type, description, paid_in, paid_out, balance) VALUES (#{bank_account_id}, '#{DateTime.now}', '#{DateTime.now}', '#{transaction['date']}', '#{transaction['type']}', '#{transaction['description'].gsub(/'/) { |s| "\\'" }}', '#{transaction['paid_in']}', '#{transaction['paid_out']}', '#{transaction['balance']}')")
             end
         end
     end

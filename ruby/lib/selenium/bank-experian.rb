@@ -4,13 +4,13 @@ class BankExperian
     include CommandLineReporter
 
     def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @password = password
-        @security = security
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://www.creditexpert.co.uk/login/login'
+        @username           = username
+        @password           = password
+        @security           = security
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://www.creditexpert.co.uk/login/login'
         @databaseConnection = databaseConnection
     end
 
@@ -47,12 +47,12 @@ class BankExperian
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getCreditScore(showInTerminal)
+                data    = getCreditScore(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e

@@ -2,7 +2,7 @@
 
 array = []
 count = 0
-sum = 0
+sum   = 0
 
 loop do
     array << Random.rand(0..256)

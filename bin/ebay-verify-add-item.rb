@@ -7,7 +7,6 @@ require File.expand_path('~/.secrets/secrets.rb')
 category_id = 32834 # TV & Home Audio Accessories > Sound & Vision > Video Cables & Connectors
 
 
-
 raw_xml = "
 <?xml version=\"1.0\" encoding=\"utf-8\"?>
 <VerifyAddItemRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
@@ -73,8 +72,8 @@ raw_xml = "
 
 # Write neatly to terminal
 puts
-doc = REXML::Document.new(raw_xml)
-formatter = REXML::Formatters::Pretty.new
+doc               = REXML::Document.new(raw_xml)
+formatter         = REXML::Formatters::Pretty.new
 formatter.compact = true
 formatter.write(doc, $stdout)
 puts

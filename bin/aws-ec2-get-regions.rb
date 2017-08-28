@@ -3,12 +3,10 @@ require 'json'
 y = JSON.parse(`aws ec2 describe-regions`)
 
 region_count = 0
-region_sql = []
+region_sql   = []
 
 az_count = 0
-az_sql = []
-
-
+az_sql   = []
 
 
 y['Regions'].each do |region|

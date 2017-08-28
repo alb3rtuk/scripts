@@ -5,10 +5,10 @@ require 'webrick/httputils'
 
 class Gumtree
 
-    GUMTREE_URL = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=flats-and-houses-for-rent&q=flat&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=private&property_type=&min_price=&max_price=500&min_property_number_beds=0&max_property_number_beds=1&refine='
+    GUMTREE_URL  = 'http://www.gumtree.com/search?sort=date&page=1&distance=0&guess_search_category=flats-and-houses-for-rent&q=flat&search_category=flats-and-houses-for-rent&search_location=bristol&seller_type=private&property_type=&min_price=&max_price=500&min_property_number_beds=0&max_property_number_beds=1&refine='
     SEARCH_TITLE = 'New Flat Available'
-    MIN_PRICE = 350
-    MAX_PRICE = 500
+    MIN_PRICE    = 350
+    MAX_PRICE    = 500
 
     # Must contain AT LEAST 1 word from BOTH whitelists.
     WHITELIST_1 = %w(horfield andrews redland bedminster barton george downs clifton werburghs cotham montpelier redfield philips judes hotwells brislington southville filton patchway stoke fishponds downend frenchay kingswood speedwell lawrence whitehall city centre center whiteladies johns marks bri bishopston ashley arches)
@@ -16,20 +16,20 @@ class Gumtree
 
     # The phone numbers to text
     NUMBERS_TO_TEXT = %w(+447479161169)
-    SENDER = "Albert's Script"
+    SENDER          = "Albert's Script"
 
     # --------------------------------------------------------------------------------------------------------------------
 
     # DO NOT CHANGE
     GUMTREE_PREFIX = 'http://www.gumtree.com'
-    TIME_PREFIX = "\033[1;37m[#{Time.now.getlocal}]\033[0m - "
+    TIME_PREFIX    = "\033[1;37m[#{Time.now.getlocal}]\033[0m - "
 
     def initialize
 
         exit
 
         @encryptor = Encryptor.new
-        @database = Mysql.new(
+        @database  = Mysql.new(
             @encryptor.decrypt(EC2MySqlAlb3rtukHost),
             @encryptor.decrypt(EC2MySqlAlb3rtukUser),
             @encryptor.decrypt(EC2MySqlAlb3rtukPass),
@@ -37,18 +37,18 @@ class Gumtree
         )
 
         existing_links = []
-        query = @database.query('SELECT link FROM gumtree ORDER BY id DESC')
+        query          = @database.query('SELECT link FROM gumtree ORDER BY id DESC')
         query.each_hash do |row|
             existing_links << row['link']
         end
         query.free
 
-        page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(GUMTREE_URL)))
+        page  = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(GUMTREE_URL)))
         links = page.css('a[class=listing-link]')
 
         links.each do |link|
             link = link['href']
-            url = "#{GUMTREE_PREFIX}#{link}"
+            url  = "#{GUMTREE_PREFIX}#{link}"
             create_new_entry(url) unless existing_links.include? url
         end
 
@@ -75,8 +75,8 @@ class Gumtree
         title = page.css('h1[itemprop=name]')
         title = title[0].text.strip
 
-        price = page.css('strong[itemprop=price]')
-        price = price[0].text.strip
+        price       = page.css('strong[itemprop=price]')
+        price       = price[0].text.strip
         price_short = price.gsub('.00', '').gsub(/\D/, '').to_i
 
         description = page.css('p[itemprop=description]')
@@ -88,7 +88,7 @@ class Gumtree
             if title_description_matches_whitelist(title, description)
                 if price_short > (MIN_PRICE - 1) && price_short < (MAX_PRICE + 1)
 
-                    text = "#{title}\n#{price}\n#{url}"
+                    text  = "#{title}\n#{price}\n#{url}"
                     nexmo = Nexmo::Client.new(key: @encryptor.decrypt(NEXMO_KEY), secret: @encryptor.decrypt(NEXMO_SECRET))
 
                     system("echo '#{TIME_PREFIX}Sent TXT alert: \033[1;32m#{title} - #{price}\033[0m' >> /tmp/gumtree.log")
@@ -105,7 +105,7 @@ class Gumtree
 
     def title_description_matches_whitelist(title, description)
 
-        title_split = title.split(' ')
+        title_split       = title.split(' ')
         description_split = description.split(' ')
 
         whitelist_1 = false

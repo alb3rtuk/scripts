@@ -4,12 +4,12 @@ class BankCapitalOne
     include CommandLineReporter
 
     def initialize(username, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @security = security
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://www.capitaloneonline.co.uk/CapitalOne_Consumer/Login.do'
+        @username           = username
+        @security           = security
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://www.capitaloneonline.co.uk/CapitalOne_Consumer/Login.do'
         @databaseConnection = databaseConnection
     end
 
@@ -43,19 +43,19 @@ class BankCapitalOne
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getAllData(showInTerminal)
+                data    = getAllData(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
-                    cronLog"Capital One: Attempt #{attempt} failed with message: #{e.message}."
+                    cronLog "Capital One: Attempt #{attempt} failed with message: #{e.message}."
                 end
             else
                 succeeded = true
@@ -66,7 +66,7 @@ class BankCapitalOne
                     BankCommon.new.insertTransactions(@databaseConnection, data['main_card'], 10)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
-                        {:bank_account_id => 10, :transactions => data['main_card']},
+                        { :bank_account_id => 10, :transactions => data['main_card'] },
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
@@ -86,12 +86,12 @@ class BankCapitalOne
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
-        data = {}
-        data['balance'] = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
+        data                    = {}
+        data['balance']         = browser.td(:text, /Current balance/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['available_funds'] = browser.td(:text, /Available to spend/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
-        data['credit_limit'] = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
+        data['credit_limit']    = browser.td(:text, /Credit limit/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
         data['minimum_payment'] = browser.td(:text, /This Month’s Minimum Payment/).parent.cell(:index => 1).text.delete('£').delete(',').to_f
-        data['due_date'] = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y').strftime('%Y-%m-%d')
+        data['due_date']        = DateTime.strptime(browser.td(:text, /Payment due date/).parent.cell(:index => 1).text, '%d-%m-%Y').strftime('%Y-%m-%d')
 
         if showInTerminal
             puts "\x1B[90mSuccessfully retrieved balances\x1B[0m"
@@ -130,14 +130,14 @@ class BankCapitalOne
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTable(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 1
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
 
@@ -177,10 +177,10 @@ class BankCapitalOne
                 # Description
                 newData['description'] = transaction['description']
                 # Paid In/Out
-                newData['paid_in'] = transaction['paid_in'].delete(',').delete('£').to_f
+                newData['paid_in']  = transaction['paid_in'].delete(',').delete('£').to_f
                 newData['paid_out'] = transaction['paid_out'].delete(',').delete('£').to_f
                 # DUD INFO
-                newData['type'] = (newData['paid_in'] > 0) ? 'CR' : 'CC'
+                newData['type']    = (newData['paid_in'] > 0) ? 'CR' : 'CC'
                 newData['balance'] = 0
                 sanitizedArray << newData
             end

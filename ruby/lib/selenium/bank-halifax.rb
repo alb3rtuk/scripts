@@ -5,13 +5,13 @@ class BankHalifax
     include CommandLineReporter
 
     def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @password = password
-        @security = security
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://www.halifax-online.co.uk/personal/logon/login.jsp'
+        @username           = username
+        @password           = password
+        @security           = security
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://www.halifax-online.co.uk/personal/logon/login.jsp'
         @databaseConnection = databaseConnection
     end
 
@@ -64,19 +64,19 @@ class BankHalifax
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getAllData(showInTerminal)
+                data    = getAllData(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
-                    cronLog"Halifax: Attempt #{attempt} failed with message: #{e.message}."
+                    cronLog "Halifax: Attempt #{attempt} failed with message: #{e.message}."
                 end
             else
                 succeeded = true
@@ -91,9 +91,9 @@ class BankHalifax
                     BankCommon.new.insertTransactions(@databaseConnection, data['account_2_transactions'], 5)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
-                        {:bank_account_id => 6, :transactions => data['isa_transactions']},
-                        {:bank_account_id => 4, :transactions => data['account_1_transactions']},
-                        {:bank_account_id => 5, :transactions => data['account_2_transactions']}
+                        { :bank_account_id => 6, :transactions => data['isa_transactions'] },
+                        { :bank_account_id => 4, :transactions => data['account_1_transactions'] },
+                        { :bank_account_id => 5, :transactions => data['account_2_transactions'] }
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
@@ -117,8 +117,8 @@ class BankHalifax
         data = {}
 
         # ISA
-        data['isa'] = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'balance').text.split
-        data['isa'] = cleanCurrency(data['isa'][data['isa'].count - 1])
+        data['isa']           = browser.div(:class => 'accountBalance', :index => 2).p(:class => 'balance').text.split
+        data['isa']           = cleanCurrency(data['isa'][data['isa'].count - 1])
         data['isa_remaining'] = cleanCurrency(browser.div(:class => 'accountBalance', :index => 2).p(:class => 'accountMsg', :index => 1).text)
         browser.link(:title => 'View the latest transactions on your Variable ISA Saver').when_present(5).click
         if showInTerminal
@@ -139,7 +139,7 @@ class BankHalifax
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         sleep(1)
         browser.link(:title => 'View the latest transactions on your Ultimate Reward Current Account').when_present(5).click
-        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_1_balance']   = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
         data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
         data['account_1_available'] = data['account_1_available'][1].split('[')
         data['account_1_available'] = cleanCurrency(data['account_1_available'][0].strip)
@@ -162,7 +162,7 @@ class BankHalifax
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         sleep(1)
         browser.link(:title => 'View the latest transactions on your Reward Current Account').when_present(5).click
-        data['account_2_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
+        data['account_2_balance']   = cleanCurrency(browser.p(:class => 'balance', :index => 0).text)
         data['account_2_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
         data['account_2_available'] = data['account_2_available'][1].split('[')
         data['account_2_available'] = cleanCurrency(data['account_2_available'][0].strip)
@@ -182,7 +182,7 @@ class BankHalifax
         end
 
         # Add transactions to final array
-        data['isa_transactions'] = data_isa
+        data['isa_transactions']       = data_isa
         data['account_1_transactions'] = data_ultimate_reward
         data['account_2_transactions'] = data_reward
 
@@ -198,14 +198,14 @@ class BankHalifax
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTable(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 1
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
                 cellCount = cellCount + 1
@@ -234,16 +234,16 @@ class BankHalifax
         transactions.each do |transaction|
             newData = {}
             # Date
-            date = Date.parse(transaction['date'])
+            date            = Date.parse(transaction['date'])
             newData['date'] = date.strftime('%Y-%m-%d')
             # Type
             newData['type'] = transaction['type']
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_in']  = transaction['paid_in'].delete(',').to_f
             newData['paid_out'] = transaction['paid_out'].delete(',').to_f
-            newData['balance'] = transaction['balance'].delete(',').to_f
+            newData['balance']  = transaction['balance'].delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray

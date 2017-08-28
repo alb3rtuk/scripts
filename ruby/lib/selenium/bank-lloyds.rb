@@ -5,13 +5,13 @@ class BankLloyds
     include CommandLineReporter
 
     def initialize(username, password, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @password = password
-        @security = security
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://online.lloydsbank.co.uk/personal/logon/login.jsp'
+        @username           = username
+        @password           = password
+        @security           = security
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://online.lloydsbank.co.uk/personal/logon/login.jsp'
         @databaseConnection = databaseConnection
     end
 
@@ -81,19 +81,19 @@ class BankLloyds
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getAllData(showInTerminal)
+                data    = getAllData(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
-                    cronLog"Lloyds: Attempt #{attempt} failed with message: #{e.message}."
+                    cronLog "Lloyds: Attempt #{attempt} failed with message: #{e.message}."
                 end
             else
                 succeeded = true
@@ -106,8 +106,8 @@ class BankLloyds
                     BankCommon.new.insertTransactions(@databaseConnection, data['account_1_transactions'], 8)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
-                        {:bank_account_id => 7, :transactions => data['cc_transactions']},
-                        {:bank_account_id => 8, :transactions => data['account_1_transactions']},
+                        { :bank_account_id => 7, :transactions => data['cc_transactions'] },
+                        { :bank_account_id => 8, :transactions => data['account_1_transactions'] },
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
@@ -127,12 +127,12 @@ class BankLloyds
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
-        data = {}
+        data             = {}
         data_credit_card = Array.new
 
         # Get Current Account Data
         browser.link(:id => 'lstAccLst:0:lkImageRetail1').when_present(5).click
-        data['account_1_balance'] = cleanCurrency(browser.p(:class => 'balance', :index => 0).when_present(5).text)
+        data['account_1_balance']   = cleanCurrency(browser.p(:class => 'balance', :index => 0).when_present(5).text)
         data['account_1_available'] = browser.div(:class => 'accountBalance', :index => 0).text.split(':')
         data['account_1_available'] = data['account_1_available'][1].split('[')
         data['account_1_available'] = cleanCurrency(data['account_1_available'][0].strip)
@@ -154,17 +154,17 @@ class BankLloyds
         # Get Credit Card Data
         browser.link(:id => 'lkAccOverView_retail').when_present(5).click
         browser.link(:title => 'View the latest transactions on your Lloyds Bank Platinum MasterCard').when_present(5).click
-        data['cc_available'] = browser.p(:class => 'accountMsg', :index => 0).when_present(5).text
-        data['cc_available'] = data['cc_available'].split(':')
-        data['cc_available'] = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
-        data['cc_limit'] = browser.p(:class => 'accountMsg', :index => 1).when_present(5).text
-        data['cc_limit'] = data['cc_limit'].split(':')
-        data['cc_limit'] = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
-        data['cc_balance'] = cleanCurrency((data['cc_limit'] - data['cc_available']).to_s)
+        data['cc_available']       = browser.p(:class => 'accountMsg', :index => 0).when_present(5).text
+        data['cc_available']       = data['cc_available'].split(':')
+        data['cc_available']       = cleanCurrency(data['cc_available'][data['cc_available'].count - 1])
+        data['cc_limit']           = browser.p(:class => 'accountMsg', :index => 1).when_present(5).text
+        data['cc_limit']           = data['cc_limit'].split(':')
+        data['cc_limit']           = cleanCurrency(data['cc_limit'][data['cc_limit'].count - 1])
+        data['cc_balance']         = cleanCurrency((data['cc_limit'] - data['cc_available']).to_s)
         data['cc_minimum_payment'] = browser.div(:class => 'creditCardStatementDetails clearfix').when_present(5).div(:class => 'numbers').p(:index => 1).text.split
         data['cc_minimum_payment'] = cleanCurrency(data['cc_minimum_payment'][data['cc_minimum_payment'].count - 1])
-        data['cc_due_date'] = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
-        data['cc_due_date'] = data['cc_due_date'].split(':')
+        data['cc_due_date']        = browser.div(:class => 'creditCardStatementDetails clearfix').div(:class => 'payment').p(:index => 0).strong.text
+        data['cc_due_date']        = data['cc_due_date'].split(':')
 
         begin
             data['cc_due_date'] = DateTime.strptime(data['cc_due_date'][data['cc_due_date'].count - 1].lstrip.rstrip, '%d %B %Y').strftime('%Y-%m-%d')
@@ -190,7 +190,7 @@ class BankLloyds
 
         # Add transactions to final array
         data['account_1_transactions'] = data_current
-        data['cc_transactions'] = data_credit_card
+        data['cc_transactions']        = data_credit_card
 
         Array[browser, data]
     end
@@ -204,14 +204,14 @@ class BankLloyds
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTable(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 1
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
                 cellCount = cellCount + 1
@@ -240,16 +240,16 @@ class BankLloyds
         transactions.each do |transaction|
             newData = {}
             # Date
-            date = Date.parse(transaction['date'])
+            date            = Date.parse(transaction['date'])
             newData['date'] = date.strftime('%Y-%m-%d')
             # Type
             newData['type'] = transaction['type']
             # Description
             newData['description'] = transaction['description']
             # Paid In/Out
-            newData['paid_in'] = transaction['paid_in'].delete(',').to_f
+            newData['paid_in']  = transaction['paid_in'].delete(',').to_f
             newData['paid_out'] = transaction['paid_out'].delete(',').to_f
-            newData['balance'] = transaction['balance'].delete(',').to_f
+            newData['balance']  = transaction['balance'].delete(',').to_f
             sanitizedArray << newData
         end
         sanitizedArray
@@ -257,14 +257,14 @@ class BankLloyds
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTableCreditCard(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 2
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
 
@@ -297,7 +297,7 @@ class BankLloyds
         transactions.each do |transaction|
             newData = {}
             # Date
-            date = Date.parse(transaction['date'])
+            date            = Date.parse(transaction['date'])
             newData['date'] = date.strftime('%Y-%m-%d')
             # Type
             newData['type'] = 'CC'
@@ -305,17 +305,17 @@ class BankLloyds
             newData['description'] = "#{transaction['description']} Ref ##{transaction['reference']}"
             # Paid In/Out
             if transaction['paid_out'].include? 'CR'
-                paidSplit = transaction['paid_out'].split(' ')
-                newData['paid_in'] = paidSplit[0].delete(',').to_f
+                paidSplit           = transaction['paid_out'].split(' ')
+                newData['paid_in']  = paidSplit[0].delete(',').to_f
                 newData['paid_out'] = 0.to_f
             else
-                newData['paid_in'] = 0.to_f
+                newData['paid_in']  = 0.to_f
                 newData['paid_out'] = transaction['paid_out'].delete(',').to_f
             end
 
             # As this doesn't display a balance, use the last 6 digits of reference as a pseudo-balance.
-            balance = transaction['reference']
-            balance = balance[-6..-1] || balance
+            balance            = transaction['reference']
+            balance            = balance[-6..-1] || balance
             newData['balance'] = balance.to_f
 
             sanitizedArray << newData

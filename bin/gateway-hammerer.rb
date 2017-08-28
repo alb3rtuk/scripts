@@ -16,7 +16,7 @@ all_files.each do |filename|
 
     counter = counter + 1
 
-    file = File.open(filename, 'rb')
+    file     = File.open(filename, 'rb')
     contents = file.read
 
     fire_only_responses_with.each do |regex|

@@ -30,9 +30,9 @@ def index_the_bank(path)
 
         else
             if File.extname(file) == '.mp4'
-                counter += 1
+                counter  += 1
                 new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '-').gsub('---', '-')}"
-                command = "mv \"#{file}\" \"#{new_file}\""
+                command  = "mv \"#{file}\" \"#{new_file}\""
                 puts "\x1B[38;5;188m#{command}\x1B[0m"
                 # system(command) # TODO - UN-COMMENT
             else

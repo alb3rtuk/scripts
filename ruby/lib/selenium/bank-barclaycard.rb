@@ -5,13 +5,13 @@ class BankBarclayCard
     include CommandLineReporter
 
     def initialize(username, pin, security, displays = 'single', headless = false, displayProgress = false, databaseConnection = nil)
-        @username = username
-        @pin = pin
-        @security = security
-        @displays = displays
-        @headless = headless
-        @displayProgress = displayProgress
-        @login_uri = 'https://bcol.barclaycard.co.uk/ecom/as2/initialLogon.do'
+        @username           = username
+        @pin                = pin
+        @security           = security
+        @displays           = displays
+        @headless           = headless
+        @displayProgress    = displayProgress
+        @login_uri          = 'https://bcol.barclaycard.co.uk/ecom/as2/initialLogon.do'
         @databaseConnection = databaseConnection
     end
 
@@ -44,19 +44,19 @@ class BankBarclayCard
     end
 
     def runExtraction(showInTerminal = false)
-        attempt = 0
+        attempt   = 0
         succeeded = false
         while !succeeded
             begin
                 attempt = attempt + 1
-                data = getAllData(showInTerminal)
+                data    = getAllData(showInTerminal)
                 data[0].close
                 data = data[1]
             rescue Exception => e
                 succeeded = false
                 if showInTerminal
                     puts "\x1B[31mAttempt #{attempt} failed with message: \x1B[90m#{e.message}.\x1B[0m"
-                    cronLog"BarclayCard: Attempt #{attempt} failed with message: #{e.message}."
+                    cronLog "BarclayCard: Attempt #{attempt} failed with message: #{e.message}."
                 end
             else
                 succeeded = true
@@ -67,7 +67,7 @@ class BankBarclayCard
                     BankCommon.new.insertTransactions(@databaseConnection, data['main_card'], 9)
                     # Check if existing transactions (in last month) still exist
                     objectData = Array[
-                        {:bank_account_id => 9, :transactions => data['main_card']},
+                        { :bank_account_id => 9, :transactions => data['main_card'] },
                     ]
                     BankCommon.new.checkIfTransactionStillExist(@databaseConnection, objectData)
                     if showInTerminal
@@ -87,12 +87,12 @@ class BankBarclayCard
     end
 
     def getBalances(showInTerminal = false, browser = self.login)
-        data = {}
-        data['balance'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
-        data['available_funds'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
-        data['credit_limit'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 3).text.delete('£').delete(',').to_f
-        data['minimum_payment'] = browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
-        data['due_date'] = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
+        data                         = {}
+        data['balance']              = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 0).text.delete('£').delete(',').to_f
+        data['available_funds']      = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
+        data['credit_limit']         = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 3).text.delete('£').delete(',').to_f
+        data['minimum_payment']      = browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 2).text.delete('£').delete(',').to_f
+        data['due_date']             = DateTime.strptime(browser.div(:class => 'panelSummary', :index => 1).p(:class => 'figure', :index => 3).text, '%d %b %y')
         data['pending_transactions'] = browser.div(:class => 'panelSummary', :index => 0).p(:class => 'figure', :index => 1).text.delete('£').delete(',').to_f
 
         if showInTerminal
@@ -134,14 +134,14 @@ class BankBarclayCard
 
     # Takes table and gets transactions from that.
     def getTransactionsFromTable(table)
-        rowCount = 0
+        rowCount     = 0
         transactions = Array.new
         table.rows.each do |tableRow|
             rowCount = rowCount + 1
             if rowCount <= 2
                 next
             end
-            rowData = {}
+            rowData   = {}
             cellCount = 0
             tableRow.cells.each do |tableCell|
                 cellCount = cellCount + 1
@@ -177,14 +177,14 @@ class BankBarclayCard
                 newData['description'] = replaceLineBreaks(transaction['description'])
                 # Paid In/Out
                 if transaction['amount'].include? 'CR'
-                    newData['paid_in'] = transaction['amount'].delete('CR\n').delete('£').delete(' ').to_f
+                    newData['paid_in']  = transaction['amount'].delete('CR\n').delete('£').delete(' ').to_f
                     newData['paid_out'] = 0
                 else
-                    newData['paid_in'] = 0
+                    newData['paid_in']  = 0
                     newData['paid_out'] = transaction['amount'].delete('£').to_f
                 end
                 # DUD INFO
-                newData['type'] = transaction['type'].delete(' ').upcase
+                newData['type']    = transaction['type'].delete(' ').upcase
                 newData['balance'] = 0
                 sanitizedArray << newData
             end

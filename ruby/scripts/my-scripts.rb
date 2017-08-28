@@ -7,15 +7,15 @@ bashProfile = File.read('/Users/Albert/.bash_profile')
 bashScripts = {}
 
 def getScriptInfo(bashProfile, bashScripts, scriptPath)
-    aliasName = File.basename(scriptPath, '.sh')
+    aliasName  = File.basename(scriptPath, '.sh')
     folderName = scriptPath.split('/')
     folderName = folderName[folderName.count - 2]
 
     if bashProfile.include?("alias #{aliasName}=")
-        scriptInfo = {}
+        scriptInfo             = {}
         scriptInfo['pathName'] = "#{folderName}#{aliasName}";
-        scriptInfo['name'] = aliasName
-        scriptInfo['folder'] = folderName
+        scriptInfo['name']        = aliasName
+        scriptInfo['folder']      = folderName
         scriptInfo['description'] = nil
 
         # Loop through the script and find the first comment.

@@ -6,6 +6,6 @@ file = '/Users/Albert/Repos/repos-nimzo/skybutler/java/skybutler-api/src/main/ja
 
 Nimzo::Files::read_file(file).each do |line|
 
-    puts "                        content << \"#{line}\"".gsub("\n" , '')
+    puts "                        content << \"#{line}\"".gsub("\n", '')
 
 end

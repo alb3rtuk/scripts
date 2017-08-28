@@ -1,10 +1,10 @@
 events = [
-  # 'AccountSuspended',
+    # 'AccountSuspended',
     'AskSellerQuestion',
     'AuctionCheckoutComplete',
     'BestOffer',
     'BidReceived',
-  # 'BuyerCancelRequested',
+    # 'BuyerCancelRequested',
     'BuyerResponseDispute',
     'CheckoutBuyerRequestsTotal',
     'EBNOrderCanceled',
@@ -38,11 +38,11 @@ events = [
     'ItemUnsold',
     'M2MMessageStatusChange',
     'MyMessageseBayMessage',
-  # 'MyMessageseBayMessageHeader',
-  # 'MyMessagesHighPriorityMessage',
-  # 'MyMessagesHighPriorityMessageHeader',
+    # 'MyMessageseBayMessageHeader',
+    # 'MyMessagesHighPriorityMessage',
+    # 'MyMessagesHighPriorityMessageHeader',
     'MyMessagesM2MMessage',
-  # 'MyMessagesM2MMessageHeader',
+    # 'MyMessagesM2MMessageHeader',
     'ReturnClosed',
     'ReturnCreated',
     'ReturnDelivered',
@@ -57,7 +57,7 @@ events = [
     'TokenRevocation'
 ]
 
-events.each do | event |
+events.each do |event|
     puts "    <NotificationEnable>"
     puts "        <EventType>\x1B[38;5;202m#{event}\x1B[0m</EventType>"
     puts "        <EventEnable>Enable</EventEnable>"

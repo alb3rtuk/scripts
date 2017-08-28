@@ -38,25 +38,25 @@ class IConsign
     def getSentConsignments(browser)
         browser.goto('https://iconsign.ukmail.com/IConsign/FindConsignments.aspx')
 
-        totalPages = browser.span(:id => 'ctl00_mainContent_resultLabel').text
-        totalPages = totalPages.gsub(/[^0-9]/, '').to_f
-        totalPages = totalPages / 20
-        totalPages = totalPages.ceil
-        currentPage = 1
+        totalPages      = browser.span(:id => 'ctl00_mainContent_resultLabel').text
+        totalPages      = totalPages.gsub(/[^0-9]/, '').to_f
+        totalPages      = totalPages / 20
+        totalPages      = totalPages.ceil
+        currentPage     = 1
         consignmentData = Array.new
 
 
         until currentPage > totalPages
             puts "Currently on: Page #{currentPage}"
             browser.execute_script("javascript:__doPostBack('ctl00$mainContent$consignmentGridView','Page$#{currentPage}')")
-            table = browser.table(:id => 'ctl00_mainContent_consignmentGridView')
+            table         = browser.table(:id => 'ctl00_mainContent_consignmentGridView')
             tableRowCount = 0
             table.rows.each do |tableRow|
                 tableRowCount = tableRowCount + 1
                 if tableRowCount == 1
                     next
                 end
-                rowData = {}
+                rowData   = {}
                 cellCount = 0
                 tableRow.cells.each do |tableCell|
                     cellCount = cellCount + 1
@@ -79,7 +79,7 @@ class IConsign
         end
 
         lastColletionDate = 0
-        output = ''
+        output            = ''
 
         consignmentData.each do |consignment|
             if lastColletionDate != consignment['collectionDate']

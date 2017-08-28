@@ -5,18 +5,18 @@ require '/Users/Albert/Repos/scripts/ruby/lib/selenium/ebay.rb'
 require 'rest_client'
 require 'json'
 
-pageCount = 0
+pageCount  = 0
 orderCount = 0
-orders = Array.new
+orders     = Array.new
 ordersInfo = Array.new
 
-data = {}
+data                  = {}
 data['hasMoreOrders'] = true
 
 while data['hasMoreOrders']
     pageCount = pageCount + 1
-    data = RestClient.get "http://localhost:8080/ebay-service/getOrders/numberOfDays/5/#{pageCount}", {'environment' => 'production', 'ebay-token' => 'AgAAAA**AQAAAA**aAAAAA**e2GOUw**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wGkYWiC5iAoA2dj6x9nY+seQ**96sAAA**AAMAAA**/FmNT6b3fxvF7XGBObBYSheWXgONWjF71tc/q9EjKzd57QBytpqIv6z3cbge3CUTdMGnENkJ7YIoUyRgULQQDEUpaCLMwD+Aes9eYCG9wW9/yoRGGLvK0rfLb3yJBBICGNUV+BgmzGNhyf0YJ/KCAJ7NCOB6K6mBiuOR2yd1QuDwNGTjjkRytlGH5ZS5CqzN0DdWkELzpZSkuDU7JDDRW0OWMJA2FyJc7DifX36yfSjcbYpSw8mISBOEgwvI9W1deMVNwb+k8lG4ejFtzHKfln1I3qt2ZvvYFMNWqUtNAmRA3BGfLKPtPaym/tobBSgvjC3HoIChazNfO7ONa+rnKJAFZZoG27Kw//TT1VnQo/VG3Uei10eoj8pCxhC69JAjM9Fu0mSPL9Zr9PIHhpvTVCjfsXnXDQJKfBRe8/Hp0X41HlnjB4YsePoH17F5WrbArxlnZu16/0GpsaNJjL2Sk1f2X7uFgw3VSsprYamU9f5zfKj7WY2Mqp+ITspgyugWo3VpYQdFewl9FjL/QsqRGCxRpdqFzHmieJD05oViPJscK3UjWrmOqfd78qGQfIiYOIV2s8WtCmdhMe3KJvXEyfeWOB2IGPFgehotcRwtSnDGC+wOhtJIre+ujEJNCBijaeivVFpS9uXgqsU8qZa54qDtmsqucPkGPrbJ7oAzizIm1SuVra1tfLH+v+vPYppC5QdBnzucyPqSiV2GIWV4I/T3yq9WIjA1xFM4yysoq8esyQGBIi5sMJ0umc7hIs7t'}
-    data = JSON.parse(data)
+    data      = RestClient.get "http://localhost:8080/ebay-service/getOrders/numberOfDays/5/#{pageCount}", { 'environment' => 'production', 'ebay-token' => 'AgAAAA**AQAAAA**aAAAAA**e2GOUw**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wGkYWiC5iAoA2dj6x9nY+seQ**96sAAA**AAMAAA**/FmNT6b3fxvF7XGBObBYSheWXgONWjF71tc/q9EjKzd57QBytpqIv6z3cbge3CUTdMGnENkJ7YIoUyRgULQQDEUpaCLMwD+Aes9eYCG9wW9/yoRGGLvK0rfLb3yJBBICGNUV+BgmzGNhyf0YJ/KCAJ7NCOB6K6mBiuOR2yd1QuDwNGTjjkRytlGH5ZS5CqzN0DdWkELzpZSkuDU7JDDRW0OWMJA2FyJc7DifX36yfSjcbYpSw8mISBOEgwvI9W1deMVNwb+k8lG4ejFtzHKfln1I3qt2ZvvYFMNWqUtNAmRA3BGfLKPtPaym/tobBSgvjC3HoIChazNfO7ONa+rnKJAFZZoG27Kw//TT1VnQo/VG3Uei10eoj8pCxhC69JAjM9Fu0mSPL9Zr9PIHhpvTVCjfsXnXDQJKfBRe8/Hp0X41HlnjB4YsePoH17F5WrbArxlnZu16/0GpsaNJjL2Sk1f2X7uFgw3VSsprYamU9f5zfKj7WY2Mqp+ITspgyugWo3VpYQdFewl9FjL/QsqRGCxRpdqFzHmieJD05oViPJscK3UjWrmOqfd78qGQfIiYOIV2s8WtCmdhMe3KJvXEyfeWOB2IGPFgehotcRwtSnDGC+wOhtJIre+ujEJNCBijaeivVFpS9uXgqsU8qZa54qDtmsqucPkGPrbJ7oAzizIm1SuVra1tfLH+v+vPYppC5QdBnzucyPqSiV2GIWV4I/T3yq9WIjA1xFM4yysoq8esyQGBIi5sMJ0umc7hIs7t' }
+    data      = JSON.parse(data)
     data['orders'].each do |order|
         if order['orderStatus'] == 'COMPLETED'
             unless order.has_key?('shippedTime')
@@ -88,22 +88,22 @@ models.each do |model|
                         itemName = "#{qty} X #{itemName}"
                     end
 
-                    orderIDSplit = order['orderID'].split('-')
-                    orderInfo = {}
-                    orderInfo['itemID'] = orderIDSplit[0]
-                    orderInfo['transID'] = orderIDSplit[1]
-                    orderInfo['name'] = order['shippingAddress']['name']
-                    orderInfo['street1'] = order['shippingAddress']['street1']
-                    orderInfo['street2'] = order['shippingAddress']['street2']
-                    orderInfo['cityName'] = order['shippingAddress']['cityName']
+                    orderIDSplit                 = order['orderID'].split('-')
+                    orderInfo                    = {}
+                    orderInfo['itemID']          = orderIDSplit[0]
+                    orderInfo['transID']         = orderIDSplit[1]
+                    orderInfo['name']            = order['shippingAddress']['name']
+                    orderInfo['street1']         = order['shippingAddress']['street1']
+                    orderInfo['street2']         = order['shippingAddress']['street2']
+                    orderInfo['cityName']        = order['shippingAddress']['cityName']
                     orderInfo['stateOrProvince'] = order['shippingAddress']['stateOrProvince']
-                    orderInfo['postalCode'] = order['shippingAddress']['postalCode'].gsub(/\s+/, '')
-                    orderInfo['phone'] = order['shippingAddress']['phone'].gsub(/\s+/, '')
-                    orderInfo['email'] = order['transactionArray']['transaction'][0]['buyer']['email']
-                    orderInfo['itemName'] = itemName
-                    orderInfo['qty'] = qty * 2
-                    orderInfo['weight'] = 20
-                    orderInfo['userID'] = order['buyerUserID']
+                    orderInfo['postalCode']      = order['shippingAddress']['postalCode'].gsub(/\s+/, '')
+                    orderInfo['phone']           = order['shippingAddress']['phone'].gsub(/\s+/, '')
+                    orderInfo['email']           = order['transactionArray']['transaction'][0]['buyer']['email']
+                    orderInfo['itemName']        = itemName
+                    orderInfo['qty']             = qty * 2
+                    orderInfo['weight']          = 20
+                    orderInfo['userID']          = order['buyerUserID']
                     ordersInfo << orderInfo
 
                 end
@@ -129,13 +129,13 @@ end
 
 puts
 
-iConsign = IConsign.new(
+iConsign        = IConsign.new(
     Encryptor.new.decrypt(IConsignUsername),
     Encryptor.new.decrypt(IConsignPassword)
 )
 iConsignBrowser = iConsign.login(ARGV[0])
 
-ebay = Ebay.new(
+ebay        = Ebay.new(
     Encryptor.new.decrypt(EbayUsernameSleek),
     Encryptor.new.decrypt(EbayPasswordSleek)
 )
@@ -160,7 +160,7 @@ ordersInfo.each do |order|
         order['weight'],
         order['userID']
     )
-    orderCount = orderCount - 1
+    orderCount      = orderCount - 1
 
     sleep(1)
 
