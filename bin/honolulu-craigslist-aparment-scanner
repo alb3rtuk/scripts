@@ -1,0 +1,74 @@
+#!/usr/bin/ruby
+
+require 'nokogiri'
+require 'nexmo'
+require 'webrick/httputils'
+require 'openssl'
+require 'base64'
+
+module BuiltByBert
+
+    class Encryptor
+
+        def initialize(key = nil, hex = nil)
+
+            @key = key
+            @hex = hex
+
+            raise RuntimeError, "Encryptor hasn't been properly initialized. You forgot to pass the CRYPT_KEY + CRYPT_HEX to the constructor when instantiating the class." if @key.nil? || @hex.nil?
+
+        end
+
+        def encrypt(string)
+
+            c = OpenSSL::Cipher.new('aes-256-cbc')
+            c.encrypt
+            c.key = Digest::SHA1.hexdigest(@hex)[0..31]
+            begin
+                d = c.update(string)
+                d << c.final
+                return Base64.encode64(d)
+            rescue => e
+                Nimzo::Terminal::error('Encryption failed', "Could not encrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Nimzo::Terminal::format_invalid(string)}", false)
+                Nimzo::Terminal::print_exception(e)
+            end
+
+        end
+
+        def decrypt(string)
+
+            string_decoded = Base64.decode64(string)
+            c              = OpenSSL::Cipher.new('aes-256-cbc')
+            c.decrypt
+            c.key = Digest::SHA1.hexdigest(@hex)[0..31]
+            begin
+                d = c.update(string_decoded)
+                d << c.final
+                return d
+            rescue => e
+                Nimzo::Terminal::error('Decryption failed', "Could not decrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Nimzo::Terminal::format_invalid(string)}", false)
+                Nimzo::Terminal::print_exception(e)
+
+            end
+
+        end
+
+    end
+
+    class CraigslistScanner
+
+        def initialize(url)
+
+            page = Nokogiri::HTML(open(WEBrick::HTTPUtils.escape(url)))
+            page.css('a[class=result-title hdrlnk]').each do |link|
+
+                puts link
+            end
+
+        end
+
+    end
+
+end
+
+CraigslistScanner.new('https://honolulu.craigslist.org/search/apa?query=Keauhou&bundleDuplicates=1&search_distance=3&postal=96813&min_price=1500&max_price=3000&availabilityMode=0&sale_date=all+dates')
