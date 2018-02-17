@@ -87,14 +87,6 @@ var iosAppIconExportOptions = [
         sizeJSON: "76x76",
         scale: "2x"
     },
-    //{
-    //     name: "-Small-40.png",
-    //     size: 40,
-    //     type: "Spotlight",
-    //     idiom: "iphone",
-    //     sizeJSON: "40x40",
-    //     scale: "1x"
-    // },
     {
         name: "-Small-40@2x.png",
         size: 80,
@@ -241,7 +233,7 @@ function exportAppIcons() {
             jsonFileObject.images.push({
                 idiom: item.idiom,
                 size: item.sizeJSON,
-                filename: artboard.name + item.name,
+                filename: artboard.name.replace(/\s/gi, "-") + item.name,
                 scale: item.scale
             });
         }
@@ -301,7 +293,7 @@ function exportImages() {
             jsonFileObject.images.push({
                 idiom: "universal",
                 scale: item.type,
-                filename: activeArtboard.name + item.name + ".png"
+                filename: activeArtboard.name.replace(/\s/gi, "-") + item.name + ".png"
             });
         }
 
