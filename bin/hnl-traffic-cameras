@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+TRAFFIC_CAMERA_PATH = '/tmp/traffic-cameras'
+
+traffic_cameras = [
+    { :title => 'Nimitz - City Mill (Westbound)', :url => 'http://trafficcam2.honolulu.gov/images/159_Nimitz_and_Pacific_OUT.jpg' },
+    { :title => 'Nimitz - Zippy\'s (Eastbound)', :url => 'http://trafficcam2.honolulu.gov/images/158_Nimitz_and_Pacific_IN.jpg' },
+    { :title => 'Nimitz - Lowes', :url => 'http://trafficcam2.honolulu.gov/images/148_Nimitz_and_Alakawa_2.jpg' },
+    { :title => 'Nimitz - Sand Island Access Road', :url => 'http://trafficcam2.honolulu.gov/images/008_Nimitz_and_Sand_Island.jpg' },
+    { :title => 'Viaduct - Facing Nimitz', :url => 'http://trafficcam2.honolulu.gov/images/076_H1_and_Viaduct_East_BD.jpg' },
+    { :title => 'Viaduct - Airport', :url => 'http://trafficcam2.honolulu.gov/images/077_H1_and_Viaduct_West_BD.jpg' },
+    { :title => 'H1 - Hickham AFB', :url => 'http://trafficcam2.honolulu.gov/images/127_H1_and_Radford_East_BD.jpg' },
+    { :title => 'H1 - Aloha Stadium', :url => 'http://trafficcam2.honolulu.gov/images/136_H1_and_Salt_Lake_Blvd_East_BD.jpg' },
+    { :title => 'H1 - Redhill Cut-off', :url => 'http://trafficcam2.honolulu.gov/images/080_H1_and_Aiea_Hts_Overpass.jpg' },
+    { :title => 'H1 - Pearl Ridge', :url => 'http://trafficcam2.honolulu.gov/images/094_H1_and_Kaonohi_West_BD.jpg' },
+    { :title => 'H1 - Pearl City (I)', :url => 'http://trafficcam2.honolulu.gov/images/100_H1_and_Waimalu_St_East_BD.jpg' },
+    { :title => 'H1 - Pearl City (II)', :url => 'http://trafficcam2.honolulu.gov/images/101_H1_and_Lehua_Ave_East_BD.jpg' },
+    { :title => 'H1 - H1/H2 Merge', :url => 'http://trafficcam2.honolulu.gov/images/104_H1_and_H2_Merge_East_BD.jpg' },
+    { :title => 'H1 - Waikele (Westbound)', :url => 'http://trafficcam2.honolulu.gov/images/114_H1_and_Waikele_West_BD.jpg' },
+    { :title => 'H1 - Waikele (Eastbound)', :url => 'http://trafficcam2.honolulu.gov/images/113_H1_and_Waikele_East_BD.jpg' },
+    { :title => 'H1 - Ewa Merge', :url => 'http://trafficcam2.honolulu.gov/images/116_H1_and_Kunia_West_BD.jpg' },
+    { :title => 'H1 - Kapolei', :url => 'http://trafficcam2.honolulu.gov/images/321_Makakilo_Dr_and__H1_On_Ramp_.jpg' }
+]
+
+# Create Directory (if it doesn't exist)
+FileUtils::mkdir_p(File.dirname("#{TRAFFIC_CAMERA_PATH}/some.file")) unless File.directory?(File.expand_path(TRAFFIC_CAMERA_PATH))
+
+traffic_cameras.each do |traffic_camera|
+
+    filename = "#{TRAFFIC_CAMERA_PATH}/#{traffic_camera[:title].gsub(' ', '-').downcase.gsub('---', '-').gsub('(', '').gsub(')', '').gsub("'", '')}.jpg"
+
+    # TODO - REMOVE
+    puts filename
+
+    `wget --quiet \
+      --method GET \
+      --header 'Accept: image/webp,image/apng,image/*,*/*;q=0.8' \
+      --header 'Accept-Encoding: gzip, deflate' \
+      --header 'Accept-Language: en-US,en;q=0.9,la;q=0.8' \
+      --header 'Cache-Control: no-cache' \
+      --header 'Connection: keep-alive' \
+      --header 'DNT: 1' \
+      --header 'Host: trafficcam2.honolulu.gov' \
+      --header 'Pragma: no-cache' \
+      --header 'Referer: http://www2.honolulu.gov/honolulumyway/?trafficcam' \
+      --header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36' \
+      --header 'Postman-Token: 47c45a18-8f21-4e40-8cb7-0520cfa3cc2e' \
+      -O #{filename}\
+      - #{traffic_camera[:url]}`
+
+end
