@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'nimzo-lib'
+
+PATH_CURRENT = File.expand_path(`pwd`)
+PATH_FILE    = ARGV[0]
+
+Nimzo::Terminal::error('Please specify a file to parse.') if PATH_FILE.nil? || PATH_FILE == ''
+
+path_file_split = PATH_FILE.split('/')
+path_file       = (path_file_split.length == 1) ? "#{PATH_CURRENT.gsub("\n", '')}/#{path_file_split[0]}" : PATH_FILE
+
+Nimzo::Terminal::error("File not found: #{Nimzo::Terminal::format_directory(path_file)}") unless Nimzo::Files::file_exists(path_file)
+
+Nimzo::Terminal::info("Processing: #{Nimzo::Terminal::format_directory(path_file)}")
