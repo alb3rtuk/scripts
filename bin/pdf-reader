@@ -17,7 +17,8 @@ Nimzo::Terminal::info("Processing: #{Nimzo::Terminal::format_directory(path_file
 
 `pdftotext #{path_file} /tmp/pdftotext.txt`
 
-lines = `cat /tmp/pdftotext.txt`.split("\n")
+lines = `cat /tmp/pdftotext.txt`.force_encoding('iso-8859-1').split("\n")
+
 `rm /tmp/pdftotext.txt`
 
 lines.each do |line|
