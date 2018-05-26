@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'nimzo-lib'
+require 'yaml'
 
 PATH_CURRENT = File.expand_path(`pwd`)
 PATH_FILE    = ARGV[0]
@@ -13,3 +14,15 @@ path_file       = (path_file_split.length == 1) ? "#{PATH_CURRENT.gsub("\n", '')
 Nimzo::Terminal::error("File not found: #{Nimzo::Terminal::format_directory(path_file)}") unless Nimzo::Files::file_exists(path_file)
 
 Nimzo::Terminal::info("Processing: #{Nimzo::Terminal::format_directory(path_file)}")
+
+`pdftotext #{path_file} /tmp/pdftotext.txt`
+
+lines = `cat /tmp/pdftotext.txt`.split("\n")
+`rm /tmp/pdftotext.txt`
+
+lines.each do |line|
+    line.strip!
+    if line != ''
+        puts "\x1B[38;5;156m#{line}\x1B[0m"
+    end
+end
