@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# This program requires pdftotext: $ brew install homebrew/cask/pdftotext
+# This program requires fswatch:   $ brew install fswatch
+
 require 'nimzo-lib'
 require 'yaml'
 
