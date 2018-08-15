@@ -3,6 +3,9 @@
 # This program requires pdftotext: $ brew install homebrew/cask/pdftotext
 # This program requires fswatch:   $ brew install fswatch
 
+# Shell command to run watcher on iCloud Drive directory.
+# $ fswatch -0 cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Scans/ | while read -d "" event; do echo ${event}; done
+
 require 'nimzo-lib'
 require 'yaml'
 
@@ -18,7 +21,7 @@ Nimzo::Terminal::error("File not found: #{Nimzo::Terminal::format_directory(path
 
 Nimzo::Terminal::info("Processing: #{Nimzo::Terminal::format_directory(path_file)}")
 
-`pdftotext "#{path_file}" /tmp/pdftotext.txt`
+`pdftotext -layout -q -nopgbrk -fixed 0 "#{path_file}" /tmp/pdftotext.txt`
 
 lines = `cat /tmp/pdftotext.txt`.force_encoding('iso-8859-1').split("\n")
 
