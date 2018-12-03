@@ -2,7 +2,7 @@
 # Logs me into my EC2 MySQL instance (nimzo).
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/.secrets/secrets.sh
+. ~/Repos/nimzo-secrets/secrets.sh
 
 #Latenct test
 #time mysql -h ${EC2_MYSQL_NIMZO_HOST} -P 3306 -u root -p${EC2_MYSQL_NIMZO_ROOT_PASS} -e 'quit'

@@ -2,7 +2,7 @@
 # SSH'es into my EC2 instance.
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/.secrets/secrets.sh
+. ~/Repos/nimzo-secrets/secrets.sh
 
 echo
 message green "EC2" "Logging into EC2 instance.. \033[33m${EC2_SERVER_NIMZO_HOST}\033[0m"

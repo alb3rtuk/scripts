@@ -2,7 +2,7 @@
 # Backs up all data on EC2 MySQL instance (alb3rtuk) to 'SQL-Backups' repo.
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/.secrets/secrets.sh
+. ~/Repos/nimzo-secrets/secrets.sh
 
 date=`date +"%m-%d-%y-%H-%M-%S"`
 filename="${EC2_MYSQL_ALB3RTUK_BACKUP_PATH}alb3rtuk-${date}.sql"

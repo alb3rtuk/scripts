@@ -2,7 +2,7 @@
 # Backs up all data on EC2 MySQL instance (nimzo) to 'SQL-Backups' repo.
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/.secrets/secrets.sh
+. ~/Repos/nimzo-secrets/secrets.sh
 
 date=`date +"%m-%d-%y-%H-%M-%S"`
 filename="${EC2_MYSQL_NIMZO_BACKUP_PATH}nimzo-${date}.sql"
