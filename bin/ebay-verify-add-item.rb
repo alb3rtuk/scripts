@@ -2,7 +2,7 @@ require 'rest-client'
 require 'rexml/document'
 require 'yaml'
 
-require File.expand_path('~/Repos/nimzo-secrets/secrets.rb')
+require File.expand_path('~/Repos/blufin-secrets/secrets.rb')
 
 category_id = 32834 # TV & Home Audio Accessories > Sound & Vision > Video Cables & Connectors
 

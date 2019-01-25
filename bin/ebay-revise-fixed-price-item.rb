@@ -2,7 +2,7 @@ require 'rest-client'
 require 'rexml/document'
 require 'yaml'
 
-require File.expand_path('~/Repos/nimzo-secrets/secrets.rb')
+require File.expand_path('~/Repos/blufin-secrets/secrets.rb')
 
 item_id = 401064215958
 

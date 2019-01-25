@@ -2,7 +2,7 @@
 # Deploys eBay Service (Java) to EC2 instance.
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/Repos/nimzo-secrets/secrets.sh
+. ~/Repos/blufin-secrets/secrets.sh
 
 echo
 message green "EC2/JAVA" "Deploying 'ebay-service' to remote Tomcat.. \033[33m${EC2_SERVER_NIMZO_HOST}\033[0m"

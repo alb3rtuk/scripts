@@ -11,7 +11,7 @@ require 'yaml'
 require 'open-uri'
 require 'net/http'
 require 'csv'
-require File.expand_path('~/Repos/nimzo-secrets/secrets.rb')
+require File.expand_path('~/Repos/blufin-secrets/secrets.rb')
 require File.expand_path('~/Repos/scripts/ruby/lib/encryptor.rb')
 
 # Returns DB connection to my personal MySQL DB.

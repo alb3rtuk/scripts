@@ -1,7 +1,7 @@
 #!/bin/sh
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/Repos/nimzo-secrets/secrets.sh
+. ~/Repos/blufin-secrets/secrets.sh
 
 logCron "Attempting to backup/dump 'alb3rtuk' EC2 MySQL DB to local repo."
 

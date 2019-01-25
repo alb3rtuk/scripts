@@ -3,7 +3,7 @@
 
 
 . ~/Repos/scripts/bash/common/utilities.sh
-. ~/Repos/nimzo-secrets/secrets.sh
+. ~/Repos/blufin-secrets/secrets.sh
 
 echo
 message green "EC2" "Running 'update' script on EC2 instance.. \033[33m${EC2_SERVER_NIMZO_HOST}\033[0m"
