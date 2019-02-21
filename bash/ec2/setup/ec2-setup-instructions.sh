@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Commands used to setup a EC2 Instance (nimzo-maintanence)
+# Commands used to setup a EC2 Instance (blufin-maintanence)
 sudo yum -y update
 sudo yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
 sudo yum install -y wget
@@ -68,13 +68,13 @@ ssh -T git@github.com
 cd ~
 mkdir Repos
 cd Repos
-git clone git@github.com:alb3rtuk/nimzo-java.git
-git clone git@github.com:alb3rtuk/nimzo-php.git
-git clone git@github.com:alb3rtuk/nimzo-ruby.git
+git clone git@github.com:alb3rtuk/blufin-java.git
+git clone git@github.com:alb3rtuk/blufin-php.git
+git clone git@github.com:alb3rtuk/blufin-ruby.git
 git clone git@github.com:alb3rtuk/sleek.git
 
 # CHMOD shell scripts
-cd ~/Repos/nimzo-ruby/scripts/system/
+cd ~/Repos/blufin-ruby/scripts/system/
 chmod 0755 chmod-shell-scripts.sh
 ./chmod-shell-scripts.sh
 

@@ -39,7 +39,7 @@ Dir.glob('/Users/Albert/Repos/scripts/bash/*/**').each do |scriptPath|
 end
 
 # Loop through all the files within the scripts directory and get info.
-Dir.glob('/Users/Albert/Repos/nimzo-ruby/scripts/*/**').each do |scriptPath|
+Dir.glob('/Users/Albert/Repos/blufin-ruby/scripts/*/**').each do |scriptPath|
     getScriptInfo(bashProfile, bashScripts, scriptPath)
 end
 

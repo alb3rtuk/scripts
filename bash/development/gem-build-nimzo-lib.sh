@@ -15,6 +15,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-cd ~/Repos/nimzo/nimzo-lib/ && cd ~/Repos/nimzo/nimzo-lib/
-gem build nimzo-lib.gemspec
-gem install ./nimzo-lib-1.2.0.gem --backtrace -V -l
+cd ~/Repos/blufin/blufin-lib/ && cd ~/Repos/blufin/blufin-lib/
+gem build blufin-lib.gemspec
+gem install ./blufin-lib-1.2.0.gem --backtrace -V -l

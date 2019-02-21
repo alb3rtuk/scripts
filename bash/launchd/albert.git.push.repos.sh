@@ -5,7 +5,7 @@
 message red " DEPRECATED " "This script is deprecated."
 exit
 
-repos=(brightpearl-cli columnist convoy factory-mall finance-report my-cli nimzo-java nimzo-node nimzo-php nimzo-ruby scripts shared)
+repos=(brightpearl-cli columnist convoy factory-mall finance-report my-cli blufin-java blufin-node blufin-php blufin-ruby scripts shared)
 
 for i in "${repos[@]}"
 do :

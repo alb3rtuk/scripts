@@ -1,5 +1,5 @@
 #!/bin/sh
-# Logs into my EC2 MySQL instance (alb3rtuk).
+# Logs me into my EC2 MySQL instance (blufin).
 
 . ~/Repos/scripts/bash/common/utilities.sh
 . ~/Repos/blufin-secrets/secrets.sh
@@ -10,7 +10,7 @@
 #time mysql -h www.brooklins.com -P 3306 --skip-secure-auth -u brookdata -ptkmdgqps52 -e 'quit'
 
 echo
-message green "EC2" "Logging into MySQL instance.. \033[33m${EC2_MYSQL_ALB3RTUK_HOST}\033[0m"
+message green "EC2" "Logging into MySQL instance.. \033[33m${EC2_MYSQL_BLUFIN_HOST}\033[0m"
 echo
 
-mysql -h ${EC2_MYSQL_ALB3RTUK_HOST} -P 3306 --skip-secure-auth -u ${EC2_MYSQL_ALB3RTUK_ROOT_USER} -p${EC2_MYSQL_ALB3RTUK_ROOT_PASS}
+mysql -h ${EC2_MYSQL_BLUFIN_HOST} -P 3306 --skip-secure-auth -u ${EC2_MYSQL_BLUFIN_ROOT_USER} -p${EC2_MYSQL_BLUFIN_ROOT_PASS}

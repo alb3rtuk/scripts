@@ -6,20 +6,20 @@
 # Shell command to run watcher on iCloud Drive directory.
 # $ fswatch -0 cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Scans/ | while read -d "" event; do echo ${event}; done
 
-require 'nimzo-lib'
+require 'blufin-lib'
 require 'yaml'
 
 PATH_CURRENT = File.expand_path(`pwd`)
 PATH_FILE    = ARGV[0]
 
-Nimzo::Terminal::error('Please specify a file to parse.') if PATH_FILE.nil? || PATH_FILE == ''
+Blufin::Terminal::error('Please specify a file to parse.') if PATH_FILE.nil? || PATH_FILE == ''
 
 path_file_split = PATH_FILE.split('/')
 path_file       = (path_file_split.length == 1) ? "#{PATH_CURRENT.gsub("\n", '')}/#{path_file_split[0]}" : File.expand_path(PATH_FILE.gsub("\\", ''))
 
-Nimzo::Terminal::error("File not found: #{Nimzo::Terminal::format_directory(path_file)}") unless Nimzo::Files::file_exists(path_file)
+Blufin::Terminal::error("File not found: #{Blufin::Terminal::format_directory(path_file)}") unless Blufin::Files::file_exists(path_file)
 
-Nimzo::Terminal::info("Processing: #{Nimzo::Terminal::format_directory(path_file)}")
+Blufin::Terminal::info("Processing: #{Blufin::Terminal::format_directory(path_file)}")
 
 `pdftotext -layout -q -nopgbrk -fixed 0 "#{path_file}" /tmp/pdftotext.txt`
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'nimzo-lib'
+require 'blufin-lib'
 
-results = Dir.glob(File.expand_path('~/Repos/nimzo-java/**/*'))
+results = Dir.glob(File.expand_path('~/Repos/blufin-java/**/*'))
 results.each do |line|
     unless File.directory?(line)
         if line =~ /pom\.xml\z/
@@ -13,9 +13,9 @@ results.each do |line|
     end
 end
 
-# results = Dir.glob(File.expand_path('~/Repos/nimzo-java/**/*'))
+# results = Dir.glob(File.expand_path('~/Repos/blufin-java/**/*'))
 # results.each do |line|
-#     unless Nimzo::Files::path_exists(line)
+#     unless Blufin::Files::path_exists(line)
 #         puts "\x1B[38;5;240m#{line}\x1B[0m"
 #     end
 # end
@@ -32,12 +32,12 @@ end
 #
 #         if package != 'auth'
 #
-#             if Nimzo::Files::path_exists(path_two)
+#             if Blufin::Files::path_exists(path_two)
 #
 #                 # puts File.expand_path("~/Repos/repos-misc/dropwizard/\x1B[38;5;122m#{line}\x1B[0m/src/main/java/io/dropwizard/#{package}")
 #                 source_path = path_two
 #
-#             elsif Nimzo::Files::path_exists(path_one)
+#             elsif Blufin::Files::path_exists(path_one)
 #
 #                 # puts File.expand_path("~/Repos/repos-misc/dropwizard/\x1B[38;5;162m#{line}\x1B[0m/src/main/java/io/dropwizard")
 #                 source_path = path_one
@@ -46,9 +46,9 @@ end
 #                 next
 #             end
 #
-#             target_path = "~/Repos/repos-nimzo/skybutler/java/nimzo-lib/src/main/java/libraries/dropwizard/#{package}"
+#             target_path = "~/Repos/repos-blufin/skybutler/java/blufin-lib/src/main/java/libraries/dropwizard/#{package}"
 #
-#             Nimzo::Files::create_directory(target_path)
+#             Blufin::Files::create_directory(target_path)
 #
 #             command = "cp -a #{source_path}/* #{target_path}/."
 #             puts command

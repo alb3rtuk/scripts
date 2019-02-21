@@ -1,5 +1,5 @@
 #!/bin/sh
-# Updates ~/.bash_profile with the the content of ~/Repos/scripts/config/.bash_profile & pulls in 'nimzo' aliases as well.
+# Updates ~/.bash_profile with the the content of ~/Repos/scripts/config/.bash_profile & pulls in 'blufin' aliases as well.
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
@@ -12,10 +12,10 @@ fi
 
 . ~/Repos/scripts/bash/sys/chmod-shell-scripts.sh
 
-# Include the NIMZO aliases.
+# Include the BLUFIN aliases.
 bash_profile=`cat ~/Repos/scripts/config/.bash_profile`
 bashrc_aliases=`cat ~/Repos/scripts/config/.bashrc_shared`
-find=">>> NIMZO ALIASES <<<"
+find=">>> BLUFIN ALIASES <<<"
 bash_final=${bash_profile//${find}/${bashrc_aliases}}
 
 echo "${bash_final}" > ~/.bash_profile

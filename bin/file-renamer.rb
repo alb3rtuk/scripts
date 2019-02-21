@@ -1,4 +1,4 @@
-directory = File.expand_path('~/Repos/nimzo-ruby/auto-sql/data')
+directory = File.expand_path('~/Repos/blufin-ruby/auto-sql/data')
 
 Dir["#{directory}/**/*"].each do |file|
     command = "mv #{file} #{file.gsub('_', '-')}"

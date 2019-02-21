@@ -29,8 +29,8 @@ module BuiltByBert
                 d << c.final
                 return Base64.encode64(d)
             rescue => e
-                Nimzo::Terminal::error('Encryption failed', "Could not encrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Nimzo::Terminal::format_invalid(string)}", false)
-                Nimzo::Terminal::print_exception(e)
+                Blufin::Terminal::error('Encryption failed', "Could not encrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Blufin::Terminal::format_invalid(string)}", false)
+                Blufin::Terminal::print_exception(e)
             end
 
         end
@@ -46,8 +46,8 @@ module BuiltByBert
                 d << c.final
                 return d
             rescue => e
-                Nimzo::Terminal::error('Decryption failed', "Could not decrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Nimzo::Terminal::format_invalid(string)}", false)
-                Nimzo::Terminal::print_exception(e)
+                Blufin::Terminal::error('Decryption failed', "Could not decrypt string \xe2\x86\x92 #{string == '' ? '[blank]' : Blufin::Terminal::format_invalid(string)}", false)
+                Blufin::Terminal::print_exception(e)
 
             end
 
