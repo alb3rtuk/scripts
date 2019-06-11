@@ -15,6 +15,6 @@
 
 . ~/Repos/Scripts/bash/common/utilities.sh
 
-cd ~/Repos/blufin-uber/ruby/blufin-lib/ && cd ~/Repos/blufin-uber/ruby/blufin-lib/
+cd ~/Repos/blufin/ruby/blufin-lib/ && cd ~/Repos/blufin/ruby/blufin-lib/
 gem build blufin-lib.gemspec
 gem install ./blufin-lib-1.2.0.gem --backtrace -V -l
