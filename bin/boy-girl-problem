@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+require 'blufin-lib'
+
+puts Blufin::Terminal::get_terminal_width
+
 # Trying to figure out this shit: http://mathoverflow.net/questions/17960/google-question-in-a-country-in-which-people-only-want-boys
 
 boys  = 0
