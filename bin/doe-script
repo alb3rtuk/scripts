@@ -1,9 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'blufin-lib'
-
-
-
-Blufin::Files::read_file('/Users/Albert/backup/ubuntu-work/assets/data-change-vax-03-05-salaried.txt').each do |line|
-    puts "ssns.Add(\"#{line[2..10]}\");"
-end

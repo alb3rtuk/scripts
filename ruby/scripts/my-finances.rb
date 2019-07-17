@@ -23,13 +23,13 @@ class ShowBankTransactions
         @minus_color = 196
 
         # Get Database Connection
-        encryptor           = Encryptor.new
-        @databaseConnection = Mysql.new(
-            encryptor.decrypt(EC2MySqlAlb3rtukHost),
-            encryptor.decrypt(EC2MySqlAlb3rtukUser),
-            encryptor.decrypt(EC2MySqlAlb3rtukPass),
-            encryptor.decrypt(EC2MySqlAlb3rtukSchema)
-        )
+        # encryptor           = Encryptor.new
+        # @databaseConnection = Mysql.new(
+        #     encryptor.decrypt(EC2MySqlAlb3rtukHost),
+        #     encryptor.decrypt(EC2MySqlAlb3rtukUser),
+        #     encryptor.decrypt(EC2MySqlAlb3rtukPass),
+        #     encryptor.decrypt(EC2MySqlAlb3rtukSchema)
+        # )
 
         # INTERNAL TYPE ID LEGEND
         # 1 => CASH IN

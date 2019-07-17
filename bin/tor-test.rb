@@ -1,6 +1,5 @@
 require 'watir-webdriver'
 
-
 Selenium::WebDriver::Firefox::Binary.path='/Users/Albert/Applications/TOR.app/Contents/MacOS/TorBrowser.app/Contents/MacOS/firefox'
 $browser                                 = Watir::Browser.new :firefox
 

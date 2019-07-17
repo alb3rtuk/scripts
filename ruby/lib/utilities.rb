@@ -2,7 +2,6 @@ require 'rubygems'
 require 'rainbow'
 require 'command_line_reporter'
 require 'watir-webdriver'
-require 'openssl'
 require 'time'
 require 'fileutils'
 require 'date'
@@ -13,17 +12,6 @@ require 'net/http'
 require 'csv'
 require File.expand_path('~/Repos/blufin-secrets/secrets.rb')
 require File.expand_path('~/Repos/scripts/ruby/lib/encryptor.rb')
-
-# Returns DB connection to my personal MySQL DB.
-def getDatabaseConnection
-    encryptor = Encryptor.new
-    Mysql.new(
-        encryptor.decrypt(EC2MySqlAlb3rtukHost),
-        encryptor.decrypt(EC2MySqlAlb3rtukUser),
-        encryptor.decrypt(EC2MySqlAlb3rtukPass),
-        encryptor.decrypt(EC2MySqlAlb3rtukSchema)
-    )
-end
 
 # Will exit script if element is not contained in arrayOfValidElements.
 # @return boolean

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-mongod --dbpath ~/Brightpearl/mongodb-data/ --port 27017                                                                                                  org.blufin.core.annotations
