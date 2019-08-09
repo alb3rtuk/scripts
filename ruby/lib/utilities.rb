@@ -72,41 +72,6 @@ def getCharAt(charAt, string)
     end
 end
 
-# Get a Watir Browser object.
-# @return [Watir::Browser]
-def getBrowser(displays = 'single', headless = false)
-
-    verifyInput(Array['single', 'multiple'], displays)
-
-    # Set the path to phantomjs executable
-    Selenium::WebDriver::PhantomJS.path = '/usr/local/bin/phantomjs'
-
-    if !headless
-        browser = Watir::Browser.new :chrome, :switches => %w(--ignore-certificate-errors --test-type)
-    else
-        browser = Watir::Browser.new :phantomjs, :switches => %w(--ignore-certificate-errors --test-type)
-    end
-
-    x = y = width = height = 0
-
-    if displays == 'single'
-        width  = 1440
-        height = 2000
-        x      = 0
-        y      = -0
-    elsif displays == 'multiple'
-        width  = 1920
-        height = 2000
-        x      = 3360
-        y      = -2000
-    end
-
-    browser.window.move_to(x, y)
-    browser.window.resize_to(width, height)
-    browser.window.use
-    browser
-end
-
 # Logs a message in config/cronlog.log
 # @return void
 def cronLog(message = '')
