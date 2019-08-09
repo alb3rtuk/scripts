@@ -14,5 +14,5 @@
 # --backtrace -- Show stack backtrace on errors
 
 cd ~/Repos/my/ && cd ~/Repos/my/
-gem build my.gemspec
+gem build my.gemspec 2>/dev/null
 gem install ./my-1.0.0.gem --backtrace -V -l
