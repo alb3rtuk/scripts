@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+require 'blufin-lib'
+require 'yaml'
+
+repos = {
+    'go-eat'      => {
+        'api'       => {},
+        'lambda'    => {},
+        'marketing' => {},
+        'app'       => {},
+        'client'    => {},
+        'mobile'    => {},
+    },
+    'blufin'      => {
+        'labs-api'               => {},
+        'labs-ui'                => {},
+        'lambda-archetype'       => {},
+        'nuxt-archetype'         => {},
+        'electron-archetype'     => {},
+        'vue-archetype'          => {},
+        'react-native-archetype' => {},
+        'org'                    => {},
+    },
+    'builtbybert' => {
+        'lambda' => {},
+        'com'    => {},
+    }
+}
+
+
+repos.each do |project, data|
+    data.each do |sub_project, sub_data|
+        path = File.expand_path("~/Repos/#{project}")
+        Blufin::Files::create_directory(path) unless Blufin::Files::path_exists(path)
+        full_project = "#{project}-#{sub_project}"
+        cmds         = []
+        cmds << "cd #{path}"
+        cmds << "git clone git@github.com:alb3rtuk/#{full_project}.git"
+
+        puts cmds.to_yaml
+    end
+end
