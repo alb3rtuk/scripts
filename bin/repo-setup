@@ -4,40 +4,58 @@ require 'blufin-lib'
 require 'yaml'
 
 repos = {
-    'go-eat'      => {
-        'api'       => {},
-        'lambda'    => {},
-        'marketing' => {},
-        'app'       => {},
-        'client'    => {},
-        'mobile'    => {},
+    'blufin'        => {
+        'java'                   => {:type => 'mvn-lib'},
+        'npm'                    => {:type => 'npm-lib'},
+        'npm-lambda'             => {:type => 'npm-lib'},
+        'npm-ui'                 => {:type => 'npm-lib'},
+        'npm-mobile'             => {:type => 'npm-lib'},
+        'labs-api'               => {:type => 'api'},
+        'labs-ui'                => {:type => 'ui'},
+        'archetype-lambda'       => {:type => 'lambda'},
+        'archetype-nuxt'         => {:type => 'ui'},
+        'archetype-electron'     => {:type => 'ui'},
+        'archetype-vue'          => {:type => 'ui'},
+        'archetype-react-native' => {:type => 'mobile'},
+        'ui'                     => {:type => 'ui'},
     },
-    'blufin'      => {
-        'labs-api'               => {},
-        'labs-ui'                => {},
-        'lambda-archetype'       => {},
-        'nuxt-archetype'         => {},
-        'electron-archetype'     => {},
-        'vue-archetype'          => {},
-        'react-native-archetype' => {},
-        'org'                    => {},
+    'go-eat'        => {
+        'api'       => {:type => 'api'},
+        'lambda'    => {:type => 'lambda'},
+        'marketing' => {:type => 'ui'},
+        'app'       => {:type => 'ui'},
+        'client'    => {:type => 'ui'},
+        'mobile'    => {:type => 'mobile'},
     },
-    'builtbybert' => {
-        'lambda' => {},
-        'com'    => {},
+    'builtbybert'   => {
+        'lambda' => {:type => 'lambda'},
+        'ui'     => {:type => 'ui'},
+    },
+    'rannetsperger' => {
+        'lambda' => {:type => 'lambda'},
+        'ui'     => {:type => 'ui'},
     }
 }
 
+current_project = nil
 
 repos.each do |project, data|
     data.each do |sub_project, sub_data|
         path = File.expand_path("~/Repos/#{project}")
         Blufin::Files::create_directory(path) unless Blufin::Files::path_exists(path)
         full_project = "#{project}-#{sub_project}"
-        cmds         = []
-        cmds << "cd #{path}"
-        cmds << "git clone git@github.com:alb3rtuk/#{full_project}.git"
 
-        puts cmds.to_yaml
+        if current_project.nil? || current_project != project
+            puts "  # #{project.capitalize} (60XX-60XX)"
+            current_project = project
+        end
+
+        puts <<TEMPLATE
+  - ProjectId: #{full_project}
+    Project: #{project}
+    Type: #{sub_data[:type]}
+    Repository: { Local: ~/Repos/#{project}/#{full_project}, Remote: "git@github.com:alb3rtuk/#{full_project}.git"}
+TEMPLATE
+
     end
 end
