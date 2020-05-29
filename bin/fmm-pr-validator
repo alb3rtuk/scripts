@@ -10,6 +10,15 @@ require 'pry'
 @pr_page    = nil
 @args       = ARGV
 
+# Checks if FMM is checked out in the /tmp folder.
+# @return void
+def checkout_fmm
+
+
+end
+
+exit
+
 Blufin::Terminal::execute_proc('Navigating to GitHub', Proc.new {
     @login_page = @agent.get('https://github.com/login')
 }, hide_progress: true)
