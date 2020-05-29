@@ -13,6 +13,6 @@
 # -f - Force gem to install, bypassing dependency checks
 # --backtrace -- Show stack backtrace on errors
 
-cd ~/Repos/my/ && cd ~/Repos/my/
+cd ~/Repos/my
 gem build my.gemspec 2>/dev/null
-gem install ./my-1.0.2.gem --backtrace -V -l
+gem install my-1.0.2.gem --backtrace -V -l
