@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require 'blufin-lib'
+require 'mechanize'
+require 'open-uri'
+require 'pry'
+
+@agent      = Mechanize.new
+@login_page = nil
+@pr_page    = nil
+@args       = ARGV
+
+Blufin::Terminal::execute_proc('Navigating to GitHub', Proc.new {
+    @login_page = @agent.get('https://github.com/login')
+}, hide_progress: true)
+
+Blufin::Terminal::execute_proc('Logging into GitHub', Proc.new {
+    login_form                                        = @login_page.form
+    login_form.field_with(:id => 'login_field').value = nil # TODO - INJECT VIA CONFIG FILE?
+    login_form.field_with(:id => 'password').value    = nil # TODO - INJECT VIA CONFIG FILE?
+    login_form.submit
+}, hide_progress: true)
+
+Blufin::Terminal::execute_proc('Navigating to Pull Requests', Proc.new {
+
+    @pr_page = @agent.get('https://github.com/eWorldES/FMM/pulls')
+
+}, hide_progress: true)
+
+Blufin::Terminal::execute_proc('Parsing Pull Requests', Proc.new {
+    @pr_page.links_with(:id => /issue_/).each do |link|
+
+        pr_inner_page = @agent.get(link.uri)
+
+        # TODO - CONTINUE HERE
+        puts "\x1B[38;5;198m#{link.text}\x1B[0m (#{link.uri})"
+        target = pr_inner_page.at('span.css-truncate-target').to_s.strip.gsub(/^<span\sclass="css-truncate-target">/, '').gsub(/<\/span>$/, '')
+        source = pr_inner_page.at('span.commit-ref.head-ref').to_s.strip.gsub(/^<span.*css-truncate-target">/, '').gsub(/<\/span.*>$/, '')
+        puts "\x1B[38;5;250m#{source}\x1B[38;5;240m \xe2\x86\x92 \x1B[38;5;202m#{target}\x1B[0m"
+
+    end
+
+    # TODO - git clone --depth 1 git@github.com:eWorldES/FMM.git
+
+}, hide_progress: true)
