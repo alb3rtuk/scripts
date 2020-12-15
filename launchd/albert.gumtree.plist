@@ -7,15 +7,15 @@
     <string>albert.gumtree</string>
 
     <key>Program</key>
-    <string>/Users/Albert/Repos/scripts/bash/launchd/albert.gumtree.sh</string>
+    <string>/Users/albert/Repos/scripts/bash/launchd/albert.gumtree.sh</string>
 
     <key>StartInterval</key>
     <integer>300</integer>
 
     <key>StandardOutPath</key>
-    <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
+    <string>/Users/albert/Repos/scripts/config/cronerror.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
+    <string>/Users/albert/Repos/scripts/config/cronerror.log</string>
 
     <key>KeepAlive</key>
     <false/>

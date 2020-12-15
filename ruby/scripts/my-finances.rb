@@ -1,5 +1,5 @@
 require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
-require '/Users/Albert/Repos/scripts/ruby/lib/encryptor.rb'
+require '/Users/albert/Repos/scripts/ruby/lib/encryptor.rb'
 
 require 'columnist'
 

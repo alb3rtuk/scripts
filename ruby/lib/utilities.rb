@@ -76,7 +76,7 @@ end
 # @return void
 def cronLog(message = '')
     timestamp = Time.now.strftime('%a %b %e %H:%M:%S %Z %Y')
-    File.open('/Users/Albert/Repos/scripts/config/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
+    File.open('/Users/albert/Repos/scripts/config/cronlog.log', 'a') { |file| file.write("#{timestamp} - #{message}\n") }
 end
 
 # Converts a number to 2 decimal points and adds thousands delimiter + currency symbol.
@@ -125,13 +125,13 @@ def exitScript(msg = 'Something went wrong and the script died. Please check you
     raise(RuntimeError, msg)
 end
 
-# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/albert/Repos/...)
 # @return boolean
 def directoryExists?(directory)
     File.directory?(directory)
 end
 
-# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/Albert/Repos/...)
+# Checks wheather a directory exists. Directory must be passed from root (IE: /Users/albert/Repos/...)
 # @return boolean
 def fileExists?(file)
     File.file?(file)

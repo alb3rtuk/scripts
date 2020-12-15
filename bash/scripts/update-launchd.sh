@@ -5,8 +5,8 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
-plistDirectory="/Users/Albert/Repos/scripts/launchd/"
-launchdDirectory="/Users/Albert/Library/LaunchAgents/"
+plistDirectory="/Users/albert/Repos/scripts/launchd/"
+launchdDirectory="/Users/albert/Library/LaunchAgents/"
 
 # First, remove all launchd jobs and symbolic links from LaunchAgents directory.
 cd ${launchdDirectory}

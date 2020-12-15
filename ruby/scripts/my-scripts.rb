@@ -1,7 +1,7 @@
 require File.expand_path('~/Repos/scripts/ruby/lib/utilities.rb')
 
 # Read contents of ~/.bash_profile into variable.
-bashProfile = File.read('/Users/Albert/.bash_profile')
+bashProfile = File.read('/Users/albert/.bash_profile')
 
 # Hashset of scripts + related information
 bashScripts = {}
@@ -34,12 +34,12 @@ def getScriptInfo(bashProfile, bashScripts, scriptPath)
 end
 
 # Loop through all the files within the scripts directory and get info.
-Dir.glob('/Users/Albert/Repos/scripts/bash/*/**').each do |scriptPath|
+Dir.glob('/Users/albert/Repos/scripts/bash/*/**').each do |scriptPath|
     getScriptInfo(bashProfile, bashScripts, scriptPath)
 end
 
 # Loop through all the files within the scripts directory and get info.
-Dir.glob('/Users/Albert/Repos/blufin-ruby/scripts/*/**').each do |scriptPath|
+Dir.glob('/Users/albert/Repos/blufin-ruby/scripts/*/**').each do |scriptPath|
     getScriptInfo(bashProfile, bashScripts, scriptPath)
 end
 

@@ -7,7 +7,7 @@
     <string>albert.order.asthma.inhaler</string>
 
     <key>Program</key>
-    <string>/Users/Albert/Repos/scripts/bash/launchd/albert.order.asthma.inhaler.sh</string>
+    <string>/Users/albert/Repos/scripts/bash/launchd/albert.order.asthma.inhaler.sh</string>
 
     <key>StartCalendarInterval</key>
     <dict>
@@ -20,9 +20,9 @@
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
+    <string>/Users/albert/Repos/scripts/config/cronerror.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>
+    <string>/Users/albert/Repos/scripts/config/cronerror.log</string>
 
     <key>KeepAlive</key>
     <false/>

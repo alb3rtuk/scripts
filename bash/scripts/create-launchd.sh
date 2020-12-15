@@ -17,9 +17,9 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit
 fi
 
-shell_script="/Users/Albert/Repos/scripts/bash/launchd/albert.${job_name}.sh"
-ruby_script="/Users/Albert/Repos/scripts/ruby/launchd/albert.${job_name}.rb"
-launchd_script="/Users/Albert/Repos/scripts/launchd/albert.${job_name}.plist"
+shell_script="/Users/albert/Repos/scripts/bash/launchd/albert.${job_name}.sh"
+ruby_script="/Users/albert/Repos/scripts/ruby/launchd/albert.${job_name}.rb"
+launchd_script="/Users/albert/Repos/scripts/launchd/albert.${job_name}.plist"
 
 touch ${shell_script}
 touch ${ruby_script}
@@ -47,7 +47,7 @@ echo "    <dict>\n" >> ${launchd_script}
 echo "        <key>Label</key>" >> ${launchd_script}
 echo "        <string>albert.${job_name}</string>\n" >> ${launchd_script}
 echo "        <key>Program</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/scripts/bash/launchd/albert.${job_name}.sh</string>\n" >> ${launchd_script}
+echo "        <string>/Users/albert/Repos/scripts/bash/launchd/albert.${job_name}.sh</string>\n" >> ${launchd_script}
 echo "        <key>StartCalendarInterval</key>" >> ${launchd_script}
 echo "        <dict>" >> ${launchd_script}
 echo "            <key>Minute</key>" >> ${launchd_script}
@@ -60,9 +60,9 @@ echo "        </dict>\n" >> ${launchd_script}
 echo "        <key>StartInterval</key>" >> ${launchd_script}
 echo "        <integer>300</integer>\n" >> ${launchd_script}
 echo "        <key>StandardOutPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>" >> ${launchd_script}
+echo "        <string>/Users/albert/Repos/scripts/config/cronerror.log</string>" >> ${launchd_script}
 echo "        <key>StandardErrorPath</key>" >> ${launchd_script}
-echo "        <string>/Users/Albert/Repos/scripts/config/cronerror.log</string>\n" >> ${launchd_script}
+echo "        <string>/Users/albert/Repos/scripts/config/cronerror.log</string>\n" >> ${launchd_script}
 echo "        <key>KeepAlive</key>" >> ${launchd_script}
 echo "        <false/>\n" >> ${launchd_script}
 echo "        <key>RunAtLoad</key>" >> ${launchd_script}

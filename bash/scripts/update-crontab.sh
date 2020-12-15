@@ -5,7 +5,7 @@
 
 . ~/Repos/scripts/bash/common/utilities.sh
 
-file="/Users/Albert/Repos/scripts/config/crontab.txt"
+file="/Users/albert/Repos/scripts/config/crontab.txt"
 
 verifyFileExists $file
 
