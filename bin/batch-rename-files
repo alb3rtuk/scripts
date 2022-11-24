@@ -10,36 +10,49 @@ puts
 puts "Path: \x1B[38;5;162m#{path}\x1B[0m"
 puts
 
-def index_the_bank(path)
+def rename(path)
 
-    max_index = []
-    Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
-        fileName = File.basename(file)
-        if fileName =~ /\AX-\d{3}-/
-            max_index << fileName[2...5].to_i
-        end
+    Dir["#{File.expand_path(path)}/**/*.js"].each do |file|
+
+        file_short = file.gsub('/Users/albert/Repos/rannetsperger/cli/', '')
+        next if file_short !~ /^(src|test)/
+
+        file_ts = file_short.gsub(/\.js$/, '.ts')
+
+        cmd = "cd #{path} && git mv #{file_short} #{file_ts}"
+
+        puts cmd
+        # system(cmd)
     end
 
-    counter = max_index.max
-
-    Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
-        fileName = File.basename(file)
-        if fileName =~/\AX-\d{3}-/
-
-            #  DO NOTHING
-
-        else
-            if File.extname(file) == '.mp4'
-                counter  += 1
-                new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '-').gsub('---', '-')}"
-                command  = "mv \"#{file}\" \"#{new_file}\""
-                puts "\x1B[38;5;188m#{command}\x1B[0m"
-                # system(command) # TODO - UN-COMMENT
-            else
-                puts File.extname(file)
-            end
-        end
-    end
+    # max_index = []
+    # Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+    #     fileName = File.basename(file)
+    #     if fileName =~ /\AX-\d{3}-/
+    #         max_index << fileName[2...5].to_i
+    #     end
+    # end
+    #
+    # counter = max_index.max
+    #
+    # Dir["#{File.expand_path(path)}/**/*.*"].each do |file|
+    #     fileName = File.basename(file)
+    #     if fileName =~/\AX-\d{3}-/
+    #
+    #         #  DO NOTHING
+    #
+    #     else
+    #         if File.extname(file) == '.mp4'
+    #             counter  += 1
+    #             new_file = "#{File.dirname(file)}/X-#{counter.to_s.rjust(3, '0')}-#{File.basename(file).gsub(' ', '-').gsub('---', '-')}"
+    #             command  = "mv \"#{file}\" \"#{new_file}\""
+    #             puts "\x1B[38;5;188m#{command}\x1B[0m"
+    #             # system(command) # TODO - UN-COMMENT
+    #         else
+    #             puts File.extname(file)
+    #         end
+    #     end
+    # end
 end
 
-index_the_bank(path)
+rename(path)
