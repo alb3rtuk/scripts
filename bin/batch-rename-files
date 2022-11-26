@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'blufin-lib'
 
 path = ARGV[0]
 
@@ -55,4 +56,315 @@ def rename(path)
     # end
 end
 
-rename(path)
+def ddl_to_types
+    str = <<TEMPLATE
+create table GIFT_CARDS
+(
+    ID               int auto_increment
+        primary key,
+    NAME             varchar(128)   not null,
+    ORIGINAL_AMOUNT  decimal(14, 2) not null,
+    REMAINING_AMOUNT decimal(14, 2) not null
+);
+
+create table L_BANK
+(
+    ID   int auto_increment
+        primary key,
+    NAME varchar(64) not null,
+    constraint CT_BANK_BANK_NAME_uindex
+        unique (NAME)
+);
+
+create table L_CREDENTIAL
+(
+    ID       int auto_increment
+        primary key,
+    NAME     varchar(64) not null,
+    ALIAS    varchar(16) null,
+    ACCOUNT  text        null,
+    USERNAME text        null,
+    PASSWORD text        null,
+    constraint L_CREDENTIALS_NAME_uindex
+        unique (NAME)
+);
+
+create table L_CREDENTIAL_CHALLENGE
+(
+    ID            int auto_increment
+        primary key,
+    CREDENTIAL_ID int  not null,
+    QUESTION      text not null,
+    ANSWER        text null,
+    constraint L_CREDENTIAL_CHALLENGE_L_CREDENTIAL_ID_fk
+        foreign key (CREDENTIAL_ID) references L_CREDENTIAL (ID)
+);
+
+create table L_CREDENTIAL_SECRET
+(
+    ID            int auto_increment
+        primary key,
+    CREDENTIAL_ID int  not null,
+    NAME          text not null,
+    VALUE         text null,
+    constraint L_CREDENTIAL_SECRET_L_CREDENTIAL_ID_fk
+        foreign key (CREDENTIAL_ID) references L_CREDENTIAL (ID)
+);
+
+create table L_PROPERTY
+(
+    ID   int auto_increment
+        primary key,
+    NAME varchar(64)                        not null,
+    TYPE enum ('DATE', 'DECIMAL', 'STRING') not null,
+    constraint L_PROPERTY_NAME_uindex
+        unique (NAME)
+);
+
+create table L_PROPERTY_HISTORY
+(
+    ID   int auto_increment
+        primary key,
+    NAME varchar(64)              not null,
+    TYPE enum ('DATE', 'DECIMAL') not null,
+    constraint L_PROPERTY_HISTORY_NAME_uindex
+        unique (NAME)
+);
+
+create table L_SCHEDULE
+(
+    ID           int auto_increment
+        primary key,
+    NAME         varchar(32)          not null,
+    PROGRAM      varchar(32)          not null,
+    PROGRAM_ARGS text                 null,
+    IS_ACTIVE    tinyint(1) default 1 not null,
+    IS_SUDO      tinyint(1) default 0 not null
+);
+
+create index L_SCHEDULE_NAME_index
+    on L_SCHEDULE (NAME);
+
+create table L_USER
+(
+    ID         int auto_increment
+        primary key,
+    FIRST_NAME varchar(16) not null,
+    LAST_NAME  varchar(32) not null
+);
+
+create table L_ACCOUNT
+(
+    ID       int auto_increment
+        primary key,
+    BANK_ID  int                                    not null,
+    USER_ID  int                                    null,
+    NAME     varchar(64)                            not null,
+    NICKNAME varchar(64)                            null,
+    TYPE     enum ('CHECKING', 'SAVINGS', 'CREDIT') not null,
+    constraint L_ACCOUNT_NAME_uindex
+        unique (NAME),
+    constraint L_ACCOUNT_L_BANK_ID_fk
+        foreign key (BANK_ID) references L_BANK (ID),
+    constraint L_ACCOUNT_L_USER_ID_fk
+        foreign key (USER_ID) references L_USER (ID)
+);
+
+create table L_MACHINE
+(
+    ID      int auto_increment
+        primary key,
+    NAME    varchar(64) not null,
+    USER_ID int         not null,
+    constraint L_MACHINE_NAME_USER_ID_uindex
+        unique (NAME, USER_ID),
+    constraint L_MACHINE_L_USER_ID_fk
+        foreign key (USER_ID) references L_USER (ID)
+);
+
+create table L_QUEUE
+(
+    ID         int auto_increment
+        primary key,
+    MACHINE_ID int                                     null,
+    TYPE       enum ('STANDARD', 'FIFO', 'SNS', 'SQS') not null,
+    NAME       varchar(128)                            not null,
+    ARN        varchar(256)                            not null,
+    URL        varchar(256)                            null,
+    constraint L_QUEUE_ARN_uindex
+        unique (ARN),
+    constraint L_QUEUE_MACHINE_ID_uindex
+        unique (MACHINE_ID),
+    constraint L_QUEUE_NAME_uindex
+        unique (NAME),
+    constraint L_QUEUE_URL_uindex
+        unique (URL),
+    constraint L_QUEUE_L_MACHINE_ID_fk
+        foreign key (MACHINE_ID) references L_MACHINE (ID)
+);
+
+create table L_SCHEDULE_TIME
+(
+    ID            int auto_increment
+        primary key,
+    MACHINE_ID    int         not null,
+    SCHEDULE_NAME varchar(64) null,
+    MONTH         int         null,
+    DAY           int         null,
+    WEEKDAY       int         null,
+    HOUR          int         null,
+    MINUTE        int         null,
+    constraint L_SCHEDULE_TIME_L_MACHINE_ID_fk
+        foreign key (MACHINE_ID) references L_MACHINE (ID),
+    constraint L_SCHEDULE_TIME_L_SCHEDULE_NAME_fk
+        foreign key (SCHEDULE_NAME) references L_SCHEDULE (NAME)
+);
+
+create table PROPERTY
+(
+    ID               int auto_increment
+        primary key,
+    FETCHED_DATETIME datetime     not null,
+    PROPERTY_NAME    varchar(64)  not null,
+    VALUE            varchar(256) not null,
+    constraint PROPERTY_L_PROPERTY_NAME_fk
+        foreign key (PROPERTY_NAME) references L_PROPERTY (NAME)
+);
+
+create table PROPERTY_HISTORY
+(
+    ID               int auto_increment
+        primary key,
+    FETCHED_DATETIME datetime     not null,
+    PROPERTY_NAME    varchar(64)  not null,
+    VALUE            varchar(256) not null,
+    constraint PROPERTY_HISTORY_L_PROPERTY_HISTORY_NAME_fk
+        foreign key (PROPERTY_NAME) references L_PROPERTY_HISTORY (NAME)
+);
+
+create table SCHEDULE_RUN
+(
+    ID             int auto_increment
+        primary key,
+    MACHINE_ID     int         not null,
+    USER_ID        int         not null,
+    SCHEDULE_NAME  varchar(32) not null,
+    START_DATETIME datetime(3) not null,
+    END_DATETIME   datetime(3) not null,
+    DURATION       bigint      not null,
+    STDOUT         mediumtext  null,
+    EXIT_CODE      int         not null,
+    constraint SCHEDULE_RUN_L_MACHINE_ID_fk
+        foreign key (MACHINE_ID) references L_MACHINE (ID),
+    constraint SCHEDULE_RUN_L_USER_ID_fk
+        foreign key (USER_ID) references L_USER (ID)
+);
+
+create table SMS
+(
+    ID                   int auto_increment
+        primary key,
+    DATETIME             datetime    not null,
+    MACHINE_ID           int         not null,
+    USER_ID              int         not null,
+    AWS_HTTP_STATUS_CODE int         not null,
+    AWS_REQUEST_ID       varchar(40) not null,
+    AWS_ATTEMPTS         int         not null,
+    AWS_RETRY_DELAY      int         not null,
+    PHONE_NUMBER         varchar(20) not null,
+    MESSAGE              text        null,
+    IS_SUCCESSFUL        tinyint(1)  not null,
+    constraint SMS_L_MACHINE_ID_fk
+        foreign key (MACHINE_ID) references L_MACHINE (ID),
+    constraint SMS_L_USER_ID_fk
+        foreign key (USER_ID) references L_USER (ID)
+);
+
+create table TRANSACTION
+(
+    ID               int auto_increment
+        primary key,
+    FETCHED_DATETIME datetime       not null,
+    ACCOUNT_ID       int            not null,
+    DATE             date           not null,
+    DESCRIPTION      varchar(128)   not null,
+    AMOUNT           decimal(14, 2) null,
+    BALANCE          decimal(14, 2) null,
+    UNIQUE_REF       varchar(128)   null,
+    LOCATION         varchar(128)   null,
+    DETAILS          varchar(256)   null,
+    constraint TRANSACTION_L_ACCOUNT_ID_fk
+        foreign key (ACCOUNT_ID) references L_ACCOUNT (ID)
+);
+
+create table TRANSACTION_PENDING
+(
+    ID               int auto_increment
+        primary key,
+    FETCHED_DATETIME datetime       not null,
+    ACCOUNT_ID       int            not null,
+    DESCRIPTION      varchar(128)   not null,
+    AMOUNT           decimal(14, 2) null,
+    UNIQUE_REF       varchar(128)   null,
+    LOCATION         varchar(128)   null,
+    DETAILS          varchar(256)   null,
+    constraint TRANSACTION_PENDING_L_ACCOUNT_ID_fk
+        foreign key (ACCOUNT_ID) references L_ACCOUNT (ID)
+);
+TEMPLATE
+
+
+    dtos = []
+    dbs = []
+
+    types = {
+        /^(int|bigint)/ => 'number',
+        /^(varchar|text|mediumtext)/ => 'string',
+        /^decimal/ => 'number',
+        /^enum/ => 'ENUM',
+        /^tinyint/ => 'boolean',
+        /^date/ => 'string',
+        /^datetime/ => 'Moment',
+    }
+    table =  nil
+    str.split(/\n/).each do | line |
+        line = line.strip
+        next if line == ''
+        if line =~ /^create table/
+            ls = line.split(' ')
+            table = {:name => ls[2], :fields => []}
+            next
+        end
+        if table
+            if line =~ /^[A-Z_]+\s+[a-z0-9]+/
+                ls = line.split(' ')
+                type = nil
+                not_null =( ls[2] == 'not' && ls[3] =~ /null,?/) || ls[2] =~ /auto_increment,?/
+                types.each do |k, v|
+                    if ls[1] =~ k
+                        type = v
+                        break
+                    end
+                end
+                raise RuntimeError, "Type not found: #{ls[1]}" if type.nil?
+                table[:fields] << {:name => Blufin::Strings::snake_case_to_camel_case_lower(ls[0].downcase), :name_db => ls[0], :type => type, :not_null => not_null}
+            elsif line =~ /\);$/
+                dtos << "export type #{Blufin::Strings::snake_case_to_camel_case(table[:name].downcase)}Dto {"
+                dbs << "export type #{Blufin::Strings::snake_case_to_camel_case(table[:name].downcase)} {"
+                table[:fields].each do | field|
+                    dtos << "  #{field[:name]}#{field[:not_null] ? '' : '?'}: #{field[:type]}"
+                    dbs << "  #{field[:name_db]}#{field[:not_null] ? '' : '?'}: #{field[:type]}"
+                end
+                dtos << '}'
+                dtos << ''
+                dbs << '}'
+                dbs << ''
+            end
+        end
+    end
+    puts dbs
+    puts dtos
+end
+
+# rename(path)
+ddl_to_types
